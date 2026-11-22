@@ -60,7 +60,7 @@ root.innerHTML = `
     </section>
     <div class="overlay-legend" id="overlayLegend" hidden><span><i class="red"></i>Cháy sáng</span><span><i class="blue"></i>Mất chi tiết tối</span><span><i class="green"></i>Cạnh tương phản cao</span><span><i class="white"></i>Lưới 1/3</span></div>
     <section class="control-row controls-only">
-      <div class="controls"><button class="primary-btn" id="analyzeBtn">${icons.sparkle}<span>Phân tích ảnh</span></button><button class="soft-btn" id="overlayBtn" aria-pressed="false">${icons.grid} Lưới & vùng</button><button class="ghost-btn" id="clearBtn">${icons.trash} Xóa ảnh</button></div>
+      <div class="controls"><button class="primary-btn" id="analyzeBtn">${icons.sparkle}<span>Phân tích ảnh</span></button><button class="soft-btn" id="overlayBtn" aria-pressed="false">${icons.grid} Lưới & vùng</button><button class="soft-btn" id="editBtn">${icons.sparkle} Chỉnh ảnh</button><button class="soft-btn" id="studioCameraBtn">${icons.camera} Camera</button><button class="ghost-btn" id="clearBtn">${icons.trash} Xóa ảnh</button></div>
     </section>
     <section id="report" class="report" aria-live="polite" aria-atomic="false"><div class="empty-state"><div class="empty-orb">${icons.chart}</div><strong>Sẵn sàng xem ảnh của bạn</strong><p>Tải một ảnh lên để xem chỉ số kỹ thuật, hoặc bật So sánh để đối chiếu hai ảnh.</p></div></section>
   </main>
@@ -198,6 +198,8 @@ for (const id of ['A','B']) {
 $('#overlayBtn').addEventListener('click', () => { showOverlay = !showOverlay; $('#overlayBtn').classList.toggle('active', showOverlay); $('#overlayBtn').setAttribute('aria-pressed', String(showOverlay)); $('#overlayLegend').hidden = !showOverlay; Object.keys(slots).forEach(drawOverlay); });
 $('#clearBtn').addEventListener('click', clearAll);
 $('#analyzeBtn').addEventListener('click', runAnalysis);
+$('#editBtn').addEventListener('click', () => launchStudio('editor'));
+$('#studioCameraBtn').addEventListener('click', () => launchStudio('camera'));
 $('#historyBtn').addEventListener('click', showHistory);
 $('#mobileHistory').addEventListener('click', showHistory);
 $('#settingsBtn').addEventListener('click', showSettings);
@@ -312,6 +314,45 @@ async function takePhoto(id) {
     return;
   }
   const input = $(`[data-input="${id}"]`); input.setAttribute('capture','environment'); input.click(); setTimeout(() => input.removeAttribute('capture'), 1000);
+}
+
+
+async function captureStudioPhoto() {
+  const permission = await Camera.requestPermissions({ permissions: ['camera'] });
+  if (permission.camera !== 'granted') throw new Error('Cần cho phép PhotoLens dùng camera để chụp ảnh.');
+  const photo = await Camera.getPhoto({ quality: 95, allowEditing: false, resultType: CameraResultType.Uri, source: CameraSource.Camera, width: 2400 });
+  const response = await fetch(photo.webPath);
+  const blob = await response.blob();
+  return new File([blob], `PhotoLens-${Date.now()}.jpg`, { type: blob.type || 'image/jpeg' });
+}
+
+async function shareStudioPhoto(blob, filename) {
+  if (!Capacitor.isNativePlatform()) return false;
+  try {
+    const base64 = await blobToBase64(blob);
+    const saved = await Filesystem.writeFile({ path: filename, data: base64, directory: Directory.Cache, recursive: true });
+    await Share.share({ title: 'PhotoLens', url: saved.uri, dialogTitle: 'Chia sẻ ảnh' });
+    return true;
+  } catch (error) {
+    console.warn('Không dùng được bảng chia sẻ native:', error);
+    return false;
+  }
+}
+
+async function launchStudio(startView = 'editor') {
+  try {
+    const { openStudio } = await import('./studio.js');
+    openStudio({
+      file: slots.A?.file || null,
+      startView,
+      onCapture: file => addFile('A', file),
+      nativeCapture: Capacitor.isNativePlatform() ? captureStudioPhoto : null,
+      nativeShare: Capacitor.isNativePlatform() ? shareStudioPhoto : null
+    });
+  } catch (error) {
+    console.error('PhotoLens Studio failed to open:', error);
+    toast('Không tải được phòng chỉnh sửa. Hãy tải lại trang rồi thử lại.');
+  }
 }
 
 function removeSlot(id) {
