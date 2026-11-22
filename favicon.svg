@@ -1,7 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="18" fill="#0d7b61"/>
-  <circle cx="32" cy="32" r="23" fill="none" stroke="#fff" stroke-width="2.8"/>
-  <circle cx="32" cy="32" r="16.5" fill="none" stroke="#fff" stroke-width="1.7" opacity=".48"/>
-  <path d="M32 9v5M32 50v5M9 32h5M50 32h5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".88"/>
-  <path d="M22 27h20M32 27v17" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 240 240">
+  <defs>
+    <linearGradient id="frame" x1="62" y1="62" x2="190" y2="194" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3477D3"/><stop offset="1" stop-color="#35D0C3"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="117" y1="99" x2="188" y2="169" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#49DCCB"/><stop offset="1" stop-color="#3488D5"/>
+    </linearGradient>
+    <clipPath id="lensClip"><circle cx="151" cy="133" r="35"/></clipPath>
+  </defs>
+  <rect width="240" height="240" rx="36" fill="#0A1729"/>
+  <path d="M42 51V36h15M183 36h15v15M42 190v15h15M183 205h15v-15" stroke="#2E6FC8" stroke-width="4" stroke-linecap="square"/>
+  <path d="M183 36h15v15M183 205h15v-15" stroke="#C4CDD5" stroke-width="4" stroke-linecap="square"/>
+  <circle cx="126" cy="36" r="3.5" fill="#C4CDD5"/><circle cx="126" cy="205" r="3.5" fill="#C4CDD5"/>
+  <circle cx="42" cy="125" r="3.5" fill="#C4CDD5"/><circle cx="198" cy="125" r="3.5" fill="#C4CDD5"/>
+  <path d="M62 64h128v30c-22-6-44 0-59 15-15 15-23 34-23 57v28H94v-20l-13-13v33H63V97" stroke="url(#frame)" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M64 79h83M64 95h65" stroke="url(#frame)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="175" cy="79" r="5.2" fill="#F05B4F"/>
+  <circle cx="151" cy="133" r="39" fill="#0A1729" stroke="url(#lens)" stroke-width="5"/>
+  <g clip-path="url(#lensClip)">
+    <path d="m151 96 23 14-13 23-27-2 2-24z" fill="#3DD5C7"/>
+    <path d="m186 132-14 24-24-12 2-27 24-1z" fill="#318ACD"/>
+    <path d="m151 170-24-13 14-23 27 2 1 25z" fill="#285FB6"/>
+    <path d="m116 133 13-24 24 13-2 27-24 1z" fill="#279CBF"/>
+    <path d="m151 115 14 8-2 16-13 9-14-8 2-16z" fill="#0B1B31" opacity=".86"/>
+  </g>
+  <circle cx="151" cy="133" r="35" stroke="#B8F3E8" stroke-width="1.5" opacity=".75"/>
 </svg>
