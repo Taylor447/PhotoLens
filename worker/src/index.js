@@ -82,6 +82,27 @@ const COMPARISON_SCHEMA = {
   required: ['analyses', 'comparison']
 };
 
+const WATERMARK_SCHEMA = {
+  type: 'OBJECT',
+  properties: {
+    watermarks: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        properties: {
+          brand: { type: 'STRING' },
+          mark_type: { type: 'STRING', enum: ['text', 'logo', 'symbol', 'combined', 'unknown'] },
+          location: { type: 'STRING', enum: ['top-left', 'top-center', 'top-right', 'middle-left', 'center', 'middle-right', 'bottom-left', 'bottom-center', 'bottom-right', 'unknown'] },
+          confidence: { type: 'NUMBER', minimum: 0, maximum: 1 },
+          evidence: { type: 'STRING' }
+        },
+        required: ['brand', 'mark_type', 'location', 'confidence', 'evidence']
+      }
+    }
+  },
+  required: ['watermarks']
+};
+
 const SYSTEM_PROMPT = `Bạn là chuyên gia nhiếp ảnh và biên tập ảnh. Hãy nhận xét khách quan, cụ thể, chỉ dựa trên những gì nhìn thấy trong ảnh. Không suy đoán hoặc bịa thông tin EXIF, thiết bị, địa điểm hay bối cảnh không thể xác định từ ảnh. Chấm điểm số nguyên 0–100 theo cùng một thang cố định cho bố cục, ánh sáng, màu sắc, kỹ thuật và cảm xúc/sáng tạo; 50 là mức trung bình, 70 là tốt, 90 là xuất sắc, điểm thấp phải chỉ rõ vấn đề. Mỗi điểm mạnh, điểm yếu và gợi ý phải cụ thể, có thể thực hiện, nói rõ cách chụp hoặc chỉnh sửa; mỗi mục tối đa 1–2 câu. Chỉ trả JSON đúng response schema, không thêm Markdown hay chữ ngoài JSON.`;
 
 function errorBody(code, message) {
@@ -222,13 +243,25 @@ function validComparison(value) {
   return true;
 }
 
+function validWatermarks(value) {
+  if (!hasExactKeys(value, ['watermarks']) || !Array.isArray(value.watermarks) || value.watermarks.length > 20) return false;
+  const types = ['text', 'logo', 'symbol', 'combined', 'unknown'];
+  const locations = ['top-left', 'top-center', 'top-right', 'middle-left', 'center', 'middle-right', 'bottom-left', 'bottom-center', 'bottom-right', 'unknown'];
+  return value.watermarks.every(mark =>
+    hasExactKeys(mark, ['brand', 'mark_type', 'location', 'confidence', 'evidence']) &&
+    validText(mark.brand) && types.includes(mark.mark_type) && locations.includes(mark.location) &&
+    typeof mark.confidence === 'number' && mark.confidence >= 0 && mark.confidence <= 1 &&
+    validText(mark.evidence)
+  );
+}
+
 function validatePayload(body) {
-  if (!body || !['single', 'compare'].includes(body.mode)) {
-    return { error: ['INVALID_MODE', 'Chế độ phải là single hoặc compare.'] };
+  if (!body || !['single', 'compare', 'watermarks'].includes(body.mode)) {
+    return { error: ['INVALID_MODE', 'Chế độ phải là single, compare hoặc watermarks.'] };
   }
-  const expectedCount = body.mode === 'single' ? 1 : 2;
+  const expectedCount = body.mode === 'compare' ? 2 : 1;
   if (!Array.isArray(body.images) || body.images.length !== expectedCount || body.images.length > MAX_IMAGES) {
-    return { error: ['INVALID_IMAGES', body.mode === 'single' ? 'Chế độ một ảnh cần đúng 1 ảnh JPEG.' : 'Chế độ so sánh cần đúng 2 ảnh JPEG A và B.'] };
+    return { error: ['INVALID_IMAGES', body.mode === 'compare' ? 'Chế độ so sánh cần đúng 2 ảnh JPEG A và B.' : 'Chế độ này cần đúng 1 ảnh JPEG.'] };
   }
   for (const image of body.images) {
     try {
@@ -241,6 +274,7 @@ function validatePayload(body) {
 }
 
 function promptForMode(mode) {
+  if (mode === 'watermarks') return 'Nhận diện dấu chìm, logo hoặc tên hãng nhìn thấy rõ trong ảnh. Chỉ đưa kết quả có bằng chứng trực quan; không suy đoán từ nội dung cảnh vật hoặc thương hiệu máy ảnh. Nếu không chắc, trả mảng rỗng. Với mỗi dấu, ghi hãng nếu đọc được, loại dấu, vị trí gần đúng theo lưới 3x3, độ tin cậy 0 đến 1 và mô tả ngắn bằng tiếng Việt về bằng chứng.';
   if (mode === 'single') {
     return 'Phân tích ảnh duy nhất được gửi. Trả về object có khóa analysis chứa đầy đủ trường theo schema.';
   }
@@ -264,7 +298,7 @@ async function analyzeWithGemini({ mode, images, env }) {
   if (!model) return { error: ['MODEL_NOT_CONFIGURED', 'Worker chưa có biến GEMINI_MODEL trong wrangler.toml.'], status: 503 };
   if (!env.GEMINI_API_KEY) return { error: ['KEY_NOT_CONFIGURED', 'Worker chưa được cấu hình secret GEMINI_API_KEY.'], status: 503 };
 
-  const schema = mode === 'single'
+  const schema = mode === 'watermarks' ? WATERMARK_SCHEMA : mode === 'single'
     ? { type: 'OBJECT', properties: { analysis: PHOTO_ANALYSIS_SCHEMA }, required: ['analysis'] }
     : COMPARISON_SCHEMA;
   const parts = [{ text: promptForMode(mode) }];
@@ -288,7 +322,7 @@ async function analyzeWithGemini({ mode, images, env }) {
             responseMimeType: 'application/json',
             responseSchema: schema,
             temperature: 0.25,
-            maxOutputTokens: mode === 'compare' ? 6000 : 3000
+            maxOutputTokens: mode === 'compare' ? 6000 : mode === 'watermarks' ? 1800 : 3000
           }
         }),
         signal: timeoutController.signal
@@ -326,7 +360,7 @@ async function analyzeWithGemini({ mode, images, env }) {
       const parsed = JSON.parse(responseText);
       const valid = mode === 'single'
         ? Boolean(parsed && validAnalysis(parsed.analysis))
-        : validComparison(parsed);
+        : mode === 'watermarks' ? validWatermarks(parsed) : validComparison(parsed);
       if (!valid) throw new Error('JSON không khớp schema PhotoLens.');
       return { data: parsed };
     } catch {

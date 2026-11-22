@@ -7,7 +7,8 @@ const defaults = () => ({
   sharpen:0, denoise:0, grain:0, vignette:0,
   cropLeft:0, cropTop:0, cropRight:0, cropBottom:0, aspect:'free',
   rotate:0, straighten:0, flipX:false, flipY:false,
-  lutId:'none', lutStrength:100, frame:'none', sticker:'',
+  lutId:'none', lutStrength:100,
+  watermarkText:'', watermarkPosition:'bottom-right', watermarkOpacity:75, watermarkSize:24, watermarkRepeat:false,
   brushEnabled:false, brushSize:12, localExposure:0, strokes:[],
   curve:[[0,0],[0.5,0.5],[1,1]]
 });
@@ -141,7 +142,15 @@ export function openStudio(options={}){
     '<details class="studio-section" open><summary>Ánh sáng &amp; màu</summary><div class="studio-section-body">'+ranges+'</div></details>',
     '<details class="studio-section"><summary>Đường cong tông màu</summary><div class="studio-section-body"><p class="studio-help">Kéo điểm trên đường cong để tinh chỉnh sáng và tương phản.</p><canvas id="studioCurve" width="256" height="150" aria-label="Đường cong tông màu"></canvas><button class="studio-action" id="studioResetCurve">Đặt lại đường cong</button></div></details>',
     '<details class="studio-section"><summary>Chỉnh sửa cục bộ</summary><div class="studio-section-body"><button class="studio-action" id="studioBrush">Cọ vùng sáng</button><p class="studio-help">Bật cọ rồi tô lên ảnh để áp dụng chỉnh sáng cục bộ.</p><label class="studio-range"><span>Kích thước cọ</span><output data-output="brushSize">12%</output><input type="range" data-adjust="brushSize" min="2" max="40" value="12" /></label><label class="studio-range"><span>Phơi sáng vùng tô</span><output data-output="localExposure">0</output><input type="range" data-adjust="localExposure" min="-100" max="100" value="0" /></label><button class="studio-action" id="studioClearBrush">Xóa vùng tô</button></div></details>',
-    '<details class="studio-section"><summary>Khung ảnh &amp; vui một chút</summary><div class="studio-section-body"><label class="studio-select-row">Khung<select id="studioFrame"><option value="none">Không khung</option><option value="film">Viền phim</option><option value="polaroid">Polaroid</option></select></label><label class="studio-select-row">Nhãn dán<select id="studioSticker"><option value="">Không nhãn</option><option value="✨">✨ Lấp lánh</option><option value="🌿">🌿 Lá xanh</option><option value="☀️">☀️ Nắng</option><option value="❤️">❤️ Trái tim</option><option value="📷">📷 Máy ảnh</option></select></label></div></details>',
+    '<details class="studio-section"><summary>Dấu chìm</summary><div class="studio-section-body">'+
+    '<label class="studio-select-row">Chữ dấu chìm<input id="studioWatermarkText" type="text" maxlength="60" placeholder="Tên hoặc thương hiệu" /></label>'+
+    '<div class="studio-watermark-logo"><button class="studio-action" id="studioWatermarkLogoBtn" type="button">Thêm logo PNG</button><input id="studioWatermarkLogoFile" type="file" accept="image/png,image/jpeg,image/webp" hidden /><span id="studioWatermarkLogoName">Chưa chọn logo</span><button class="studio-action" id="studioWatermarkLogoRemove" type="button" hidden>Xóa logo</button></div>'+
+    '<label class="studio-select-row">Vị trí<select id="studioWatermarkPosition"><option value="top-left">Trên trái</option><option value="top-center">Trên giữa</option><option value="top-right">Trên phải</option><option value="middle-left">Giữa trái</option><option value="center">Chính giữa</option><option value="middle-right">Giữa phải</option><option value="bottom-left">Dưới trái</option><option value="bottom-center">Dưới giữa</option><option value="bottom-right">Dưới phải</option></select></label>'+
+    '<label class="studio-range"><span>Độ mờ</span><output id="studioWatermarkOpacityValue">75%</output><input id="studioWatermarkOpacity" type="range" min="5" max="100" value="75" /></label>'+
+    '<label class="studio-range"><span>Kích thước</span><output id="studioWatermarkSizeValue">24</output><input id="studioWatermarkSize" type="range" min="10" max="40" value="24" /></label>'+
+    '<label class="studio-check"><input id="studioWatermarkRepeat" type="checkbox" /> Lặp dấu chìm khắp ảnh</label>'+
+    '<button class="studio-action" id="studioDetectWatermark" type="button">Nhận diện dấu chìm hãng bằng AI</button><div class="studio-watermark-results" id="studioWatermarkResults" role="status" aria-live="polite"></div>'+
+    '<p class="studio-help">Tạo dấu chìm và xuất ảnh ngay trên thiết bị. Nhận diện AI chỉ gửi JPEG tối đa 1024 px sau khi bạn xác nhận.</p></div></details>',
     '</aside></div></section>',
     '<section class="studio-page studio-lut-page" data-studio-page="luts" hidden><div class="studio-library-head"><div><h2>Kho LUT màu</h2><p>Chọn một màu, chỉnh cường độ hoặc nhập tệp LUT 3D .cube của bạn.</p></div><div class="studio-lut-tools"><input type="search" id="studioLutSearch" placeholder="Tìm LUT…" aria-label="Tìm LUT" /><select id="studioLutCategory" aria-label="Lọc theo danh mục"><option value="">Tất cả nhóm</option><option>Chân dung</option><option>Phong cảnh</option><option>Đường phố</option><option>Phim</option><option>Điện ảnh</option><option>Đen trắng</option><option>Của tôi</option></select><button class="studio-action" id="studioImportLut">Nhập .cube</button><input type="file" id="studioLutFile" accept=".cube,text/plain" hidden /></div></div><label class="studio-range studio-lut-strength"><span>Cường độ LUT</span><output id="studioLutStrengthValue">100%</output><input type="range" id="studioLutStrength" min="0" max="100" value="100" /></label><div class="studio-lut-grid" id="studioLutGrid"></div></section>',
     '<section class="studio-page studio-camera-page" data-studio-page="camera" hidden><div class="studio-camera-layout"><div class="studio-camera-main"><div class="studio-camera-stage" id="studioCameraStage"><video id="studioVideo" autoplay muted playsinline></video><div class="studio-camera-grid" id="studioCameraGrid" hidden><i></i><i></i></div><button class="studio-focus-target" id="studioFocusTarget" aria-label="Lấy nét tại điểm chạm" hidden></button><div class="studio-camera-empty" id="studioCameraEmpty"><strong>Camera chưa bật</strong><p>Quyền camera chỉ được yêu cầu khi bạn mở chế độ chụp.</p><button class="studio-primary" id="studioStartCamera">Bật camera</button><button class="studio-action" id="studioCameraChoose">Chọn ảnh thay thế</button></div></div><div class="studio-camera-actions"><label>Hẹn giờ<select id="studioTimer"><option value="0">Tắt</option><option value="3">3 giây</option><option value="10">10 giây</option></select></label><label>Tỉ lệ<select id="studioCameraAspect"><option value="4:3">4:3</option><option value="16:9">16:9</option><option value="1:1">1:1</option></select></label><button class="studio-primary" id="studioCapture" disabled>Chụp ảnh</button></div></div><aside class="studio-camera-sidebar"><h2>Camera</h2><label class="studio-select-row">Thiết bị<select id="studioCameraDevice"><option value="">Mặc định</option></select></label><label class="studio-select-row">Độ phân giải<select id="studioCameraResolution"><option value="1920x1080">Cao · 1080p</option><option value="1280x720">Vừa · 720p</option><option value="640x480">Nhẹ · 480p</option></select></label><label class="studio-check"><input type="checkbox" id="studioGridToggle" /> Lưới 1/3</label><div id="studioCameraAdvanced" class="studio-camera-advanced"></div><p id="studioCameraStatus" class="studio-help" role="status">Các điều khiển thủ công chỉ xuất hiện nếu camera và trình duyệt hỗ trợ.</p><button class="studio-action" id="studioNativeCapture" hidden>Mở camera thiết bị</button></aside></div></section>',
@@ -154,7 +163,7 @@ export function openStudio(options={}){
   q('#studioSize').options[0].textContent='Tối đa theo thiết bị ('+outputCap+' px)';
   Array.from(q('#studioSize').options).forEach(option=>{if(Number(option.value)>outputCap&&option.value!=='0')option.disabled=true;});
 
-  let file=null,image=null,imageUrl='',activeLut=null,customLuts=[],worker=null,mediaStream=null,track=null;
+  let file=null,image=null,imageUrl='',activeLut=null,customLuts=[],worker=null,mediaStream=null,track=null,watermarkLogoBlob=null,watermarkLogoImage=null,watermarkLogoUrl='';
   let state=defaults(),undoStack=[],redoStack=[],lastCommitted='',renderTicket=0,renderTimer=0,showOriginal=false,stageImageRect=null,brushStroke=null,curvePoint=-1;
   const pending=new Map();let requestId=0,closed=false,activeView='editor',previewTimer=0,dbReady=null;
   const lutMap=new Map(lookSpecs.map(s=>[s.id,{...s,...makeLookLut(s.id)}]));
@@ -177,7 +186,8 @@ export function openStudio(options={}){
   }
   function syncControls(){
     qa('[data-adjust]').forEach(input=>{const key=input.dataset.adjust;input.value=state[key]??0;const out=q('[data-output="'+key+'"]');if(out)out.textContent=key==='exposure'?Number(state[key]).toFixed(1)+' EV':Math.round(Number(state[key])||0)+(key==='straighten'?'°':key==='brushSize'||key==='grain'||key==='vignette'||key==='sharpen'||key==='denoise'||key==='cropLeft'||key==='cropTop'||key==='cropRight'||key==='cropBottom'?'%':'');});
-    q('#studioAspect').value=state.aspect;q('#studioFrame').value=state.frame;q('#studioSticker').value=state.sticker;
+    q('#studioAspect').value=state.aspect;q('#studioWatermarkText').value=state.watermarkText||'';q('#studioWatermarkPosition').value=state.watermarkPosition||'bottom-right';q('#studioWatermarkOpacity').value=state.watermarkOpacity??75;q('#studioWatermarkOpacityValue').textContent=(state.watermarkOpacity??75)+'%';q('#studioWatermarkSize').value=state.watermarkSize??24;q('#studioWatermarkSizeValue').textContent=state.watermarkSize??24;q('#studioWatermarkRepeat').checked=Boolean(state.watermarkRepeat);
+    q('#studioWatermarkLogoName').textContent=watermarkLogoBlob?.name||'Chưa chọn logo';q('#studioWatermarkLogoRemove').hidden=!watermarkLogoBlob;
     q('#studioBrush').classList.toggle('active',state.brushEnabled);q('#studioLutStrength').value=state.lutStrength;q('#studioLutStrengthValue').textContent=state.lutStrength+'%';
   }
   function computeCrop(){
@@ -251,16 +261,43 @@ export function openStudio(options={}){
     const ctx=out.getContext('2d');ctx.translate(ow/2,oh/2);ctx.rotate(angle);ctx.scale(state.flipX?-1:1,state.flipY?-1:1);ctx.drawImage(tmp,-w/2,-h/2);
     tmp.width=0;tmp.height=0;
     applyMask(out,state);
-    const result=decorate(out,state);if(result!==out){out.width=0;out.height=0;}
+    const result=await decorate(out,state);if(result!==out){out.width=0;out.height=0;}
     return result;
   }
-  function decorate(source,s){
-    if(s.frame==='none'&&!s.sticker)return source;const pad=s.frame==='polaroid'?24:s.frame==='film'?10:0,bottom=s.frame==='polaroid'?72:pad;const c=document.createElement('canvas');c.width=source.width+pad*2;c.height=source.height+pad+bottom;const ctx=c.getContext('2d');
-    if(s.frame==='polaroid'){ctx.fillStyle='#fbfaf5';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(source,pad,pad);ctx.fillStyle='#28313a';ctx.font='600 '+Math.max(16,Math.round(source.width*.025))+'px system-ui,sans-serif';ctx.textAlign='center';ctx.fillText('PhotoLens',c.width/2,c.height-pad-22);}
-    else if(s.frame==='film'){ctx.fillStyle='#101923';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(source,pad,pad);ctx.strokeStyle='#eef3f7';ctx.lineWidth=Math.max(2,pad*.16);ctx.strokeRect(pad/2,pad/2,source.width+pad,source.height+pad);}
-    else{ctx.drawImage(source,0,0);}
-    if(s.sticker){ctx.font=Math.max(28,Math.round(source.width*.09))+'px system-ui,sans-serif';ctx.textAlign='right';ctx.textBaseline='bottom';ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=8;ctx.fillText(s.sticker,c.width-pad-12,c.height-bottom+Math.max(0,bottom-6));}
-    return c;
+  async function decorate(source,s){
+    const text=String(s.watermarkText||'').trim();
+    if(!text&&!watermarkLogoImage)return source;
+    const canvas=document.createElement('canvas');canvas.width=source.width;canvas.height=source.height;
+    const ctx=canvas.getContext('2d');ctx.drawImage(source,0,0);
+    const opacity=clamp(Number(s.watermarkOpacity)||75,5,100)/100;
+    const fontSize=clamp(source.width*(Number(s.watermarkSize)||24)/800,14,180);
+    const logoW=watermarkLogoImage?clamp(source.width*(Number(s.watermarkSize)||24)/160,Math.min(48,source.width*.06),source.width*.32):0;
+    const logoH=watermarkLogoImage?logoW*(watermarkLogoImage.naturalHeight/watermarkLogoImage.naturalWidth):0;
+    const gap=logoW&&text?fontSize*.45:0;
+    const measured=(()=>{ctx.save();ctx.font='700 '+fontSize+'px system-ui,sans-serif';const w=text?ctx.measureText(text).width:0;ctx.restore();return w;})();
+    const markW=logoW+gap+measured, markH=Math.max(logoH,fontSize);
+    const pad=Math.max(14,Math.round(source.width*.035));
+    const drawMark=(x,y)=>{
+      ctx.save();ctx.globalAlpha=opacity;
+      let cursor=x-markW/2;
+      if(watermarkLogoImage){ctx.drawImage(watermarkLogoImage,cursor,y-logoH/2,logoW,logoH);cursor+=logoW+gap;}
+      if(text){
+        ctx.font='700 '+fontSize+'px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';
+        ctx.lineJoin='round';ctx.lineWidth=Math.max(2,fontSize*.12);ctx.strokeStyle='rgba(0,0,0,.72)';ctx.shadowColor='rgba(0,0,0,.58)';ctx.shadowBlur=fontSize*.25;
+        ctx.strokeText(text,cursor,y);ctx.fillStyle='#fff';ctx.fillText(text,cursor,y);
+      }
+      ctx.restore();
+    };
+    if(s.watermarkRepeat){
+      const stepX=Math.max(markW+pad*2,source.width*.28),stepY=Math.max(markH+pad*2,source.height*.2);
+      for(let y=stepY/2;y<source.height+stepY;y+=stepY)for(let x=stepX/2;x<source.width+stepX;x+=stepX)drawMark(x,y);
+    }else{
+      const [row,col]=String(s.watermarkPosition||'bottom-right').split('-');
+      const x=col==='left'?pad+markW/2:col==='right'?source.width-pad-markW/2:source.width/2;
+      const y=row==='top'?pad+markH/2:row==='bottom'?source.height-pad-markH/2:source.height/2;
+      drawMark(x,y);
+    }
+    return canvas;
   }
   async function renderPreview(){
     if(!image){q('#studioEmpty').hidden=false;return;}
@@ -276,11 +313,17 @@ export function openStudio(options={}){
     }catch(error){if(ticket===renderTicket)toast(error.message||'Không thể xem trước ảnh.');}
   }
   function schedulePreview(){clearTimeout(previewTimer);previewTimer=setTimeout(()=>requestAnimationFrame(renderPreview),35);}
-  async function setSource(nextFile,restoreState=null){
+  async function setWatermarkLogo(blob){
+    if(watermarkLogoUrl)URL.revokeObjectURL(watermarkLogoUrl);watermarkLogoUrl='';watermarkLogoBlob=blob||null;watermarkLogoImage=null;
+    if(blob){watermarkLogoUrl=URL.createObjectURL(blob);const img=new Image();img.src=watermarkLogoUrl;try{await img.decode();watermarkLogoImage=img;}catch{URL.revokeObjectURL(watermarkLogoUrl);watermarkLogoUrl='';watermarkLogoBlob=null;throw new Error('Không đọc được tệp logo.');}}
+  }
+  async function setSource(nextFile,restoreState=null,restoreLogo=null){
     if(!nextFile)return;
-    if(imageUrl)URL.revokeObjectURL(imageUrl);file=nextFile;syncExportControls();imageUrl=URL.createObjectURL(nextFile);image=new Image();image.src=imageUrl;
+    if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl='';image=null;
+    await setWatermarkLogo(restoreLogo||null);
+    file=nextFile;syncExportControls();imageUrl=URL.createObjectURL(nextFile);image=new Image();image.src=imageUrl;
     try{await image.decode();}catch{toast('Không đọc được ảnh này. Hãy chọn JPG, PNG, WebP hoặc HEIC.');image=null;return;}
-    state=Object.assign(defaults(),restoreState||{});if(!Array.isArray(state.strokes))state.strokes=[];
+    state=Object.assign(defaults(),restoreState||{});delete state.frame;delete state.sticker;if(!Array.isArray(state.strokes))state.strokes=[];
     undoStack=[];redoStack=[];lastCommitted=snapshot();syncControls();await loadActiveLut(state.lutId);q('#studioEmpty').hidden=true;q('#studioFileName').textContent=file.name+' · '+image.naturalWidth+' × '+image.naturalHeight;
     await renderPreview();
   }
@@ -311,8 +354,18 @@ export function openStudio(options={}){
   curve.addEventListener('dblclick',e=>{if(state.curve.length<=3)return;const rect=curve.getBoundingClientRect(),x=(e.clientX-rect.left)/rect.width,y=1-(e.clientY-rect.top)/rect.height;let best=-1,d=.06;state.curve.forEach((p,i)=>{const n=Math.hypot(p[0]-x,p[1]-y);if(n<d){d=n;best=i;}});if(best>0&&best<state.curve.length-1){state.curve.splice(best,1);drawCurve();commit();schedulePreview();}});
   q('#studioResetCurve').addEventListener('click',()=>{state.curve=[[0,0],[.5,.5],[1,1]];drawCurve();commit();schedulePreview();});
   q('#studioAspect').addEventListener('change',e=>{state.aspect=e.target.value;commit();schedulePreview();});
-  q('#studioFrame').addEventListener('change',e=>{state.frame=e.target.value;commit();schedulePreview();});
-  q('#studioSticker').addEventListener('change',e=>{state.sticker=e.target.value;commit();schedulePreview();});
+  q('#studioWatermarkText').addEventListener('input',e=>{state.watermarkText=e.target.value;schedulePreview();});
+  q('#studioWatermarkText').addEventListener('change',commit);
+  q('#studioWatermarkPosition').addEventListener('change',e=>{state.watermarkPosition=e.target.value;commit();schedulePreview();});
+  q('#studioWatermarkOpacity').addEventListener('input',e=>{state.watermarkOpacity=Number(e.target.value);q('#studioWatermarkOpacityValue').textContent=e.target.value+'%';schedulePreview();});
+  q('#studioWatermarkOpacity').addEventListener('change',commit);
+  q('#studioWatermarkSize').addEventListener('input',e=>{state.watermarkSize=Number(e.target.value);q('#studioWatermarkSizeValue').textContent=e.target.value;schedulePreview();});
+  q('#studioWatermarkSize').addEventListener('change',commit);
+  q('#studioWatermarkRepeat').addEventListener('change',e=>{state.watermarkRepeat=e.target.checked;commit();schedulePreview();});
+  q('#studioWatermarkLogoBtn').addEventListener('click',()=>q('#studioWatermarkLogoFile').click());
+  q('#studioWatermarkLogoFile').addEventListener('change',async e=>{const logo=e.target.files?.[0];e.target.value='';if(!logo)return;if(logo.size>1_500_000){toast('Logo phải nhỏ hơn 1,5 MB.');return;}try{await setWatermarkLogo(logo);q('#studioWatermarkLogoName').textContent=logo.name;q('#studioWatermarkLogoRemove').hidden=false;commit();schedulePreview();}catch(error){toast(error.message);}});
+  q('#studioWatermarkLogoRemove').addEventListener('click',async()=>{await setWatermarkLogo(null);q('#studioWatermarkLogoName').textContent='Chưa chọn logo';q('#studioWatermarkLogoRemove').hidden=true;commit();schedulePreview();});
+  q('#studioDetectWatermark').addEventListener('click',detectWatermarks);
   q('#studioRotateLeft').addEventListener('click',()=>{state.rotate=(state.rotate-90+360)%360;commit();schedulePreview();});
   q('#studioRotateRight').addEventListener('click',()=>{state.rotate=(state.rotate+90)%360;commit();schedulePreview();});
   q('#studioFlipX').addEventListener('click',()=>{state.flipX=!state.flipX;commit();schedulePreview();});
@@ -325,7 +378,7 @@ export function openStudio(options={}){
   const endBrush=()=>{if(brushStroke){brushStroke=null;commit();schedulePreview();}};stage.addEventListener('pointerup',endBrush);stage.addEventListener('pointercancel',endBrush);
   
   q('#studioUndo').addEventListener('click',undo);q('#studioRedo').addEventListener('click',redo);
-  q('#studioReset').addEventListener('click',()=>{if(!image)return;state=defaults();lastCommitted=snapshot();undoStack=[];redoStack=[];syncControls();drawCurve();loadActiveLut('none');updateHistoryButtons();renderPreview();});
+  q('#studioReset').addEventListener('click',async()=>{if(!image)return;await setWatermarkLogo(null);state=defaults();lastCommitted=snapshot();undoStack=[];redoStack=[];syncControls();drawCurve();loadActiveLut('none');updateHistoryButtons();renderPreview();});
   q('#studioBefore').addEventListener('pointerdown',()=>{showOriginal=true;renderPreview();});['pointerup','pointerleave','pointercancel'].forEach(t=>q('#studioBefore').addEventListener(t,()=>{showOriginal=false;renderPreview();}));
   q('#studioOpenFile').addEventListener('click',()=>q('#studioFile').click());q('#studioChooseFile').addEventListener('click',()=>q('#studioFile').click());
   q('#studioFile').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(f)setSource(f);e.target.value='';});
@@ -358,8 +411,32 @@ export function openStudio(options={}){
   }
   function onKeydown(e){if(e.key==='Escape'){close();return;}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();redo();}}
   function close(){
-    if(closed)return;closed=true;stopCamera();worker?.terminate();for(const p of pending.values())p.reject(new Error('Đã đóng phòng chỉnh sửa.'));pending.clear();document.removeEventListener('keydown',onKeydown);resizeObserver.disconnect();if(imageUrl)URL.revokeObjectURL(imageUrl);root.remove();document.body.style.overflow=previousOverflow;
+    if(closed)return;closed=true;stopCamera();worker?.terminate();for(const p of pending.values())p.reject(new Error('Đã đóng phòng chỉnh sửa.'));pending.clear();document.removeEventListener('keydown',onKeydown);resizeObserver.disconnect();if(imageUrl)URL.revokeObjectURL(imageUrl);if(watermarkLogoUrl)URL.revokeObjectURL(watermarkLogoUrl);root.remove();document.body.style.overflow=previousOverflow;
   }
+  async function detectWatermarks(){
+    const result=q('#studioWatermarkResults');
+    if(!file){result.textContent='Mở ảnh trước để nhận diện dấu chìm.';return;}
+    let config;
+    try{config=await cfg.getAiStatus?.();}catch{}
+    if(!config?.enabled||!config?.endpoint){
+      result.innerHTML='<p>Hãy bật AI và cấu hình Worker trong Cài đặt AI trước khi nhận diện.</p><button type="button" class="studio-action" id="studioWatermarkSettings">Mở Cài đặt AI</button>';
+      q('#studioWatermarkSettings').addEventListener('click',()=>{close();setTimeout(()=>cfg.openAiSettings?.(),0);});
+      return;
+    }
+    const layer=q('#studioModalLayer');layer.hidden=false;
+    layer.innerHTML='<div class="studio-modal" role="dialog" aria-modal="true"><h2>Gửi ảnh để nhận diện?</h2><p>PhotoLens sẽ gửi bản JPEG đã thu nhỏ tối đa 1024 px, bỏ siêu dữ liệu EXIF/GPS, tới Worker và Gemini. Ảnh gốc vẫn ở trên thiết bị. Chỉ tiếp tục nếu bạn đồng ý.</p><div class="studio-modal-actions"><button class="studio-action" id="studioWatermarkCancel">Hủy</button><button class="studio-primary" id="studioWatermarkConfirm">Đồng ý và nhận diện</button></div></div>';
+    q('#studioWatermarkCancel').addEventListener('click',()=>{layer.hidden=true;layer.innerHTML='';});
+    q('#studioWatermarkConfirm').addEventListener('click',async()=>{
+      const button=q('#studioWatermarkConfirm');button.disabled=true;button.textContent='Đang nhận diện…';result.textContent='Đang gửi ảnh đã thu nhỏ tới Worker…';
+      layer.hidden=true;layer.innerHTML='';
+      try{
+        const marks=await cfg.detectWatermarks(file);
+        if(!Array.isArray(marks)||!marks.length){result.textContent='Không nhận diện được dấu chìm hãng rõ ràng trong ảnh.';return;}
+        result.innerHTML='<strong>Kết quả ước lượng từ AI</strong>'+marks.map(mark=>'<article class="studio-watermark-result"><b>'+esc(mark.brand)+'</b><span>'+esc(mark.mark_type)+' · '+esc(mark.location)+' · '+Math.round(Number(mark.confidence)*100)+'%</span><small>'+esc(mark.evidence)+'</small></article>').join('')+'<small>AI có thể nhầm logo, chữ hoặc vật thể; hãy kiểm tra bằng mắt.</small>';
+      }catch(error){result.textContent=error.message||'Không nhận diện được dấu chìm. Hãy kiểm tra cài đặt AI và thử lại.';}
+    });
+  }
+
   function cropAndRotateNoop(){return null;}
 
   async function applyToPhotoLens(){
@@ -426,15 +503,15 @@ export function openStudio(options={}){
   }
   async function saveProject(){
     if(!file||!image){toast('Mở ảnh trước rồi mới lưu dự án.');return;}
-    try{const id=[file.name,file.size,file.lastModified].join('|');await dbAction('projects','readwrite','put',{id,name:file.name,blob:file,settings:deepCopy(state),updatedAt:Date.now()});toast('Dự án đã lưu trên thiết bị này.');}
+    try{const id=[file.name,file.size,file.lastModified].join('|');await dbAction('projects','readwrite','put',{id,name:file.name,blob:file,settings:deepCopy(state),watermarkLogo:watermarkLogoBlob,updatedAt:Date.now()});toast('Dự án đã lưu trên thiết bị này.');}
     catch(error){toast(error.message||'Không lưu được dự án cục bộ.');}
   }
-  async function saveDraft(){if(!file||!state)return;try{const id=[file.name,file.size,file.lastModified].join('|');await dbAction('projects','readwrite','put',{id,name:file.name,blob:file,settings:deepCopy(state),updatedAt:Date.now()});}catch{}}
+  async function saveDraft(){if(!file||!state)return;try{const id=[file.name,file.size,file.lastModified].join('|');await dbAction('projects','readwrite','put',{id,name:file.name,blob:file,settings:deepCopy(state),watermarkLogo:watermarkLogoBlob,updatedAt:Date.now()});}catch{}}
   async function showProjects(){
     const layer=q('#studioModalLayer');layer.hidden=false;layer.innerHTML='<div class="studio-modal"><h2>Dự án lưu trên thiết bị này</h2><div id="studioProjectList" class="studio-project-list">Đang tải…</div><div class="studio-modal-actions"><button class="studio-action" id="studioProjectClose">Đóng</button></div></div>';
     q('#studioProjectClose').addEventListener('click',()=>{layer.hidden=true;layer.innerHTML='';});
     try{const all=await dbAction('projects','readonly','getAll');const list=q('#studioProjectList');list.innerHTML=all.length?all.sort((a,b)=>b.updatedAt-a.updatedAt).map(p=>'<button class="studio-project-item" data-project="'+esc(p.id)+'"><strong>'+esc(p.name)+'</strong><span>'+new Date(p.updatedAt).toLocaleString()+'</span></button>').join(''):'<p>Chưa có dự án nào.</p>';
-      list.querySelectorAll('[data-project]').forEach(b=>b.addEventListener('click',async()=>{const p=all.find(x=>x.id===b.dataset.project);if(p){await setSource(new File([p.blob],p.name,{type:p.blob.type||'image/jpeg'}),p.settings);layer.hidden=true;layer.innerHTML='';setView('editor');}}));
+      list.querySelectorAll('[data-project]').forEach(b=>b.addEventListener('click',async()=>{const p=all.find(x=>x.id===b.dataset.project);if(p){await setSource(new File([p.blob],p.name,{type:p.blob.type||'image/jpeg'}),p.settings,p.watermarkLogo||null);layer.hidden=true;layer.innerHTML='';setView('editor');}}));
     }catch(error){q('#studioProjectList').textContent=error.message;}
   }
   async function loadActiveLut(id){

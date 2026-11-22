@@ -339,6 +339,29 @@ async function shareStudioPhoto(blob, filename) {
   }
 }
 
+async function detectStudioWatermarks(file) {
+  if (!(await loadAiEnabled())) throw new Error('AI đang tắt. Hãy bật Dùng AI trong Cài đặt AI.');
+  const endpoint = await getAiEndpoint();
+  if (!endpoint) throw new Error('Chưa cấu hình URL Cloudflare Worker.');
+  const { data } = await prepareAiJpeg({ file });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 45_000);
+  try {
+    const response = await fetch(`${endpoint.replace(/\\/+$/, '')}/analyze`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode: 'watermarks', images: [data] }), signal: controller.signal
+    });
+    const body = await response.json().catch(() => null);
+    if (!response.ok) throw new Error(body?.error?.message || `Worker trả HTTP ${response.status}.`);
+    return body?.watermarks || [];
+  } catch (error) {
+    if (error?.name === 'AbortError') throw new Error('Worker phản hồi quá lâu. Hãy thử lại.');
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function launchStudio(startView = 'editor') {
   try {
     const { openStudio } = await import('./studio.js');
@@ -347,7 +370,10 @@ async function launchStudio(startView = 'editor') {
       startView,
       onCapture: file => addFile('A', file),
       nativeCapture: Capacitor.isNativePlatform() ? captureStudioPhoto : null,
-      nativeShare: Capacitor.isNativePlatform() ? shareStudioPhoto : null
+      nativeShare: Capacitor.isNativePlatform() ? shareStudioPhoto : null,
+      getAiStatus: async () => ({ enabled: await loadAiEnabled(), endpoint: await getAiEndpoint() }),
+      detectWatermarks: detectStudioWatermarks,
+      openAiSettings: showSettings
     });
   } catch (error) {
     console.error('PhotoLens Studio failed to open:', error);

@@ -49,12 +49,13 @@
   font-size: 22px; line-height: 1;
 }
 #photoStudio .studio-close { font-size: 26px; }
-#photoStudio .studio-content { min-height: 0; flex: 1; overflow: auto; overscroll-behavior: contain; }
-#photoStudio .studio-page { min-height: 100%; }
+#photoStudio .studio-content { min-height: 0; flex: 1; overflow: hidden; overscroll-behavior: contain; }
+#photoStudio .studio-page { min-height: 100%; height: 100%; }
+#photoStudio .studio-lut-page, #photoStudio .studio-camera-page { overflow: auto; }
 #photoStudio .studio-editor-layout {
-  min-height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  height: 100%; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 360px); overflow: hidden;
 }
-#photoStudio .studio-preview-panel { min-width: 0; min-height: 0; display: flex; flex-direction: column; padding: 18px; }
+#photoStudio .studio-preview-panel { min-width: 0; min-height: 0; height: 100%; position: sticky; top: 0; display: flex; flex-direction: column; padding: 18px; overflow: hidden; }
 #photoStudio .studio-stage {
   position: relative; display: grid; min-height: 280px; height: clamp(320px, 56vh, 760px);
   overflow: hidden; place-items: center; border: 1px solid #253747; border-radius: 15px;
@@ -76,7 +77,7 @@
 #photoStudio .studio-exportbar > label, #photoStudio .studio-camera-actions > label {
   display: inline-flex; align-items: center; gap: 7px; color: var(--studio-muted); font-size: 12px;
 }
-#photoStudio select, #photoStudio input[type="search"] {
+#photoStudio select, #photoStudio input[type="search"], #photoStudio .studio-select-row input[type="text"] {
   min-height: 38px; max-width: 100%; border: 1px solid var(--studio-line); border-radius: 9px;
   padding: 6px 10px; color: var(--studio-text); background: #0a131d;
 }
@@ -100,6 +101,13 @@
 #photoStudio .studio-sidebar, #photoStudio .studio-camera-sidebar {
   min-width: 0; padding: 16px; border-left: 1px solid var(--studio-line); background: #0e1721;
 }
+#photoStudio .studio-sidebar { height: 100%; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+#photoStudio .studio-watermark-logo { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--studio-muted); font-size: 12px; }
+#photoStudio .studio-watermark-results { display: grid; gap: 8px; color: var(--studio-muted); font-size: 13px; }
+#photoStudio .studio-watermark-results p { margin: 0; }
+#photoStudio .studio-watermark-result { display: grid; gap: 3px; padding: 10px; border: 1px solid var(--studio-line); border-radius: 10px; background: #0a131c; }
+#photoStudio .studio-watermark-result b { color: var(--studio-text); }
+#photoStudio .studio-watermark-result small { line-height: 1.45; }
 #photoStudio .studio-section { border: 1px solid var(--studio-line); border-radius: 11px; margin: 0 0 10px; background: var(--studio-panel); }
 #photoStudio .studio-section summary { padding: 12px 13px; font-weight: 700; cursor: pointer; }
 #photoStudio .studio-section-body { display: grid; gap: 10px; padding: 0 13px 14px; }
@@ -176,10 +184,13 @@
   #photoStudio .studio-tabs { order: 3; width: 100%; justify-content: stretch; }
   #photoStudio .studio-tabs button { min-height: 40px; flex: 1; padding: 7px 8px; font-size: 13px; }
   #photoStudio .studio-icon-btn, #photoStudio .studio-close { width: 38px; height: 38px; }
-  #photoStudio .studio-editor-layout, #photoStudio .studio-camera-layout { display: flex; flex-direction: column; }
-  #photoStudio .studio-preview-panel, #photoStudio .studio-camera-main { padding: 10px; }
+  #photoStudio .studio-content { overflow-y: auto; }
+  #photoStudio .studio-editor-page { height: auto; min-height: 100%; }
+  #photoStudio .studio-editor-layout, #photoStudio .studio-camera-layout { height: auto; min-height: 100%; display: flex; flex-direction: column; overflow: visible; }
+  #photoStudio .studio-preview-panel { position: sticky; top: 0; z-index: 4; height: auto; max-height: 76vh; overflow-y: auto; padding: 10px; background: #0e1721; border-bottom: 1px solid var(--studio-line); }
+  #photoStudio .studio-camera-main { padding: 10px; }
   #photoStudio .studio-stage { height: min(48vh, 420px); min-height: 230px; border-radius: 12px; }
-  #photoStudio .studio-sidebar, #photoStudio .studio-camera-sidebar { border-top: 1px solid var(--studio-line); border-left: 0; padding: 12px; }
+  #photoStudio .studio-sidebar, #photoStudio .studio-camera-sidebar { height: auto; overflow: visible; border-top: 1px solid var(--studio-line); border-left: 0; padding: 12px; }
   #photoStudio .studio-side-tools { position: sticky; top: 0; z-index: 2; background: #0e1721; }
   #photoStudio .studio-exportbar > label { flex: 1 1 44%; }
   #photoStudio .studio-exportbar .studio-primary, #photoStudio .studio-exportbar .studio-action { flex: 1 1 40%; }

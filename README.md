@@ -134,6 +134,17 @@ Từ màn hình chính, **Chỉnh ảnh** mở phòng chỉnh sửa cục bộ; 
 - LUT mẫu do PhotoLens tự tạo, yêu thích, tìm kiếm, lọc nhóm và nhập LUT 3D `.cube` tối đa 3 MB (kích thước 2–64).
 - Xuất JPG, PNG hoặc WebP, chọn chất lượng và kích thước; giữ EXIF chỉ khi người dùng bật lựa chọn và ảnh gốc là JPEG. Có thể đưa ảnh đã chỉnh về ảnh A để tiếp tục phân tích hoặc so sánh.
 - Camera dùng `getUserMedia` trên web, cho chọn camera, hẹn giờ, tỉ lệ và lưới. Zoom, bù sáng, lấy nét và đèn flash chỉ xuất hiện khi trình duyệt/camera báo hỗ trợ. Trên Android, nếu camera web không hoạt động, có thể mở Camera native của Capacitor.
-- Khung phim, khung Polaroid, nhãn dán, chia sẻ ảnh đã chỉnh sửa hoặc thẻ ghép trước/sau; Android dùng bảng chia sẻ native khi khả dụng. Xử lý ảnh và dữ liệu LUT chạy tại thiết bị; không gửi ảnh tới máy chủ, trừ luồng AI Worker hiện có khi người dùng chủ động bật.
+- Dấu chìm chữ/logo, chia sẻ ảnh đã chỉnh sửa hoặc thẻ ghép trước/sau; Android dùng bảng chia sẻ native khi khả dụng. Xử lý ảnh và dữ liệu LUT chạy tại thiết bị; không gửi ảnh tới máy chủ, trừ luồng AI Worker hiện có khi người dùng chủ động bật.
 
 Trình duyệt yêu cầu HTTPS hoặc localhost để xin quyền camera. Camera Windows tùy thuộc thiết bị, quyền hệ điều hành, trình duyệt và HTTPS. Android hỗ trợ camera native qua Capacitor khi ứng dụng được build từ thư mục Android; GitHub Pages chạy camera web và cần HTTPS. Studio giới hạn kích thước xuất tối đa theo thiết bị để tránh vượt bộ nhớ. Cọ vùng là công cụ mask cục bộ; vùng tròn/gradient, điều khiển ISO/tốc độ màn trập thủ công và ghép ảnh nhiều khung chưa có vì không được API camera web hỗ trợ ổn định hoặc cần thêm luồng UI riêng.
+
+
+## Dấu chìm và nhận diện hãng
+
+Trong PhotoLens Studio, mục “Dấu chìm” cho phép chèn chữ hoặc logo do bạn chọn, đặt vị trí, độ mờ, kích thước và lặp mẫu. Dấu chìm được gắn vào bản xuất; ảnh gốc không bị ghi đè. Dự án lưu cả logo cục bộ trong IndexedDB để tiếp tục chỉnh sửa trên cùng thiết bị.
+
+Nhận diện hãng dùng Gemini qua Cloudflare Worker. Ứng dụng chỉ gửi ảnh sau khi AI được bật/cấu hình và người dùng xác nhận; payload là JPEG đã thu nhỏ tối đa 1024 px, không chứa EXIF/GPS. Hãy triển khai phiên bản Worker mới bằng `npm.cmd run worker:deploy` để bật chế độ `watermarks`; triển khai GitHub Pages chỉ cập nhật giao diện.
+
+## Cuộn trong Studio
+
+Trên màn hình máy tính, khung xem trước đứng yên và cột công cụ bên phải có thanh cuộn riêng. Trên điện thoại, phần xem trước ghim phía trên khi bạn cuộn tới các công cụ.
