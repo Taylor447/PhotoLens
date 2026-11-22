@@ -124,8 +124,8 @@ export function openStudio(options={}){
     '<div class="studio-header-actions"><button class="studio-icon-btn" id="studioUndo" title="Hoàn tác" aria-label="Hoàn tác">↶</button><button class="studio-icon-btn" id="studioRedo" title="Làm lại" aria-label="Làm lại">↷</button><button class="studio-close" id="studioClose" aria-label="Đóng">×</button></div></header>',
     '<main class="studio-content">',
     '<section class="studio-page studio-editor-page" data-studio-page="editor"><div class="studio-editor-layout">',
-    '<div class="studio-preview-panel"><div class="studio-stage" id="studioStage"><canvas id="studioCanvas" aria-label="Xem trước ảnh đã chỉnh sửa"></canvas><div class="studio-empty" id="studioEmpty"><div class="studio-empty-icon">✦</div><strong>Mở ảnh để bắt đầu chỉnh sửa</strong><p>Ảnh được xử lý trên thiết bị của bạn.</p><button class="studio-action" id="studioChooseFile">Chọn ảnh</button></div></div>',
-    '<div class="studio-preview-toolbar"><button class="studio-action" id="studioOpenFile">Mở ảnh</button><input id="studioFile" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden /><button class="studio-action" id="studioBefore">Giữ để xem ảnh gốc</button><span class="studio-file-name" id="studioFileName">Chưa chọn ảnh</span></div>',
+    '<div class="studio-preview-panel"><div class="studio-stage" id="studioStage"><canvas id="studioCanvas" aria-label="Xem trước ảnh đã chỉnh sửa"></canvas><div class="studio-empty" id="studioEmpty"><div class="studio-empty-icon">✦</div><strong>Mở ảnh để bắt đầu chỉnh sửa</strong><p>Chọn JPG, PNG, WebP hoặc AVIF. HEIC/HEIF tùy trình duyệt.</p><button class="studio-action" id="studioChooseFile">Chọn ảnh</button></div></div>',
+    '<div class="studio-preview-toolbar"><button class="studio-action" id="studioOpenFile">Mở ảnh</button><input id="studioFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.avif,.heic,.heif" hidden /><button class="studio-action" id="studioBefore">Giữ để xem ảnh gốc</button><span class="studio-file-name" id="studioFileName">Chưa chọn ảnh</span></div>',
     '<div class="studio-exportbar"><label>Định dạng <select id="studioFormat"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></label><label>Kích thước <select id="studioSize"><option value="0">Tối đa theo thiết bị</option><option value="4096">4096 px</option><option value="2048">2048 px</option><option value="1080">1080 px</option></select></label><label class="studio-quality-label">Chất lượng <input id="studioQuality" type="range" min="50" max="100" value="92" /><output id="studioQualityValue">92%</output></label><label class="studio-check"><input id="studioKeepMetadata" type="checkbox" /> Giữ EXIF (JPG gốc)</label><button class="studio-primary" id="studioExport">Xuất ảnh</button><button class="studio-action" id="studioApply">Dùng ảnh đã chỉnh</button><label>Chia sẻ<select id="studioShareMode"><option value="edited">Ảnh đã chỉnh</option><option value="before-after">Trước / sau</option></select></label><button class="studio-action" id="studioShare">Chia sẻ</button></div>',
     '</div>',
     '<aside class="studio-sidebar">',
@@ -313,16 +313,30 @@ export function openStudio(options={}){
     }catch(error){if(ticket===renderTicket)toast(error.message||'Không thể xem trước ảnh.');}
   }
   function schedulePreview(){clearTimeout(previewTimer);previewTimer=setTimeout(()=>requestAnimationFrame(renderPreview),35);}
+  function openPhotoPicker(){
+    const input=q('#studioFile');input.value='';
+    try{if(typeof input.showPicker==='function'){input.showPicker();return;}}catch{}
+    input.click();
+  }
   async function setWatermarkLogo(blob){
     if(watermarkLogoUrl)URL.revokeObjectURL(watermarkLogoUrl);watermarkLogoUrl='';watermarkLogoBlob=blob||null;watermarkLogoImage=null;
     if(blob){watermarkLogoUrl=URL.createObjectURL(blob);const img=new Image();img.src=watermarkLogoUrl;try{await img.decode();watermarkLogoImage=img;}catch{URL.revokeObjectURL(watermarkLogoUrl);watermarkLogoUrl='';watermarkLogoBlob=null;throw new Error('Không đọc được tệp logo.');}}
   }
+  function imageLoadError(nextFile){
+    const name=String(nextFile?.name||'').toLowerCase();
+    if(/\.(heic|heif)$/.test(name)||/heic|heif/i.test(nextFile?.type||''))return new Error('Trình duyệt này không đọc được ảnh HEIC/HEIF. Hãy chuyển ảnh sang JPG hoặc PNG rồi thử lại.');
+    return new Error('Không giải mã được ảnh này. Hãy thử ảnh JPG, PNG, WebP hoặc AVIF.');
+  }
   async function setSource(nextFile,restoreState=null,restoreLogo=null){
-    if(!nextFile)return;
-    if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl='';image=null;
-    await setWatermarkLogo(restoreLogo||null);
-    file=nextFile;syncExportControls();imageUrl=URL.createObjectURL(nextFile);image=new Image();image.src=imageUrl;
-    try{await image.decode();}catch{toast('Không đọc được ảnh này. Hãy chọn JPG, PNG, WebP hoặc HEIC.');image=null;return;}
+    if(!nextFile)throw new Error('Chưa chọn tệp ảnh.');
+    const nextUrl=URL.createObjectURL(nextFile),nextImage=new Image();nextImage.src=nextUrl;
+    try{
+      await nextImage.decode();
+      if(!nextImage.naturalWidth||!nextImage.naturalHeight)throw new Error('Ảnh không có kích thước hợp lệ.');
+    }catch(error){URL.revokeObjectURL(nextUrl);throw error instanceof Error&&error.message==='Ảnh không có kích thước hợp lệ.'?error:imageLoadError(nextFile);}
+    try{await setWatermarkLogo(restoreLogo||null);}catch(error){URL.revokeObjectURL(nextUrl);throw error;}
+    if(imageUrl)URL.revokeObjectURL(imageUrl);
+    imageUrl=nextUrl;image=nextImage;file=nextFile;syncExportControls();
     state=Object.assign(defaults(),restoreState||{});delete state.frame;delete state.sticker;if(!Array.isArray(state.strokes))state.strokes=[];
     undoStack=[];redoStack=[];lastCommitted=snapshot();syncControls();await loadActiveLut(state.lutId);q('#studioEmpty').hidden=true;q('#studioFileName').textContent=file.name+' · '+image.naturalWidth+' × '+image.naturalHeight;
     await renderPreview();
@@ -380,8 +394,15 @@ export function openStudio(options={}){
   q('#studioUndo').addEventListener('click',undo);q('#studioRedo').addEventListener('click',redo);
   q('#studioReset').addEventListener('click',async()=>{if(!image)return;await setWatermarkLogo(null);state=defaults();lastCommitted=snapshot();undoStack=[];redoStack=[];syncControls();drawCurve();loadActiveLut('none');updateHistoryButtons();renderPreview();});
   q('#studioBefore').addEventListener('pointerdown',()=>{showOriginal=true;renderPreview();});['pointerup','pointerleave','pointercancel'].forEach(t=>q('#studioBefore').addEventListener(t,()=>{showOriginal=false;renderPreview();}));
-  q('#studioOpenFile').addEventListener('click',()=>q('#studioFile').click());q('#studioChooseFile').addEventListener('click',()=>q('#studioFile').click());
-  q('#studioFile').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(f)setSource(f);e.target.value='';});
+  q('#studioOpenFile').addEventListener('click',openPhotoPicker);q('#studioChooseFile').addEventListener('click',openPhotoPicker);
+  q('#studioFile').addEventListener('change',async e=>{
+    const input=e.currentTarget,selected=input.files&&input.files[0];if(!selected)return;
+    const previousLabel=file?file.name+' · '+image.naturalWidth+' × '+image.naturalHeight:'Chưa chọn ảnh';
+    q('#studioFileName').textContent='Đang mở '+selected.name+'…';
+    try{await setSource(selected);toast('Đã mở ảnh thành công.');}
+    catch(error){q('#studioFileName').textContent=file?previousLabel:'Không mở được ảnh';toast(error.message||'Không thể mở ảnh.');}
+    finally{input.value='';}
+  });
   q('#studioQuality').addEventListener('input',e=>q('#studioQualityValue').textContent=e.target.value+'%');
   q('#studioFormat').addEventListener('change',syncExportControls);
   q('#studioExport').addEventListener('click',exportImage);q('#studioApply').addEventListener('click',applyToPhotoLens);q('#studioShare').addEventListener('click',shareImage);
@@ -395,7 +416,7 @@ export function openStudio(options={}){
   q('#studioCameraDevice').addEventListener('change',()=>startCamera(q('#studioCameraDevice').value));
   q('#studioGridToggle').addEventListener('change',e=>q('#studioCameraGrid').hidden=!e.target.checked);
   q('#studioStartCamera').addEventListener('click',()=>startCamera());
-  q('#studioCameraChoose').addEventListener('click',()=>{setView('editor');q('#studioFile').click();});
+  q('#studioCameraChoose').addEventListener('click',()=>{void setView('editor');openPhotoPicker();});
   q('#studioCapture').addEventListener('click',captureCamera);
   q('#studioNativeCapture').addEventListener('click',async()=>{if(!cfg.nativeCapture){toast('Camera thiết bị không khả dụng.');return;}try{const f=await cfg.nativeCapture();if(f){if(cfg.onCapture)await cfg.onCapture(f);close();}}catch(error){toast(error.message||'Không mở được camera thiết bị.');}});
   q('#studioCameraStage').addEventListener('click',focusAtPoint);
@@ -511,7 +532,7 @@ export function openStudio(options={}){
     const layer=q('#studioModalLayer');layer.hidden=false;layer.innerHTML='<div class="studio-modal"><h2>Dự án lưu trên thiết bị này</h2><div id="studioProjectList" class="studio-project-list">Đang tải…</div><div class="studio-modal-actions"><button class="studio-action" id="studioProjectClose">Đóng</button></div></div>';
     q('#studioProjectClose').addEventListener('click',()=>{layer.hidden=true;layer.innerHTML='';});
     try{const all=await dbAction('projects','readonly','getAll');const list=q('#studioProjectList');list.innerHTML=all.length?all.sort((a,b)=>b.updatedAt-a.updatedAt).map(p=>'<button class="studio-project-item" data-project="'+esc(p.id)+'"><strong>'+esc(p.name)+'</strong><span>'+new Date(p.updatedAt).toLocaleString()+'</span></button>').join(''):'<p>Chưa có dự án nào.</p>';
-      list.querySelectorAll('[data-project]').forEach(b=>b.addEventListener('click',async()=>{const p=all.find(x=>x.id===b.dataset.project);if(p){await setSource(new File([p.blob],p.name,{type:p.blob.type||'image/jpeg'}),p.settings,p.watermarkLogo||null);layer.hidden=true;layer.innerHTML='';setView('editor');}}));
+      list.querySelectorAll('[data-project]').forEach(b=>b.addEventListener('click',async()=>{const p=all.find(x=>x.id===b.dataset.project);if(p){try{await setSource(new File([p.blob],p.name,{type:p.blob.type||'image/jpeg'}),p.settings,p.watermarkLogo||null);layer.hidden=true;layer.innerHTML='';setView('editor');}catch(error){toast(error.message||'Không mở được dự án.');}}}));
     }catch(error){q('#studioProjectList').textContent=error.message;}
   }
   async function loadActiveLut(id){
@@ -573,7 +594,7 @@ export function openStudio(options={}){
   }
   
 
-  if(cfg.file)void setSource(cfg.file);
+  if(cfg.file){q('#studioFileName').textContent='Đang mở '+cfg.file.name+'…';void setSource(cfg.file).catch(error=>{q('#studioFileName').textContent='Không mở được ảnh';toast(error.message||'Không thể mở ảnh.');});}
   else{q('#studioEmpty').hidden=false;lastCommitted=snapshot();syncControls();}
   syncExportControls();
   void loadActiveLut(state.lutId);
