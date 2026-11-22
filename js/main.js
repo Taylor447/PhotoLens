@@ -94,20 +94,24 @@ try {
 function toast(message) { const el = $('#toast'); el.textContent = message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => el.classList.remove('show'), 2800); }
 // Worker/API có thể trả lỗi lồng nhau; tránh hiển thị [object Object] trong giao diện.
 function readableErrorMessage(value, fallback = 'Không thể kết nối AI. Các chỉ số cục bộ vẫn được giữ.') {
+  const regionBlocked = 'Google Gemini từ chối vị trí IP mà Worker dùng để gọi API. PhotoLens đã bật Smart Placement trong cấu hình; hãy deploy lại Worker và chờ Cloudflare tối ưu vị trí (có thể đến 15 phút). Nếu vẫn lỗi, cần đổi nơi chạy backend hoặc gửi báo cáo tới Google. Báo cáo cục bộ vẫn đầy đủ.';
+  const messages = {
+    ORIGIN_NOT_ALLOWED: 'Worker chưa cho phép địa chỉ của ứng dụng. Hãy dùng http://localhost:5173 hoặc thêm đúng origin vào ALLOWED_ORIGINS rồi deploy lại Worker.',
+    KEY_NOT_CONFIGURED: 'Worker chưa được cấu hình secret GEMINI_API_KEY.',
+    GEMINI_AUTH: 'Gemini từ chối API key. Hãy kiểm tra secret GEMINI_API_KEY trên Cloudflare.',
+    GEMINI_RATE_LIMIT: 'Gemini đang giới hạn yêu cầu. Hãy thử lại sau ít phút.',
+    GEMINI_REGION_BLOCKED: regionBlocked
+  };
   let current = value;
   for (let depth = 0; depth < 5; depth++) {
-    if (typeof current === 'string' && current.trim()) return current.trim();
     if (current instanceof Error) { current = current.message; continue; }
+    if (typeof current === 'string' && current.trim()) {
+      return /user location is not supported for the api use/i.test(current) ? regionBlocked : current.trim();
+    }
     if (!current || typeof current !== 'object') break;
+    if (typeof current.code === 'string' && messages[current.code]) return messages[current.code];
     if (current.message != null) { current = current.message; continue; }
     if (current.error != null) { current = current.error; continue; }
-    const messages = {
-      ORIGIN_NOT_ALLOWED: 'Worker chưa cho phép địa chỉ của ứng dụng. Hãy dùng http://localhost:5173 hoặc thêm đúng origin vào ALLOWED_ORIGINS rồi deploy lại Worker.',
-      KEY_NOT_CONFIGURED: 'Worker chưa được cấu hình secret GEMINI_API_KEY.',
-      GEMINI_AUTH: 'Gemini từ chối API key. Hãy kiểm tra secret GEMINI_API_KEY trên Cloudflare.',
-      GEMINI_RATE_LIMIT: 'Gemini đang giới hạn yêu cầu. Hãy thử lại sau ít phút.'
-    };
-    if (typeof current.code === 'string' && messages[current.code]) return messages[current.code];
     break;
   }
   return fallback;

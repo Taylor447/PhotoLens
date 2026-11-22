@@ -351,6 +351,12 @@ async function analyzeWithGemini({ mode, deepAnalysis = false, images, env }) {
         ? upstreamError.error.message.replace(/\s+/g, ' ').trim().slice(0, 240)
         : '';
       if (detail && env.GEMINI_API_KEY) detail = detail.split(env.GEMINI_API_KEY).join('[đã ẩn khóa]');
+      if (upstream.status === 400 && /user location is not supported for the api use/i.test(detail)) {
+        return {
+          error: ['GEMINI_REGION_BLOCKED', 'Google Gemini từ chối vị trí IP mà Worker dùng để gọi API. PhotoLens đã bật Smart Placement trong cấu hình; hãy deploy lại Worker và chờ Cloudflare tối ưu vị trí (có thể đến 15 phút). Nếu vẫn lỗi, cần đổi nơi chạy backend hoặc gửi báo cáo tới Google. Báo cáo cục bộ vẫn đầy đủ.'],
+          status: 502
+        };
+      }
       const providerStatus = typeof upstreamError?.error?.status === 'string' ? ` (${upstreamError.error.status})` : '';
       const diagnostic = detail ? `: ${detail}` : '.';
       return {
@@ -469,15 +475,38 @@ export default {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 12000);
       try {
-        const upstream = await fetch('https://overpass-api.de/api/interpreter', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 'Accept': 'application/json', 'User-Agent': 'PhotoLens/1.0 (+https://taylor447.github.io/PhotoLens/)' },
-          body: 'data=' + encodeURIComponent(query),
-          signal: controller.signal
-        });
-        if (!upstream.ok) return failure(request, env, 'OVERPASS_ERROR', 'OpenStreetMap tạm thời không trả được dữ liệu.', 502);
-        const payload = await upstream.json();
-        const elements = Array.isArray(payload?.elements) ? payload.elements.slice(0, 35) : [];
+        const endpoints = [
+          'https://overpass-api.de/api/interpreter',
+          'https://overpass.private.coffee/api/interpreter',
+          'https://ovp.dresel.systems/api-as/interpreter'
+        ];
+        let payload = null;
+        let lastStatus = 0;
+        for (const endpoint of endpoints) {
+          const attemptController = new AbortController();
+          const attemptTimer = setTimeout(() => attemptController.abort(), 3800);
+          try {
+            const upstream = await fetch(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 'Accept': 'application/json', 'User-Agent': 'PhotoLens/1.0 (+https://taylor447.github.io/PhotoLens/)' },
+              body: 'data=' + encodeURIComponent(query),
+              signal: attemptController.signal
+            });
+            if (!upstream.ok) { lastStatus = upstream.status; continue; }
+            const candidate = await upstream.json();
+            if (!Array.isArray(candidate?.elements)) { lastStatus = 502; continue; }
+            payload = candidate;
+            break;
+          } catch {
+            lastStatus = 0;
+          } finally { clearTimeout(attemptTimer); }
+        }
+        if (!payload) {
+          return lastStatus
+            ? failure(request, env, 'OVERPASS_ERROR', 'Các máy chủ OpenStreetMap đang lỗi (HTTP ' + lastStatus + '). Hãy thử lại sau.', 502)
+            : failure(request, env, 'OVERPASS_TIMEOUT', 'Không kết nối được các máy chủ OpenStreetMap. Hãy thử lại sau.', 504);
+        }
+        const elements = payload.elements.slice(0, 35);
         const response = json(request, env, { elements, source: 'OpenStreetMap', fetchedAt: new Date().toISOString() });
         const headers = new Headers(response.headers);
         headers.set('Cache-Control', 'public, max-age=300');
