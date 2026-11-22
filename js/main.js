@@ -28,13 +28,13 @@ const icons = {
   theme: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>')
 };
 
-const brandMark = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="16" r="13.3" opacity=".92"/><circle cx="16" cy="16" r="9.2" opacity=".42"/><path d="M10 11.5h12M16 11.5v10.2" stroke-width="2.6"/><path d="M16 2.7v2.4M16 26.9v2.4M2.7 16h2.4M26.9 16h2.4" opacity=".82"/></svg>';
+const brandMark = '<svg width="48" height="48" viewBox="0 0 240 240" fill="none" aria-hidden="true"><defs><linearGradient id="brandFrame" x1="62" y1="62" x2="190" y2="194" gradientUnits="userSpaceOnUse"><stop stop-color="#3477D3"/><stop offset="1" stop-color="#35D0C3"/></linearGradient><linearGradient id="brandLens" x1="117" y1="99" x2="188" y2="169" gradientUnits="userSpaceOnUse"><stop stop-color="#49DCCB"/><stop offset="1" stop-color="#3488D5"/></linearGradient><clipPath id="brandLensClip"><circle cx="151" cy="133" r="35"/></clipPath></defs><path d="M42 51V36h15M183 36h15v15M42 190v15h15M183 205h15v-15" stroke="#2E6FC8" stroke-width="4" stroke-linecap="square"/><path d="M183 36h15v15M183 205h15v-15" stroke="#C4CDD5" stroke-width="4" stroke-linecap="square"/><circle cx="126" cy="36" r="3.5" fill="#C4CDD5"/><circle cx="126" cy="205" r="3.5" fill="#C4CDD5"/><circle cx="42" cy="125" r="3.5" fill="#C4CDD5"/><circle cx="198" cy="125" r="3.5" fill="#C4CDD5"/><path d="M62 64h128v30c-22-6-44 0-59 15-15 15-23 34-23 57v28H94v-20l-13-13v33H63V97" stroke="url(#brandFrame)" stroke-width="4" stroke-linejoin="round"/><path d="M64 79h83M64 95h65" stroke="url(#brandFrame)" stroke-width="4" stroke-linecap="round"/><circle cx="175" cy="79" r="5.2" fill="#F05B4F"/><circle cx="151" cy="133" r="39" fill="#0A1729" stroke="url(#brandLens)" stroke-width="5"/><g clip-path="url(#brandLensClip)"><path d="m151 96 23 14-13 23-27-2 2-24z" fill="#3DD5C7"/><path d="m186 132-14 24-24-12 2-27 24-1z" fill="#318ACD"/><path d="m151 170-24-13 14-23 27 2 1 25z" fill="#285FB6"/><path d="m116 133 13-24 24 13-2 27-24 1z" fill="#279CBF"/><path d="m151 115 14 8-2 16-13 9-14-8 2-16z" fill="#0B1B31" opacity=".86"/></g><circle cx="151" cy="133" r="35" stroke="#B8F3E8" stroke-width="1.5" opacity=".75"/></svg>';
 
 const root = $('#app');
 root.innerHTML = `
   <main class="shell">
     <header class="topbar">
-      <div class="brand"><div class="brand-mark">${brandMark}</div><div class="brand-name">Taylor</div></div>
+      <div class="brand"><div class="brand-mark">${brandMark}</div><div><div class="brand-name">PhotoLens</div><div class="brand-sub">Analysis &amp; Editor</div></div></div>
       <div class="top-actions">
         <button class="icon-btn" id="themeBtn" title="Chuyển giao diện sáng/tối" aria-label="Chuyển giao diện sáng/tối" aria-pressed="false">${icons.theme}</button>
         <button class="icon-btn" id="settingsBtn" title="Cấu hình AI" aria-label="Cấu hình AI">${icons.sparkle}</button>
