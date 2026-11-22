@@ -1,0 +1,12 @@
+node_modules/
+dist/
+release/
+android/
+.env
+.env.*
+!.env.example
+.dev.vars
+worker/.dev.vars
+worker/.wrangler/
+*.bak
+*.log

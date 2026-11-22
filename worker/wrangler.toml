@@ -1,0 +1,16 @@
+name = "photolens-ai-proxy"
+main = "src/index.js"
+compatibility_date = "2026-11-21"
+
+[vars]
+GEMINI_MODEL = "gemini-3.5-flash-lite"
+ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,https://localhost,capacitor://localhost,photolens://app"
+# Có thể giới hạn origin, phân tách bằng dấu phẩy. Ví dụ gồm web, Android, Electron và local dev:
+# ALLOWED_ORIGINS = "https://your-domain.example,https://localhost,null,http://localhost:5173"
+[[ratelimits]]
+name = "PHOTO_AI_LIMITER"
+namespace_id = "1001"
+
+[ratelimits.simple]
+limit = 20
+period = 60
