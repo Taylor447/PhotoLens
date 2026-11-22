@@ -119,7 +119,7 @@ export function openStudio(options={}){
   const ranges=controlSpecs.map(rangeControl).join('');
   root.innerHTML=[
     '<header class="studio-header"><div class="studio-brand"><strong>PhotoLens Studio</strong><span>Chỉnh sửa cục bộ · không tải ảnh lên</span></div>',
-    '<nav class="studio-tabs" aria-label="Công cụ"><button class="active" data-studio-view="editor">Chỉnh sửa</button><button data-studio-view="luts">LUT &amp; màu</button><button data-studio-view="camera">Camera</button></nav>',
+    '<nav class="studio-tabs" aria-label="Công cụ"><button class="active" data-studio-view="editor">Chỉnh sửa</button><button data-studio-view="luts">LUT &amp; màu</button></nav>',
     '<div class="studio-header-actions"><button class="studio-icon-btn" id="studioUndo" title="Hoàn tác" aria-label="Hoàn tác">↶</button><button class="studio-icon-btn" id="studioRedo" title="Làm lại" aria-label="Làm lại">↷</button><button class="studio-close" id="studioClose" aria-label="Đóng">×</button></div></header>',
     '<main class="studio-content">',
     '<section class="studio-page studio-editor-page" data-studio-page="editor"><div class="studio-editor-layout">',
