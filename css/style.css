@@ -13,7 +13,7 @@ svg { display: block; width: 20px; height: 20px; max-width: 100%; flex: none; }
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); margin-bottom: var(--space-12); }
 .brand { display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
 .brand-mark { display: grid; width: 48px; height: 48px; place-items: center; border: var(--border-width) solid var(--color-accent); border-radius: var(--radius-sm); background: var(--color-accent); color: var(--color-accent-ink); box-shadow: var(--shadow-sm); }
-.brand-mark svg { width: 24px; height: 24px; }
+.brand-mark svg { width: 30px; height: 30px; }
 .brand-name { color: var(--color-text); font-size: var(--text-20); font-weight: var(--weight-bold); line-height: var(--line-tight); letter-spacing: -.02em; }
 .brand-sub { margin-top: var(--space-1); color: var(--color-text-muted); font-size: var(--text-12); }
 .top-actions { display: flex; align-items: center; gap: var(--space-2); }
