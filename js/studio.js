@@ -36,6 +36,7 @@ const studioIconPaths={
   trash:'<path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/>',
   wand:'<path d="m15 4 1.5 4.5L21 10l-4.5 1.5L15 16l-1.5-4.5L9 10l4.5-1.5L15 4Z"/><path d="m5 3 .8 2.2L8 6l-2.2.8L5 9l-.8-2.2L2 6l2.2-.8L5 3Zm2 12 .9 2.1L10 18l-2.1.9L7 21l-.9-2.1L4 18l2.1-.9L7 15Z"/>',
   share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4m-6.6 7 6.6 4.4"/>',
+  crop:'<path d="M7 3v11a3 3 0 0 0 3 3h11M3 7h11a3 3 0 0 1 3 3v11"/><path d="M3 3h4M17 3h4v4M3 17v4h4M17 21h4v-4"/>',
   favorite:'<path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/>'
 };
 const studioIcon=name=>'<svg class="studio-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(studioIconPaths[name]||studioIconPaths.wand)+'</svg>';
@@ -148,19 +149,20 @@ export function openStudio(options={}){
     '<div class="studio-header-actions"><button class="studio-icon-btn" id="studioUndo" title="Hoàn tác" aria-label="Hoàn tác">↶</button><button class="studio-icon-btn" id="studioRedo" title="Làm lại" aria-label="Làm lại">↷</button><button class="studio-close" id="studioClose" aria-label="Đóng">×</button></div></header>',
     '<main class="studio-content">',
     '<section class="studio-page studio-editor-page" data-studio-page="editor"><div class="studio-editor-layout">',
-    '<div class="studio-preview-panel"><div class="studio-stage" id="studioStage"><canvas id="studioCanvas" aria-label="Xem trước ảnh đã chỉnh sửa"></canvas><div class="studio-empty" id="studioEmpty"><div class="studio-empty-icon">✦</div><strong>Mở ảnh để bắt đầu chỉnh sửa</strong><p>Chọn JPG, PNG, WebP, AVIF hoặc HEIC/HEIF.</p><button class="studio-action" id="studioChooseFile">Chọn ảnh</button></div></div>',
+    '<div class="studio-preview-panel"><div class="studio-stage" id="studioStage"><canvas id="studioCanvas" aria-label="Xem trước ảnh đã chỉnh sửa"></canvas><div class="studio-crop-overlay" id="studioCropOverlay" hidden><span class="studio-crop-tip" id="studioCropTip">Kéo trên ảnh để chọn vùng cắt</span><div class="studio-crop-box" id="studioCropBox" hidden><i data-edge="nw"></i><i data-edge="n"></i><i data-edge="ne"></i><i data-edge="e"></i><i data-edge="se"></i><i data-edge="s"></i><i data-edge="sw"></i><i data-edge="w"></i></div></div><div class="studio-empty" id="studioEmpty"><div class="studio-empty-icon">✦</div><strong>Mở ảnh để bắt đầu chỉnh sửa</strong><p>Chọn JPG, PNG, WebP, AVIF hoặc HEIC/HEIF.</p><button class="studio-action" id="studioChooseFile">Chọn ảnh</button></div></div>',
     '<div class="studio-preview-toolbar"><button class="studio-action" id="studioOpenFile">Mở ảnh</button><input id="studioFile" class="studio-file-input" type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.avif,.heic,.heif" aria-label="Chọn ảnh để chỉnh sửa" /><button class="studio-action" id="studioBefore">Giữ để xem ảnh gốc</button><span class="studio-file-name" id="studioFileName" aria-live="polite">Chưa chọn ảnh</span></div>',
     '<div class="studio-exportbar"><label>Định dạng <select id="studioFormat"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></label><label>Kích thước <select id="studioSize"><option value="0">Tối đa theo thiết bị</option><option value="4096">4096 px</option><option value="2048">2048 px</option><option value="1080">1080 px</option></select></label><label class="studio-quality-label">Chất lượng <input id="studioQuality" type="range" min="50" max="100" value="92" /><output id="studioQualityValue">92%</output></label><label class="studio-check"><input id="studioKeepMetadata" type="checkbox" /> Giữ EXIF (JPG gốc)</label><button class="studio-primary" id="studioExport">Xuất ảnh</button><button class="studio-action" id="studioApply">Dùng ảnh đã chỉnh</button><label>Chia sẻ<select id="studioShareMode"><option value="edited">Ảnh đã chỉnh</option><option value="before-after">Trước / sau</option></select></label><button class="studio-action" id="studioShare">Chia sẻ</button></div>',
     '</div>',
     '<aside class="studio-sidebar"><div class="studio-editor-hint" id="studioEditorHint"><strong>Chưa có ảnh để chỉnh sửa</strong><span>Mở ảnh trước, các công cụ sẽ bật và xem trước thay đổi tại đây.</span><button class="studio-action" id="studioHintOpen" type="button">Chọn ảnh</button></div>',
     '<div class="studio-side-tools"><button class="studio-action" id="studioSaveProject">Lưu dự án</button><button class="studio-action" id="studioOpenProject">Dự án đã lưu</button><button class="studio-action" id="studioReset">Đặt lại</button></div>',
     '<details class="studio-section" open><summary>Cắt, xoay &amp; cân chỉnh</summary><div class="studio-section-body">',
+    '<button class="studio-action studio-crop-gesture" id="studioCropGesture" type="button" title="Bật rồi kéo trực tiếp trên ảnh để cắt">Vuốt để cắt trên ảnh</button><p class="studio-help">Bấm nút, kéo để chọn vùng; thả tay để áp dụng. Có thể hoàn tác.</p>',
     '<label class="studio-select-row">Tỉ lệ khung hình<select id="studioAspect"><option value="free">Tự do</option><option value="1:1">1:1 · Vuông</option><option value="4:3">4:3</option><option value="3:2">3:2</option><option value="16:9">16:9</option><option value="9:16">9:16 · Dọc</option></select></label>',
     '<div class="studio-transform-row"><button class="studio-action" id="studioRotateLeft" title="Xoay trái 90°">↶ Xoay trái</button><button class="studio-action" id="studioRotateRight" title="Xoay phải 90°">↷ Xoay phải</button><button class="studio-action" id="studioFlipX">Lật ngang</button><button class="studio-action" id="studioFlipY">Lật dọc</button></div>',
-    '<label class="studio-range"><span>Cắt trái</span><output data-output="cropLeft">0%</output><input type="range" data-adjust="cropLeft" min="0" max="45" value="0" /></label>',
-    '<label class="studio-range"><span>Cắt trên</span><output data-output="cropTop">0%</output><input type="range" data-adjust="cropTop" min="0" max="45" value="0" /></label>',
-    '<label class="studio-range"><span>Cắt phải</span><output data-output="cropRight">0%</output><input type="range" data-adjust="cropRight" min="0" max="45" value="0" /></label>',
-    '<label class="studio-range"><span>Cắt dưới</span><output data-output="cropBottom">0%</output><input type="range" data-adjust="cropBottom" min="0" max="45" value="0" /></label>',
+    '<label class="studio-range"><span>Cắt trái</span><output data-output="cropLeft">0%</output><input type="range" data-adjust="cropLeft" min="0" max="90" value="0" /></label>',
+    '<label class="studio-range"><span>Cắt trên</span><output data-output="cropTop">0%</output><input type="range" data-adjust="cropTop" min="0" max="90" value="0" /></label>',
+    '<label class="studio-range"><span>Cắt phải</span><output data-output="cropRight">0%</output><input type="range" data-adjust="cropRight" min="0" max="90" value="0" /></label>',
+    '<label class="studio-range"><span>Cắt dưới</span><output data-output="cropBottom">0%</output><input type="range" data-adjust="cropBottom" min="0" max="90" value="0" /></label>',
     '<label class="studio-range"><span>Cân thẳng</span><output data-output="straighten">0°</output><input type="range" data-adjust="straighten" min="-15" max="15" step="0.1" value="0" /></label>',
     '</div></details>',
     '<details class="studio-section" open><summary>Ánh sáng &amp; màu</summary><div class="studio-section-body">'+ranges+'</div></details>',
@@ -175,8 +177,8 @@ export function openStudio(options={}){
     '<label class="studio-check"><input id="studioWatermarkRepeat" type="checkbox" /> Lặp dấu chìm khắp ảnh</label>'+
     '<button class="studio-action" id="studioDetectWatermark" type="button">Nhận diện dấu chìm hãng bằng AI</button><div class="studio-watermark-results" id="studioWatermarkResults" role="status" aria-live="polite"></div>'+
     '<p class="studio-help">Tạo dấu chìm và xuất ảnh ngay trên thiết bị. Nhận diện AI chỉ gửi JPEG tối đa 1024 px sau khi bạn xác nhận.</p></div></details>',
-    '</aside></div></section>',
-    '<section class="studio-page studio-lut-page" data-studio-page="luts" hidden><div class="studio-library-head"><div><h2>Kho LUT màu</h2><p>Chọn một màu, chỉnh cường độ hoặc nhập tệp LUT 3D .cube của bạn.</p></div><div class="studio-lut-tools"><input type="search" id="studioLutSearch" placeholder="Tìm LUT…" aria-label="Tìm LUT" /><select id="studioLutCategory" aria-label="Lọc theo danh mục"><option value="">Tất cả nhóm</option><option>Chân dung</option><option>Phong cảnh</option><option>Đường phố</option><option>Phim</option><option>Điện ảnh</option><option>Đen trắng</option><option>Của tôi</option></select><button class="studio-action" id="studioImportLut">Nhập .cube</button><input type="file" id="studioLutFile" accept=".cube,text/plain" hidden /></div></div><label class="studio-range studio-lut-strength"><span>Cường độ LUT</span><output id="studioLutStrengthValue">100%</output><input type="range" id="studioLutStrength" min="0" max="100" value="100" /></label><div class="studio-lut-grid" id="studioLutGrid"></div></section>',
+    '</aside></div>',
+    '<div class="studio-lut-drawer" id="studioLutDrawer" role="dialog" aria-label="Kho LUT màu" hidden><div class="studio-lut-drawer-head"><div><h2>Kho LUT màu</h2><p>Chọn màu, chỉnh cường độ hoặc nhập LUT 3D .cube.</p></div><button class="studio-icon-btn" id="studioLutClose" type="button" aria-label="Đóng kho LUT">×</button></div><div class="studio-lut-tools"><input type="search" id="studioLutSearch" placeholder="Tìm LUT…" aria-label="Tìm LUT" /><select id="studioLutCategory" aria-label="Lọc theo danh mục"><option value="">Tất cả nhóm</option><option>Chân dung</option><option>Phong cảnh</option><option>Đường phố</option><option>Phim</option><option>Điện ảnh</option><option>Đen trắng</option><option>Của tôi</option></select><button class="studio-action" id="studioImportLut">Nhập .cube</button><input type="file" id="studioLutFile" accept=".cube,text/plain" hidden /></div><label class="studio-range studio-lut-strength"><span>Cường độ LUT</span><output id="studioLutStrengthValue">100%</output><input type="range" id="studioLutStrength" min="0" max="100" value="100" /></label><div class="studio-lut-grid" id="studioLutGrid"></div></div></section>',
     '<section class="studio-page studio-camera-page" data-studio-page="camera" hidden><div class="studio-camera-layout"><div class="studio-camera-main"><div class="studio-camera-stage" id="studioCameraStage"><video id="studioVideo" autoplay muted playsinline></video><div class="studio-camera-grid" id="studioCameraGrid" hidden><i></i><i></i></div><button class="studio-focus-target" id="studioFocusTarget" aria-label="Lấy nét tại điểm chạm" hidden></button><div class="studio-camera-empty" id="studioCameraEmpty"><strong>Camera chưa bật</strong><p>Quyền camera chỉ được yêu cầu khi bạn mở chế độ chụp.</p><button class="studio-primary" id="studioStartCamera">Bật camera</button><button class="studio-action" id="studioCameraChoose">Chọn ảnh thay thế</button></div></div><div class="studio-camera-actions"><label>Hẹn giờ<select id="studioTimer"><option value="0">Tắt</option><option value="3">3 giây</option><option value="10">10 giây</option></select></label><label>Tỉ lệ<select id="studioCameraAspect"><option value="4:3">4:3</option><option value="16:9">16:9</option><option value="1:1">1:1</option></select></label><button class="studio-primary" id="studioCapture" disabled>Chụp ảnh</button></div></div><aside class="studio-camera-sidebar"><h2>Camera</h2><label class="studio-select-row">Thiết bị<select id="studioCameraDevice"><option value="">Mặc định</option></select></label><label class="studio-select-row">Độ phân giải<select id="studioCameraResolution"><option value="1920x1080">Cao · 1080p</option><option value="1280x720">Vừa · 720p</option><option value="640x480">Nhẹ · 480p</option></select></label><label class="studio-check"><input type="checkbox" id="studioGridToggle" /> Lưới 1/3</label><div id="studioCameraAdvanced" class="studio-camera-advanced"></div><p id="studioCameraStatus" class="studio-help" role="status">Các điều khiển thủ công chỉ xuất hiện nếu camera và trình duyệt hỗ trợ.</p><button class="studio-action" id="studioNativeCapture" hidden>Mở camera thiết bị</button></aside></div></section>',
     '</main><div class="studio-modal-layer" id="studioModalLayer" hidden></div><div class="studio-toast" id="studioToast" role="status" aria-live="polite"></div></div>'
   ].join('');
@@ -186,7 +188,7 @@ export function openStudio(options={}){
   const setIconButton=(button,name,label='')=>{if(!button)return;button.innerHTML=studioIcon(name)+(label?'<span class="studio-button-label">'+label+'</span>':'');};
   const setStudioButtonLabel=(button,label)=>{const node=button?.querySelector('.studio-button-label');if(node)node.textContent=label;else if(button)button.textContent=label;};
   const iconBindings=[
-    ['#studioUndo','undo'],['#studioRedo','redo'],['#studioClose','close'],
+    ['#studioUndo','undo'],['#studioRedo','redo'],['#studioClose','close'],['#studioCropGesture','crop','Vuốt để cắt trên ảnh'],['#studioLutClose','close'],
     ['#studioChooseFile','upload','Chọn ảnh'],['#studioOpenFile','folder','Mở ảnh'],
     ['#studioBefore','eye','Giữ để xem ảnh gốc'],['#studioExport','download','Xuất ảnh'],
     ['#studioApply','check','Dùng ảnh đã chỉnh'],['#studioShare','share','Chia sẻ'],
@@ -205,7 +207,7 @@ export function openStudio(options={}){
 
 
   let file=null,image=null,imageUrl='',activeLut=null,customLuts=[],worker=null,mediaStream=null,track=null,watermarkLogoBlob=null,watermarkLogoImage=null,watermarkLogoUrl='';
-  let state=defaults(),undoStack=[],redoStack=[],lastCommitted='',renderTicket=0,renderTimer=0,showOriginal=false,stageImageRect=null,brushStroke=null,curvePoint=-1;
+  let state=defaults(),undoStack=[],redoStack=[],lastCommitted='',renderTicket=0,renderTimer=0,showOriginal=false,stageImageRect=null,brushStroke=null,curvePoint=-1,cropMode=false,cropSelection=null,cropGesture=null;
   const pending=new Map();let requestId=0,closed=false,activeView='editor',previewTimer=0,dbReady=null;
   const lutMap=new Map(lookSpecs.map(s=>[s.id,{...s,...makeLookLut(s.id)}]));
   try{worker=new Worker(new URL('./studio.worker.js',import.meta.url),{type:'module'});worker.onmessage=e=>{const item=pending.get(e.data.id);if(!item)return;pending.delete(e.data.id);e.data.error?item.reject(new Error(e.data.error)):item.resolve(new Uint8ClampedArray(e.data.buffer));};worker.onerror=e=>{e.preventDefault();worker.terminate();worker=null;for(const p of pending.values())p.reject(new Error('Bộ xử lý nền không khả dụng.'));pending.clear();};}catch{worker=null;}
@@ -223,12 +225,12 @@ export function openStudio(options={}){
   function updateHistoryButtons(){q('#studioUndo').disabled=!undoStack.length;q('#studioRedo').disabled=!redoStack.length;}
   function syncImageAvailability(){
     const ready=Boolean(image);
-    ['studioBefore','studioExport','studioApply','studioShare','studioSaveProject','studioReset','studioBrush','studioClearBrush','studioDetectWatermark','studioRotateLeft','studioRotateRight','studioFlipX','studioFlipY','studioAspect','studioResetCurve','studioWatermarkText','studioWatermarkPosition','studioWatermarkOpacity','studioWatermarkSize','studioWatermarkRepeat','studioWatermarkLogoBtn','studioWatermarkLogoRemove','studioFormat','studioSize','studioQuality','studioKeepMetadata','studioShareMode','studioLutStrength'].forEach(id=>{const node=q('#'+id);if(node)node.disabled=!ready;});
+    ['studioBefore','studioExport','studioApply','studioShare','studioSaveProject','studioReset','studioBrush','studioClearBrush','studioCropGesture','studioDetectWatermark','studioRotateLeft','studioRotateRight','studioFlipX','studioFlipY','studioAspect','studioResetCurve','studioWatermarkText','studioWatermarkPosition','studioWatermarkOpacity','studioWatermarkSize','studioWatermarkRepeat','studioWatermarkLogoBtn','studioWatermarkLogoRemove','studioFormat','studioSize','studioQuality','studioKeepMetadata','studioShareMode','studioLutStrength'].forEach(id=>{const node=q('#'+id);if(node)node.disabled=!ready;});
     qa('[data-adjust]').forEach(node=>{node.disabled=!ready;});
     const curve=q('#studioCurve');if(curve){curve.setAttribute('aria-disabled',String(!ready));curve.classList.toggle('is-disabled',!ready);}
     const hint=q('#studioEditorHint');if(hint)hint.hidden=ready;
   }
-  async function restoreSnapshot(value){state=JSON.parse(value);lastCommitted=snapshot();syncControls();drawCurve();updateHistoryButtons();await loadActiveLut(state.lutId);await renderPreview();}
+  async function restoreSnapshot(value){if(cropMode)setCropMode(false);state=JSON.parse(value);lastCommitted=snapshot();syncControls();drawCurve();updateHistoryButtons();await loadActiveLut(state.lutId);await renderPreview();}
   function undo(){if(!undoStack.length)return;redoStack.push(snapshot());restoreSnapshot(undoStack.pop());}
   function redo(){if(!redoStack.length)return;undoStack.push(snapshot());restoreSnapshot(redoStack.pop());}
   function syncExportControls(){
@@ -242,7 +244,9 @@ export function openStudio(options={}){
     q('#studioBrush').classList.toggle('active',state.brushEnabled);q('#studioLutStrength').value=state.lutStrength;q('#studioLutStrengthValue').textContent=state.lutStrength+'%';
   }
   function computeCrop(){
-    if(!image)return{x:0,y:0,w:0,h:0};let l=clamp(Number(state.cropLeft)||0,0,45)/100,t=clamp(Number(state.cropTop)||0,0,45)/100,r=clamp(Number(state.cropRight)||0,0,45)/100,b=clamp(Number(state.cropBottom)||0,0,45)/100;
+    if(!image)return{x:0,y:0,w:0,h:0};
+    let l=clamp(Number(state.cropLeft)||0,0,90)/100,t=clamp(Number(state.cropTop)||0,0,90)/100,r=clamp(Number(state.cropRight)||0,0,90)/100,b=clamp(Number(state.cropBottom)||0,0,90)/100;
+    if(l+r>.9){const sum=l+r;l=l*.9/sum;r=.9-l;}if(t+b>.9){const sum=t+b;t=t*.9/sum;b=.9-t;}
     let x=image.naturalWidth*l,y=image.naturalHeight*t,w=image.naturalWidth*(1-l-r),h=image.naturalHeight*(1-t-b);
     const ratios={'1:1':1,'4:3':4/3,'3:2':1.5,'16:9':16/9,'9:16':9/16};const ratio=ratios[state.aspect];
     if(ratio){const current=w/h;if(current>ratio){const nw=h*ratio;x+=(w-nw)/2;w=nw;}else{const nh=w/ratio;y+=(h-nh)/2;h=nh;}}
@@ -351,7 +355,7 @@ export function openStudio(options={}){
     return canvas;
   }
   async function renderPreview(){
-    if(!image){const canvas=q('#studioCanvas');canvas.getContext('2d')?.clearRect(0,0,canvas.width,canvas.height);stageImageRect=null;q('#studioEmpty').hidden=false;return;}
+    if(!image){const canvas=q('#studioCanvas');canvas.getContext('2d')?.clearRect(0,0,canvas.width,canvas.height);stageImageRect=null;q('#studioEmpty').hidden=false;syncCropOverlay();return;}
     const ticket=++renderTicket;
     try{
       const result=await renderProcessed(1100,showOriginal);if(closed||ticket!==renderTicket||!result)return;
@@ -359,7 +363,7 @@ export function openStudio(options={}){
       canvas.width=Math.max(1,Math.round(rect.width*dpr));canvas.height=Math.max(1,Math.round(rect.height*dpr));
       const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#08111b';ctx.fillRect(0,0,canvas.width,canvas.height);
       const scale=Math.min(canvas.width/result.width,canvas.height/result.height),dw=result.width*scale,dh=result.height*scale,x=(canvas.width-dw)/2,y=(canvas.height-dh)/2;
-      ctx.drawImage(result,x,y,dw,dh);stageImageRect={x,y,w:dw,h:dh,dpr};q('#studioEmpty').hidden=true;
+      ctx.drawImage(result,x,y,dw,dh);stageImageRect={x,y,w:dw,h:dh,dpr};q('#studioEmpty').hidden=true;syncCropOverlay();
       q('#studioFileName').textContent=file?file.name:'Ảnh đã chụp';
     }catch(error){if(ticket===renderTicket)toast(error.message||'Không thể xem trước ảnh.');}
   }
@@ -398,6 +402,7 @@ export function openStudio(options={}){
     }catch{throw new Error('Không chuyển được ảnh HEIC/HEIF. Hãy xuất ảnh sang JPG rồi thử lại.');}
   }
   async function setSource(nextFile,restoreState=null,restoreLogo=null){
+    if(cropMode)setCropMode(false);
     if(!nextFile)throw new Error('Chưa chọn tệp ảnh.');
     let preparedFile=nextFile,decoded;
     try{decoded=await decodeImageFile(preparedFile);}
@@ -415,7 +420,10 @@ export function openStudio(options={}){
     syncImageAvailability();await renderPreview();
   }
   function updateOutput(input){
-    const key=input.dataset.adjust;state[key]=Number(input.value);const out=q('[data-output="'+key+'"]');
+    const key=input.dataset.adjust;state[key]=Number(input.value);
+    const cropPairs={cropLeft:'cropRight',cropRight:'cropLeft',cropTop:'cropBottom',cropBottom:'cropTop'};
+    const mateKey=cropPairs[key];if(mateKey&&state[key]+Number(state[mateKey]||0)>90){state[mateKey]=90-state[key];const mateInput=qa('[data-adjust]').find(node=>node.dataset.adjust===mateKey);if(mateInput){mateInput.value=state[mateKey];const mateOut=q('[data-output="'+mateKey+'"]');if(mateOut)mateOut.textContent=state[mateKey]+'%';}}
+    const out=q('[data-output="'+key+'"]');
     if(out){const suffix=key==='exposure'?' EV':key==='straighten'?'°':(['brushSize','grain','vignette','sharpen','denoise','cropLeft','cropTop','cropRight','cropBottom'].includes(key)?'%':'');out.textContent=formatValue(key,input.value,suffix);}
     schedulePreview();
   }
@@ -441,6 +449,7 @@ export function openStudio(options={}){
   curve.addEventListener('dblclick',e=>{if(state.curve.length<=3)return;const rect=curve.getBoundingClientRect(),x=(e.clientX-rect.left)/rect.width,y=1-(e.clientY-rect.top)/rect.height;let best=-1,d=.06;state.curve.forEach((p,i)=>{const n=Math.hypot(p[0]-x,p[1]-y);if(n<d){d=n;best=i;}});if(best>0&&best<state.curve.length-1){state.curve.splice(best,1);drawCurve();commit();schedulePreview();}});
   q('#studioResetCurve').addEventListener('click',()=>{state.curve=[[0,0],[.5,.5],[1,1]];drawCurve();commit();schedulePreview();});
   q('#studioAspect').addEventListener('change',e=>{state.aspect=e.target.value;commit();schedulePreview();});
+  q('#studioCropGesture').addEventListener('click',()=>setCropMode(!cropMode));
   q('#studioWatermarkText').addEventListener('input',e=>{state.watermarkText=e.target.value;schedulePreview();});
   q('#studioWatermarkText').addEventListener('change',commit);
   q('#studioWatermarkPosition').addEventListener('change',e=>{state.watermarkPosition=e.target.value;commit();schedulePreview();});
@@ -470,12 +479,104 @@ export function openStudio(options={}){
     try{await setSource(dropped);toast('Đã mở ảnh thành công.');}
     catch(error){q('#studioFileName').textContent=file?file.name+' · '+image.naturalWidth+' × '+image.naturalHeight:'Không mở được ảnh';toast(error.message||'Không thể mở ảnh.');}
   });
-  stage.addEventListener('pointerdown',e=>{if(!state.brushEnabled||!stageImageRect||!image)return;const r=stage.getBoundingClientRect(),dpr=stageImageRect.dpr,x=(e.clientX-r.left)*dpr,y=(e.clientY-r.top)*dpr,rect=stageImageRect;if(x<rect.x||x>rect.x+rect.w||y<rect.y||y>rect.y+rect.h)return;brushStroke={points:[[(x-rect.x)/rect.w,(y-rect.y)/rect.h]],size:state.brushSize/100,hardness:.48};state.strokes.push(brushStroke);stage.setPointerCapture(e.pointerId);});
-  stage.addEventListener('pointermove',e=>{if(!brushStroke||!stageImageRect)return;const r=stage.getBoundingClientRect(),dpr=stageImageRect.dpr,rect=stageImageRect,x=clamp((e.clientX-r.left)*dpr,rect.x,rect.x+rect.w),y=clamp((e.clientY-r.top)*dpr,rect.y,rect.y+rect.h);brushStroke.points.push([(x-rect.x)/rect.w,(y-rect.y)/rect.h]);});
-  const endBrush=()=>{if(brushStroke){brushStroke=null;commit();schedulePreview();}};stage.addEventListener('pointerup',endBrush);stage.addEventListener('pointercancel',endBrush);
+  function syncCropOverlay(){
+    const overlay=q('#studioCropOverlay'),box=q('#studioCropBox'),tip=q('#studioCropTip');
+    if(!cropMode||!image||!stageImageRect){overlay.hidden=true;return;}
+    const r=stageImageRect,dpr=r.dpr||1;overlay.hidden=false;
+    overlay.style.left=(r.x/dpr)+'px';overlay.style.top=(r.y/dpr)+'px';overlay.style.width=(r.w/dpr)+'px';overlay.style.height=(r.h/dpr)+'px';
+    tip.hidden=Boolean(cropSelection);
+    if(!cropSelection){box.hidden=true;return;}
+    box.hidden=false;box.style.left=(cropSelection.x*100)+'%';box.style.top=(cropSelection.y*100)+'%';box.style.width=(cropSelection.w*100)+'%';box.style.height=(cropSelection.h*100)+'%';
+  }
+  function setCropMode(enabled){
+    cropMode=Boolean(enabled&&image);cropGesture=null;cropSelection=null;
+    if(cropMode&&state.brushEnabled){state.brushEnabled=false;q('#studioBrush').classList.remove('active');dropStage.classList.remove('is-brushing');}
+    dropStage.classList.toggle('is-cropping',cropMode);q('#studioCropOverlay').hidden=!cropMode;
+    const button=q('#studioCropGesture');button?.classList.toggle('active',cropMode);setStudioButtonLabel(button,cropMode?'Đang cắt · kéo trên ảnh':'Vuốt để cắt trên ảnh');
+    if(cropMode)toast('Kéo trên ảnh để chọn vùng cắt; thả tay để áp dụng.');
+    syncCropOverlay();
+  }
+  function cropPointFromEvent(e,allowOutside=false){
+    if(!stageImageRect)return null;
+    const rect=stage.getBoundingClientRect(),dpr=stageImageRect.dpr||1;
+    const px=(e.clientX-rect.left)*dpr,py=(e.clientY-rect.top)*dpr,frame=stageImageRect;
+    if(!allowOutside&&(px<frame.x||px>frame.x+frame.w||py<frame.y||py>frame.y+frame.h))return null;
+    return{u:clamp((px-frame.x)/frame.w,0,1),v:clamp((py-frame.y)/frame.h,0,1)};
+  }
+  function beginCropGesture(e){
+    const point=cropPointFromEvent(e);if(!point)return false;
+    let mode='draw',edges='';
+    if(cropSelection){
+      const frame=stageImageRect,dpr=frame.dpr||1,tolX=clamp(14/(frame.w/dpr),.012,.065),tolY=clamp(14/(frame.h/dpr),.012,.065);
+      const x1=cropSelection.x,x2=x1+cropSelection.w,y1=cropSelection.y,y2=y1+cropSelection.h;
+      const inside=point.u>=x1&&point.u<=x2&&point.v>=y1&&point.v<=y2;
+      if(inside){
+        if(Math.abs(point.u-x1)<=tolX)edges+='w';else if(Math.abs(point.u-x2)<=tolX)edges+='e';
+        if(Math.abs(point.v-y1)<=tolY)edges+='n';else if(Math.abs(point.v-y2)<=tolY)edges+='s';
+        mode=edges?'resize':'move';
+      }
+    }
+    const origin=mode==='draw'?null:{...cropSelection};
+    if(mode==='draw')cropSelection={x:point.u,y:point.v,w:0,h:0};
+    cropGesture={mode,edges,start:point,origin};stage.setPointerCapture(e.pointerId);e.preventDefault();syncCropOverlay();return true;
+  }
+  function updateCropGesture(e){
+    if(!cropGesture)return;const point=cropPointFromEvent(e,true);if(!point)return;
+    const g=cropGesture;
+    if(g.mode==='draw'){cropSelection={x:Math.min(g.start.u,point.u),y:Math.min(g.start.v,point.v),w:Math.abs(point.u-g.start.u),h:Math.abs(point.v-g.start.v)};}
+    else if(g.mode==='move'){const o=g.origin;cropSelection={...o,x:clamp(o.x+point.u-g.start.u,0,1-o.w),y:clamp(o.y+point.v-g.start.v,0,1-o.h)};}
+    else{
+      const o=g.origin;let x1=o.x,x2=o.x+o.w,y1=o.y,y2=o.y+o.h;
+      if(g.edges.includes('w'))x1=clamp(point.u,0,x2-.04);if(g.edges.includes('e'))x2=clamp(point.u,x1+.04,1);
+      if(g.edges.includes('n'))y1=clamp(point.v,0,y2-.04);if(g.edges.includes('s'))y2=clamp(point.v,y1+.04,1);
+      cropSelection={x:x1,y:y1,w:x2-x1,h:y2-y1};
+    }
+    syncCropOverlay();
+  }
+  function applyGestureCrop(selection){
+    const crop=computeCrop(),scale=Math.min(1,1100/Math.max(crop.w,crop.h));
+    const w=Math.max(1,Math.round(crop.w*scale)),h=Math.max(1,Math.round(crop.h*scale));
+    const angle=(Number(state.rotate)+Number(state.straighten))*Math.PI/180,cos=Math.cos(angle),sin=Math.sin(angle);
+    const outW=Math.max(1,Math.ceil(w*Math.abs(cos)+h*Math.abs(sin))),outH=Math.max(1,Math.ceil(h*Math.abs(cos)+w*Math.abs(sin)));
+    const corners=[{u:selection.x,v:selection.y},{u:selection.x+selection.w,v:selection.y},{u:selection.x+selection.w,v:selection.y+selection.h},{u:selection.x,v:selection.y+selection.h}];
+    const points=corners.map(p=>{
+      const dx=p.u*outW-outW/2,dy=p.v*outH-outH/2;
+      const localX=(cos*dx+sin*dy)*(state.flipX?-1:1),localY=(-sin*dx+cos*dy)*(state.flipY?-1:1);
+      return{u:clamp((localX+w/2)/w,0,1),v:clamp((localY+h/2)/h,0,1)};
+    });
+    const minU=Math.min(...points.map(p=>p.u)),maxU=Math.max(...points.map(p=>p.u)),minV=Math.min(...points.map(p=>p.v)),maxV=Math.max(...points.map(p=>p.v));
+    const imageW=image.naturalWidth,imageH=image.naturalHeight,minW=imageW*.1,minH=imageH*.1;
+    let x1=clamp(crop.x+minU*crop.w,0,imageW-minW),x2=clamp(crop.x+maxU*crop.w,x1+minW,imageW);
+    let y1=clamp(crop.y+minV*crop.h,0,imageH-minH),y2=clamp(crop.y+maxV*crop.h,y1+minH,imageH);
+    state.cropLeft=Math.round(x1/imageW*100);state.cropRight=Math.round((imageW-x2)/imageW*100);
+    state.cropTop=Math.round(y1/imageH*100);state.cropBottom=Math.round((imageH-y2)/imageH*100);state.aspect='free';
+    syncControls();setCropMode(false);commit();schedulePreview();toast('Đã áp dụng vùng cắt. Có thể hoàn tác bằng nút mũi tên.');
+  }
+  function finishCropGesture(cancel=false){
+    if(!cropGesture)return;cropGesture=null;
+    if(cancel){cropSelection=null;syncCropOverlay();return;}
+    if(cropSelection&&cropSelection.w>=.05&&cropSelection.h>=.05){const selected={...cropSelection};applyGestureCrop(selected);}
+    else{cropSelection=null;syncCropOverlay();toast('Vùng chọn hơi nhỏ. Kéo rộng hơn để cắt ảnh.');}
+  }
+  stage.addEventListener('pointerdown',e=>{
+    if(cropMode){if(beginCropGesture(e))return;}
+    if(!state.brushEnabled||!stageImageRect||!image)return;
+    const r=stage.getBoundingClientRect(),dpr=stageImageRect.dpr,x=(e.clientX-r.left)*dpr,y=(e.clientY-r.top)*dpr,rect=stageImageRect;
+    if(x<rect.x||x>rect.x+rect.w||y<rect.y||y>rect.y+rect.h)return;
+    brushStroke={points:[[(x-rect.x)/rect.w,(y-rect.y)/rect.h]],size:state.brushSize/100,hardness:.48};state.strokes.push(brushStroke);stage.setPointerCapture(e.pointerId);
+  });
+  stage.addEventListener('pointermove',e=>{
+    if(cropGesture){updateCropGesture(e);return;}
+    if(!brushStroke||!stageImageRect)return;
+    const r=stage.getBoundingClientRect(),dpr=stageImageRect.dpr,rect=stageImageRect,x=clamp((e.clientX-r.left)*dpr,rect.x,rect.x+rect.w),y=clamp((e.clientY-r.top)*dpr,rect.y,rect.y+rect.h);
+    brushStroke.points.push([(x-rect.x)/rect.w,(y-rect.y)/rect.h]);
+  });
+  const endBrush=()=>{if(cropGesture){finishCropGesture(false);return;}if(brushStroke){brushStroke=null;commit();schedulePreview();}};
+  const cancelGesture=()=>{if(cropGesture){finishCropGesture(true);return;}if(brushStroke){brushStroke=null;commit();schedulePreview();}};
+  stage.addEventListener('pointerup',endBrush);stage.addEventListener('pointercancel',cancelGesture);
   
   q('#studioUndo').addEventListener('click',undo);q('#studioRedo').addEventListener('click',redo);
-  q('#studioReset').addEventListener('click',async()=>{if(!image)return;await setWatermarkLogo(null);state=defaults();lastCommitted=snapshot();undoStack=[];redoStack=[];syncControls();drawCurve();loadActiveLut('none');updateHistoryButtons();renderPreview();});
+  q('#studioReset').addEventListener('click',async()=>{if(!image)return;if(cropMode)setCropMode(false);await setWatermarkLogo(null);state=defaults();lastCommitted=snapshot();undoStack=[];redoStack=[];syncControls();drawCurve();loadActiveLut('none');updateHistoryButtons();renderPreview();});
   q('#studioBefore').addEventListener('pointerdown',()=>{showOriginal=true;renderPreview();});['pointerup','pointerleave','pointercancel'].forEach(t=>q('#studioBefore').addEventListener(t,()=>{showOriginal=false;renderPreview();}));
   q('#studioOpenFile').addEventListener('click',openPhotoPicker);q('#studioChooseFile').addEventListener('click',openPhotoPicker);
   q('#studioFile').addEventListener('cancel',()=>{if(!file)q('#studioFileName').textContent='Chưa chọn ảnh';});
@@ -491,6 +592,7 @@ export function openStudio(options={}){
   q('#studioFormat').addEventListener('change',syncExportControls);
   q('#studioExport').addEventListener('click',exportImage);q('#studioApply').addEventListener('click',applyToPhotoLens);q('#studioShare').addEventListener('click',shareImage);
   q('#studioSaveProject').addEventListener('click',saveProject);q('#studioOpenProject').addEventListener('click',showProjects);
+  q('#studioLutClose').addEventListener('click',()=>setView('editor'));
   q('#studioLutStrength').addEventListener('input',e=>{state.lutStrength=Number(e.target.value);q('#studioLutStrengthValue').textContent=e.target.value+'%';schedulePreview();});
   q('#studioLutStrength').addEventListener('change',commit);
   q('#studioImportLut').addEventListener('click',()=>q('#studioLutFile').click());
@@ -510,11 +612,13 @@ export function openStudio(options={}){
   const resizeObserver=new ResizeObserver(()=>{if(activeView==='editor')schedulePreview();});
   resizeObserver.observe(q('#studioStage'));
   async function setView(view){
-    activeView=view;qa('[data-studio-view]').forEach(b=>b.classList.toggle('active',b.dataset.studioView===view));qa('[data-studio-page]').forEach(p=>p.hidden=p.dataset.studioPage!==view);
+    activeView=view;qa('[data-studio-view]').forEach(b=>b.classList.toggle('active',b.dataset.studioView===view));
+    if(view!=='editor'&&cropMode)setCropMode(false);
+    const pageView=view==='luts'?'editor':view;qa('[data-studio-page]').forEach(p=>p.hidden=p.dataset.studioPage!==pageView);q('#studioLutDrawer').hidden=view!=='luts';q('#photoStudio').classList.toggle('is-lut-open',view==='luts');
     if(view==='camera'){if(!mediaStream)await startCamera();}else stopCamera();
     if(view==='editor')schedulePreview();if(view==='luts')drawLutCards();
   }
-  function onKeydown(e){if(e.target.matches?.('input,textarea,select,[contenteditable=true]')&&e.key!=='Escape')return;if(e.key==='Escape'){close();return;}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();redo();}}
+  function onKeydown(e){if(e.target.matches?.('input,textarea,select,[contenteditable=true]')&&e.key!=='Escape')return;if(e.key==='Escape'){if(activeView==='luts'){e.preventDefault();setView('editor');return;}close();return;}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();redo();}}
   function close(){
     if(closed)return;closed=true;stopCamera();worker?.terminate();for(const p of pending.values())p.reject(new Error('Đã đóng phòng chỉnh sửa.'));pending.clear();document.removeEventListener('keydown',onKeydown);resizeObserver.disconnect();if(imageUrl)URL.revokeObjectURL(imageUrl);if(watermarkLogoUrl)URL.revokeObjectURL(watermarkLogoUrl);root.remove();document.body.style.overflow=previousOverflow;
   }

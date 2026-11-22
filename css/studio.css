@@ -259,3 +259,46 @@
   #photoStudio .studio-empty { gap: 8px; padding: 14px; }
   #photoStudio .studio-editor-hint { margin: 0 0 10px; }
 }
+
+/* Direct crop gesture and LUT side drawer */
+#photoStudio .studio-editor-layout { position: relative; }
+#photoStudio .studio-crop-gesture { width: 100%; justify-content: flex-start; }
+#photoStudio .studio-crop-gesture.active { color: #09261e; border-color: transparent; background: linear-gradient(135deg,#8af0cb,#68d9b4); }
+#photoStudio .studio-stage.is-cropping canvas { cursor: crosshair; }
+#photoStudio .studio-crop-overlay { position: absolute; z-index: 3; pointer-events: none; }
+#photoStudio .studio-crop-tip { position: absolute; top: 10px; left: 50%; max-width: calc(100% - 20px); transform: translateX(-50%); padding: 7px 11px; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; color: #fff; background: rgba(5,12,18,.76); font-size: 12px; font-weight: 650; text-align: center; white-space: nowrap; }
+#photoStudio .studio-crop-box { position: absolute; min-width: 4%; min-height: 4%; border: 1.5px solid #f5fff9; box-shadow: 0 0 0 9999px rgba(2,8,13,.52), inset 0 0 0 1px rgba(9,36,29,.35); background: linear-gradient(to right, transparent 33.1%,rgba(255,255,255,.55) 33.3%,transparent 33.7%,transparent 66.3%,rgba(255,255,255,.55) 66.6%,transparent 66.9%), linear-gradient(to bottom, transparent 33.1%,rgba(255,255,255,.55) 33.3%,transparent 33.7%,transparent 66.3%,rgba(255,255,255,.55) 66.6%,transparent 66.9%); }
+#photoStudio .studio-crop-box i { position: absolute; width: 10px; height: 10px; border: 1px solid #0b1a19; border-radius: 50%; background: #8af0cb; box-shadow: 0 1px 6px rgba(0,0,0,.55); }
+#photoStudio .studio-crop-box i:nth-child(1) { left: 0; top: 0; transform: translate(-50%,-50%); }
+#photoStudio .studio-crop-box i:nth-child(2) { left: 50%; top: 0; transform: translate(-50%,-50%); }
+#photoStudio .studio-crop-box i:nth-child(3) { right: 0; top: 0; transform: translate(50%,-50%); }
+#photoStudio .studio-crop-box i:nth-child(4) { right: 0; top: 50%; transform: translate(50%,-50%); }
+#photoStudio .studio-crop-box i:nth-child(5) { right: 0; bottom: 0; transform: translate(50%,50%); }
+#photoStudio .studio-crop-box i:nth-child(6) { left: 50%; bottom: 0; transform: translate(-50%,50%); }
+#photoStudio .studio-crop-box i:nth-child(7) { left: 0; bottom: 0; transform: translate(-50%,50%); }
+#photoStudio .studio-crop-box i:nth-child(8) { left: 0; top: 50%; transform: translate(-50%,-50%); }
+
+#photoStudio .studio-lut-drawer { position: absolute; z-index: 8; inset: 0 0 0 auto; width: min(440px, 44%); display: flex; flex-direction: column; gap: 13px; min-height: 0; padding: 16px; border-left: 1px solid var(--studio-line); background: rgba(14,23,33,.985); box-shadow: -22px 0 48px rgba(0,0,0,.42); }
+#photoStudio .studio-lut-drawer[hidden] { display: none !important; }
+#photoStudio .studio-lut-drawer-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+#photoStudio .studio-lut-drawer-head h2 { margin: 0 0 3px; font-size: 20px; }
+#photoStudio .studio-lut-drawer-head p { margin: 0; color: var(--studio-muted); font-size: 12px; line-height: 1.4; }
+#photoStudio .studio-lut-drawer-head .studio-icon-btn { width: 36px; height: 36px; flex: 0 0 auto; }
+#photoStudio .studio-lut-tools { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; }
+#photoStudio .studio-lut-tools input[type="search"] { grid-column: 1 / -1; width: 100%; }
+#photoStudio .studio-lut-tools select { min-width: 0; width: 100%; }
+#photoStudio .studio-lut-tools .studio-action { white-space: nowrap; }
+#photoStudio .studio-lut-strength { width: 100%; max-width: none; margin: 0; padding: 11px 12px; border: 1px solid var(--studio-line); border-radius: 11px; background: var(--studio-panel); }
+#photoStudio .studio-lut-grid { flex: 1; min-height: 0; overflow-y: auto; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; padding: 0 3px 10px 0; align-content: start; }
+#photoStudio .studio-lut-card { align-self: start; }
+#photoStudio .studio-lut-swatch { height: 58px; }
+#photoStudio .studio-lut-apply { padding: 8px; }
+#photoStudio .studio-lut-apply strong { font-size: 13px; }
+#photoStudio .studio-lut-apply small { font-size: 10px; }
+@media (max-width: 740px) {
+  #photoStudio .studio-lut-drawer { position: fixed; inset: 100px 0 0 auto; width: min(430px, calc(100vw - 14px)); padding: 12px; border-radius: 16px 0 0 0; }
+  #photoStudio .studio-lut-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 380px) {
+  #photoStudio .studio-lut-grid { grid-template-columns: 1fr; }
+}
