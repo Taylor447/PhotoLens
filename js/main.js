@@ -347,7 +347,7 @@ async function detectStudioWatermarks(file) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 45_000);
   try {
-    const response = await fetch(`${endpoint.replace(/\\/+$/, '')}/analyze`, {
+    const response = await fetch(`${endpoint.replace(/\/+$/, '')}/analyze`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mode: 'watermarks', images: [data] }), signal: controller.signal
     });
