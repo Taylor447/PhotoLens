@@ -377,7 +377,9 @@ async function launchStudio(startView = 'editor') {
     });
   } catch (error) {
     console.error('PhotoLens Studio failed to open:', error);
-    toast('Không tải được phòng chỉnh sửa. Hãy tải lại trang rồi thử lại.');
+    const orphan=document.getElementById('photoStudio');
+    if(orphan){orphan.remove();document.body.style.overflow='';}
+    toast('Studio gặp lỗi khi khởi tạo. Hãy tải lại trang để nhận bản sửa mới.');
   }
 }
 
@@ -1105,7 +1107,11 @@ if (Capacitor.isNativePlatform()) {
 try { applyTheme(localStorage.getItem('photolens_theme') || 'dark'); } catch { applyTheme('dark'); }
 showOnboarding();
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && !window.photolens) {
-  window.addEventListener('load', () => navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(error => console.info('PWA offline cache unavailable:', error.message)));
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`, { updateViaCache: 'none' })
+      .then(registration => registration.update().catch(() => {}))
+      .catch(error => console.info('PWA offline cache unavailable:', error.message));
+  });
 }
 
 
