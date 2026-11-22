@@ -199,7 +199,7 @@
   #photoStudio .studio-lut-tools input[type="search"], #photoStudio .studio-lut-tools select { grid-column: 1 / -1; width: 100%; }
   #photoStudio .studio-lut-strength { margin: 0 12px 12px; max-width: none; }
   #photoStudio .studio-lut-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 0 12px 16px; }
-  #photoStudio .studio-lut-apply { padding: 8px; }
+  #photoStudio .studio-lut-apply { min-height: 0; padding: 8px; white-space: normal; }
   #photoStudio .studio-lut-swatch { height: 52px; }
   #photoStudio .studio-lut-apply small { font-size: 10px; }
   #photoStudio .studio-camera-stage { min-height: 230px; height: 48vh; }
@@ -278,7 +278,7 @@
 #photoStudio .studio-crop-box i:nth-child(7) { left: 0; bottom: 0; transform: translate(-50%,50%); }
 #photoStudio .studio-crop-box i:nth-child(8) { left: 0; top: 50%; transform: translate(-50%,-50%); }
 
-#photoStudio .studio-lut-drawer { position: absolute; z-index: 8; inset: 0 0 0 auto; width: min(440px, 44%); display: flex; flex-direction: column; gap: 13px; min-height: 0; padding: 16px; border-left: 1px solid var(--studio-line); background: rgba(14,23,33,.985); box-shadow: -22px 0 48px rgba(0,0,0,.42); }
+#photoStudio .studio-lut-drawer { position: absolute; z-index: 8; inset: 0 0 0 auto; width: min(380px, 40%); display: flex; flex-direction: column; gap: 12px; min-height: 0; padding: 14px; border-left: 1px solid var(--studio-line); background: rgba(14,23,33,.985); box-shadow: -18px 0 40px rgba(0,0,0,.38); }
 #photoStudio .studio-lut-drawer[hidden] { display: none !important; }
 #photoStudio .studio-lut-drawer-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 #photoStudio .studio-lut-drawer-head h2 { margin: 0 0 3px; font-size: 20px; }
@@ -289,16 +289,31 @@
 #photoStudio .studio-lut-tools select { min-width: 0; width: 100%; }
 #photoStudio .studio-lut-tools .studio-action { white-space: nowrap; }
 #photoStudio .studio-lut-strength { width: 100%; max-width: none; margin: 0; padding: 11px 12px; border: 1px solid var(--studio-line); border-radius: 11px; background: var(--studio-panel); }
-#photoStudio .studio-lut-grid { flex: 1; min-height: 0; overflow-y: auto; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; padding: 0 3px 10px 0; align-content: start; }
-#photoStudio .studio-lut-card { align-self: start; }
+#photoStudio .studio-lut-grid { flex: 1 1 0; min-height: 0; overflow-y: auto; grid-template-columns: repeat(2,minmax(0,1fr)); grid-auto-rows: max-content; gap: 10px; padding: 0 3px 10px 0; align-content: start; }
+#photoStudio .studio-lut-card { align-self: start; height: max-content; }
 #photoStudio .studio-lut-swatch { height: 58px; }
 #photoStudio .studio-lut-apply { padding: 8px; }
 #photoStudio .studio-lut-apply strong { font-size: 13px; }
 #photoStudio .studio-lut-apply small { font-size: 10px; }
 @media (max-width: 740px) {
-  #photoStudio .studio-lut-drawer { position: fixed; inset: 100px 0 0 auto; width: min(430px, calc(100vw - 14px)); padding: 12px; border-radius: 16px 0 0 0; }
-  #photoStudio .studio-lut-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  #photoStudio .studio-lut-drawer { position: fixed; inset: auto 0 0; width: 100%; height: min(40dvh,320px); max-height: calc(100dvh - 90px); gap: 8px; padding: 10px 12px max(10px,env(safe-area-inset-bottom)); border: 1px solid var(--studio-line); border-bottom: 0; border-radius: 16px 16px 0 0; box-shadow: 0 -16px 38px rgba(0,0,0,.45); }
+  #photoStudio .studio-lut-drawer-head { align-items: center; }
+  #photoStudio .studio-lut-drawer-head h2 { margin: 0; font-size: 16px; }
+  #photoStudio .studio-lut-drawer-head p { display: none; }
+  #photoStudio .studio-lut-drawer-head .studio-icon-btn { width: 32px; height: 32px; }
+  #photoStudio .studio-lut-tools { grid-template-columns: minmax(0,1fr) minmax(0,.9fr) auto; gap: 6px; }
+  #photoStudio .studio-lut-tools input[type="search"] { grid-column: auto !important; min-width: 0; width: 100%; }
+  #photoStudio .studio-lut-tools select { grid-column: auto !important; min-width: 0; width: 100%; padding-inline: 8px; }
+  #photoStudio .studio-lut-tools .studio-action { padding: 8px; font-size: 12px; }
+  #photoStudio .studio-lut-strength { padding: 7px 10px; }
+  #photoStudio .studio-lut-grid { flex: 1 1 0; grid-auto-flow: column; grid-auto-columns: minmax(120px, 34vw); grid-template-columns: none; grid-template-rows: minmax(0,1fr); grid-auto-rows: auto; overflow-x: auto; overflow-y: hidden; gap: 8px; padding: 0 1px 3px; }
+  #photoStudio .studio-lut-card { height: 100%; min-height: 0; }
+  #photoStudio .studio-lut-apply { height: 100%; grid-template-rows: 40px auto; align-content: start; padding: 7px; gap: 4px; }
+  #photoStudio .studio-lut-swatch { height: 40px; }
+  #photoStudio .studio-lut-apply strong { font-size: 12px; line-height: 1.2; }
+  #photoStudio .studio-lut-apply small { display: none; }
 }
 @media (max-width: 380px) {
-  #photoStudio .studio-lut-grid { grid-template-columns: 1fr; }
+  #photoStudio .studio-lut-tools { grid-template-columns: minmax(0,1fr) minmax(0,.85fr) auto; }
+  #photoStudio .studio-lut-grid { grid-auto-columns: minmax(108px, 38vw); }
 }
