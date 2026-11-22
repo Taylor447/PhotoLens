@@ -536,7 +536,7 @@ async function runAnalysis() {
               const response = await fetch(`${endpoint.replace(/\/+$/, '')}/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: targetIds.length === 2 ? 'compare' : 'single', images: targetIds.map(id => prepared[id].data) }),
+                body: JSON.stringify({ mode: targetIds.length === 2 ? 'compare' : 'single', deepAnalysis: (await getPreference('photolens_deep_analysis')) === 'true', images: targetIds.map(id => prepared[id].data) }),
                 signal: controller.signal
               });
               const data = await response.json().catch(() => null);
@@ -977,7 +977,9 @@ async function showSettings() {
   await loadAiEnabled();
   const endpoint = await getAiEndpoint();
   const envLocked = Boolean(ENV_AI_ENDPOINT);
-  openModal(`<h2>Cài đặt AI</h2><p>Ảnh được đo ngay trên thiết bị. Khi bật AI, chỉ bản JPEG đã thu nhỏ tối đa 1024 px và đã loại EXIF/GPS mới được gửi tới Cloudflare Worker.</p><label for="proxyInput">URL Cloudflare Worker</label><input id="proxyInput" type="url" placeholder="https://photolens-ai.ten-ban.workers.dev" value="${escapeAttr(endpoint)}" ${envLocked ? 'readonly' : ''} aria-describedby="endpointHelp"><p id="endpointHelp">${envLocked ? 'URL này do biến VITE_AI_ENDPOINT của bản build cung cấp.' : 'Nhập địa chỉ Worker gốc; ứng dụng sẽ gọi /health và /analyze.'}</p><label class="setting-toggle" for="settingsUseAi"><input type="checkbox" id="settingsUseAi" ${aiEnabled ? 'checked' : ''}><span>Dùng AI</span></label><div class="ai-status" role="status" aria-live="polite"><span id="aiStatusBadge" class="ai-status-badge">${endpoint ? 'Đang kiểm tra' : 'Chưa cấu hình'}</span><span id="aiStatusReason">${endpoint ? 'Đang kiểm tra kết nối Worker…' : 'Nhập URL Worker rồi kiểm tra kết nối.'}</span></div><div class="modal-actions settings-actions"><button class="ghost-btn" id="checkAiBtn" type="button" aria-label="Kiểm tra kết nối AI">Kiểm tra kết nối</button><button class="ghost-btn" id="closeModal" type="button">Đóng</button><button class="primary-btn" id="saveAiSettings" type="button">Lưu cài đặt</button></div>`);
+  const deepAnalysis = (await getPreference('photolens_deep_analysis')) === 'true';
+  const showCost = (await getPreference('photolens_show_cost')) === 'true';
+  openModal(`<h2>Cài đặt AI</h2><p>Ảnh được đo ngay trên thiết bị. Khi bật AI, chỉ bản JPEG đã thu nhỏ tối đa 1024 px và đã loại EXIF/GPS mới được gửi tới Cloudflare Worker.</p><label for="proxyInput">URL Cloudflare Worker</label><input id="proxyInput" type="url" placeholder="https://photolens-ai.ten-ban.workers.dev" value="${escapeAttr(endpoint)}" ${envLocked ? 'readonly' : ''} aria-describedby="endpointHelp"><p id="endpointHelp">${envLocked ? 'URL này do biến VITE_AI_ENDPOINT của bản build cung cấp.' : 'Nhập địa chỉ Worker gốc; ứng dụng sẽ gọi /health và /analyze.'}</p><label class="setting-toggle" for="settingsUseAi"><input type="checkbox" id="settingsUseAi" ${aiEnabled ? 'checked' : ''}><span>Dùng AI</span></label><label class="setting-toggle" for="settingsDeepAnalysis"><input type="checkbox" id="settingsDeepAnalysis" ${deepAnalysis ? 'checked' : ''}><span>Phân tích sâu (có thể dùng nhiều token hơn)</span></label><label class="setting-toggle" for="settingsShowCost"><input type="checkbox" id="settingsShowCost" ${showCost ? 'checked' : ''}><span>Hiện ước tính token và chi phí nếu Worker có cấu hình giá</span></label><div class="ai-status" role="status" aria-live="polite"><span id="aiStatusBadge" class="ai-status-badge">${endpoint ? 'Đang kiểm tra' : 'Chưa cấu hình'}</span><span id="aiStatusReason">${endpoint ? 'Đang kiểm tra kết nối Worker…' : 'Nhập URL Worker rồi kiểm tra kết nối.'}</span></div><div class="modal-actions settings-actions"><button class="ghost-btn" id="checkAiBtn" type="button" aria-label="Kiểm tra kết nối AI">Kiểm tra kết nối</button><button class="ghost-btn" id="closeModal" type="button">Đóng</button><button class="primary-btn" id="saveAiSettings" type="button">Lưu cài đặt</button></div>`);
 
   const setStatus = (state, reason) => {
     const badge = $('#aiStatusBadge');
@@ -1019,6 +1021,8 @@ async function showSettings() {
     try {
       if (!ENV_AI_ENDPOINT) await setPreference('photolens_worker_url', value);
       await setPreference('photolens_ai_enabled', aiEnabled);
+      await setPreference('photolens_deep_analysis', $('#settingsDeepAnalysis')?.checked || false);
+      await setPreference('photolens_show_cost', $('#settingsShowCost')?.checked || false);
     } catch { toast('Không lưu được cài đặt AI trên thiết bị.'); return; }
     closeModal();
     toast(aiEnabled ? 'Đã lưu cài đặt AI.' : 'Đã tắt AI; chỉ số cục bộ vẫn hoạt động.');

@@ -259,6 +259,7 @@ function validatePayload(body) {
   if (!body || !['single', 'compare', 'watermarks'].includes(body.mode)) {
     return { error: ['INVALID_MODE', 'Chế độ phải là single, compare hoặc watermarks.'] };
   }
+  if (body.deepAnalysis !== undefined && typeof body.deepAnalysis !== 'boolean') return { error: ['INVALID_OPTION', 'Tùy chọn phân tích sâu không hợp lệ.'] };
   const expectedCount = body.mode === 'compare' ? 2 : 1;
   if (!Array.isArray(body.images) || body.images.length !== expectedCount || body.images.length > MAX_IMAGES) {
     return { error: ['INVALID_IMAGES', body.mode === 'compare' ? 'Chế độ so sánh cần đúng 2 ảnh JPEG A và B.' : 'Chế độ này cần đúng 1 ảnh JPEG.'] };
@@ -293,7 +294,7 @@ async function readGeminiText(response) {
   return result?.candidates?.[0]?.content?.parts?.map(part => part.text || '').join('').trim() || '';
 }
 
-async function analyzeWithGemini({ mode, images, env }) {
+async function analyzeWithGemini({ mode, deepAnalysis = false, images, env }) {
   const model = String(env.GEMINI_MODEL || '').trim();
   if (!model) return { error: ['MODEL_NOT_CONFIGURED', 'Worker chưa có biến GEMINI_MODEL trong wrangler.toml.'], status: 503 };
   if (!env.GEMINI_API_KEY) return { error: ['KEY_NOT_CONFIGURED', 'Worker chưa được cấu hình secret GEMINI_API_KEY.'], status: 503 };
@@ -304,6 +305,8 @@ async function analyzeWithGemini({ mode, images, env }) {
   const parts = [{ text: promptForMode(mode) }];
   for (const data of images) parts.push({ inlineData: { mimeType: 'image/jpeg', data } });
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+  const thinkingLevels = ['minimal', 'low', 'medium', 'high'];
+  const startThinkingIndex = deepAnalysis && mode !== 'watermarks' ? 3 : mode === 'single' ? 0 : 1;
   let lastSchemaError = false;
   const timeoutController = new AbortController();
   const timeoutId = setTimeout(() => timeoutController.abort(new DOMException('Gemini timed out', 'TimeoutError')), GEMINI_TIMEOUT_MS);
@@ -318,7 +321,7 @@ async function analyzeWithGemini({ mode, images, env }) {
         generationConfig: {
           responseMimeType: 'application/json',
           responseSchema: schema,
-          thinkingConfig: { thinkingLevel: mode === 'single' ? 'minimal' : 'low' },
+          thinkingConfig: { thinkingLevel: thinkingLevels[Math.min(startThinkingIndex + attempt, thinkingLevels.length - 1)] },
           maxOutputTokens: mode === 'compare' ? 6000 : mode === 'watermarks' ? 1800 : 3000
         }
       });
@@ -402,6 +405,7 @@ const STRUCTURED_SYSTEM='Bạn là trợ lý nhiếp ảnh PhotoLens. JSON paylo
 function validStructuredInput(path,b){
  const str=x=>typeof x==='string'&&x.trim().length>0&&x.length<=500, val=x=>x===null||Number.isFinite(x);
  if(!b||typeof b!=='object'||Array.isArray(b))return false;
+ if(b.deepAnalysis!==undefined&&typeof b.deepAnalysis!=='boolean')return false;
  if(path==='/devices/summary')return Array.isArray(b.devices)&&b.devices.length>=1&&b.devices.length<=3&&b.devices.every(d=>d&&str(d.id)&&str(d.brand)&&str(d.model)&&Array.isArray(d.facts)&&d.facts.length<=60&&d.facts.every(f=>f&&str(f.label)&&(typeof f.value==='string'||typeof f.value==='number'||typeof f.value==='boolean'||f.value===null)));
  if(path==='/spots/rank')return str(b.genre)&&Array.isArray(b.candidates)&&b.candidates.length>=1&&b.candidates.length<=35&&b.candidates.every(c=>c&&str(c.id)&&str(c.name)&&str(c.category)&&val(c.distanceKm)&&val(c.conditionScore)&&(c.knownNotes===null||typeof c.knownNotes==='string'));
  if(path==='/angles')return str(b.genre)&&str(b.subject)&&b.subject.length<=200&&typeof b.scene==='string'&&b.scene.length<=500&&Array.isArray(b.deviceFacts)&&b.deviceFacts.length<=40&&b.deviceFacts.every(f=>f&&str(f.label)&&(typeof f.value==='string'||typeof f.value==='number'||typeof f.value==='boolean'||f.value===null));
@@ -421,10 +425,10 @@ async function structuredWithGemini({path,body,env}){
  const model=String(env['GEMINI_MODEL_'+path.slice(1).replace(/[^a-z]/gi,'_').toUpperCase()]||env.GEMINI_MODEL||'').trim();
  if(!model)return {error:['MODEL_NOT_CONFIGURED','Worker chưa có biến GEMINI_MODEL.'],status:503};
  if(!env.GEMINI_API_KEY)return {error:['KEY_NOT_CONFIGURED','Worker chưa được cấu hình secret GEMINI_API_KEY.'],status:503};
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),GEMINI_TIMEOUT_MS),api='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',levels=['low','medium','high'];
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),GEMINI_TIMEOUT_MS),api='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',levels=['minimal','low','medium','high'],startLevel=body.deepAnalysis?3:1,modelBody={...body};delete modelBody.deepAnalysis;
  try{for(let i=0;i<MAX_SCHEMA_ATTEMPTS;i++){
   let response;
-  try{response=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':env.GEMINI_API_KEY},signal:controller.signal,body:JSON.stringify({systemInstruction:{parts:[{text:STRUCTURED_SYSTEM}]},contents:[{role:'user',parts:[{text:'Route '+path+'; payload facts: '+JSON.stringify(body)}]}],generationConfig:{responseMimeType:'application/json',responseSchema:STRUCTURED_SCHEMAS[path],thinkingConfig:{thinkingLevel:levels[i]},maxOutputTokens:path==='/angles'?2400:1800}})});}catch(e){const timed=e?.name==='AbortError'||e?.name==='TimeoutError';return {error:[timed?'GEMINI_TIMEOUT':'GEMINI_UNAVAILABLE',timed?'Gemini phản hồi quá 30 giây.':'Không kết nối được Gemini.'],status:timed?504:502};}
+  try{response=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':env.GEMINI_API_KEY},signal:controller.signal,body:JSON.stringify({systemInstruction:{parts:[{text:STRUCTURED_SYSTEM}]},contents:[{role:'user',parts:[{text:'Route '+path+'; payload facts: '+JSON.stringify(modelBody)}]}],generationConfig:{responseMimeType:'application/json',responseSchema:STRUCTURED_SCHEMAS[path],thinkingConfig:{thinkingLevel:levels[Math.min(startLevel+i,levels.length-1)]},maxOutputTokens:path==='/angles'?2400:1800}})});}catch(e){const timed=e?.name==='AbortError'||e?.name==='TimeoutError';return {error:[timed?'GEMINI_TIMEOUT':'GEMINI_UNAVAILABLE',timed?'Gemini phản hồi quá 30 giây.':'Không kết nối được Gemini.'],status:timed?504:502};}
   if(response.status===429&&i===0){await new Promise(r=>setTimeout(r,900));continue;}
   if(!response.ok)return {error:[response.status===429?'GEMINI_RATE_LIMIT':'GEMINI_ERROR',response.status===429?'Gemini đang quá tải. Hãy thử lại sau.':'Gemini không xử lý được yêu cầu ('+response.status+').'],status:response.status===429?429:502};
   const result=await response.json().catch(()=>null),raw=result?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('').trim();
@@ -525,7 +529,7 @@ export default {
       return failure(request, env, payload.error[0], payload.error[1], payload.status || 400);
     }
 
-    const result = await analyzeWithGemini({ mode: body.mode, images: payload.images, env });
+    const result = await analyzeWithGemini({ mode: body.mode, deepAnalysis: body.deepAnalysis === true, images: payload.images, env });
     if (result.error) return failure(request, env, result.error[0], result.error[1], result.status || 502);
     return json(request, env, result.data);
   }
