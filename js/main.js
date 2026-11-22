@@ -94,7 +94,7 @@ try {
 function toast(message) { const el = $('#toast'); el.textContent = message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => el.classList.remove('show'), 2800); }
 // Worker/API có thể trả lỗi lồng nhau; tránh hiển thị [object Object] trong giao diện.
 function readableErrorMessage(value, fallback = 'Không thể kết nối AI. Các chỉ số cục bộ vẫn được giữ.') {
-  const regionBlocked = 'Google Gemini từ chối vị trí IP mà Worker dùng để gọi API. Worker đã bật Smart Placement; hãy deploy lại rồi thử lại. Nếu vẫn lỗi, cần đổi nơi chạy backend hoặc gửi báo cáo tới Google. Báo cáo cục bộ vẫn đầy đủ.';
+  const regionBlocked = 'Google Gemini từ chối vị trí IP mà Worker dùng để gọi API. PhotoLens đã bật Smart Placement trong cấu hình; hãy deploy lại Worker và chờ Cloudflare tối ưu vị trí (có thể đến 15 phút). Nếu vẫn lỗi, cần đổi nơi chạy backend hoặc gửi báo cáo tới Google. Báo cáo cục bộ vẫn đầy đủ.';
   const messages = {
     ORIGIN_NOT_ALLOWED: 'Worker chưa cho phép địa chỉ của ứng dụng. Hãy dùng http://localhost:5173 hoặc thêm đúng origin vào ALLOWED_ORIGINS rồi deploy lại Worker.',
     KEY_NOT_CONFIGURED: 'Worker chưa được cấu hình secret GEMINI_API_KEY.',
