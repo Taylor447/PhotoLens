@@ -1,0 +1,61 @@
+{
+  "weights": {
+    "portrait": {
+      "rain": 0.3,
+      "wind": 0.2,
+      "cloud": 0.18,
+      "visibility": 0.14,
+      "uv": 0.1,
+      "pm": 0.08
+    },
+    "landscape": {
+      "rain": 0.24,
+      "wind": 0.14,
+      "cloud": 0.22,
+      "visibility": 0.24,
+      "uv": 0.08,
+      "pm": 0.08
+    },
+    "architecture": {
+      "rain": 0.25,
+      "wind": 0.1,
+      "cloud": 0.2,
+      "visibility": 0.25,
+      "uv": 0.12,
+      "pm": 0.08
+    },
+    "street": {
+      "rain": 0.25,
+      "wind": 0.14,
+      "cloud": 0.18,
+      "visibility": 0.23,
+      "uv": 0.1,
+      "pm": 0.1
+    },
+    "night": {
+      "rain": 0.24,
+      "wind": 0.13,
+      "cloud": 0.3,
+      "visibility": 0.19,
+      "uv": 0.04,
+      "pm": 0.1
+    },
+    "moon": {
+      "rain": 0.2,
+      "wind": 0.1,
+      "cloud": 0.4,
+      "visibility": 0.2,
+      "uv": 0.02,
+      "pm": 0.08
+    }
+  },
+  "normalization": {
+    "rain": "100 - xác suất mưa (%)",
+    "wind": "100 - mức phạt từ 5 km/h; phạt tối đa 70 điểm",
+    "cloud": "ưu tiên mây trung bình cho ban ngày; ít mây cho đêm/trăng",
+    "visibility": "tầm nhìn chuẩn hóa về 0–100",
+    "uv": "giảm điểm từ UV 4 trở lên",
+    "pm": "giảm điểm từ PM2.5 5 µg/m³ trở lên"
+  },
+  "missingData": "Bỏ trường thiếu khỏi phép tính và chuẩn hóa lại theo tổng trọng số còn lại; cần tối thiểu hai trường có dữ liệu."
+}

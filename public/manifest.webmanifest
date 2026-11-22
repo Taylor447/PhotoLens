@@ -1,0 +1,20 @@
+{
+  "name": "PhotoLens",
+  "short_name": "PhotoLens",
+  "description": "Phân tích, chỉnh sửa và lên kế hoạch chụp ảnh.",
+  "lang": "vi",
+  "id": "/PhotoLens/",
+  "start_url": "/PhotoLens/",
+  "scope": "/PhotoLens/",
+  "display": "standalone",
+  "background_color": "#0a1017",
+  "theme_color": "#0a1017",
+  "icons": [
+    {
+      "src": "/PhotoLens/assets/photolens-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

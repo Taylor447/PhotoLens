@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -28,6 +31,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Run core tests
+        run: npm run test:unit
       - name: Build site
         run: npm run build
       - name: Configure GitHub Pages
@@ -38,6 +43,7 @@ jobs:
           path: dist
 
   deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:
