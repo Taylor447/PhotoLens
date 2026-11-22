@@ -28,13 +28,13 @@ const icons = {
   theme: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>')
 };
 
-const brandMark = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="16" cy="16" r="13.5"/><circle cx="16" cy="16" r="10.2" opacity=".58"/><path d="M16 2.5v3.2M16 26.3v3.2M2.5 16h3.2M26.3 16h3.2" stroke-linecap="round"/><text x="16" y="20" text-anchor="middle" fill="currentColor" stroke="none" font-family="system-ui,sans-serif" font-size="9.5" font-weight="800" letter-spacing="-.6">ĐT</text></svg>';
+const brandMark = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="16" r="13.3" opacity=".92"/><circle cx="16" cy="16" r="9.2" opacity=".42"/><path d="M10 11.5h12M16 11.5v10.2" stroke-width="2.6"/><path d="M16 2.7v2.4M16 26.9v2.4M2.7 16h2.4M26.9 16h2.4" opacity=".82"/></svg>';
 
 const root = $('#app');
 root.innerHTML = `
   <main class="shell">
     <header class="topbar">
-      <div class="brand"><div class="brand-mark">${brandMark}</div><div><div class="brand-name">PhotoLens</div><div class="brand-sub">Góc nhìn ảnh của Đức Tài</div></div></div>
+      <div class="brand"><div class="brand-mark">${brandMark}</div><div class="brand-name">Taylor</div></div>
       <div class="top-actions">
         <button class="icon-btn" id="themeBtn" title="Chuyển giao diện sáng/tối" aria-label="Chuyển giao diện sáng/tối" aria-pressed="false">${icons.theme}</button>
         <button class="icon-btn" id="settingsBtn" title="Cấu hình AI" aria-label="Cấu hình AI">${icons.sparkle}</button>
