@@ -353,7 +353,7 @@ async function analyzeWithGemini({ mode, deepAnalysis = false, images, env }) {
       if (detail && env.GEMINI_API_KEY) detail = detail.split(env.GEMINI_API_KEY).join('[đã ẩn khóa]');
       if (upstream.status === 400 && /user location is not supported for the api use/i.test(detail)) {
         return {
-          error: ['GEMINI_REGION_BLOCKED', 'Google Gemini từ chối vị trí IP mà Worker dùng để gọi API. Worker đã bật Smart Placement; hãy deploy lại rồi thử lại. Nếu vẫn lỗi, cần đổi nơi chạy backend hoặc gửi báo cáo tới Google. Báo cáo cục bộ vẫn đầy đủ.'],
+          error: ['GEMINI_REGION_BLOCKED', 'Google Gemini từ chối vị trí IP mà Worker dùng để gọi API. PhotoLens đã bật Smart Placement trong cấu hình; hãy deploy lại Worker và chờ Cloudflare tối ưu vị trí (có thể đến 15 phút). Nếu vẫn lỗi, cần đổi nơi chạy backend hoặc gửi báo cáo tới Google. Báo cáo cục bộ vẫn đầy đủ.'],
           status: 502
         };
       }
