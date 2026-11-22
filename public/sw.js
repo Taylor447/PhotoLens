@@ -1,4 +1,4 @@
-const CACHE_NAME = 'photolens-shell-v2';
+const CACHE_NAME = 'photolens-shell-v3';
 const APP_SCOPE = new URL(self.registration.scope);
 
 self.addEventListener('install', event => {

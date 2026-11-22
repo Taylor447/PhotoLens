@@ -1,0 +1,188 @@
+{
+  "version": 1,
+  "purposes": {
+    "portrait": {
+      "sensor.megapixels": {
+        "min": 8,
+        "max": 60,
+        "weight": 0.25,
+        "direction": "higher"
+      },
+      "lens.maxApertureF": {
+        "min": 1.2,
+        "max": 5.6,
+        "weight": 0.35,
+        "direction": "lower"
+      },
+      "focus.burstFps": {
+        "min": 3,
+        "max": 30,
+        "weight": 0.2,
+        "direction": "higher"
+      },
+      "power.weightG": {
+        "min": 120,
+        "max": 900,
+        "weight": 0.2,
+        "direction": "lower"
+      }
+    },
+    "travel": {
+      "sensor.megapixels": {
+        "min": 8,
+        "max": 60,
+        "weight": 0.2,
+        "direction": "higher"
+      },
+      "lens.opticalZoom": {
+        "min": 1,
+        "max": 10,
+        "weight": 0.25,
+        "direction": "higher"
+      },
+      "focus.stabilizationScore": {
+        "min": 0,
+        "max": 5,
+        "weight": 0.25,
+        "direction": "higher"
+      },
+      "power.weightG": {
+        "min": 120,
+        "max": 900,
+        "weight": 0.2,
+        "direction": "lower"
+      },
+      "power.batteryShots": {
+        "min": 150,
+        "max": 1000,
+        "weight": 0.1,
+        "direction": "higher"
+      }
+    },
+    "lowLight": {
+      "sensor.highISO": {
+        "min": 800,
+        "max": 12800,
+        "weight": 0.35,
+        "direction": "higher"
+      },
+      "lens.maxApertureF": {
+        "min": 1.2,
+        "max": 5.6,
+        "weight": 0.35,
+        "direction": "lower"
+      },
+      "focus.stabilizationScore": {
+        "min": 0,
+        "max": 5,
+        "weight": 0.3,
+        "direction": "higher"
+      }
+    },
+    "video": {
+      "video.maxFps": {
+        "min": 24,
+        "max": 240,
+        "weight": 0.35,
+        "direction": "higher"
+      },
+      "video.bitDepth": {
+        "min": 8,
+        "max": 12,
+        "weight": 0.25,
+        "direction": "higher"
+      },
+      "focus.stabilizationScore": {
+        "min": 0,
+        "max": 5,
+        "weight": 0.25,
+        "direction": "higher"
+      },
+      "power.weightG": {
+        "min": 120,
+        "max": 900,
+        "weight": 0.15,
+        "direction": "lower"
+      }
+    },
+    "architecture": {
+      "sensor.megapixels": {
+        "min": 8,
+        "max": 60,
+        "weight": 0.25,
+        "direction": "higher"
+      },
+      "lens.minFocal35mm": {
+        "min": 10,
+        "max": 70,
+        "weight": 0.25,
+        "direction": "lower"
+      },
+      "sensor.rawBitDepth": {
+        "min": 10,
+        "max": 16,
+        "weight": 0.25,
+        "direction": "higher"
+      },
+      "focus.stabilizationScore": {
+        "min": 0,
+        "max": 5,
+        "weight": 0.15,
+        "direction": "higher"
+      }
+    },
+    "sports": {
+      "focus.burstFps": {
+        "min": 3,
+        "max": 60,
+        "weight": 0.35,
+        "direction": "higher"
+      },
+      "focus.subjectTrackingScore": {
+        "min": 0,
+        "max": 5,
+        "weight": 0.4,
+        "direction": "higher"
+      },
+      "focus.stabilizationScore": {
+        "min": 0,
+        "max": 5,
+        "weight": 0.2,
+        "direction": "higher"
+      },
+      "video.maxFps": {
+        "min": 24,
+        "max": 240,
+        "weight": 0.15,
+        "direction": "higher"
+      }
+    },
+    "editing": {
+      "sensor.rawBitDepth": {
+        "min": 10,
+        "max": 16,
+        "weight": 0.35,
+        "direction": "higher"
+      },
+      "sensor.colorDepth": {
+        "min": 8,
+        "max": 16,
+        "weight": 0.25,
+        "direction": "higher"
+      },
+      "sensor.megapixels": {
+        "min": 8,
+        "max": 60,
+        "weight": 0.25,
+        "direction": "higher"
+      },
+      "power.storageGB": {
+        "min": 32,
+        "max": 2048,
+        "weight": 0.15,
+        "direction": "higher"
+      }
+    }
+  },
+  "note": "Điểm không hiện nếu thiếu ít nhất hai trường số; chỉ chuẩn hóa các dữ liệu nhập/xác minh, không tự thêm thông số."
+}

@@ -1,1 +1,5 @@
-GEMINI_API_KEY=thay_bang_api_key_cua_ban
+# Local Wrangler variables. Replace locally; never commit the real worker/.dev.vars file.
+GEMINI_API_KEY=replace-with-your-Gemini-key
+# Optional prices in USD per one million tokens. Keep empty to hide cost estimates.
+PRICE_IN_PER_M=
+PRICE_OUT_PER_M=
