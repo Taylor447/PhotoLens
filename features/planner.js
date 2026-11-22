@@ -105,7 +105,8 @@ async function findSpots(){
   status='Đang tìm OpenStreetMap quanh vị trí…';
   render();
   const ql='[out:json][timeout:10];(nwr(around:5000,'+place.latitude+','+place.longitude+')[leisure~"park|garden|nature_reserve"];nwr(around:5000,'+place.latitude+','+place.longitude+')[tourism~"attraction|museum|viewpoint|artwork"];nwr(around:5000,'+place.latitude+','+place.longitude+')[historic];);out center tags 35;';
-  const worker=String(import.meta.env.VITE_AI_ENDPOINT||localStorage.getItem('photolens_worker_url')||'').replace(/\\/+$/,'');
+  let worker=String(import.meta.env.VITE_AI_ENDPOINT||localStorage.getItem('photolens_worker_url')||'');
+  while(worker.endsWith('/'))worker=worker.slice(0,-1);
   const endpoints=[
     ['https://overpass-api.de/api/interpreter','máy chủ Overpass chính'],
     ['https://overpass.private.coffee/api/interpreter','máy chủ Overpass dự phòng'],
