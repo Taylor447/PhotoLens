@@ -11,6 +11,102 @@ const groups={sensor:['type','size','megapixels','pixelPitchUm','iso','highISO',
 export function expandDevice(d){const out={sensor:{},lens:{},focus:{},video:{},durability:{},power:{},...d};for(const [g,keys] of Object.entries(groups)){out[g]={...Object.fromEntries(keys.map(k=>[k,null])),...(d[g]||{})};}return out;}
 export function compareDevices(devices,onlyDiff=false){return DEVICE_FIELDS.map(f=>{const vals=devices.map(d=>f.path.split('.').reduce((o,k)=>o&&o[k],d));const known=vals.filter(v=>v!==null&&v!==undefined&&v!=='');return {...f,values:vals,different:known.length>1&&new Set(known.map(v=>JSON.stringify(v))).size>1};}).filter(f=>!onlyDiff||f.different);}
 export function deviceScore(device,purpose,config){const weights=config.purposes[purpose]||{};let sum=0,total=0,count=0;for(const [path,d] of Object.entries(weights)){const value=num(path.split('.').reduce((o,k)=>o&&o[k],device));if(value===null)continue;let score=clamp((value-d.min)/(d.max-d.min)*100);if(d.direction==='lower')score=100-score;sum+=score*d.weight;total+=d.weight;count++;}return {score:count>=2?Math.round(sum/total):null,count};}
+const recommendationPath=(object,path)=>path.split('.').reduce((value,key)=>value&&value[key],object);
+function recommendationNumber(device,field){
+ const raw=recommendationPath(device,field.path);
+ if(raw===null||raw===undefined||raw==='')return null;
+ if(field.mode==='presence')return String(raw).trim()?100:null;
+ if(field.parse==='mAh'){
+  if(typeof raw==='number'&&Number.isFinite(raw))return raw;
+  const match=String(raw).match(/(\\d+(?:[.,]\\d+)?)\\s*mAh/i);
+  return match?Number(match[1].replace(',','.')):null;
+ }
+ if(typeof raw==='number')return Number.isFinite(raw)?raw:null;
+ const match=String(raw).match(/-?\\d+(?:[.,]\\d+)?/);
+ return match?Number(match[0].replace(',','.')):null;
+}
+function recommendationType(type){
+ const value=String(type||'other').toLowerCase().trim().replace(/[ _]+/g,'-');
+ if(['action-camera','actioncam','action-cam'].includes(value))return 'action';
+ if(['smartphone','mobile-phone'].includes(value))return 'phone';
+ if(value==='my-device')return 'other';
+ return value;
+}
+function recommendationPriceVnd(device){
+ const raw=device?.power?.price;
+ let amount=null,currency='';
+ if(raw&&typeof raw==='object'){
+  amount=Number(raw.amount??raw.value);
+  currency=String(raw.currency||device?.power?.priceCurrency||'').toUpperCase();
+  if(!Number.isFinite(amount))amount=Number(String(raw.amount??raw.value??'').replace(/[^0-9]/g,''));
+ }else if(typeof raw==='number'){
+  amount=raw;
+  currency=String(device?.power?.priceCurrency||'').toUpperCase();
+ }else if(typeof raw==='string'&&/(VND|₫)/i.test(raw)){
+  amount=Number(raw.replace(/[^0-9]/g,''));
+  currency='VND';
+ }
+ return currency==='VND'&&Number.isFinite(amount)&&amount>0?amount:null;
+}
+export function recommendDevices(devices,filters={},configuration={}){
+ const config=configuration.recommendation||configuration;
+ const criteriaConfig=config.criteria||{};
+ const purposes=config.purposeWeights||{};
+ const purpose=purposes[filters.purpose]||purposes.portrait||{};
+ const activeCriteria=Object.entries(purpose).filter(([id,weight])=>criteriaConfig[id]&&Number.isFinite(Number(weight))&&Number(weight)>0);
+ const current=(filters.currentDeviceId?devices.find(device=>device.id===filters.currentDeviceId):null)||null;
+ const requestedType=String(filters.type||'all');
+ const effectiveType=requestedType!=='all'?recommendationType(requestedType):(current?recommendationType(current.type):'all');
+ const typedCandidates=devices.map(expandDevice).filter(device=>
+  (!effectiveType||effectiveType==='all'||recommendationType(device.type)===effectiveType)&&
+  (!current||device.id!==current.id)
+ );
+ const budget=Number(filters.budget);
+ const hasBudget=Number.isFinite(budget)&&budget>0;
+ const unknownPriceCount=hasBudget?typedCandidates.filter(device=>recommendationPriceVnd(device)===null).length:0;
+ const overBudgetCount=hasBudget?typedCandidates.filter(device=>{const price=recommendationPriceVnd(device);return price!==null&&price>budget;}).length:0;
+ const candidates=hasBudget?typedCandidates.filter(device=>{const price=recommendationPriceVnd(device);return price!==null&&price<=budget;}):typedCandidates;
+ const selectedPriorities=new Set(Array.isArray(filters.priorities)?filters.priorities:[]);
+ const boost=Number.isFinite(Number(config.priorityBoost))?Math.max(1,Number(config.priorityBoost)):1.7;
+ const minimum=Math.max(1,Number(config.minimumKnownCriteria)||2);
+ const ranked=candidates.map(device=>{
+  const results=activeCriteria.map(([id,baseWeight])=>{
+   const definition=criteriaConfig[id],known=[];
+   for(const field of definition.fields||[]){
+    const raw=recommendationPath(device,field.path),value=recommendationNumber(device,field);
+    if(value===null)continue;
+    let score;
+    if(field.mode==='presence')score=100;
+    else{
+     const min=Number(field.min),max=Number(field.max);
+     if(!Number.isFinite(min)||!Number.isFinite(max)||max<=min)continue;
+     score=clamp((value-min)/(max-min)*100);
+     if(field.direction==='lower')score=100-score;
+    }
+    known.push({label:field.label||field.path,path:field.path,value:raw,score:Math.round(score)});
+   }
+   if(!known.length)return {id,label:definition.label||id,score:null,weight:0,details:[]};
+   const fieldWeight=known.reduce((sum,item)=>sum+(Number((definition.fields||[]).find(field=>field.path===item.path)?.weight)||1),0);
+   const criterionScore=Math.round(known.reduce((sum,item)=>sum+item.score*(Number((definition.fields||[]).find(field=>field.path===item.path)?.weight)||1),0)/fieldWeight);
+   const weight=Number(baseWeight)*(selectedPriorities.has(id)?boost:1);
+   return {id,label:definition.label||id,score:criterionScore,weight,details:known,note:definition.note||''};
+  });
+  const available=results.filter(result=>result.score!==null&&result.weight>0);
+  const totalWeight=available.reduce((sum,result)=>sum+result.weight,0);
+  const score=available.length>=minimum&&totalWeight>0?Math.round(available.reduce((sum,result)=>sum+result.score*result.weight,0)/totalWeight):null;
+  return {device,score,confidence:{known:available.length,total:activeCriteria.length,percent:activeCriteria.length?Math.round(available.length/activeCriteria.length*100):0},criteria:results,missingCriteria:results.filter(result=>result.score===null).map(result=>result.label),reasons:available.slice().sort((a,b)=>b.score-a.score).slice(0,3),priceVnd:recommendationPriceVnd(device)};
+ }).filter(result=>result.score!==null).sort((a,b)=>b.score-a.score||String(a.device.brand+' '+a.device.model).localeCompare(String(b.device.brand+' '+b.device.model)));
+ let message='';
+ if(!ranked.length){
+  if(hasBudget&&typedCandidates.length&&candidates.length===0)message='Không có mẫu nào có giá VND đã biết nằm trong ngân sách này.';
+  else if(!typedCandidates.length)message='Không có thiết bị nào khớp loại hoặc thiết bị nâng cấp đã chọn.';
+  else message='Chưa có đủ thông số có nguồn để xếp hạng. Cần ít nhất '+minimum+' tiêu chí có dữ liệu.';
+ }
+ const notices=[];
+ if(hasBudget&&unknownPriceCount)notices.push(unknownPriceCount+' thiết bị chưa có giá VND nên không thể xác nhận theo ngân sách.');
+ if(hasBudget&&overBudgetCount)notices.push(overBudgetCount+' thiết bị có giá đã biết vượt ngân sách.');
+ return {recommendations:ranked.slice(0,Math.max(1,Number(config.maximumResults)||5)),message,notice:notices.join(' '),candidateCount:typedCandidates.length,eligibleCount:candidates.length,unknownPriceCount,overBudgetCount};
+}
 export function conditionScore(v={},genre='portrait',weightConfig={}){const W=weightConfig.weights||weightConfig,w=W[genre]||W.portrait||{};const c={rain:num(v.rain)==null?null:100-clamp(v.rain),wind:num(v.wind)==null?null:100-clamp((v.wind-5)*3,0,70),cloud:num(v.cloud)==null?null:(genre==='night'||genre==='moon'?100-clamp(v.cloud):100-Math.abs(v.cloud-(genre==='portrait'?35:25))*.8),visibility:num(v.visibility)==null?null:clamp(v.visibility),uv:num(v.uv)==null?null:100-clamp((v.uv-4)*8,0,60),pm:num(v.pm)==null?null:100-clamp((v.pm-5)*1.2,0,70)};const keys=Object.keys(w).filter(k=>Number.isFinite(c[k])&&Number.isFinite(w[k])&&w[k]>0);const weight=keys.reduce((s,k)=>s+w[k],0);if(keys.length<2||!weight)return {score:null,factors:c,why:'Chưa đủ số liệu thời tiết.'};const score=Math.round(keys.reduce((s,k)=>s+c[k]*w[k],0)/weight);return {score,factors:c,why:'Điểm tham khảo từ mưa, gió, mây, tầm nhìn, UV và PM2.5 hiện có; không phải cam kết thời tiết.'};}
 export function scoreHours(hourly,genre='portrait',offset=0,weightConfig={}){const now=Date.now(),until=now+48*60*60*1000;return (hourly.time||[]).map((time,i)=>{const timestamp=Date.parse(time+'Z')-offset*1000;if(!Number.isFinite(timestamp)||timestamp<now||timestamp>until)return null;const r=conditionScore({rain:hourly.precipitation_probability?.[i],wind:hourly.wind_speed_10m?.[i],cloud:hourly.cloud_cover?.[i],visibility:hourly.visibility?.[i]/100,uv:hourly.uv_index?.[i],pm:hourly.pm2_5?.[i]},genre,weightConfig);return {time,timestamp,score:r.score,temp:hourly.temperature_2m?.[i]??null,why:r.why};}).filter(Boolean).sort((a,b)=>a.timestamp-b.timestamp);}
 export function bestHours(hourly,genre='portrait',offset=0,weightConfig={}){return scoreHours(hourly,genre,offset,weightConfig).sort((a,b)=>(b.score??-1)-(a.score??-1)).slice(0,8);}

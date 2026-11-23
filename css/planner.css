@@ -54,3 +54,25 @@
 .planner-map-canvas .maplibregl-ctrl-group{overflow:hidden;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.18)}
 .planner-map-canvas .maplibregl-ctrl-attrib{font-size:10px;line-height:1.35}
 .planner-search-location-dot{width:18px;height:18px;border:3px solid #fff;border-radius:50%;background:#0b7a5a;box-shadow:0 1px 8px rgba(0,0,0,.45)}
+
+.planner-rec{display:grid;gap:14px}
+.planner-rec-form{display:grid;gap:14px}
+.planner-rec-priorities{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:0;padding:12px;border:1px solid var(--color-border);border-radius:12px}
+.planner-rec-priorities legend{padding:0 6px;color:var(--color-text-secondary);font-weight:700}
+.planner-rec-priorities label{display:flex;align-items:center;gap:8px;min-height:40px;padding:6px 8px;border:1px solid var(--color-border);border-radius:9px;background:var(--color-surface-raised)}
+.planner-rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
+.planner-rec-card{min-width:0;padding:16px;border:1px solid var(--color-border);border-radius:14px;background:var(--color-surface-raised);overflow-wrap:anywhere}
+.planner-rec-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.planner-rec-heading h4{margin:4px 0 8px}
+.planner-rec-heading small,.planner-rec-source{color:var(--color-text-muted)}
+.planner-rec-score{display:grid;gap:4px;text-align:right;white-space:nowrap}
+.planner-rec-score strong{color:var(--color-accent);font-size:20px}
+.planner-rec-score small{white-space:normal}
+.planner-rec-card p{margin:10px 0;font-size:14px;line-height:1.5}
+.planner-rec-criteria,.planner-rec-card details ul{padding-left:20px;font-size:13px;line-height:1.6}
+.planner-rec-card details{margin:12px 0}
+.planner-rec-card details summary,.planner-rec-method summary{min-height:40px;display:flex;align-items:center;cursor:pointer;font-weight:700}
+.planner-rec-card>button{margin-top:8px}
+.planner-rec-method{padding:12px 14px;border:1px solid var(--color-border);border-radius:12px}
+.planner-rec-method p{font-size:13px;line-height:1.55}
+@media(max-width:760px){.planner-rec-grid{grid-template-columns:1fr}.planner-rec-heading{flex-wrap:wrap}.planner-rec-score{text-align:left}.planner-rec-priorities{grid-template-columns:repeat(2,minmax(0,1fr))}}
