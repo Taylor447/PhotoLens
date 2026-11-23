@@ -150,21 +150,20 @@ Nhận diện hãng dùng Gemini qua Cloudflare Worker. Ứng dụng chỉ gửi
 Trên màn hình máy tính, khung xem trước đứng yên và cột công cụ bên phải có thanh cuộn riêng. Trên điện thoại, phần xem trước ghim phía trên khi bạn cuộn tới các công cụ.
 
 
-## Thiết bị, thời tiết và kế hoạch chụp
+## Thời tiết, địa điểm và kế hoạch chụp
 
-PhotoLens tải riêng khu vực **Thiết bị & chụp** khi bạn mở nó. Các mô-đun mới nằm ở `core/photography.js`, `features/planner.js` và `data/`:
+PhotoLens tải riêng khu vực công cụ chụp khi bạn mở. Các mô-đun nằm ở `core/photography.js`, `features/planner.js` và `data/`:
 
-- So sánh 2–3 thiết bị, chỉ hiện thông số có dữ liệu, thêm thiết bị do bạn nhập và tính điểm theo cấu hình minh bạch. Một số mẫu có vài thông số được chép kèm nguồn nhà sản xuất; toàn bộ mẫu vẫn đánh dấu **Chưa xác minh**, các trường chưa đối chiếu được để trống/null và không được suy đoán.
 - Dự báo Open-Meteo, chất lượng không khí PM2.5, khung giờ tốt trong 48 giờ và dự báo 7 ngày. Điểm điều kiện chụp dùng `data/weather-scoring.json`; dữ liệu thiếu bị bỏ qua và điểm được chuẩn hóa theo trọng số còn lại.
-- Tìm tên địa điểm quanh vị trí qua Overpass/OpenStreetMap khi có tọa độ; danh sách gợi ý Hà Nội chỉ có tên và liên kết tìm kiếm, không có tọa độ hoặc giờ mở cửa được khẳng định. Mọi dữ liệu bản đồ phải ghi nguồn OpenStreetMap contributors theo ODbL.
-- Gợi ý góc chụp và trang phục có chế độ quy tắc cục bộ. AI là tùy chọn, chỉ được bật sau khi chọn **Dùng AI** trong Cài đặt AI; các route mới là `/devices/summary`, `/spots/rank`, `/angles`, `/outfit`. Worker kiểm tra cấu trúc dữ liệu, giới hạn AI diễn giải danh sách/số liệu đã gửi và trả usage. Không gửi ảnh ở các route này.
+- Tìm địa điểm quanh vị trí qua Overpass/OpenStreetMap khi có tọa độ; danh sách gợi ý Hà Nội chỉ có tên và liên kết tìm kiếm, không khẳng định tọa độ hoặc giờ mở cửa. Mọi dữ liệu bản đồ ghi nguồn OpenStreetMap contributors theo ODbL.
+- Gợi ý góc chụp và trang phục có chế độ quy tắc cục bộ. AI là tùy chọn, chỉ được bật sau khi chọn **Dùng AI** trong Cài đặt AI; các route gồm `/spots/rank`, `/angles`, `/outfit`. Worker kiểm tra cấu trúc dữ liệu và chỉ diễn giải dữ liệu đã gửi. Không gửi ảnh ở các route này.
 - Kế hoạch chụp lưu cục bộ trên thiết bị hiện tại, có tạo/sửa/xóa và xuất/chia sẻ JSON, PDF hoặc PNG; trên Android ưu tiên bảng chia sẻ native khi plugin có sẵn.
 
 ### Nguồn dữ liệu và quyền riêng tư
 
-Thời tiết dùng [Open-Meteo Forecast API](https://open-meteo.com/en/docs), [Geocoding API](https://open-meteo.com/en/docs/geocoding-api) và [Air Quality API](https://open-meteo.com/en/docs/air-quality-api). Địa điểm dùng [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API); khi dùng dữ liệu OSM hãy ghi công [OpenStreetMap contributors](https://www.openstreetmap.org/copyright). Quyền vị trí chỉ được hỏi sau khi bạn bấm **Dùng vị trí hiện tại**; tọa độ được làm tròn 2 chữ số trước khi gửi tìm kiếm. Từ chối quyền vẫn có thể nhập địa danh. Thời tiết được lưu tạm cục bộ 20 phút; kế hoạch và thiết bị tự thêm lưu trong trình duyệt/ứng dụng đang dùng. Trong Cài đặt AI, có thể bật phân tích sâu (tốn thêm token) và tùy chọn hiện số token/ước tính chi phí nếu Worker được cấu hình đơn giá.
+Thời tiết dùng [Open-Meteo Forecast API](https://open-meteo.com/en/docs), [Geocoding API](https://open-meteo.com/en/docs/geocoding-api) và [Air Quality API](https://open-meteo.com/en/docs/air-quality-api). Địa điểm dùng [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API); khi dùng dữ liệu OSM hãy ghi công [OpenStreetMap contributors](https://www.openstreetmap.org/copyright). Quyền vị trí chỉ được hỏi sau khi bạn bấm **Dùng vị trí hiện tại**; tọa độ được làm tròn 2 chữ số trước khi gửi tìm kiếm. Từ chối quyền vẫn có thể nhập địa danh. Thời tiết được lưu tạm cục bộ 20 phút; kế hoạch lưu trong trình duyệt/ứng dụng đang dùng. Trong Cài đặt AI, có thể bật phân tích sâu (tốn thêm token) và tùy chọn hiện số token/ước tính chi phí nếu Worker được cấu hình đơn giá.
 
-AI dùng Cloudflare Worker. Chỉ Worker giữ secret `GEMINI_API_KEY`; không đặt khóa trong app, GitHub Pages, `.env.example` hoặc `worker/.dev.vars.example`. Các route AI thiết bị/địa điểm/góc/trang phục chỉ nhận dữ liệu JSON đã chọn. Các route phân tích ảnh hiện có chỉ gửi JPEG đã chuẩn hóa khi AI được bật.
+AI dùng Cloudflare Worker. Chỉ Worker giữ secret `GEMINI_API_KEY`; không đặt khóa trong app, GitHub Pages, `.env.example` hoặc `worker/.dev.vars.example`. Các route AI cho địa điểm/góc/trang phục chỉ nhận dữ liệu JSON đã chọn. Các route phân tích ảnh hiện có chỉ gửi JPEG đã chuẩn hóa khi AI được bật.
 
 ### Chạy, kiểm tra và triển khai
 
@@ -190,4 +189,4 @@ npm run worker:dev
 
 ### Phần còn giới hạn
 
-Bản đồ chụp hiện là khung OpenStreetMap nhúng, chưa dùng Leaflet. Giờ vàng hiện ước tính từ bình minh/hoàng hôn, chưa dùng SunCalc thiên văn; chưa có pha trăng/giờ trăng mọc-lặn, hệ thống kiểm thử E2E/thiết bị giả lập, dữ liệu đầy đủ cho cả 12 mẫu, hay APK/AAB và bộ cài Windows đã ký. Dữ liệu thiết bị mẫu để trống các thông số chưa được đối chiếu; khi đó điểm thiết bị sẽ báo **Chưa đủ dữ liệu**. Web camera và các quyền native vẫn phụ thuộc trình duyệt/thiết bị. Không hiển thị ISO, tốc độ màn trập hoặc điều khiển phần cứng khi thiết bị không cung cấp API tương ứng.
+Bản đồ chụp hiện là khung OpenStreetMap nhúng, chưa dùng Leaflet. Giờ vàng hiện ước tính từ bình minh/hoàng hôn, chưa dùng SunCalc thiên văn; chưa có pha trăng/giờ trăng mọc-lặn, hệ thống kiểm thử E2E/thiết bị giả lập, hay APK/AAB và bộ cài Windows đã ký. Web camera và các quyền native vẫn phụ thuộc trình duyệt/thiết bị. Không hiển thị ISO, tốc độ màn trập hoặc điều khiển phần cứng khi thiết bị không cung cấp API tương ứng.
