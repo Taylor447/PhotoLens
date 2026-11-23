@@ -67,7 +67,8 @@ test('action camera aliases match the action type filter',()=>{
  const result=recommendDevices(devices,{type:'action',purpose:'travel'},recommendationFixtureConfig);
  assert.equal(result.recommendations[0].device.id,'action');
 });
-\ntest('device examples are explicitly unverified and keep their source references',()=>{
+
+test('device examples are explicitly unverified and keep their source references',()=>{
  const devices=JSON.parse(readFileSync(new URL('../data/devices.json',import.meta.url),'utf8'));
  assert.equal(devices.length,12);
  for(const device of devices){assert.equal(device.verified,false);assert.match(device.sourceUrl,/^https:\/\//);assert.equal(typeof device.brand,'string');assert.equal(typeof device.model,'string');}
