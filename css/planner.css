@@ -55,3 +55,5 @@
 .planner-map-canvas .maplibregl-ctrl-attrib{font-size:10px;line-height:1.35}
 .planner-search-location-dot{width:18px;height:18px;border:3px solid #fff;border-radius:50%;background:#0b7a5a;box-shadow:0 1px 8px rgba(0,0,0,.45)}
 
+
+.planner-angle-grid article>small{color:var(--color-accent);font-weight:800}.planner-pose-tip{padding:10px 12px;border-left:3px solid var(--color-accent);border-radius:0 8px 8px 0;background:var(--color-surface-raised)}

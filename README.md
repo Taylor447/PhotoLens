@@ -156,7 +156,7 @@ PhotoLens tải riêng khu vực công cụ chụp khi bạn mở. Các mô-đun
 
 - Dự báo Open-Meteo, chất lượng không khí PM2.5, khung giờ tốt trong 48 giờ và dự báo 7 ngày. Điểm điều kiện chụp dùng `data/weather-scoring.json`; dữ liệu thiếu bị bỏ qua và điểm được chuẩn hóa theo trọng số còn lại.
 - Tìm địa điểm quanh vị trí qua Overpass/OpenStreetMap khi có tọa độ; danh sách gợi ý Hà Nội chỉ có tên và liên kết tìm kiếm, không khẳng định tọa độ hoặc giờ mở cửa. Mọi dữ liệu bản đồ ghi nguồn OpenStreetMap contributors theo ODbL.
-- Gợi ý góc chụp và trang phục có chế độ quy tắc cục bộ. AI là tùy chọn, chỉ được bật sau khi chọn **Dùng AI** trong Cài đặt AI; các route gồm `/spots/rank`, `/angles`, `/outfit`. Worker kiểm tra cấu trúc dữ liệu và chỉ diễn giải dữ liệu đã gửi. Không gửi ảnh ở các route này.
+- Mục **Góc chụp** gợi ý ba góc máy theo thể loại, số người và bối cảnh, kèm mẹo bố cục và tạo dáng; gợi ý chạy cục bộ. Trang phục cũng có chế độ quy tắc cục bộ. AI là tùy chọn, chỉ được bật sau khi chọn **Dùng AI** trong Cài đặt AI; các route gồm `/spots/rank`, `/angles`, `/outfit`. Worker kiểm tra cấu trúc dữ liệu và chỉ diễn giải dữ liệu đã gửi. Không gửi ảnh ở các route này.
 - Kế hoạch chụp lưu cục bộ trên thiết bị hiện tại, có tạo/sửa/xóa và xuất/chia sẻ JSON, PDF hoặc PNG; trên Android ưu tiên bảng chia sẻ native khi plugin có sẵn.
 
 ### Nguồn dữ liệu và quyền riêng tư
