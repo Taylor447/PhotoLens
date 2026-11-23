@@ -1,0 +1,1165 @@
+{
+  "schemaVersion": 1,
+  "license": "CC BY-SA 3.0",
+  "attribution": "Lensfun camera database contributors.",
+  "licenseUrl": "https://github.com/lensfun/lensfun/blob/master/data/COPYING.CC_BY-SA_3.0",
+  "items": [
+    {
+      "brand": "AEE DV",
+      "model": "AEE DV",
+      "aliases": [
+        "AEE MagiCam SD19 & compatibles"
+      ],
+      "mount": "aeeDV",
+      "cropFactor": 6,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "DJI",
+      "model": "FC3411",
+      "aliases": [
+        "Air 2S"
+      ],
+      "mount": "djiFC3411",
+      "cropFactor": 2.73,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "DJI",
+      "model": "FC3582",
+      "aliases": [
+        "Mini 3 Pro"
+      ],
+      "mount": "djiFC3582",
+      "cropFactor": 3.6,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "DJI",
+      "model": "FC6310",
+      "aliases": [],
+      "mount": "djiFC6310",
+      "cropFactor": 2.73,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "DJI",
+      "model": "FC6310R",
+      "aliases": [
+        "Phantom 4 RTK"
+      ],
+      "mount": "djiFC6310R",
+      "cropFactor": 2.73,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "DJI",
+      "model": "Mavic Air FC2103",
+      "aliases": [],
+      "mount": "djiMavicAirFC2103",
+      "cropFactor": 5.6,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "DJI",
+      "model": "Mavic Pro FC220",
+      "aliases": [],
+      "mount": "djiMavicProFC220",
+      "cropFactor": 5.64,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "DJI",
+      "model": "Phantom 3 Pro FC300X",
+      "aliases": [],
+      "mount": "dijPhantom3ProFC300X",
+      "cropFactor": 5.5,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "DJI",
+      "model": "Phantom Vision FC200",
+      "aliases": [],
+      "mount": "dijPhantomVisionFC200",
+      "cropFactor": 6,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "GitUp",
+      "model": "Git2",
+      "aliases": [],
+      "mount": "git2",
+      "cropFactor": 5.57,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "GoPro",
+      "model": "HD2",
+      "aliases": [],
+      "mount": "goProHero",
+      "cropFactor": 6.4,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "GoPro",
+      "model": "Hero10 black",
+      "aliases": [],
+      "mount": "goProHero10bl",
+      "cropFactor": 5.5,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "GoPro",
+      "model": "Hero11 Black",
+      "aliases": [],
+      "mount": "goProHero11bl",
+      "cropFactor": 5.54,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "GoPro",
+      "model": "Hero3+ black",
+      "aliases": [],
+      "mount": "goProHero3+",
+      "cropFactor": 5.42,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "GoPro",
+      "model": "HERO4 Black",
+      "aliases": [],
+      "mount": "goProHero4black",
+      "cropFactor": 5,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "GoPro",
+      "model": "HERO4 Silver",
+      "aliases": [],
+      "mount": "goProHero4",
+      "cropFactor": 7.66,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "GoPro",
+      "model": "HERO5 Black",
+      "aliases": [],
+      "mount": "goProHero4black",
+      "cropFactor": 5,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Hasselblad",
+      "model": "L1D-20c",
+      "aliases": [
+        "DJI Mavic 2 Pro"
+      ],
+      "mount": "l1d20c",
+      "cropFactor": 2.8,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Hasselblad",
+      "model": "L2D-20c",
+      "aliases": [
+        "DJI Mavic 3"
+      ],
+      "mount": "l2d20c",
+      "cropFactor": 1.953,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-1",
+      "aliases": [
+        "Alpha 1"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-1M2",
+      "aliases": [
+        "Alpha 1 II"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-3000",
+      "aliases": [
+        "Alpha 3000"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-5000",
+      "aliases": [
+        "Alpha 5000"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-5100",
+      "aliases": [
+        "Alpha 5100"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-6000",
+      "aliases": [
+        "Alpha 6000"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-6100",
+      "aliases": [
+        "Alpha 6100"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-6100A",
+      "aliases": [
+        "Alpha 6100A"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-6300",
+      "aliases": [
+        "Alpha 6300"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-6400",
+      "aliases": [
+        "Alpha 6400"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-6400A",
+      "aliases": [
+        "Alpha 6400A"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-6500",
+      "aliases": [
+        "Alpha 6500"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-6600",
+      "aliases": [
+        "Alpha 6600"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-6700",
+      "aliases": [
+        "Alpha 6700"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7",
+      "aliases": [
+        "Alpha 7"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7C",
+      "aliases": [
+        "Alpha 7C"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7CM2",
+      "aliases": [
+        "Alpha 7C II"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7CR",
+      "aliases": [
+        "Alpha 7CR"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7M2",
+      "aliases": [
+        "Alpha 7 II"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7M3",
+      "aliases": [
+        "Alpha 7 III"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7M4",
+      "aliases": [
+        "Alpha 7 IV"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7M5",
+      "aliases": [
+        "Alpha 7 V"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7R",
+      "aliases": [
+        "Alpha 7R"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7RM2",
+      "aliases": [
+        "Alpha 7R II"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7RM3",
+      "aliases": [
+        "Alpha 7R III"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7RM3A",
+      "aliases": [
+        "Alpha 7R IIIA"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7RM4",
+      "aliases": [
+        "Alpha 7R IV"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7RM4A",
+      "aliases": [
+        "Alpha 7R IVA"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7RM5",
+      "aliases": [
+        "Alpha 7R V"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7RM6",
+      "aliases": [
+        "Alpha 7R VI"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7S",
+      "aliases": [
+        "Alpha 7S"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7SM2",
+      "aliases": [
+        "Alpha 7S II"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-7SM3",
+      "aliases": [
+        "Alpha 7S III"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-9",
+      "aliases": [
+        "Alpha 9"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-9M2",
+      "aliases": [
+        "Alpha 9 II"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILCE-9M3",
+      "aliases": [
+        "Alpha 9 III"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILME-FX2",
+      "aliases": [
+        "FX2"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILME-FX3",
+      "aliases": [
+        "FX3"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ILME-FX30",
+      "aliases": [
+        "FX30"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.546,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "NEX-3",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "NEX-3N",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "NEX-5",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "NEX-5N",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "NEX-5R",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "NEX-5T",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "NEX-6",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "NEX-7",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "NEX-C3",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "NEX-F3",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ZV-E1",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ZV-E10",
+      "aliases": [],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    },
+    {
+      "brand": "Sony",
+      "model": "ZV-E10M2",
+      "aliases": [
+        "ZV-E10 II"
+      ],
+      "mount": "Sony E",
+      "cropFactor": 1.534,
+      "provenance": {
+        "sourceId": "lensfun",
+        "url": "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "pipeline",
+        "verified": false
+      }
+    }
+  ]
+}

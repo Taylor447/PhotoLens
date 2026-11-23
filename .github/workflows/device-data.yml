@@ -1,0 +1,58 @@
+name: Review device data updates
+
+on:
+  schedule:
+    - cron: '17 3 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: device-data-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Fetch and prepare reviewable data
+        id: data
+        continue-on-error: true
+        run: npm run data:update
+      - name: Prepare update report
+        if: always()
+        run: |
+          echo "## PhotoLens device data update" >> "$GITHUB_STEP_SUMMARY"
+          echo "Pipeline result: ${{ steps.data.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f DATA_REPORT.md ]; then cat DATA_REPORT.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - name: Create review pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATE_OUTCOME: ${{ steps.data.outcome }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          git add data DATA_REPORT.md DATA_TODO.md
+          if git diff --cached --quiet; then
+            echo "No source data changes to review."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          branch="device-data-update-${RUN_ID}"
+          git checkout -b "$branch"
+          git commit -m "chore(data): refresh reviewable device sources"
+          git push --set-upstream origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "Review PhotoLens device data update" \
+            --body "Monthly source refresh. Pipeline result: ${UPDATE_OUTCOME}. Review DATA_REPORT.md and data/review/conflicts.json. This workflow does not publish data; unresolved conflicts must be reviewed before merge."

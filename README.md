@@ -1,193 +1,194 @@
 # PhotoLens
 
-PhotoLens là ứng dụng tiếng Việt để phân tích, so sánh, chỉnh sửa và chụp ảnh. Phân tích ảnh và Studio chạy trực tiếp trên thiết bị; AI là tùy chọn; ảnh chỉ gửi tới Cloudflare Worker sau khi bạn bật AI, kiểm tra/cấu hình endpoint và chủ động chạy phân tích.
+PhotoLens là ứng dụng tiếng Việt để phân tích một ảnh hoặc so sánh hai ảnh. Các chỉ số kỹ thuật được đo trên thiết bị bằng Canvas 2D và Web Worker. Gemini là tùy chọn, chỉ nhận ảnh JPEG đã thu nhỏ qua Cloudflare Worker.
 
-## Nền tảng
+## Nền tảng và quyền riêng tư
 
-- Web: Windows và trình duyệt hiện đại; GitHub Pages giữ base path `/PhotoLens/`.
-- Android: Capacitor Camera, Share và Preferences.
-- Windows desktop: Electron, menu ứng dụng và hộp thoại lưu tệp.
-- Không bao gồm bản iOS hoặc macOS.
+- Web/PWA: cài từ trình duyệt và dùng phần đo cục bộ khi ngoại tuyến sau lần tải đầu.
+- Android: Capacitor, chọn ảnh bằng Photo Picker, chụp qua Camera plugin.
+- Windows: Electron, menu ứng dụng, kéo thả, `Ctrl+O` mở ảnh và `Ctrl+S` xuất báo cáo.
+- Dự án không còn cấu hình iOS hoặc macOS.
+- Ảnh gốc không được gửi tới AI. Khi bật AI, Canvas tạo JPEG mới với cạnh dài tối đa 1024 px, qua đó loại bỏ EXIF/GPS trước khi gửi.
+- API key Gemini chỉ được lưu trong Cloudflare Worker secret. Không đặt key trong `.env`, mã frontend hoặc `dist/`.
+- Lịch sử lưu trên thiết bị; không lưu ảnh gốc vào lịch sử.
 
-## Chạy web local
+## Yêu cầu
 
-Yêu cầu Node.js và npm.
+- Node.js 22.12 trở lên và npm.
+- Windows: PowerShell hoặc Command Prompt.
+- Android: Android Studio và Android SDK nếu muốn build APK/AAB.
+- Kiểm thử E2E: Chromium do Playwright cài đặt.
 
-Trong PowerShell trên Windows, dùng `npm.cmd` và `npx.cmd` để tránh lỗi Execution Policy chặn các tệp `npm.ps1`/`npx.ps1`. Trong Command Prompt, có thể dùng `npm` và `npx` như bình thường.
+## Cài và chạy web
+
+Trong PowerShell, dùng `npm.cmd` và `npx.cmd` để tránh Execution Policy chặn `npm.ps1`/`npx.ps1`:
 
 ```powershell
 npm.cmd install
 npm.cmd run dev
 ```
 
-Mở URL Vite được in trong terminal. Để tạo bản build web:
+Mở địa chỉ Vite in ra trong terminal. Lệnh build và xem bản build:
 
 ```powershell
 npm.cmd run build
 npm.cmd run preview
 ```
 
-Các phép đo kỹ thuật vẫn dùng được khi offline sau khi ứng dụng đã tải. Gemini cần mạng và Worker đã deploy.
+Nếu Windows báo `running scripts is disabled`, không cần đổi Execution Policy: chạy lệnh tương đương bằng `npm.cmd`/`npx.cmd`.
 
-## Cấu hình Cloudflare Worker và Gemini
+## Cấu hình AI và Cloudflare Worker
 
-1. Tạo Gemini API key trong [Google AI Studio](https://aistudio.google.com/app/apikey). Không đặt key trong file frontend, `.env` của Vite hoặc bất kỳ tệp nào được build vào `dist`.
-2. Cài Wrangler và đăng nhập Cloudflare nếu máy chưa có:
+1. Tạo Gemini API key trong [Google AI Studio](https://aistudio.google.com/app/apikey).
+2. Tạo `.env.local` từ `.env.example` bằng `Copy-Item .env.example .env.local`; điền URL Worker đã deploy vào `VITE_AI_ENDPOINT`. Đây chỉ là URL công khai của Worker, không phải khóa API.
+3. Khi chạy Worker local, sao chép `worker/.dev.vars.example` thành `worker/.dev.vars` và điền `GEMINI_API_KEY`.
+4. Đăng nhập Cloudflare, sau đó lưu khóa production trực tiếp dưới dạng secret:
 
    ```powershell
-   npm.cmd install
    npx.cmd wrangler login
-   ```
-
-3. Từ thư mục gốc dự án, lưu khóa dưới dạng secret:
-
-   ```powershell
    npx.cmd wrangler secret put GEMINI_API_KEY --config worker/wrangler.toml
    ```
 
-   Dán key khi Wrangler hỏi. Key chỉ được lưu trong secret của Worker.
-
-4. Deploy Worker:
+5. Trong `worker/wrangler.toml`, sửa `ALLOWED_ORIGINS` thành đúng các origin cần dùng. Ví dụ: `https://ten-mien-cua-ban.vn,https://localhost,photolens://app,http://localhost:5173`.
+6. Chạy Worker local hoặc deploy:
 
    ```powershell
+   npm.cmd run worker:dev
    npm.cmd run worker:deploy
    ```
 
-5. Mở PhotoLens, nhấn nút hình ngôi sao ở góc phải, dán địa chỉ Worker (ví dụ `https://photolens-ai-proxy.<tai-khoan>.workers.dev`) và lưu.
+7. Nếu không dùng biến `VITE_AI_ENDPOINT`, mở PhotoLens → **Cấu hình AI** và nhập URL Worker. AI có thể không khả dụng khi ngoại tuyến; báo cáo chỉ số cục bộ vẫn hoạt động.
 
-Có thể giới hạn CORS bằng cách bỏ comment `ALLOWED_ORIGINS` trong `worker/wrangler.toml`, thay bằng danh sách origin thực rồi deploy lại. Web dùng domain của bạn, Android thường dùng `https://localhost`, Electron dùng origin `null`, còn Vite local dùng `http://localhost:5173`. CORS không thay thế xác thực hoặc giới hạn lưu lượng; trước khi mở Worker công khai, nên đặt rate limit bằng Cloudflare.
+Không commit `.env.local`, `worker/.dev.vars` hoặc keystore. CORS chỉ giới hạn origin trình duyệt; rate limit của Worker là lớp bảo vệ bổ sung, không thay cho việc bảo vệ secret.
 
-### Chạy Worker local
+## Lệnh npm
 
-Tạo `worker/.dev.vars` từ `worker/.dev.vars.example`, điền Gemini key vào tệp local này rồi chạy:
+| Lệnh | Tác dụng |
+| --- | --- |
+| `npm.cmd run dev` | Chạy Vite dev server |
+| `npm.cmd run build` | Build web/PWA vào `dist/` |
+| `npm.cmd run preview` | Xem bản build bằng Vite preview |
+| `npm.cmd run test:unit` | Chạy unit test `/core` bằng Vitest |
+| `npm.cmd run test:e2e:install` | Cài Chromium cho Playwright lần đầu |
+| `npm.cmd run test:e2e` | Chạy E2E: phân tích, so sánh, xuất JSON và responsive |
+| `npm.cmd test` | Chạy unit test rồi E2E |
+| `npm.cmd run worker:dev` | Chạy Cloudflare Worker local |
+| `npm.cmd run worker:deploy` | Deploy Worker |
+| `npm.cmd run cap:android` | Build web, sync Android, cập nhật tài nguyên và mở Android Studio |
+| `npm.cmd run cap:sync` | Build web và đồng bộ mã vào Android |
+| `npm.cmd run electron:dev` | Build web rồi mở ứng dụng Electron |
+| `npm.cmd run electron:build` | Đóng gói bộ cài Windows `.exe` |
+
+## Kiểm thử và ảnh mẫu
+
+Unit test trong `core/metrics.test.js` kiểm tra độ sáng, tương phản/độ nét, nhiễu, bảng màu, điểm số và ảnh bằng nhau. Bộ ảnh trong `tests/fixtures/` gồm ảnh sáng, tối, nét, mờ, nhiễu và bảng màu. Playwright kiểm tra ba luồng chính và không tràn ngang ở 360, 768, 1280, 1920 px.
+
+Chạy lần đầu:
 
 ```powershell
-npm.cmd run worker:dev
+npm.cmd run test:e2e:install
+npm.cmd test
 ```
 
-Không commit `.dev.vars`. Worker có endpoint kiểm tra trạng thái tại `/health`.
+Nếu máy không tải được Chromium, `test:unit` vẫn chạy độc lập; cài Chromium rồi chạy `test:e2e` sau đó.
 
-## Android APK với Android Studio
+## PWA và ngoại tuyến
 
-1. Cài Android Studio và cấu hình Android SDK trên máy.
-2. Tạo thư mục nền tảng Android một lần:
+`npm.cmd run build` đưa manifest, biểu tượng và service worker vào `dist/`. Khi host trên HTTPS (hoặc localhost), mở ứng dụng và chọn **Cài đặt ứng dụng** trong trình duyệt. Service worker lưu app shell để mở lại ngoại tuyến; Gemini cần kết nối mạng.
+
+## Android: tạo APK/AAB
+
+1. Cài Android Studio, Android SDK và cấu hình biến `ANDROID_HOME` nếu máy yêu cầu.
+2. Cài dependency và tạo project native Android một lần:
 
    ```powershell
+   npm.cmd install
    npx.cmd cap add android
    ```
 
-3. Build web và đồng bộ native project, sau đó mở Android Studio:
+3. Đồng bộ build web, plugin, quyền camera, icon và splash rồi mở Android Studio:
 
    ```powershell
    npm.cmd run cap:android
    ```
 
-4. Trong Android Studio, chờ Gradle sync. Dùng **Build → Build Bundle(s) / APK(s) → Build APK(s)** để tạo APK debug; dùng **Generate Signed Bundle / APK** để tạo bản phát hành có chữ ký.
-5. Mỗi lần sửa web, chạy `npm.cmd run cap:sync`, sau đó build/run lại từ Android Studio.
+4. Trong Android Studio chờ **Gradle Sync** hoàn tất. Chạy thử trên thiết bị/emulator bằng nút **Run**.
+5. Tạo APK thử nghiệm: **Build → Build Bundle(s) / APK(s) → Build APK(s)**. Android Studio hiển thị đường dẫn APK khi hoàn tất.
+6. Tạo bản phát hành có ký: **Build → Generate Signed Bundle / APK** → chọn **Android App Bundle** để phát hành qua Play Console hoặc **APK** để cài trực tiếp.
+7. Nếu chưa có khóa ký, tạo keystore trên máy cá nhân ở ngoài thư mục dự án. Ví dụ:
 
-## Windows desktop
+   ```powershell
+   keytool -genkeypair -v -keystore "$env:USERPROFILE\photolens-release.jks" -alias photolens -keyalg RSA -keysize 2048 -validity 10000
+   ```
 
-Chạy Electron trong môi trường local:
+   Giữ mật khẩu và bản sao lưu riêng tư. Mất keystore có thể khiến bạn không cập nhật được bản Android đã phát hành. Không đưa `.jks`/`.keystore` lên Git.
+8. Mỗi lần đổi mã web, chạy `npm.cmd run cap:sync`, sau đó build lại trong Android Studio.
+
+Ứng dụng chỉ yêu cầu quyền camera khi chụp. Chọn ảnh dùng bộ chọn hệ thống Android; app không yêu cầu quyền đọc toàn bộ thư viện ảnh.
+
+## Windows: chạy và đóng gói `.exe`
 
 ```powershell
+npm.cmd install
 npm.cmd run electron:dev
-```
-
-Đóng gói bộ cài Windows `.exe`:
-
-```powershell
 npm.cmd run electron:build
 ```
 
-Bộ cài xuất hiện trong `release/`. Electron có menu **Tệp → Mở ảnh**, **Xuất báo cáo PDF**, cùng phím tắt `Ctrl+O` và `Ctrl+S`.
+Bộ cài NSIS được tạo trong `release/`. Electron dùng origin nội bộ `photolens://app`, CSP, preload giới hạn IPC và chặn điều hướng ra ngoài. Gói build mặc định chưa ký chứng thư nhà phát hành; Windows có thể hiện cảnh báo SmartScreen khi cài.
 
-## Cấu trúc
+## Checklist thủ công
+
+### Android
+
+- [ ] Cài APK debug và bản ký trên thiết bị thật.
+- [ ] Chọn ảnh từ thư viện, chụp ảnh; từ chối quyền camera và kiểm tra thông báo hướng dẫn.
+- [ ] Kiểm tra nút Back khi đang ở modal, chế độ so sánh và màn chính.
+- [ ] Thử ảnh nhỏ, ảnh >20 MB, sai định dạng, PNG trong suốt, HEIC và ảnh có EXIF xoay.
+- [ ] Bật chế độ máy bay: chỉ số cục bộ vẫn chạy, AI báo chưa khả dụng.
+- [ ] Kiểm tra safe-area, bottom bar, nút chạm và xoay màn hình.
+- [ ] Xuất/chia sẻ báo cáo và xóa lịch sử.
+
+### Windows
+
+- [ ] Cài và mở `.exe`; kéo thả ảnh, dùng `Ctrl+O`, `Ctrl+S` và menu ứng dụng.
+- [ ] Kiểm tra cửa sổ không nhỏ hơn kích thước tối thiểu và resize ở các độ rộng 360/768/1280/1920 px.
+- [ ] Thử phân tích đơn, so sánh hai ảnh, ảnh sai định dạng/ảnh lớn và chế độ offline.
+- [ ] Xuất PDF/PNG/JSON, mở file xuất và xóa lịch sử.
+- [ ] Xác nhận Worker chỉ cho phép đúng origin đã khai báo.
+
+## Cấu trúc chính
 
 ```text
-PhotoLens/
-├─ core/metrics.js            # Chỉ số, so sánh và điểm kỹ thuật
-├─ css/style.css              # Giao diện responsive của ứng dụng
-├─ css/studio.css             # Giao diện Studio tải theo nhu cầu
-├─ js/main.js                 # Giao diện chính, nhập ảnh, lịch sử, xuất báo cáo
-├─ js/studio.js               # Chỉnh sửa ảnh, LUT và camera
-├─ js/studio.worker.js        # Xử lý điểm ảnh ngoài luồng chính
-├─ js/analysis.worker.js      # K-means và Laplacian ngoài luồng chính
-├─ worker/src/index.js        # Cloudflare Worker gọi Gemini
-├─ electron/main.js           # Electron main process và menu desktop
-├─ electron/preload.js        # Cầu IPC giới hạn quyền
-├─ capacitor.config.ts        # Cấu hình Android
-├─ vite.config.js
-└─ index.html
+core/                  Thuật toán chỉ số và config trọng số, không phụ thuộc giao diện
+js/main.js             Giao diện, nhập ảnh, AI, lịch sử và xuất báo cáo
+js/analysis.worker.js  Histogram, K-means, Laplacian chạy ngoài luồng chính
+css/style.css          Dark/light, responsive, trạng thái giao diện
+worker/                Cloudflare Worker gọi Gemini
+public/                PWA manifest, service worker và icon
+android/               Project Capacitor tạo bằng `npx cap add android` (không commit)
+electron/              Electron main/preload và CSP
+scripts/               Tạo/cập nhật manifest tài nguyên Android
+core/metrics.test.js   Unit test Vitest
+tests/e2e/              Kiểm thử Playwright
 ```
 
-Lịch sử lưu trong `localStorage` trên web, Preferences trên Android và thư mục dữ liệu ứng dụng Electron trên Windows. Ảnh không được thêm vào lịch sử; chỉ lưu chỉ số, nhận xét AI và thumbnail nhỏ.
+## Kiểm tra Worker bằng curl
+
+Chạy Worker local bằng `npm.cmd run worker:dev`, sau đó mở PowerShell khác:
+
+```powershell
+curl.exe -i -H "Origin: http://localhost:5173" http://127.0.0.1:8787/health
+```
+
+Gửi một ảnh JPEG đã mã hóa Base64 (bỏ tiền tố `data:image/jpeg;base64,`):
+
+```powershell
+curl.exe -i -X POST http://127.0.0.1:8787/analyze -H "Origin: http://localhost:5173" -H "Content-Type: application/json" --data-raw '{"mode":"single","images":["<BASE64_JPEG>"]}'
+```
+
+Với so sánh, dùng `mode` là `compare` và gửi hai chuỗi Base64 trong `images`.
 
 
-## PhotoLens Studio
+## Device catalog data
 
-Từ màn hình chính, **Chỉnh ảnh** mở phòng chỉnh sửa cục bộ; **Camera** mở chế độ chụp. Tính năng Studio được tải riêng khi mở, để giữ lần khởi động ban đầu nhẹ.
-
-- Cắt bằng khung tỉ lệ và thanh căn mép; xoay, lật và cân thẳng ảnh.
-- Chỉnh phơi sáng, tương phản, vùng sáng/tối, trắng/đen, nhiệt độ, sắc độ, bão hòa, độ rực, HSL tổng thể, đường cong, độ nét, giảm nhiễu, hạt và tối viền.
-- Cọ chỉnh phơi sáng cục bộ, xem trước trước/sau bằng cách nhấn giữ, hoàn tác/làm lại.
-- Lưu dự án và thông số không phá hủy vào IndexedDB trên thiết bị; mở lại dự án từ Studio.
-- LUT mẫu do PhotoLens tự tạo, yêu thích, tìm kiếm, lọc nhóm và nhập LUT 3D `.cube` tối đa 3 MB (kích thước 2–64).
-- Xuất JPG, PNG hoặc WebP, chọn chất lượng và kích thước; giữ EXIF chỉ khi người dùng bật lựa chọn và ảnh gốc là JPEG. Có thể đưa ảnh đã chỉnh về ảnh A để tiếp tục phân tích hoặc so sánh.
-- Camera dùng `getUserMedia` trên web, cho chọn camera, hẹn giờ, tỉ lệ và lưới. Zoom, bù sáng, lấy nét và đèn flash chỉ xuất hiện khi trình duyệt/camera báo hỗ trợ. Trên Android, nếu camera web không hoạt động, có thể mở Camera native của Capacitor.
-- Dấu chìm chữ/logo, chia sẻ ảnh đã chỉnh sửa hoặc thẻ ghép trước/sau; Android dùng bảng chia sẻ native khi khả dụng. Xử lý ảnh và dữ liệu LUT chạy tại thiết bị; không gửi ảnh tới máy chủ, trừ luồng AI Worker hiện có khi người dùng chủ động bật.
-
-Trình duyệt yêu cầu HTTPS hoặc localhost để xin quyền camera. Camera Windows tùy thuộc thiết bị, quyền hệ điều hành, trình duyệt và HTTPS. Android hỗ trợ camera native qua Capacitor khi ứng dụng được build từ thư mục Android; GitHub Pages chạy camera web và cần HTTPS. Studio giới hạn kích thước xuất tối đa theo thiết bị để tránh vượt bộ nhớ. Cọ vùng là công cụ mask cục bộ; vùng tròn/gradient, điều khiển ISO/tốc độ màn trập thủ công và ghép ảnh nhiều khung chưa có vì không được API camera web hỗ trợ ổn định hoặc cần thêm luồng UI riêng.
-
-
-## Dấu chìm và nhận diện hãng
-
-Trong PhotoLens Studio, mục “Dấu chìm” cho phép chèn chữ hoặc logo do bạn chọn, đặt vị trí, độ mờ, kích thước và lặp mẫu. Dấu chìm được gắn vào bản xuất; ảnh gốc không bị ghi đè. Dự án lưu cả logo cục bộ trong IndexedDB để tiếp tục chỉnh sửa trên cùng thiết bị.
-
-Nhận diện hãng dùng Gemini qua Cloudflare Worker. Ứng dụng chỉ gửi ảnh sau khi AI được bật/cấu hình và người dùng xác nhận; payload là JPEG đã thu nhỏ tối đa 1024 px, không chứa EXIF/GPS. Hãy triển khai phiên bản Worker mới bằng `npm.cmd run worker:deploy` để bật chế độ `watermarks`; triển khai GitHub Pages chỉ cập nhật giao diện.
-
-## Cuộn trong Studio
-
-Trên màn hình máy tính, khung xem trước đứng yên và cột công cụ bên phải có thanh cuộn riêng. Trên điện thoại, phần xem trước ghim phía trên khi bạn cuộn tới các công cụ.
-
-
-## Thiết bị, thời tiết và kế hoạch chụp
-
-PhotoLens tải riêng khu vực **Thiết bị & chụp** khi bạn mở nó. Các mô-đun mới nằm ở `core/photography.js`, `features/planner.js` và `data/`:
-
-- So sánh 2–3 thiết bị, chỉ hiện thông số có dữ liệu, thêm thiết bị do bạn nhập và tính điểm theo cấu hình minh bạch. Một số mẫu có vài thông số được chép kèm nguồn nhà sản xuất; toàn bộ mẫu vẫn đánh dấu **Chưa xác minh**, các trường chưa đối chiếu được để trống/null và không được suy đoán.
-- Dự báo Open-Meteo, chất lượng không khí PM2.5, khung giờ tốt trong 48 giờ và dự báo 7 ngày. Điểm điều kiện chụp dùng `data/weather-scoring.json`; dữ liệu thiếu bị bỏ qua và điểm được chuẩn hóa theo trọng số còn lại.
-- Tìm tên địa điểm quanh vị trí qua Overpass/OpenStreetMap khi có tọa độ; danh sách gợi ý Hà Nội chỉ có tên và liên kết tìm kiếm, không có tọa độ hoặc giờ mở cửa được khẳng định. Mọi dữ liệu bản đồ phải ghi nguồn OpenStreetMap contributors theo ODbL.
-- Gợi ý góc chụp và trang phục có chế độ quy tắc cục bộ. AI là tùy chọn, chỉ được bật sau khi chọn **Dùng AI** trong Cài đặt AI; các route mới là `/devices/summary`, `/spots/rank`, `/angles`, `/outfit`. Worker kiểm tra cấu trúc dữ liệu, giới hạn AI diễn giải danh sách/số liệu đã gửi và trả usage. Không gửi ảnh ở các route này.
-- Kế hoạch chụp lưu cục bộ trên thiết bị hiện tại, có tạo/sửa/xóa và xuất/chia sẻ JSON, PDF hoặc PNG; trên Android ưu tiên bảng chia sẻ native khi plugin có sẵn.
-
-### Nguồn dữ liệu và quyền riêng tư
-
-Thời tiết dùng [Open-Meteo Forecast API](https://open-meteo.com/en/docs), [Geocoding API](https://open-meteo.com/en/docs/geocoding-api) và [Air Quality API](https://open-meteo.com/en/docs/air-quality-api). Địa điểm dùng [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API); khi dùng dữ liệu OSM hãy ghi công [OpenStreetMap contributors](https://www.openstreetmap.org/copyright). Quyền vị trí chỉ được hỏi sau khi bạn bấm **Dùng vị trí hiện tại**; tọa độ được làm tròn 2 chữ số trước khi gửi tìm kiếm. Từ chối quyền vẫn có thể nhập địa danh. Thời tiết được lưu tạm cục bộ 20 phút; kế hoạch và thiết bị tự thêm lưu trong trình duyệt/ứng dụng đang dùng. Trong Cài đặt AI, có thể bật phân tích sâu (tốn thêm token) và tùy chọn hiện số token/ước tính chi phí nếu Worker được cấu hình đơn giá.
-
-AI dùng Cloudflare Worker. Chỉ Worker giữ secret `GEMINI_API_KEY`; không đặt khóa trong app, GitHub Pages, `.env.example` hoặc `worker/.dev.vars.example`. Các route AI thiết bị/địa điểm/góc/trang phục chỉ nhận dữ liệu JSON đã chọn. Các route phân tích ảnh hiện có chỉ gửi JPEG đã chuẩn hóa khi AI được bật.
-
-### Chạy, kiểm tra và triển khai
-
-```sh
-npm ci
-npm run dev
-npm run test
-npm run worker:dev
-``
-
-- `npm run test:unit`: kiểm thử core bằng Node test runner, không cần thêm thư viện test.
-- `npm run build`: tạo bản GitHub Pages với base path `/PhotoLens/`.
-- `npm run worker:dev`: chạy Worker cục bộ; sao chép `worker/.dev.vars.example` thành `worker/.dev.vars` rồi điền key cục bộ. `worker/.dev.vars` đã bị gitignore.
-- Đặt secret triển khai bằng `npx wrangler secret put GEMINI_API_KEY --config worker/wrangler.toml`; sau đó `npm run worker:deploy`. Không dán key vào mã nguồn hay chat.
-- `.env.example` chỉ nhận `VITE_AI_ENDPOINT` công khai, không nhận secret. Có thể để trống và nhập URL trong Cài đặt AI.
-- CI chạy `npm run test:unit` rồi build/deploy Pages khi có commit vào `main`.
-
-### Android và Windows
-
-- `npm run cap:android` build web, tự thêm thư mục Android nếu chưa có, đồng bộ Capacitor và mở Android Studio. Cần Android Studio/SDK/JDK tương thích để build APK/AAB. Ký APK bằng keystore riêng trong Android Studio; **keystore không được commit**.
-- `npm run electron:build` tạo gói Windows bằng electron-builder trong `release/`. Build Windows cần môi trường Node/Electron tương thích.
-- Kho mã hiện không commit dự án Android sinh tự động, APK/AAB đã ký hoặc bộ cài Windows. GitHub Pages là bản web/PWA.
-
-### Phần còn giới hạn
-
-Bản đồ chụp hiện là khung OpenStreetMap nhúng, chưa dùng Leaflet. Giờ vàng hiện ước tính từ bình minh/hoàng hôn, chưa dùng SunCalc thiên văn; chưa có pha trăng/giờ trăng mọc-lặn, hệ thống kiểm thử E2E/thiết bị giả lập, dữ liệu đầy đủ cho cả 12 mẫu, hay APK/AAB và bộ cài Windows đã ký. Dữ liệu thiết bị mẫu để trống các thông số chưa được đối chiếu; khi đó điểm thiết bị sẽ báo **Chưa đủ dữ liệu**. Web camera và các quyền native vẫn phụ thuộc trình duyệt/thiết bị. Không hiển thị ISO, tốc độ màn trập hoặc điều khiển phần cứng khi thiết bị không cung cấp API tương ứng.
+See [README_DATA.md](README_DATA.md) for the sourced device catalog, update pipeline, provenance rules, licenses, and coverage report.

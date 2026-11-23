@@ -1,19 +1,32 @@
 {
-  "name": "PhotoLens",
+  "id": "./",
+  "name": "PhotoLens - Phân tích ảnh",
   "short_name": "PhotoLens",
-  "description": "Phân tích, chỉnh sửa và lên kế hoạch chụp ảnh.",
   "lang": "vi",
-  "id": "/PhotoLens/",
-  "start_url": "/PhotoLens/",
-  "scope": "/PhotoLens/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0a1017",
-  "theme_color": "#0a1017",
+  "orientation": "any",
+  "background_color": "#080b12",
+  "theme_color": "#080b12",
+  "description": "Phân tích và so sánh ảnh. Chỉ số kỹ thuật được đo cục bộ.",
   "icons": [
     {
-      "src": "/PhotoLens/assets/photolens-logo.png",
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any"
     }
   ]

@@ -4,22 +4,248 @@
     "brand": "Huawei",
     "model": "P60 Pro",
     "type": "phone",
-    "verified": false,
-    "sourceUrl": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
-    "checkedAt": "2026-11-22",
-    "note": "Trích thông số trang HUAWEI; cấu hình khu vực có thể khác, PhotoLens chưa xác minh mẫu máy cụ thể.",
+    "releaseYear": null,
     "sensor": {
-      "megapixels": 48
+      "type": null,
+      "size": null,
+      "megapixels": 48,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": null,
+      "colorDepth": null,
+      "provenance": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "lens": {
-      "maxApertureF": 1.4
+      "focal35mm": null,
+      "aperture": "Camera chính f/1.4–f/4.0; góc siêu rộng f/2.2; tele f/2.1",
+      "opticalZoom": 3.5,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null,
+      "maxApertureF": 1.4,
+      "provenance": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "focus": {
+      "autofocus": "Lấy nét theo pha và tương phản",
+      "subjectTracking": null,
+      "stabilization": null,
+      "burstFps": null,
+      "provenance": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "video": {
+      "maxResolution": "3840 × 2160 (4K)",
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null,
+      "maxFps": null,
+      "provenance": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "durability": {
-      "rating": "IP68"
+      "rating": "IP68; điều kiện thử theo trang hỗ trợ Huawei",
+      "display": null,
+      "viewfinder": null,
+      "provenance": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "power": {
-      "battery": "4815 mAh",
-      "weightG": 200
+      "battery": "4815 mAh (điển hình); 4715 mAh (danh định)",
+      "storage": "256 GB",
+      "weightG": 200,
+      "dimensionsMm": [
+        161,
+        74.5,
+        8.3
+      ],
+      "connectivity": null,
+      "price": null,
+      "storageGB": 256,
+      "ramGB": 8,
+      "provenance": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "manualControls": null,
+    "verified": true,
+    "sourceUrl": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+    "checkedAt": "2026-11-23",
+    "note": "Các trường có dữ liệu được đối chiếu với nguồn chính hãng nêu ở từng nhóm; trường còn thiếu để null. Xác minh này không đồng nghĩa đã bao phủ mọi biến thể theo vùng.",
+    "schemaVersion": 2,
+    "aliases": [
+      "P60 Pro",
+      "MNA-LX9"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [],
+    "cameraModules": [
+      {
+        "role": "main",
+        "megapixels": 48,
+        "apertureF": 1.4,
+        "apertureRangeF": [
+          1.4,
+          4
+        ],
+        "ois": true,
+        "provenance": {
+          "sourceId": "huawei",
+          "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "ultrawide",
+        "megapixels": 13,
+        "apertureF": 2.2,
+        "ois": null,
+        "provenance": {
+          "sourceId": "huawei",
+          "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 48,
+        "apertureF": 2.1,
+        "ois": true,
+        "opticalZoom": 3.5,
+        "provenance": {
+          "sourceId": "huawei",
+          "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "front",
+        "megapixels": 13,
+        "apertureF": 2.4,
+        "provenance": {
+          "sourceId": "huawei",
+          "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "tier": 0,
+    "lastCheckedAt": "2026-11-23",
+    "ramGB": 8,
+    "provenance": {
+      "ramGB": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "storageGB": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "battery": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "brand": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "huawei",
+        "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": false
+      }
+    },
+    "storageGB": 256,
+    "battery": {
+      "capacityTypicalMah": 4815,
+      "capacityNominalMah": 4715
     }
   },
   {
@@ -27,58 +253,518 @@
     "brand": "Samsung",
     "model": "Galaxy S21 Ultra 5G",
     "type": "phone",
-    "verified": false,
-    "sourceUrl": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
-    "checkedAt": "2026-11-22",
-    "note": "Trích Samsung Newsroom; thông số/kết nối và trọng lượng có thể khác theo thị trường.",
+    "releaseYear": null,
     "sensor": {
+      "type": null,
+      "size": null,
       "megapixels": 108,
+      "pixelPitchUm": 0.8,
+      "iso": null,
       "raw": true,
-      "rawBitDepth": 12
+      "colorDepth": null,
+      "rawBitDepth": 12,
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "lens": {
+      "focal35mm": null,
+      "aperture": "Camera sau: f/2.2, f/1.8, f/2.4, f/4.9; camera trước: f/2.2",
+      "opticalZoom": 10,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null,
       "maxApertureF": 1.8,
-      "opticalZoom": 10
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "focus": {
+      "autofocus": "Camera chính PDAF; tele Dual Pixel AF",
+      "subjectTracking": null,
+      "stabilization": "OIS trên camera chính và hai camera tele",
+      "burstFps": null,
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "video": {
       "maxResolution": "8K",
-      "maxFps": 60
+      "frameRates": [
+        60
+      ],
+      "codec": null,
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null,
+      "maxFps": null,
+      "modes": [
+        {
+          "resolution": "4K",
+          "frameRateFps": 60,
+          "scope": "Các camera trước và sau"
+        },
+        {
+          "resolution": "8K",
+          "frameRateFps": 24,
+          "scope": "Video"
+        }
+      ],
+      "provenance": {
+        "sourceId": "samsung-video",
+        "url": "https://news.samsung.com/ca/budding-filmmaker-how-the-new-galaxy-s21-ultra-5g-doubles-as-a-movie-camera",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "durability": {
+      "rating": "IP68; thử ở nước ngọt tĩnh đến 1.5 m trong tối đa 30 phút",
+      "display": null,
+      "viewfinder": null,
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "power": {
-      "battery": "5000 mAh"
+      "battery": "5000 mAh (điển hình); 4855 mAh (tối thiểu)",
+      "storage": null,
+      "weightG": null,
+      "dimensionsMm": [
+        165.1,
+        75.6,
+        8.9
+      ],
+      "connectivity": null,
+      "price": null,
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "manualControls": null,
+    "verified": true,
+    "sourceUrl": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+    "checkedAt": "2026-11-23",
+    "note": "Các trường có dữ liệu được đối chiếu với nguồn chính hãng nêu ở từng nhóm; trường còn thiếu để null. Xác minh này không đồng nghĩa đã bao phủ mọi biến thể theo vùng.",
+    "schemaVersion": 2,
+    "aliases": [
+      "Galaxy S21 Ultra 5G"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [
+      {
+        "id": "sub6-12-128",
+        "regions": [],
+        "ramGB": 12,
+        "storageGB": 128,
+        "weightG": 227,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "sub6-12-256",
+        "regions": [],
+        "ramGB": 12,
+        "storageGB": 256,
+        "weightG": 227,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "sub6-16-512",
+        "regions": [],
+        "ramGB": 16,
+        "storageGB": 512,
+        "weightG": 227,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "mmwave-weight",
+        "regions": [],
+        "weightG": 229,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "cameraModules": [
+      {
+        "role": "ultrawide",
+        "megapixels": 12,
+        "apertureF": 2.2,
+        "autofocus": "Dual Pixel AF",
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "main",
+        "megapixels": 108,
+        "apertureF": 1.8,
+        "ois": true,
+        "autofocus": "Phase detection AF",
+        "pixelPitchUm": 0.8,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 10,
+        "apertureF": 2.4,
+        "ois": true,
+        "autofocus": "Dual Pixel AF",
+        "opticalZoom": 3,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 10,
+        "apertureF": 4.9,
+        "ois": true,
+        "autofocus": "Dual Pixel AF",
+        "opticalZoom": 10,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "front",
+        "megapixels": 40,
+        "apertureF": 2.2,
+        "autofocus": "Phase detection AF",
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "tier": 0,
+    "lastCheckedAt": "2026-11-23",
+    "battery": {
+      "capacityTypicalMah": 5000,
+      "capacityRatedMah": 4855
+    },
+    "provenance": {
+      "battery": {
+        "sourceId": "samsung",
+        "url": "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "brand": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": false
+      }
     }
   },
   {
     "id": "dji-action-4",
     "brand": "DJI",
     "model": "Osmo Action 4",
-    "type": "action-camera",
-    "verified": false,
-    "sourceUrl": "https://www.dji.com/osmo-action-4/specs",
-    "checkedAt": "2026-11-22",
-    "note": "Thông số từ trang kỹ thuật DJI; điều kiện chống nước/ổn định phụ thuộc chế độ và phụ kiện.",
+    "type": "action",
+    "releaseYear": null,
     "sensor": {
+      "type": "CMOS",
       "size": "1/1.3 inch",
       "megapixels": 10,
-      "highISO": 12800
+      "pixelPitchUm": null,
+      "iso": "100–12800 (ảnh và video)",
+      "raw": null,
+      "colorDepth": null,
+      "provenance": {
+        "sourceId": "dji",
+        "url": "https://www.dji.com/osmo-action-4/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "lens": {
-      "aperture": "f/2.8"
+      "focal35mm": null,
+      "aperture": "f/2.8",
+      "opticalZoom": null,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null,
+      "maxApertureF": 2.8,
+      "fieldOfViewDeg": 155,
+      "focusRangeM": [
+        0.4,
+        null
+      ],
+      "provenance": {
+        "sourceId": "dji",
+        "url": "https://www.dji.com/osmo-action-4/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "focus": {
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": "Không có dữ liệu về chống rung quang học",
+      "burstFps": null,
+      "provenance": {
+        "sourceId": "dji",
+        "url": "https://www.dji.com/osmo-action-4/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "video": {
-      "maxResolution": "4K",
-      "maxFps": 120,
-      "codec": "MP4 (H.264/HEVC)",
-      "stabilization": "EIS: RockSteady 3.0 / 3.0+, HorizonBalancing, HorizonSteady"
+      "maxResolution": "4K (3840 × 2160)",
+      "frameRates": null,
+      "codec": "MP4 (H.264 / HEVC)",
+      "hdrLog": null,
+      "stabilization": "EIS: RockSteady 3.0, RockSteady 3.0+, HorizonBalancing, HorizonSteady",
+      "continuousLimit": null,
+      "maxFps": null,
+      "modes": [
+        {
+          "resolution": "4K 16:9",
+          "frameRates": [
+            24,
+            25,
+            30,
+            48,
+            50,
+            60,
+            100,
+            120
+          ]
+        },
+        {
+          "resolution": "4K 4:3",
+          "frameRates": [
+            24,
+            25,
+            30,
+            48,
+            50,
+            60
+          ]
+        }
+      ],
+      "provenance": {
+        "sourceId": "dji",
+        "url": "https://www.dji.com/osmo-action-4/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "durability": {
-      "rating": "IP68; lặn đến 18 m không hộp chống nước"
+      "rating": "IP68; chống nước đến 18 m không vỏ, 60 m với vỏ chống nước",
+      "display": null,
+      "viewfinder": null,
+      "provenance": {
+        "sourceId": "dji",
+        "url": "https://www.dji.com/osmo-action-4/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "power": {
+      "battery": "1770 mAh",
+      "storage": "Không có bộ nhớ trong; microSD tối đa 512 GB",
       "weightG": 145,
-      "dimensionsMm": "70.5 × 44.2 × 32.8 mm",
-      "storage": "microSD tối đa 512 GB",
-      "battery": "1770 mAh"
+      "dimensionsMm": [
+        70.5,
+        44.2,
+        32.8
+      ],
+      "connectivity": null,
+      "price": null,
+      "provenance": {
+        "sourceId": "dji",
+        "url": "https://www.dji.com/osmo-action-4/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "manualControls": null,
+    "verified": true,
+    "sourceUrl": "https://www.dji.com/osmo-action-4/specs",
+    "checkedAt": "2026-11-23",
+    "note": "Các trường có dữ liệu được đối chiếu với nguồn chính hãng nêu ở từng nhóm; trường còn thiếu để null. Xác minh này không đồng nghĩa đã bao phủ mọi biến thể theo vùng.",
+    "schemaVersion": 2,
+    "aliases": [
+      "Osmo Action 4"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [],
+    "cameraModules": [
+      {
+        "role": "action",
+        "sensorSize": "1/1.3 inch CMOS",
+        "apertureF": 2.8,
+        "opticalZoom": null,
+        "provenance": {
+          "sourceId": "dji",
+          "url": "https://www.dji.com/osmo-action-4/specs",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "tier": 0,
+    "lastCheckedAt": "2026-11-23",
+    "provenance": {
+      "brand": {
+        "sourceId": "dji",
+        "url": "https://www.dji.com/osmo-action-4/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "dji",
+        "url": "https://www.dji.com/osmo-action-4/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "dji",
+        "url": "https://www.dji.com/osmo-action-4/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "dji",
+        "url": "https://www.dji.com/osmo-action-4/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": false
+      }
     }
   },
   {
@@ -86,21 +772,303 @@
     "brand": "Apple",
     "model": "iPhone 15 Pro",
     "type": "phone",
-    "verified": false,
-    "sourceUrl": "https://support.apple.com/vi-vn/111829",
-    "checkedAt": "2026-11-22",
-    "note": "Thông tin Apple; một số chế độ video phụ thuộc cấu hình lưu trữ ngoài và vùng.",
+    "releaseYear": null,
     "sensor": {
+      "type": null,
+      "size": null,
       "megapixels": 48,
-      "raw": true
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": true,
+      "colorDepth": null,
+      "provenance": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "lens": {
-      "opticalZoom": 3
+      "focal35mm": 24,
+      "aperture": "Chính 24 mm f/1.78; siêu rộng 13 mm f/2.2; tele 48 mm f/1.78 và 77 mm f/2.8",
+      "opticalZoom": 6,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null,
+      "maxApertureF": 1.78,
+      "provenance": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "focus": {
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": "Chống rung quang học dịch chuyển cảm biến thế hệ 2 ở camera chính và tele 2×; OIS ở tele 3×",
+      "burstFps": null,
+      "provenance": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "video": {
-      "maxResolution": "4K ProRes",
+      "maxResolution": "4K",
+      "frameRates": null,
+      "codec": "HEVC / H.264 / ProRes",
+      "hdrLog": "Dolby Vision HDR; Apple Log; ProRes",
+      "stabilization": null,
+      "continuousLimit": null,
       "maxFps": 60,
-      "codec": "Apple ProRes (ghi ngoài)"
+      "provenance": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "durability": {
+      "rating": "IP68; độ sâu tối đa 6 m trong tối đa 30 phút theo điều kiện thử",
+      "display": null,
+      "viewfinder": null,
+      "provenance": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "power": {
+      "battery": null,
+      "storage": "128 / 256 / 512 GB / 1 TB",
+      "weightG": 187,
+      "dimensionsMm": [
+        146.6,
+        70.6,
+        8.25
+      ],
+      "connectivity": null,
+      "price": null,
+      "provenance": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "manualControls": null,
+    "verified": true,
+    "sourceUrl": "https://support.apple.com/vi-vn/111829",
+    "checkedAt": "2026-11-23",
+    "note": "Các trường có dữ liệu được đối chiếu với nguồn chính hãng nêu ở từng nhóm; trường còn thiếu để null. Xác minh này không đồng nghĩa đã bao phủ mọi biến thể theo vùng.",
+    "schemaVersion": 2,
+    "aliases": [
+      "iPhone 15 Pro",
+      "iPhone 15 Pro 128GB",
+      "iPhone 15 Pro 256GB",
+      "iPhone 15 Pro 512GB",
+      "iPhone 15 Pro 1TB"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [
+      {
+        "id": "storage-128",
+        "regions": [],
+        "storageGB": 128,
+        "provenance": {
+          "sourceId": "apple",
+          "url": "https://support.apple.com/vi-vn/111829",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "storage-256",
+        "regions": [],
+        "storageGB": 256,
+        "provenance": {
+          "sourceId": "apple",
+          "url": "https://support.apple.com/vi-vn/111829",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "storage-512",
+        "regions": [],
+        "storageGB": 512,
+        "provenance": {
+          "sourceId": "apple",
+          "url": "https://support.apple.com/vi-vn/111829",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "storage-1024",
+        "regions": [],
+        "storageGB": 1024,
+        "provenance": {
+          "sourceId": "apple",
+          "url": "https://support.apple.com/vi-vn/111829",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "cameraModules": [
+      {
+        "role": "main",
+        "megapixels": 48,
+        "focalLength35mm": 24,
+        "apertureF": 1.78,
+        "ois": true,
+        "provenance": {
+          "sourceId": "apple",
+          "url": "https://support.apple.com/vi-vn/111829",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "ultrawide",
+        "megapixels": 12,
+        "focalLength35mm": 13,
+        "apertureF": 2.2,
+        "provenance": {
+          "sourceId": "apple",
+          "url": "https://support.apple.com/vi-vn/111829",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 12,
+        "focalLength35mm": 48,
+        "apertureF": 1.78,
+        "ois": true,
+        "opticalZoom": 2,
+        "provenance": {
+          "sourceId": "apple",
+          "url": "https://support.apple.com/vi-vn/111829",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 12,
+        "focalLength35mm": 77,
+        "apertureF": 2.8,
+        "ois": true,
+        "opticalZoom": 3,
+        "provenance": {
+          "sourceId": "apple",
+          "url": "https://support.apple.com/vi-vn/111829",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "tier": 0,
+    "lastCheckedAt": "2026-11-23",
+    "chip": "A17 Pro",
+    "provenance": {
+      "chip": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "storageGB": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "display": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "brand": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "apple",
+        "url": "https://support.apple.com/vi-vn/111829",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": false
+      }
+    },
+    "storageGB": null,
+    "display": {
+      "technology": "Super Retina XDR OLED",
+      "sizeInches": 6.1
     }
   },
   {
@@ -108,29 +1076,181 @@
     "brand": "Sony",
     "model": "α6400",
     "type": "mirrorless",
-    "verified": false,
-    "sourceUrl": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
-    "checkedAt": "2026-11-22",
-    "note": "Thông số Sony Support cho thân máy; tiêu cự/khẩu độ phụ thuộc ống kính bán kèm hoặc ống kính đang gắn.",
+    "releaseYear": null,
     "sensor": {
-      "size": "APS-C 23.5 × 15.6 mm",
+      "type": "Exmor CMOS",
+      "size": "APS-C",
       "megapixels": 24.2,
+      "pixelPitchUm": null,
+      "iso": null,
       "raw": true,
-      "rawBitDepth": 14
+      "colorDepth": null,
+      "dimensionsMm": [
+        23.5,
+        15.6
+      ],
+      "rawBitDepth": 14,
+      "provenance": {
+        "sourceId": "sony",
+        "url": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "lens": {
-      "mount": "Sony E-mount"
+      "focal35mm": null,
+      "aperture": null,
+      "opticalZoom": null,
+      "macro": null,
+      "mount": "Sony E-mount",
+      "ecosystem": "Sony E-mount lenses",
+      "provenance": {
+        "sourceId": "sony",
+        "url": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "focus": {
-      "burstFps": 11
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": null,
+      "burstFps": 11,
+      "provenance": {
+        "sourceId": "sony",
+        "url": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
     },
     "video": {
-      "maxResolution": "4K",
-      "maxFps": 30,
-      "codec": "XAVC S"
+      "maxResolution": "4K (3840 × 2160)",
+      "frameRates": null,
+      "codec": "XAVC S / AVCHD",
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null,
+      "maxFps": null,
+      "modes": [
+        {
+          "system": "PAL",
+          "resolution": "3840 × 2160",
+          "frameRates": [
+            25
+          ]
+        }
+      ],
+      "provenance": {
+        "sourceId": "sony",
+        "url": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "durability": {
+      "rating": null,
+      "display": null,
+      "viewfinder": null
     },
     "power": {
-      "weightG": 403
+      "battery": null,
+      "storage": "Thẻ SD/SDHC/SDXC; Memory Stick PRO Duo/PRO-HG Duo",
+      "weightG": null,
+      "dimensionsMm": null,
+      "connectivity": null,
+      "price": null,
+      "provenance": {
+        "sourceId": "sony",
+        "url": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+        "retrievedAt": "2026-11-23",
+        "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "manualControls": null,
+    "verified": true,
+    "sourceUrl": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+    "checkedAt": "2026-11-23",
+    "note": "Các trường có dữ liệu được đối chiếu với nguồn chính hãng nêu ở từng nhóm; trường còn thiếu để null. Xác minh này không đồng nghĩa đã bao phủ mọi biến thể theo vùng.",
+    "schemaVersion": 2,
+    "aliases": [
+      "α6400",
+      "ILCE-6400",
+      "Alpha 6400"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [],
+    "cameraModules": [
+      {
+        "role": "main",
+        "megapixels": 24.2,
+        "sensorSize": "APS-C (23.5 × 15.6 mm)",
+        "provenance": {
+          "sourceId": "sony",
+          "url": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+          "retrievedAt": "2026-11-23",
+          "license": "Dữ kiện kỹ thuật được trích có kiểm duyệt; trang không công bố giấy phép tái phân phối riêng cho dữ liệu thông số. Không sao chép văn bản quảng cáo, ảnh hoặc bài đánh giá.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "tier": 0,
+    "lastCheckedAt": "2026-11-23",
+    "derived": {
+      "cropFactor": {
+        "value": 1.534,
+        "derived": true,
+        "formula": "sqrt(36^2 + 24^2) / sqrt(23.5^2 + 15.6^2)",
+        "inputPaths": [
+          "sensor.dimensionsMm"
+        ]
+      }
+    },
+    "provenance": {
+      "brand": {
+        "sourceId": "sony",
+        "url": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "sony",
+        "url": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "sony",
+        "url": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "lensfun",
+        "url": "https://github.com/lensfun/lensfun/tree/master/data/db",
+        "retrievedAt": "2026-11-23",
+        "license": "CC BY-SA 3.0",
+        "extractedBy": "manual",
+        "verified": false
+      }
     }
   },
   {
@@ -138,17 +1258,100 @@
     "brand": "Canon",
     "model": "EOS R50",
     "type": "mirrorless",
-    "verified": false,
-    "sourceUrl": "https://www.usa.canon.com/cameras/eos-r50",
-    "checkedAt": "2026-11-22",
-    "note": "Thông tin Canon; tiêu cự/khẩu độ phụ thuộc ống kính.",
+    "releaseYear": null,
     "sensor": {
-      "size": "APS-C",
-      "megapixels": 24.2
+      "type": null,
+      "size": null,
+      "megapixels": null,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": null,
+      "colorDepth": null
+    },
+    "lens": {
+      "focal35mm": null,
+      "aperture": null,
+      "opticalZoom": null,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null
+    },
+    "focus": {
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": null,
+      "burstFps": null
     },
     "video": {
-      "maxResolution": "4K",
-      "maxFps": 30
+      "maxResolution": null,
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null
+    },
+    "durability": {
+      "rating": null,
+      "display": null,
+      "viewfinder": null
+    },
+    "power": {
+      "battery": null,
+      "storage": null,
+      "weightG": null,
+      "dimensionsMm": null,
+      "connectivity": null,
+      "price": null
+    },
+    "manualControls": null,
+    "verified": false,
+    "sourceUrl": "https://www.usa.canon.com/cameras/eos-r50",
+    "checkedAt": "2026-11-23",
+    "note": "Tên mẫu được giữ từ danh mục PhotoLens có sẵn; chưa có thông số kỹ thuật được xác minh.",
+    "schemaVersion": 2,
+    "aliases": [
+      "EOS R50"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [],
+    "cameraModules": [],
+    "tier": null,
+    "lastCheckedAt": "2026-11-23",
+    "provenance": {
+      "brand": {
+        "sourceId": "canon",
+        "url": "https://www.usa.canon.com/cameras/eos-r50",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "canon",
+        "url": "https://www.usa.canon.com/cameras/eos-r50",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "canon",
+        "url": "https://www.usa.canon.com/cameras/eos-r50",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "canon",
+        "url": "https://www.usa.canon.com/cameras/eos-r50",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": false
+      }
     }
   },
   {
@@ -156,59 +1359,1905 @@
     "brand": "Nikon",
     "model": "Z fc",
     "type": "mirrorless",
+    "releaseYear": null,
+    "sensor": {
+      "type": null,
+      "size": null,
+      "megapixels": null,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": null,
+      "colorDepth": null
+    },
+    "lens": {
+      "focal35mm": null,
+      "aperture": null,
+      "opticalZoom": null,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null
+    },
+    "focus": {
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": null,
+      "burstFps": null
+    },
+    "video": {
+      "maxResolution": null,
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null
+    },
+    "durability": {
+      "rating": null,
+      "display": null,
+      "viewfinder": null
+    },
+    "power": {
+      "battery": null,
+      "storage": null,
+      "weightG": null,
+      "dimensionsMm": null,
+      "connectivity": null,
+      "price": null
+    },
+    "manualControls": null,
     "verified": false,
     "sourceUrl": "https://www.nikonusa.com/p/z-fc/1678/overview",
-    "checkedAt": "2026-11-22",
-    "note": "Mẫu tham khảo; các thông số chưa được PhotoLens xác minh."
+    "checkedAt": "2026-11-23",
+    "note": "Tên mẫu được giữ từ danh mục PhotoLens có sẵn; chưa có thông số kỹ thuật được xác minh.",
+    "schemaVersion": 2,
+    "aliases": [
+      "Z fc"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [],
+    "cameraModules": [],
+    "tier": null,
+    "lastCheckedAt": "2026-11-23",
+    "provenance": {
+      "brand": {
+        "sourceId": "nikon",
+        "url": "https://www.nikonusa.com/p/z-fc/1678/overview",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "nikon",
+        "url": "https://www.nikonusa.com/p/z-fc/1678/overview",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "nikon",
+        "url": "https://www.nikonusa.com/p/z-fc/1678/overview",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "nikon",
+        "url": "https://www.nikonusa.com/p/z-fc/1678/overview",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": false
+      }
+    }
   },
   {
     "id": "fujifilm-xs20",
     "brand": "Fujifilm",
     "model": "X-S20",
     "type": "mirrorless",
+    "releaseYear": null,
+    "sensor": {
+      "type": null,
+      "size": null,
+      "megapixels": null,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": null,
+      "colorDepth": null
+    },
+    "lens": {
+      "focal35mm": null,
+      "aperture": null,
+      "opticalZoom": null,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null
+    },
+    "focus": {
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": null,
+      "burstFps": null
+    },
+    "video": {
+      "maxResolution": null,
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null
+    },
+    "durability": {
+      "rating": null,
+      "display": null,
+      "viewfinder": null
+    },
+    "power": {
+      "battery": null,
+      "storage": null,
+      "weightG": null,
+      "dimensionsMm": null,
+      "connectivity": null,
+      "price": null
+    },
+    "manualControls": null,
     "verified": false,
     "sourceUrl": "https://fujifilm-x.com/global/products/cameras/x-s20/",
-    "checkedAt": "2026-11-22",
-    "note": "Mẫu tham khảo; các thông số chưa được PhotoLens xác minh."
+    "checkedAt": "2026-11-23",
+    "note": "Tên mẫu được giữ từ danh mục PhotoLens có sẵn; chưa có thông số kỹ thuật được xác minh.",
+    "schemaVersion": 2,
+    "aliases": [
+      "X-S20"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [],
+    "cameraModules": [],
+    "tier": null,
+    "lastCheckedAt": "2026-11-23",
+    "provenance": {
+      "brand": {
+        "sourceId": "fujifilm",
+        "url": "https://fujifilm-x.com/global/products/cameras/x-s20/",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "fujifilm",
+        "url": "https://fujifilm-x.com/global/products/cameras/x-s20/",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "fujifilm",
+        "url": "https://fujifilm-x.com/global/products/cameras/x-s20/",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "fujifilm",
+        "url": "https://fujifilm-x.com/global/products/cameras/x-s20/",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": false
+      }
+    }
   },
   {
     "id": "panasonic-g9ii",
     "brand": "Panasonic",
     "model": "Lumix G9 II",
     "type": "mirrorless",
+    "releaseYear": null,
+    "sensor": {
+      "type": null,
+      "size": null,
+      "megapixels": null,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": null,
+      "colorDepth": null
+    },
+    "lens": {
+      "focal35mm": null,
+      "aperture": null,
+      "opticalZoom": null,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null
+    },
+    "focus": {
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": null,
+      "burstFps": null
+    },
+    "video": {
+      "maxResolution": null,
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null
+    },
+    "durability": {
+      "rating": null,
+      "display": null,
+      "viewfinder": null
+    },
+    "power": {
+      "battery": null,
+      "storage": null,
+      "weightG": null,
+      "dimensionsMm": null,
+      "connectivity": null,
+      "price": null
+    },
+    "manualControls": null,
     "verified": false,
     "sourceUrl": "https://www.panasonic.com/global/consumer/lumix/g-series/g9m2.html",
-    "checkedAt": "2026-11-22",
-    "note": "Mẫu tham khảo; các thông số chưa được PhotoLens xác minh."
+    "checkedAt": "2026-11-23",
+    "note": "Tên mẫu được giữ từ danh mục PhotoLens có sẵn; chưa có thông số kỹ thuật được xác minh.",
+    "schemaVersion": 2,
+    "aliases": [
+      "Lumix G9 II"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [],
+    "cameraModules": [],
+    "tier": null,
+    "lastCheckedAt": "2026-11-23",
+    "provenance": {
+      "brand": {
+        "sourceId": "panasonic",
+        "url": "https://www.panasonic.com/global/consumer/lumix/g-series/g9m2.html",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "panasonic",
+        "url": "https://www.panasonic.com/global/consumer/lumix/g-series/g9m2.html",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "panasonic",
+        "url": "https://www.panasonic.com/global/consumer/lumix/g-series/g9m2.html",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "panasonic",
+        "url": "https://www.panasonic.com/global/consumer/lumix/g-series/g9m2.html",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": false
+      }
+    }
   },
   {
     "id": "sony-zve10ii",
     "brand": "Sony",
     "model": "ZV-E10 II",
     "type": "mirrorless",
+    "releaseYear": null,
+    "sensor": {
+      "type": null,
+      "size": null,
+      "megapixels": null,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": null,
+      "colorDepth": null
+    },
+    "lens": {
+      "focal35mm": null,
+      "aperture": null,
+      "opticalZoom": null,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null
+    },
+    "focus": {
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": null,
+      "burstFps": null
+    },
+    "video": {
+      "maxResolution": null,
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null
+    },
+    "durability": {
+      "rating": null,
+      "display": null,
+      "viewfinder": null
+    },
+    "power": {
+      "battery": null,
+      "storage": null,
+      "weightG": null,
+      "dimensionsMm": null,
+      "connectivity": null,
+      "price": null
+    },
+    "manualControls": null,
     "verified": false,
     "sourceUrl": "https://www.sony.com/electronics/interchangeable-lens-cameras/zv-e10m2-body-kit",
-    "checkedAt": "2026-11-22",
-    "note": "Mẫu tham khảo; các thông số chưa được PhotoLens xác minh."
+    "checkedAt": "2026-11-23",
+    "note": "Tên mẫu được giữ từ danh mục PhotoLens có sẵn; chưa có thông số kỹ thuật được xác minh.",
+    "schemaVersion": 2,
+    "aliases": [
+      "ZV-E10 II"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [],
+    "cameraModules": [],
+    "tier": null,
+    "lastCheckedAt": "2026-11-23",
+    "provenance": {
+      "brand": {
+        "sourceId": "existing-project-catalog",
+        "url": "https://github.com/Taylor447/PhotoLens/blob/main/data/devices.json",
+        "retrievedAt": "2026-11-23",
+        "license": "Retained from the user-provided project snapshot; no independent redistribution license was supplied. Identifiers are not independently verified.",
+        "extractedBy": "import",
+        "verified": false
+      },
+      "model": {
+        "sourceId": "existing-project-catalog",
+        "url": "https://github.com/Taylor447/PhotoLens/blob/main/data/devices.json",
+        "retrievedAt": "2026-11-23",
+        "license": "Retained from the user-provided project snapshot; no independent redistribution license was supplied. Identifiers are not independently verified.",
+        "extractedBy": "import",
+        "verified": false
+      },
+      "type": {
+        "sourceId": "existing-project-catalog",
+        "url": "https://github.com/Taylor447/PhotoLens/blob/main/data/devices.json",
+        "retrievedAt": "2026-11-23",
+        "license": "Retained from the user-provided project snapshot; no independent redistribution license was supplied. Identifiers are not independently verified.",
+        "extractedBy": "import",
+        "verified": false
+      },
+      "aliases": {
+        "sourceId": "existing-project-catalog",
+        "url": "https://github.com/Taylor447/PhotoLens/blob/main/data/devices.json",
+        "retrievedAt": "2026-11-23",
+        "license": "Retained from the user-provided project snapshot; no independent redistribution license was supplied. Identifiers are not independently verified.",
+        "extractedBy": "import",
+        "verified": false
+      }
+    }
   },
   {
     "id": "gopro-hero12",
     "brand": "GoPro",
     "model": "HERO12 Black",
-    "type": "action-camera",
+    "type": "action",
+    "releaseYear": null,
+    "sensor": {
+      "type": null,
+      "size": null,
+      "megapixels": null,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": null,
+      "colorDepth": null
+    },
+    "lens": {
+      "focal35mm": null,
+      "aperture": null,
+      "opticalZoom": null,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null
+    },
+    "focus": {
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": null,
+      "burstFps": null
+    },
+    "video": {
+      "maxResolution": null,
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null
+    },
+    "durability": {
+      "rating": null,
+      "display": null,
+      "viewfinder": null
+    },
+    "power": {
+      "battery": null,
+      "storage": null,
+      "weightG": null,
+      "dimensionsMm": null,
+      "connectivity": null,
+      "price": null
+    },
+    "manualControls": null,
     "verified": false,
     "sourceUrl": "https://gopro.com/en/us/shop/cameras/hero12black/CHDHX-121-master.html",
-    "checkedAt": "2026-11-22",
-    "note": "Mẫu tham khảo; các thông số chưa được PhotoLens xác minh."
+    "checkedAt": "2026-11-23",
+    "note": "Tên mẫu được giữ từ danh mục PhotoLens có sẵn; chưa có thông số kỹ thuật được xác minh.",
+    "schemaVersion": 2,
+    "aliases": [
+      "HERO12 Black"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [],
+    "cameraModules": [],
+    "tier": null,
+    "lastCheckedAt": "2026-11-23",
+    "provenance": {
+      "brand": {
+        "sourceId": "gopro",
+        "url": "https://gopro.com/en/us/shop/cameras/hero12black/CHDHX-121-master.html",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "gopro",
+        "url": "https://gopro.com/en/us/shop/cameras/hero12black/CHDHX-121-master.html",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "gopro",
+        "url": "https://gopro.com/en/us/shop/cameras/hero12black/CHDHX-121-master.html",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "gopro",
+        "url": "https://gopro.com/en/us/shop/cameras/hero12black/CHDHX-121-master.html",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": false
+      }
+    }
   },
   {
     "id": "om-om5",
     "brand": "OM System",
     "model": "OM-5",
     "type": "mirrorless",
+    "releaseYear": null,
+    "sensor": {
+      "type": null,
+      "size": null,
+      "megapixels": null,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": null,
+      "colorDepth": null
+    },
+    "lens": {
+      "focal35mm": null,
+      "aperture": null,
+      "opticalZoom": null,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null
+    },
+    "focus": {
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": null,
+      "burstFps": null
+    },
+    "video": {
+      "maxResolution": null,
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null
+    },
+    "durability": {
+      "rating": null,
+      "display": null,
+      "viewfinder": null
+    },
+    "power": {
+      "battery": null,
+      "storage": null,
+      "weightG": null,
+      "dimensionsMm": null,
+      "connectivity": null,
+      "price": null
+    },
+    "manualControls": null,
     "verified": false,
     "sourceUrl": "https://explore.omsystem.com/us/en/om-5",
-    "checkedAt": "2026-11-22",
-    "note": "Mẫu tham khảo; các thông số chưa được PhotoLens xác minh."
+    "checkedAt": "2026-11-23",
+    "note": "Tên mẫu được giữ từ danh mục PhotoLens có sẵn; chưa có thông số kỹ thuật được xác minh.",
+    "schemaVersion": 2,
+    "aliases": [
+      "OM-5"
+    ],
+    "releaseDate": null,
+    "status": null,
+    "regions": [],
+    "variants": [],
+    "cameraModules": [],
+    "tier": null,
+    "lastCheckedAt": "2026-11-23",
+    "provenance": {
+      "brand": {
+        "sourceId": "om-system",
+        "url": "https://explore.omsystem.com/us/en/om-5",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "om-system",
+        "url": "https://explore.omsystem.com/us/en/om-5",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "om-system",
+        "url": "https://explore.omsystem.com/us/en/om-5",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "om-system",
+        "url": "https://explore.omsystem.com/us/en/om-5",
+        "retrievedAt": "2026-11-23",
+        "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+        "extractedBy": "manual",
+        "verified": false
+      }
+    }
+  },
+  {
+    "schemaVersion": 2,
+    "id": "samsung-galaxy-s25-ultra",
+    "brand": "Samsung",
+    "model": "Galaxy S25 Ultra",
+    "aliases": [
+      "Galaxy S25 Ultra"
+    ],
+    "type": "phone",
+    "releaseYear": null,
+    "releaseDate": "2025-02-07",
+    "status": null,
+    "regions": [
+      "PH"
+    ],
+    "tier": 1,
+    "verified": true,
+    "sourceUrl": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+    "checkedAt": "2026-11-23",
+    "lastCheckedAt": "2026-11-23",
+    "sensor": {
+      "type": null,
+      "size": null,
+      "megapixels": 200,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": null,
+      "colorDepth": null,
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "lens": {
+      "focal35mm": null,
+      "aperture": "Chính f/1.7; tele 5× f/3.4; siêu rộng f/1.9; tele 3× f/2.4",
+      "opticalZoom": 5,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null,
+      "maxApertureF": 1.7,
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "focus": {
+      "autofocus": null,
+      "subjectTracking": null,
+      "stabilization": null,
+      "burstFps": null,
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "video": {
+      "maxResolution": "8K (7680 × 4320)",
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": null,
+      "stabilization": null,
+      "continuousLimit": null,
+      "maxFps": 120,
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://images.samsung.com/is/content/samsung/assets/us/business/mobile/phones/galaxy-s25/02052025/S25_Series_B2B_Spec_Sheet_HRc.pdf",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "durability": {
+      "rating": "IP68",
+      "display": null,
+      "viewfinder": null,
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "power": {
+      "battery": null,
+      "storage": "256 / 512 GB / 1 TB",
+      "weightG": 218,
+      "dimensionsMm": [
+        162.8,
+        77.6,
+        8.2
+      ],
+      "connectivity": null,
+      "price": null,
+      "provenance": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "manualControls": null,
+    "variants": [
+      {
+        "id": "storage-256",
+        "regions": [
+          "PH"
+        ],
+        "storageGB": 256,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "storage-512",
+        "regions": [
+          "PH"
+        ],
+        "storageGB": 512,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "storage-1024",
+        "regions": [
+          "PH"
+        ],
+        "storageGB": 1024,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "cameraModules": [
+      {
+        "role": "main",
+        "megapixels": 200,
+        "apertureF": 1.7,
+        "ois": true,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 50,
+        "apertureF": 3.4,
+        "ois": true,
+        "opticalZoom": 5,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "ultrawide",
+        "megapixels": 50,
+        "apertureF": 1.9,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 10,
+        "apertureF": 2.4,
+        "ois": true,
+        "opticalZoom": 3,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "front",
+        "megapixels": 12,
+        "apertureF": 2.2,
+        "provenance": {
+          "sourceId": "samsung",
+          "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "provenance": {
+      "brand": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "regions": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "releaseDate": {
+        "sourceId": "samsung",
+        "url": "https://news.samsung.com/uk/samsung-galaxy-s25-series-sets-the-standard-of-ai-phone-as-a-true-ai-companion",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "chip": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "ramGB": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "display": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "battery": {
+        "sourceId": "samsung",
+        "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "note": "Tier 1; thông số được ghi theo nguồn và khu vực nêu trên. Các trường không được nguồn công bố để null.",
+    "chip": "Snapdragon 8 Elite for Galaxy",
+    "ramGB": 12,
+    "storageGB": null,
+    "display": {
+      "sizeInches": 6.9
+    },
+    "battery": {
+      "capacityTypicalMah": 5000
+    }
+  },
+  {
+    "schemaVersion": 2,
+    "id": "google-pixel-10-pro",
+    "brand": "Google",
+    "model": "Pixel 10 Pro",
+    "aliases": [
+      "Pixel 10 Pro",
+      "Google Pixel 10 Pro"
+    ],
+    "type": "phone",
+    "releaseYear": null,
+    "releaseDate": "2025-08-28",
+    "status": null,
+    "regions": [
+      "US"
+    ],
+    "tier": 1,
+    "verified": true,
+    "sourceUrl": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+    "checkedAt": "2026-11-23",
+    "lastCheckedAt": "2026-11-23",
+    "sensor": {
+      "type": null,
+      "size": "Main camera 1/1.3 inch; ultrawide and telephoto 1/2.51 inch",
+      "megapixels": 50,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": null,
+      "colorDepth": null,
+      "provenance": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "lens": {
+      "focal35mm": null,
+      "aperture": "Chính f/1.68; siêu rộng f/1.7; tele 5× f/2.8; trước f/2.2",
+      "opticalZoom": 5,
+      "macro": "Macro Focus được nêu cho camera siêu rộng",
+      "mount": null,
+      "ecosystem": null,
+      "maxApertureF": 1.68,
+      "provenance": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "focus": {
+      "autofocus": "Multi-zone LDAF; camera trước tự động lấy nét",
+      "subjectTracking": null,
+      "stabilization": "OIS + EIS trên camera chính và tele",
+      "burstFps": null,
+      "provenance": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "video": {
+      "maxResolution": "8K (qua Video Boost)",
+      "frameRates": null,
+      "codec": "HEVC (H.265), AVC (H.264), AV1, VP9",
+      "hdrLog": "10-bit HDR",
+      "stabilization": "Optical + fused video stabilization",
+      "continuousLimit": null,
+      "maxFps": 60,
+      "provenance": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "durability": {
+      "rating": "IP68",
+      "display": null,
+      "viewfinder": null,
+      "provenance": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "power": {
+      "battery": null,
+      "storage": "128 / 256 / 512 GB / 1 TB",
+      "weightG": null,
+      "dimensionsMm": null,
+      "connectivity": null,
+      "price": null,
+      "provenance": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "manualControls": null,
+    "variants": [
+      {
+        "id": "storage-128",
+        "regions": [
+          "US"
+        ],
+        "ramGB": 16,
+        "storageGB": 128,
+        "provenance": {
+          "sourceId": "google",
+          "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "storage-256",
+        "regions": [
+          "US"
+        ],
+        "ramGB": 16,
+        "storageGB": 256,
+        "provenance": {
+          "sourceId": "google",
+          "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "storage-512",
+        "regions": [
+          "US"
+        ],
+        "ramGB": 16,
+        "storageGB": 512,
+        "provenance": {
+          "sourceId": "google",
+          "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "storage-1024",
+        "regions": [
+          "US"
+        ],
+        "ramGB": 16,
+        "storageGB": 1024,
+        "provenance": {
+          "sourceId": "google",
+          "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "cameraModules": [
+      {
+        "role": "main",
+        "megapixels": 50,
+        "sensorSize": "1/1.3 inch",
+        "apertureF": 1.68,
+        "provenance": {
+          "sourceId": "google",
+          "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "ultrawide",
+        "megapixels": 48,
+        "sensorSize": "1/2.51 inch",
+        "apertureF": 1.7,
+        "autofocus": "Autofocus",
+        "provenance": {
+          "sourceId": "google",
+          "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 48,
+        "sensorSize": "1/2.51 inch",
+        "apertureF": 2.8,
+        "ois": true,
+        "opticalZoom": 5,
+        "provenance": {
+          "sourceId": "google",
+          "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "front",
+        "megapixels": 42,
+        "apertureF": 2.2,
+        "autofocus": "Autofocus",
+        "provenance": {
+          "sourceId": "google",
+          "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "provenance": {
+      "brand": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "regions": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "releaseDate": {
+        "sourceId": "google",
+        "url": "https://blog.google/products-and-platforms/devices/pixel/google-pixel-10-pro-xl/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "chip": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "ramGB": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "display": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "battery": {
+        "sourceId": "google",
+        "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "note": "Tier 1; thông số được ghi theo nguồn và khu vực nêu trên. Các trường không được nguồn công bố để null.",
+    "chip": "Google Tensor G5",
+    "ramGB": 16,
+    "storageGB": null,
+    "display": {
+      "sizeInches": 6.3
+    },
+    "battery": {
+      "capacityTypicalMah": 4870,
+      "capacityMinimumMah": 4707
+    }
+  },
+  {
+    "schemaVersion": 2,
+    "id": "xiaomi-15-ultra",
+    "brand": "Xiaomi",
+    "model": "15 Ultra",
+    "aliases": [
+      "15 Ultra",
+      "Xiaomi 15 Ultra"
+    ],
+    "type": "phone",
+    "releaseYear": null,
+    "releaseDate": "2025-03-02",
+    "status": null,
+    "regions": [
+      "Global"
+    ],
+    "tier": 1,
+    "verified": true,
+    "sourceUrl": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+    "checkedAt": "2026-11-23",
+    "lastCheckedAt": "2026-11-23",
+    "sensor": {
+      "type": "Sony LYT-900 (camera chính)",
+      "size": "1 inch",
+      "megapixels": 50,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": true,
+      "colorDepth": null,
+      "provenance": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "rawBitDepth": 16
+    },
+    "lens": {
+      "focal35mm": "14–100 mm equivalent",
+      "aperture": "Chính f/1.63; tele 100 mm f/2.6; tele 70 mm f/1.8; siêu rộng f/2.2",
+      "opticalZoom": null,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null,
+      "maxApertureF": 1.63,
+      "provenance": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "focus": {
+      "autofocus": "Xiaomi ProFocus: theo dõi chuyển động, mắt và chụp chuyển động",
+      "subjectTracking": "Theo dõi chuyển động và mắt (ProFocus)",
+      "stabilization": "OIS trên camera chính và hai camera tele",
+      "burstFps": null,
+      "provenance": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "video": {
+      "maxResolution": "8K (7680 × 4320)",
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": "Video log; Dolby Vision",
+      "stabilization": "ShootSteady",
+      "continuousLimit": null,
+      "maxFps": 120,
+      "provenance": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "durability": {
+      "rating": null,
+      "display": null,
+      "viewfinder": null,
+      "provenance": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "power": {
+      "battery": null,
+      "storage": "512 GB / 1 TB",
+      "weightG": null,
+      "dimensionsMm": null,
+      "connectivity": null,
+      "price": null,
+      "provenance": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "manualControls": null,
+    "variants": [
+      {
+        "id": "storage-512",
+        "regions": [
+          "Global"
+        ],
+        "ramGB": 16,
+        "storageGB": 512,
+        "provenance": {
+          "sourceId": "xiaomi",
+          "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "storage-1024",
+        "regions": [
+          "Global"
+        ],
+        "ramGB": 16,
+        "storageGB": 1024,
+        "provenance": {
+          "sourceId": "xiaomi",
+          "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "cameraModules": [
+      {
+        "role": "main",
+        "megapixels": 50,
+        "sensorSize": "1 inch",
+        "focalLength35mm": 23,
+        "apertureF": 1.63,
+        "ois": true,
+        "provenance": {
+          "sourceId": "xiaomi",
+          "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 200,
+        "focalLength35mm": 100,
+        "apertureF": 2.6,
+        "ois": true,
+        "provenance": {
+          "sourceId": "xiaomi",
+          "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 50,
+        "focalLength35mm": 70,
+        "apertureF": 1.8,
+        "ois": true,
+        "provenance": {
+          "sourceId": "xiaomi",
+          "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "ultrawide",
+        "megapixels": 50,
+        "focalLength35mm": 14,
+        "apertureF": 2.2,
+        "provenance": {
+          "sourceId": "xiaomi",
+          "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "front",
+        "megapixels": 32,
+        "focalLength35mm": 21,
+        "apertureF": 2,
+        "provenance": {
+          "sourceId": "xiaomi",
+          "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "provenance": {
+      "brand": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "regions": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "releaseDate": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/uk/support/faq/details/KA-536389/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "chip": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "ramGB": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "display": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "battery": {
+        "sourceId": "xiaomi",
+        "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "note": "Tier 1; thông số được ghi theo nguồn và khu vực nêu trên. Các trường không được nguồn công bố để null.",
+    "chip": "Snapdragon 8 Elite",
+    "ramGB": 16,
+    "storageGB": null,
+    "display": {
+      "sizeInches": 6.73
+    },
+    "battery": {
+      "capacityTypicalMah": 5410
+    }
+  },
+  {
+    "schemaVersion": 2,
+    "id": "oneplus-13",
+    "brand": "OnePlus",
+    "model": "13",
+    "aliases": [
+      "13",
+      "OnePlus 13"
+    ],
+    "type": "phone",
+    "releaseYear": null,
+    "releaseDate": "2025-01-07",
+    "status": null,
+    "regions": [
+      "Global"
+    ],
+    "tier": 1,
+    "verified": true,
+    "sourceUrl": "https://www.oneplus.com/global/13/specs",
+    "checkedAt": "2026-11-23",
+    "lastCheckedAt": "2026-11-23",
+    "sensor": {
+      "type": "Sony LYT-808 (camera chính)",
+      "size": "Camera chính 1/1.4 inch; tele 1/1.95 inch; siêu rộng 1/2.75 inch",
+      "megapixels": 50,
+      "pixelPitchUm": null,
+      "iso": null,
+      "raw": true,
+      "colorDepth": null,
+      "provenance": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "lens": {
+      "focal35mm": "15–73 mm equivalent",
+      "aperture": "Chính f/1.6; tele f/2.6; siêu rộng f/2.0",
+      "opticalZoom": 3,
+      "macro": null,
+      "mount": null,
+      "ecosystem": null,
+      "maxApertureF": 1.6,
+      "provenance": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "focus": {
+      "autofocus": "PDAF đa hướng toàn điểm ảnh + CAF + LDAF",
+      "subjectTracking": null,
+      "stabilization": "OIS + EIS camera chính và tele; EIS siêu rộng",
+      "burstFps": null,
+      "provenance": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "video": {
+      "maxResolution": "8K",
+      "frameRates": null,
+      "codec": null,
+      "hdrLog": "Dolby Vision 4K",
+      "stabilization": "Steady video",
+      "continuousLimit": null,
+      "maxFps": 60,
+      "provenance": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "durability": {
+      "rating": "IP68/IP69",
+      "display": null,
+      "viewfinder": null,
+      "provenance": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "power": {
+      "battery": null,
+      "storage": "256 / 512 GB",
+      "weightG": 210,
+      "dimensionsMm": [
+        162.9,
+        76.5,
+        8.5
+      ],
+      "connectivity": "Wi-Fi 7; Bluetooth 5.4; NFC",
+      "provenance": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "manualControls": null,
+    "variants": [
+      {
+        "id": "12-256",
+        "regions": [
+          "Global"
+        ],
+        "ramGB": 12,
+        "storageGB": 256,
+        "provenance": {
+          "sourceId": "oneplus",
+          "url": "https://www.oneplus.com/global/13/specs",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "id": "16-512",
+        "regions": [
+          "Global"
+        ],
+        "ramGB": 16,
+        "storageGB": 512,
+        "provenance": {
+          "sourceId": "oneplus",
+          "url": "https://www.oneplus.com/global/13/specs",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "cameraModules": [
+      {
+        "role": "main",
+        "megapixels": 50,
+        "sensorSize": "1/1.4 inch",
+        "pixelPitchUm": 1.12,
+        "focalLength35mm": 23,
+        "apertureF": 1.6,
+        "ois": true,
+        "autofocus": "PDAF",
+        "provenance": {
+          "sourceId": "oneplus",
+          "url": "https://www.oneplus.com/global/13/specs",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "tele",
+        "megapixels": 50,
+        "sensorSize": "1/1.95 inch",
+        "pixelPitchUm": 0.8,
+        "focalLength35mm": 73,
+        "apertureF": 2.6,
+        "ois": true,
+        "opticalZoom": 3,
+        "autofocus": "Autofocus",
+        "provenance": {
+          "sourceId": "oneplus",
+          "url": "https://www.oneplus.com/global/13/specs",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "ultrawide",
+        "megapixels": 50,
+        "sensorSize": "1/2.75 inch",
+        "pixelPitchUm": 0.64,
+        "focalLength35mm": 15,
+        "apertureF": 2,
+        "autofocus": "Autofocus",
+        "provenance": {
+          "sourceId": "oneplus",
+          "url": "https://www.oneplus.com/global/13/specs",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      },
+      {
+        "role": "front",
+        "megapixels": 32,
+        "sensorSize": "1/2.74 inch",
+        "pixelPitchUm": 0.8,
+        "focalLength35mm": 21,
+        "apertureF": 2.4,
+        "autofocus": "Fixed focus",
+        "provenance": {
+          "sourceId": "oneplus",
+          "url": "https://www.oneplus.com/global/13/specs",
+          "retrievedAt": "2026-11-23",
+          "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+          "extractedBy": "manual",
+          "verified": true
+        }
+      }
+    ],
+    "provenance": {
+      "brand": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "model": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "aliases": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "type": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "regions": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "releaseDate": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/press/press-release/oneplus-launches-new-flagship-series-oneplus-13-and-oneplus-13r",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "chip": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "display": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      },
+      "battery": {
+        "sourceId": "oneplus",
+        "url": "https://www.oneplus.com/global/13/specs",
+        "retrievedAt": "2026-11-23",
+        "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+        "extractedBy": "manual",
+        "verified": true
+      }
+    },
+    "note": "Tier 1; thông số được ghi theo nguồn và khu vực nêu trên. Các trường không được nguồn công bố để null.",
+    "chip": "Snapdragon 8 Elite",
+    "ramGB": null,
+    "storageGB": null,
+    "display": {
+      "sizeInches": 6.82
+    },
+    "battery": {
+      "capacityTypicalMah": 6000,
+      "capacityRatedMah": 5840
+    }
   }
 ]

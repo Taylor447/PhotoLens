@@ -1,0 +1,780 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taylor447.github.io/PhotoLens/data/schema/device.schema.json",
+  "title": "PhotoLens Device Record",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "brand",
+    "model",
+    "aliases",
+    "type",
+    "releaseDate",
+    "status",
+    "regions",
+    "variants",
+    "verified"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "brand": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "type": {
+      "enum": [
+        "phone",
+        "mirrorless",
+        "dslr",
+        "compact",
+        "action",
+        "other"
+      ]
+    },
+    "releaseDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "status": {
+      "enum": [
+        "announced",
+        "current",
+        "discontinued",
+        null
+      ]
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tier": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "enum": [
+        0,
+        1,
+        2,
+        null
+      ]
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/variant"
+      }
+    },
+    "cameraModules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/cameraModule"
+      }
+    },
+    "sensor": {
+      "$ref": "#/$defs/factGroup"
+    },
+    "lens": {
+      "$ref": "#/$defs/factGroup"
+    },
+    "focus": {
+      "$ref": "#/$defs/factGroup"
+    },
+    "video": {
+      "$ref": "#/$defs/factGroup"
+    },
+    "durability": {
+      "$ref": "#/$defs/factGroup"
+    },
+    "power": {
+      "$ref": "#/$defs/factGroup"
+    },
+    "chip": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ramGB": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "storageGB": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "display": {
+      "$ref": "#/$defs/display"
+    },
+    "battery": {
+      "$ref": "#/$defs/battery"
+    },
+    "derived": {
+      "type": "object"
+    },
+    "prices": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/price"
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/provenance"
+      }
+    },
+    "verified": {
+      "type": "boolean"
+    },
+    "sourceUrl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "checkedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "lastCheckedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "releaseYear": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1800,
+      "maximum": 2200
+    },
+    "manualControls": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "$defs": {
+    "provenance": {
+      "type": "object",
+      "required": [
+        "sourceId",
+        "url",
+        "retrievedAt",
+        "license",
+        "extractedBy",
+        "verified"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "anyOf": [
+            { "format": "uri" },
+            { "pattern": "^urn:photolens:local-import:[a-z0-9-]+:.+$" }
+          ]
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date"
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1
+        },
+        "extractedBy": {
+          "enum": [
+            "manual",
+            "pipeline",
+            "import",
+            "community"
+          ]
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 500
+        },
+        "derived": {
+          "type": "boolean"
+        },
+        "formula": {
+          "type": "string"
+        },
+        "inputPaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "factGroup": {
+      "type": "object",
+      "properties": {
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "size": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "megapixels": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 500
+        },
+        "pixelPitchUm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 200
+        },
+        "iso": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "raw": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "rawBitDepth": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "colorDepth": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "dimensionsMm": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 3
+        },
+        "focal35mm": {
+          "type": [
+            "number",
+            "string",
+            "null"
+          ]
+        },
+        "aperture": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "opticalZoom": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "macro": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mount": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ecosystem": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "maxApertureF": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "fieldOfViewDeg": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 360
+        },
+        "focusRangeM": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "autofocus": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "subjectTracking": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "stabilization": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "burstFps": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "maxResolution": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "frameRates": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "number"
+          }
+        },
+        "codec": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hdrLog": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "continuousLimit": {
+          "type": [
+            "string",
+            "number",
+            "null"
+          ]
+        },
+        "maxFps": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "modes": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "object"
+          }
+        },
+        "rating": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "viewfinder": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "display": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "battery": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "storage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "storageGB": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "ramGB": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "weightG": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 20000
+        },
+        "connectivity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "price": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/price"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "cameraModule": {
+      "type": "object",
+      "required": [
+        "role",
+        "provenance"
+      ],
+      "properties": {
+        "role": {
+          "enum": [
+            "main",
+            "ultrawide",
+            "tele",
+            "macro",
+            "front",
+            "action",
+            "other"
+          ]
+        },
+        "megapixels": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 500
+        },
+        "sensorSize": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pixelPitchUm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "focalLengthMm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "focalLength35mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "apertureF": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "ois": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "autofocus": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "opticalZoom": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      },
+      "additionalProperties": true
+    },
+    "variant": {
+      "type": "object",
+      "required": [
+        "id",
+        "regions"
+      ],
+      "properties": {
+        "ramGB": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "storageGB": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "weightG": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "chip": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "price": {
+      "type": "object",
+      "required": [
+        "currency",
+        "amount",
+        "asOf",
+        "region",
+        "source"
+      ],
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "asOf": {
+          "type": "string",
+          "format": "date"
+        },
+        "region": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "additionalProperties": false
+    },
+    "display": {
+      "type": "object",
+      "properties": {
+        "technology": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sizeInches": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 100
+        },
+        "resolution": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "refreshRateHz": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "brightnessNits": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "battery": {
+      "type": "object",
+      "properties": {
+        "capacityTypicalMah": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "capacityNominalMah": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "capacityRatedMah": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "capacityMinimumMah": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "chargeW": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "wirelessChargeW": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

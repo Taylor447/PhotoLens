@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "apple",
+      "name": "Apple Support — iPhone 15 Pro specifications",
+      "type": "official-manufacturer",
+      "url": "https://support.apple.com/vi-vn/111829",
+      "urls": [
+        "https://support.apple.com/vi-vn/111829"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Official Vietnamese technical specifications."
+    },
+    {
+      "id": "canon",
+      "name": "Canon official EOS R50 page",
+      "type": "official-manufacturer",
+      "url": "https://www.usa.canon.com/cameras/eos-r50",
+      "urls": [
+        "https://www.usa.canon.com/cameras/eos-r50"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Candidate source; no facts imported until reviewed."
+    },
+    {
+      "id": "community-import",
+      "name": "User-provided data",
+      "type": "user-import",
+      "url": "https://github.com/Taylor447/PhotoLens",
+      "urls": [
+        "https://github.com/Taylor447/PhotoLens"
+      ],
+      "license": "Each import must declare a license. Imported records remain unverified until checked against official or two independent sources.",
+      "priority": 4,
+      "use": "Import only data the contributor is licensed to redistribute."
+    },
+    {
+      "id": "dji",
+      "name": "DJI Osmo Action 4 specifications",
+      "type": "official-manufacturer",
+      "url": "https://www.dji.com/osmo-action-4/specs",
+      "urls": [
+        "https://www.dji.com/osmo-action-4/specs"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Official product specification page."
+    },
+    {
+      "id": "existing-project-catalog",
+      "name": "Existing PhotoLens project catalog",
+      "type": "user-provided-file",
+      "url": "https://github.com/Taylor447/PhotoLens/blob/main/data/devices.json",
+      "urls": [
+        "https://github.com/Taylor447/PhotoLens/blob/main/data/devices.json"
+      ],
+      "license": "Retained from the user-provided project snapshot; no independent redistribution license was supplied. Identifiers are not independently verified.",
+      "priority": 4,
+      "use": "Traceability only for legacy placeholder names and categories; never a source for technical specifications."
+    },
+    {
+      "id": "fujifilm",
+      "name": "Fujifilm official X-S20 page",
+      "type": "official-manufacturer",
+      "url": "https://fujifilm-x.com/global/products/cameras/x-s20/",
+      "urls": [
+        "https://fujifilm-x.com/global/products/cameras/x-s20/"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Candidate source; no facts imported until reviewed."
+    },
+    {
+      "id": "google",
+      "type": "official-manufacturer",
+      "priority": 1,
+      "name": "Google Store and Google product announcement",
+      "url": "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+      "urls": [
+        "https://store.google.com/product/pixel_10_pro_specs?hl=en-US",
+        "https://blog.google/products-and-platforms/devices/pixel/google-pixel-10-pro-xl/"
+      ],
+      "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+      "use": "Official Pixel technical specifications and launch announcement."
+    },
+    {
+      "id": "gopro",
+      "name": "GoPro official HERO12 Black page",
+      "type": "official-manufacturer",
+      "url": "https://gopro.com/en/us/shop/cameras/hero12black/CHDHX-121-master.html",
+      "urls": [
+        "https://gopro.com/en/us/shop/cameras/hero12black/CHDHX-121-master.html"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Candidate source; no facts imported until reviewed."
+    },
+    {
+      "id": "huawei",
+      "name": "HUAWEI P60 Pro specifications",
+      "type": "official-manufacturer",
+      "url": "https://consumer.huawei.com/cl/phones/p60-pro/specs/",
+      "urls": [
+        "https://consumer.huawei.com/cl/phones/p60-pro/specs/"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Official Chile specifications; only explicitly listed facts are transcribed."
+    },
+    {
+      "id": "lensfun",
+      "name": "Lensfun camera database",
+      "type": "open-data",
+      "url": "https://github.com/lensfun/lensfun/tree/master/data/db",
+      "urls": [
+        "https://github.com/lensfun/lensfun/tree/master/data/db",
+        "https://github.com/lensfun/lensfun/blob/37238fcef563196fb798f6151cb9023968b26c40/data/db/mil-sony.xml"
+      ],
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://github.com/lensfun/lensfun/blob/master/data/COPYING.CC_BY-SA_3.0",
+      "priority": 3,
+      "use": "Derived mount and crop data are kept separately in lensfun-derived.json with attribution and ShareAlike.",
+      "fetchUrls": [
+        "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/mil-sony.xml",
+        "https://raw.githubusercontent.com/lensfun/lensfun/master/data/db/actioncams.xml"
+      ]
+    },
+    {
+      "id": "nikon",
+      "name": "Nikon official Z fc page",
+      "type": "official-manufacturer",
+      "url": "https://www.nikonusa.com/p/z-fc/1678/overview",
+      "urls": [
+        "https://www.nikonusa.com/p/z-fc/1678/overview"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Candidate source; no facts imported until reviewed."
+    },
+    {
+      "id": "om-system",
+      "name": "OM System official OM-5 page",
+      "type": "official-manufacturer",
+      "url": "https://explore.omsystem.com/us/en/om-5",
+      "urls": [
+        "https://explore.omsystem.com/us/en/om-5"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Candidate source; no facts imported until reviewed."
+    },
+    {
+      "id": "oneplus",
+      "type": "official-manufacturer",
+      "priority": 1,
+      "name": "OnePlus Global specifications and press release",
+      "url": "https://www.oneplus.com/global/13/specs",
+      "urls": [
+        "https://www.oneplus.com/global/13/specs",
+        "https://www.oneplus.com/global/press/press-release/oneplus-launches-new-flagship-series-oneplus-13-and-oneplus-13r"
+      ],
+      "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+      "use": "Official global technical specifications and global launch announcement."
+    },
+    {
+      "id": "panasonic",
+      "name": "Panasonic official LUMIX G9II page",
+      "type": "official-manufacturer",
+      "url": "https://www.panasonic.com/global/consumer/lumix/g-series/g9m2.html",
+      "urls": [
+        "https://www.panasonic.com/global/consumer/lumix/g-series/g9m2.html"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Candidate source; no facts imported until reviewed."
+    },
+    {
+      "id": "samsung",
+      "name": "Samsung official specifications and newsroom",
+      "type": "official-manufacturer",
+      "url": "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+      "urls": [
+        "https://news.samsung.com/global/samsung-galaxy-s21-ultra-the-ultimate-smartphone-experience-designed-to-be-epic-in-every-way",
+        "https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/",
+        "https://news.samsung.com/uk/samsung-galaxy-s25-series-sets-the-standard-of-ai-phone-as-a-true-ai-companion",
+        "https://images.samsung.com/is/content/samsung/assets/us/business/mobile/phones/galaxy-s25/02052025/S25_Series_B2B_Spec_Sheet_HRc.pdf"
+      ],
+      "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+      "priority": 1,
+      "use": "Official Galaxy specifications and general-availability announcement; region-specific specifications are labeled."
+    },
+    {
+      "id": "samsung-video",
+      "name": "Samsung Global Newsroom — Galaxy S21 Ultra video modes",
+      "type": "official-manufacturer",
+      "url": "https://news.samsung.com/ca/budding-filmmaker-how-the-new-galaxy-s21-ultra-5g-doubles-as-a-movie-camera",
+      "urls": [
+        "https://news.samsung.com/ca/budding-filmmaker-how-the-new-galaxy-s21-ultra-5g-doubles-as-a-movie-camera"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Official Samsung source for explicitly stated recording modes."
+    },
+    {
+      "id": "sony",
+      "name": "Sony Support — ILCE-6400 specifications",
+      "type": "official-manufacturer",
+      "url": "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications",
+      "urls": [
+        "https://www.sony.com/electronics/support/e-mount-body/ilce-6400/specifications"
+      ],
+      "license": "Facts only; manufacturer pages provide no separate redistribution license for specifications. No marketing text, images, reviews, or scores are copied.",
+      "priority": 1,
+      "use": "Official Sony support specifications."
+    },
+    {
+      "id": "wikidata",
+      "name": "Wikidata Query Service",
+      "type": "open-data",
+      "url": "https://query.wikidata.org/sparql",
+      "urls": [
+        "https://query.wikidata.org/sparql"
+      ],
+      "documentationUrl": "https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/API",
+      "license": "CC0-1.0",
+      "priority": 2,
+      "use": "Discover names and candidate devices; facts require independent review before entering the baseline."
+    },
+    {
+      "id": "xiaomi",
+      "type": "official-manufacturer",
+      "priority": 1,
+      "name": "Xiaomi Global specifications and official FAQ",
+      "url": "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+      "urls": [
+        "https://www.mi.com/global/product/xiaomi-15-ultra/specs/",
+        "https://www.mi.com/uk/support/faq/details/KA-536389/"
+      ],
+      "license": "Factual specifications transcribed from the manufacturer; no separate specification redistribution license stated. No marketing text, images, reviews, or third-party scores copied.",
+      "use": "Official global technical specifications and official launch/sale date FAQ."
+    }
+  ]
+}

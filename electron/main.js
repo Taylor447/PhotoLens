@@ -16,7 +16,7 @@ function createWindow() {
   });
   const indexPath = path.join(__dirname, '..', 'dist', 'index.html');
   const trustedIndexUrl = 'photolens://app/index.html';
-  const csp = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com https://air-quality-api.open-meteo.com https://overpass-api.de https://*.workers.dev https://generativelanguage.googleapis.com http://localhost:8787 http://127.0.0.1:8787; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
+  const csp = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https: http://localhost:8787 http://127.0.0.1:8787; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
   mainWindow.webContents.session.webRequest.onHeadersReceived({ urls: ['photolens://*'] }, (details, callback) => {
     callback({ responseHeaders: { ...details.responseHeaders, 'Content-Security-Policy': [csp] } });
   });
