@@ -1,0 +1,1315 @@
+{
+  "version": 1,
+  "parameterGroups": {
+    "phone-imaging": {
+      "nameVi": "Di?n tho?i",
+      "fields": [
+        "sensor.size",
+        "sensor.megapixels",
+        "lens.opticalZoom",
+        "video.maxResolution",
+        "video.maxFps",
+        "power.weightG",
+        "durability.rating"
+      ],
+      "description": "Th�ng tin c?m bi?n, ?ng k�nh t�ch h?p, video, tr?ng lu?ng v� d? b?n khi c� ngu?n."
+    },
+    "interchangeable-lens": {
+      "nameVi": "M�y ?nh ?ng k�nh r?i",
+      "fields": [
+        "sensor.size",
+        "sensor.megapixels",
+        "sensor.rawBitDepth",
+        "lens.mount",
+        "lens.ecosystem",
+        "focus.autofocus",
+        "focus.burstFps",
+        "video.maxResolution",
+        "video.maxFps"
+      ],
+      "description": "C?m bi?n, ng�m, l?y n�t, ch?p li�n ti?p v� video; ti�u c?/kh?u d? ph? thu?c ?ng k�nh."
+    },
+    "fixed-lens": {
+      "nameVi": "M�y ?nh ?ng k�nh li?n",
+      "fields": [
+        "sensor.size",
+        "sensor.megapixels",
+        "lens.minFocal35mm",
+        "lens.maxApertureF",
+        "lens.opticalZoom",
+        "focus.stabilization",
+        "video.maxResolution",
+        "power.weightG"
+      ],
+      "description": "C?m bi?n, d?i ti�u c?, kh?u d?, zoom quang v� kh?i lu?ng."
+    },
+    "video-camera": {
+      "nameVi": "M�y quay phim",
+      "fields": [
+        "sensor.size",
+        "video.maxResolution",
+        "video.maxFps",
+        "video.codec",
+        "video.bitDepth",
+        "video.continuousLimit",
+        "lens.mount",
+        "power.weightG"
+      ],
+      "description": "D?nh d?ng v� th?i lu?ng quay, ng�m/?ng k�nh v� c�c k?t n?i video."
+    },
+    "action-video": {
+      "nameVi": "M�y ?nh h�nh d?ng",
+      "fields": [
+        "sensor.size",
+        "sensor.megapixels",
+        "video.maxResolution",
+        "video.maxFps",
+        "video.stabilization",
+        "durability.rating",
+        "power.weightG"
+      ],
+      "description": "Video, ch?ng rung, d? b?n v� tr?ng lu?ng."
+    },
+    "pocket-gimbal": {
+      "nameVi": "Gimbal/pocket camera",
+      "fields": [
+        "sensor.size",
+        "sensor.megapixels",
+        "lens.focal35mm",
+        "video.maxResolution",
+        "video.maxFps",
+        "video.stabilization",
+        "power.weightG"
+      ],
+      "description": "Camera t�ch h?p, ch?ng rung co h?c/di?n t?, video v� kh?i lu?ng."
+    },
+    "instant-film": {
+      "nameVi": "M�y ?nh l?y li?n",
+      "fields": [
+        "film.format",
+        "image.size",
+        "lens.focal35mm",
+        "focus.mode",
+        "power.weightG"
+      ],
+      "description": "Kh? phim/?nh, ti�u c?, ch? d? l?y n�t v� kh?i lu?ng."
+    },
+    "film-camera": {
+      "nameVi": "M�y ?nh phim",
+      "fields": [
+        "film.format",
+        "lens.mount",
+        "shutter.speedRange",
+        "focus.mode",
+        "power.weightG"
+      ],
+      "description": "Kh? phim, ng�m, m�n tr?p, l?y n�t v� kh?i lu?ng."
+    },
+    "drone-imaging": {
+      "nameVi": "Camera drone",
+      "fields": [
+        "camera.sensor.size",
+        "camera.megapixels",
+        "camera.video.maxResolution",
+        "camera.video.maxFps",
+        "gimbal.axes",
+        "flight.timeMinutes"
+      ],
+      "description": "C?n t�ch th�ng s? camera kh?i th�ng s? bay; kh�ng �p d?ng di?m m�y ?nh th�ng thu?ng."
+    },
+    "webcam": {
+      "nameVi": "Webcam/streaming",
+      "fields": [
+        "video.maxResolution",
+        "video.maxFps",
+        "video.codec",
+        "interface.connection",
+        "focus.autofocus"
+      ],
+      "description": "D? ph�n gi?i video, t?c d? khung h�nh, k?t n?i v� l?y n�t."
+    },
+    "thermal": {
+      "nameVi": "Camera nhi?t",
+      "fields": [
+        "thermal.resolution",
+        "thermal.sensitivity",
+        "thermal.range",
+        "lens.fieldOfView"
+      ],
+      "description": "D? ph�n gi?i nhi?t, d? nh?y v� d?i do; kh�ng so s�nh nhu camera ?nh thu?ng."
+    },
+    "specialized": {
+      "nameVi": "Camera chuy�n d?ng",
+      "fields": [
+        "sensor.type",
+        "sensor.size",
+        "video.maxResolution",
+        "interface.connection",
+        "environment.rating"
+      ],
+      "description": "Ch?n th�ng s? theo m?c d�ch chuy�n m�n; kh�ng d�ng thang di?m m�y ?nh ph? th�ng."
+    },
+    "accessory": {
+      "nameVi": "Ph? ki?n quay ch?p",
+      "fields": [
+        "compatibility.devices",
+        "stabilization.axes",
+        "power.battery",
+        "power.weightG"
+      ],
+      "description": "Ph? ki?n kh�ng ph?i m�y ?nh d?c l?p."
+    },
+    "camera-general": {
+      "nameVi": "Th�ng s? m�y ?nh",
+      "fields": [
+        "sensor.size",
+        "sensor.megapixels",
+        "lens.mount",
+        "video.maxResolution",
+        "video.maxFps",
+        "power.weightG"
+      ],
+      "description": "Nh�m th�ng tin chung; ch? luu th�ng s? c� ngu?n."
+    }
+  },
+  "classificationPolicy": {
+    "modelRecognition": "Explicit device type first; exact family aliases may refine it. Never classify an accessory as an independent camera.",
+    "sensorFormat": "Infer sensor-format children only from an explicit sourced sensor.size field.",
+    "modelFacts": "Type recognition does not verify model specifications, price, or availability."
+  },
+  "types": [
+    {
+      "id": "phone",
+      "nameVi": "Di?n tho?i",
+      "nameEn": "Phone",
+      "parentId": null,
+      "description": "Di?n tho?i c� camera t�ch h?p.",
+      "aliases": [
+        "phone",
+        "smartphone",
+        "mobile phone",
+        "di?n tho?i",
+        "di?n tho?i di d?ng"
+      ],
+      "keywords": [
+        "mobile",
+        "camera phone"
+      ],
+      "specGroups": [
+        "phone-imaging"
+      ],
+      "scoreable": true,
+      "facetGroup": "device-family",
+      "legacyIds": [
+        "phone"
+      ],
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "phone-android",
+      "nameVi": "Android",
+      "nameEn": "Android phone",
+      "parentId": "phone",
+      "description": "Di?n tho?i ch?y Android; ph�n lo?i n?n t?ng khi c� model ho?c lo?i g?c ph� h?p.",
+      "aliases": [
+        "android phone",
+        "android smartphone"
+      ],
+      "keywords": [
+        "android",
+        "android mobile"
+      ],
+      "specGroups": [
+        "phone-imaging"
+      ],
+      "scoreable": true,
+      "facetGroup": "platform",
+      "brandAliases": [
+        "Samsung",
+        "Huawei",
+        "Xiaomi",
+        "Google",
+        "OPPO",
+        "OnePlus",
+        "vivo",
+        "Honor",
+        "Motorola",
+        "Sony",
+        "Nothing",
+        "realme",
+        "ASUS",
+        "ZTE",
+        "Lenovo"
+      ],
+      "modelAliases": [
+        "Samsung Galaxy",
+        "Huawei P",
+        "Huawei Mate",
+        "Google Pixel",
+        "Xiaomi Redmi",
+        "Xiaomi 14",
+        "Xiaomi 15",
+        "OPPO Find",
+        "vivo X",
+        "Honor Magic",
+        "Sony Xperia",
+        "Nothing Phone",
+        "realme GT",
+        "ASUS Zenfone",
+        "Lenovo Legion"
+      ]
+    },
+    {
+      "id": "phone-iphone",
+      "nameVi": "iPhone",
+      "nameEn": "iPhone",
+      "parentId": "phone",
+      "description": "Di?n tho?i Apple iPhone.",
+      "aliases": [
+        "ios phone",
+        "apple smartphone",
+        "iphone smartphone"
+      ],
+      "keywords": [
+        "ios",
+        "apple phone"
+      ],
+      "specGroups": [
+        "phone-imaging"
+      ],
+      "scoreable": true,
+      "facetGroup": "platform",
+      "brandAliases": [
+        "Apple"
+      ],
+      "modelAliases": [
+        "iPhone"
+      ]
+    },
+    {
+      "id": "phone-foldable",
+      "nameVi": "Di?n tho?i g?p",
+      "nameEn": "Foldable phone",
+      "parentId": "phone",
+      "description": "Di?n tho?i c� m�n h�nh g?p; t�n d�ng ph?i nh?n di?n ro.",
+      "aliases": [
+        "foldable phone",
+        "folding phone",
+        "foldable smartphone"
+      ],
+      "keywords": [
+        "folding smartphone",
+        "foldable"
+      ],
+      "specGroups": [
+        "phone-imaging"
+      ],
+      "scoreable": true,
+      "facetGroup": "form-factor",
+      "modelAliases": [
+        "Galaxy Z Fold",
+        "Galaxy Z Flip",
+        "Huawei Mate X",
+        "Huawei Pocket",
+        "Motorola Razr",
+        "Xiaomi Mix Fold",
+        "OPPO Find N",
+        "Google Pixel Fold",
+        "Honor Magic V",
+        "vivo X Fold"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "phone-rugged",
+      "nameVi": "Di?n tho?i si�u b?n",
+      "nameEn": "Rugged phone",
+      "parentId": "phone",
+      "description": "Di?n tho?i thi?t k? b?n/ch?ng ch?u; nh?n di?n theo d�ng m�y c? th?.",
+      "aliases": [
+        "rugged phone",
+        "rugged smartphone",
+        "tough phone"
+      ],
+      "keywords": [
+        "rugged",
+        "durable phone"
+      ],
+      "specGroups": [
+        "phone-imaging"
+      ],
+      "scoreable": true,
+      "facetGroup": "form-factor",
+      "modelAliases": [
+        "Doogee V",
+        "Ulefone Armor",
+        "Oukitel WP",
+        "Blackview BL",
+        "Samsung XCover",
+        "Cat S"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "phone-gaming",
+      "nameVi": "Di?n tho?i gaming",
+      "nameEn": "Gaming phone",
+      "parentId": "phone",
+      "description": "Di?n tho?i thu?c d�ng gaming chuy�n d?ng.",
+      "aliases": [
+        "gaming phone",
+        "gaming smartphone"
+      ],
+      "keywords": [
+        "mobile gaming"
+      ],
+      "specGroups": [
+        "phone-imaging"
+      ],
+      "scoreable": true,
+      "facetGroup": "use-case",
+      "modelAliases": [
+        "ASUS ROG Phone",
+        "RedMagic",
+        "Lenovo Legion Phone",
+        "Black Shark"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "phone-camera",
+      "nameVi": "Di?n tho?i t?p trung camera",
+      "nameEn": "Camera-focused phone",
+      "parentId": "phone",
+      "description": "D�ng di?n tho?i c� d?nh v? camera ro trong t�n thuong m?i.",
+      "aliases": [
+        "camera-focused phone",
+        "camera-centric phone",
+        "camera phone"
+      ],
+      "keywords": [
+        "camera flagship",
+        "photography phone"
+      ],
+      "specGroups": [
+        "phone-imaging"
+      ],
+      "scoreable": true,
+      "facetGroup": "use-case",
+      "modelAliases": [
+        "Huawei Pura",
+        "Xiaomi Ultra",
+        "vivo X100",
+        "Samsung Galaxy S Ultra",
+        "Google Pixel Pro",
+        "iPhone Pro Max"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "camera",
+      "nameVi": "M�y ?nh & thi?t b? quay ch?p",
+      "nameEn": "Camera and imaging device",
+      "parentId": null,
+      "description": "Nh�m g?c cho m�y ?nh s?, m�y quay v� thi?t b? ghi h�nh.",
+      "aliases": [
+        "camera",
+        "digital camera",
+        "imaging device",
+        "m�y ?nh",
+        "m�y quay"
+      ],
+      "keywords": [
+        "photography",
+        "imaging"
+      ],
+      "specGroups": [
+        "camera-general"
+      ],
+      "scoreable": true,
+      "facetGroup": "device-family",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "interchangeable-lens-camera",
+      "nameVi": "M�y ?nh ?ng k�nh r?i",
+      "nameEn": "Interchangeable-lens camera",
+      "parentId": "camera",
+      "description": "M�y ?nh cho ph�p thay ?ng k�nh.",
+      "aliases": [
+        "interchangeable-lens camera",
+        "camera with interchangeable lenses",
+        "ilc"
+      ],
+      "keywords": [
+        "interchangeable lens",
+        "?ng k�nh r?i"
+      ],
+      "specGroups": [
+        "interchangeable-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "lens-system",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "mirrorless",
+      "nameVi": "Mirrorless",
+      "nameEn": "Mirrorless camera",
+      "parentId": "interchangeable-lens-camera",
+      "description": "M�y ?nh ?ng k�nh r?i kh�ng guong l?t; gi? ID cu mirrorless.",
+      "aliases": [
+        "mirrorless camera",
+        "mirrorless",
+        "milc"
+      ],
+      "keywords": [
+        "mirrorless camera body",
+        "kh�ng guong l?t"
+      ],
+      "specGroups": [
+        "interchangeable-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "camera-body",
+      "legacyIds": [
+        "mirrorless"
+      ],
+      "modelAliases": [
+        "Sony Alpha",
+        "Canon EOS R",
+        "Nikon Z",
+        "Fujifilm X",
+        "Panasonic Lumix G",
+        "Panasonic Lumix S",
+        "OM System OM",
+        "Olympus OM-D"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "mirrorless-full-frame",
+      "nameVi": "Mirrorless full-frame",
+      "nameEn": "Full-frame mirrorless",
+      "parentId": "mirrorless",
+      "description": "D�ng c?m bi?n full-frame ch? khi d? li?u ngu?n ghi ro.",
+      "aliases": [
+        "full-frame mirrorless",
+        "full frame mirrorless camera"
+      ],
+      "keywords": [
+        "35mm full-frame"
+      ],
+      "specGroups": [
+        "interchangeable-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "sensor-format",
+      "sensorFormat": "full-frame",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "mirrorless-aps-c",
+      "nameVi": "Mirrorless APS-C",
+      "nameEn": "APS-C mirrorless",
+      "parentId": "mirrorless",
+      "description": "D�ng c?m bi?n APS-C ch? khi d? li?u ngu?n ghi ro.",
+      "aliases": [
+        "aps-c mirrorless",
+        "aps-c mirrorless camera"
+      ],
+      "keywords": [
+        "aps c"
+      ],
+      "specGroups": [
+        "interchangeable-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "sensor-format",
+      "sensorFormat": "aps-c",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "mirrorless-mft",
+      "nameVi": "Mirrorless Micro Four Thirds",
+      "nameEn": "Micro Four Thirds mirrorless",
+      "parentId": "mirrorless",
+      "description": "D�ng Micro Four Thirds ch? khi d? li?u ngu?n ghi ro.",
+      "aliases": [
+        "micro four thirds mirrorless",
+        "mft mirrorless",
+        "m43 mirrorless"
+      ],
+      "keywords": [
+        "micro four thirds",
+        "mft",
+        "m43"
+      ],
+      "specGroups": [
+        "interchangeable-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "sensor-format",
+      "sensorFormat": "micro-four-thirds",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "mirrorless-medium-format",
+      "nameVi": "Mirrorless medium format",
+      "nameEn": "Medium-format mirrorless",
+      "parentId": "mirrorless",
+      "description": "D�ng medium format ch? khi d? li?u ngu?n ghi ro.",
+      "aliases": [
+        "medium-format mirrorless",
+        "medium format mirrorless camera"
+      ],
+      "keywords": [
+        "medium format"
+      ],
+      "specGroups": [
+        "interchangeable-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "sensor-format",
+      "sensorFormat": "medium-format",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "dslr",
+      "nameVi": "DSLR",
+      "nameEn": "Digital single-lens reflex camera",
+      "parentId": "interchangeable-lens-camera",
+      "description": "M�y ?nh DSLR; gi? ID cu dslr.",
+      "aliases": [
+        "dslr",
+        "digital slr camera",
+        "digital single-lens reflex"
+      ],
+      "keywords": [
+        "digital slr",
+        "m�y ?nh ph?n x? s?"
+      ],
+      "specGroups": [
+        "interchangeable-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "camera-body",
+      "legacyIds": [
+        "dslr"
+      ],
+      "modelAliases": [
+        "Canon EOS DSLR",
+        "Nikon D",
+        "Pentax K"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "dslr-full-frame",
+      "nameVi": "DSLR full-frame",
+      "nameEn": "Full-frame DSLR",
+      "parentId": "dslr",
+      "description": "D�ng DSLR full-frame ch? khi d? li?u ngu?n ghi ro.",
+      "aliases": [
+        "full-frame dslr",
+        "full frame dslr camera"
+      ],
+      "keywords": [
+        "35mm full-frame"
+      ],
+      "specGroups": [
+        "interchangeable-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "sensor-format",
+      "sensorFormat": "full-frame",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "dslr-aps-c",
+      "nameVi": "DSLR APS-C",
+      "nameEn": "APS-C DSLR",
+      "parentId": "dslr",
+      "description": "D�ng DSLR APS-C ch? khi d? li?u ngu?n ghi ro.",
+      "aliases": [
+        "aps-c dslr",
+        "aps-c dslr camera"
+      ],
+      "keywords": [
+        "aps c"
+      ],
+      "specGroups": [
+        "interchangeable-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "sensor-format",
+      "sensorFormat": "aps-c",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "dslr-medium-format",
+      "nameVi": "DSLR medium format",
+      "nameEn": "Medium-format DSLR",
+      "parentId": "dslr",
+      "description": "D�ng medium format ch? khi d? li?u ngu?n ghi ro.",
+      "aliases": [
+        "medium-format dslr",
+        "medium format dslr camera"
+      ],
+      "keywords": [
+        "medium format"
+      ],
+      "specGroups": [
+        "interchangeable-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "sensor-format",
+      "sensorFormat": "medium-format",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "fixed-lens-camera",
+      "nameVi": "M�y ?nh ?ng k�nh li?n",
+      "nameEn": "Fixed-lens camera",
+      "parentId": "camera",
+      "description": "M�y ?nh c� ?ng k�nh c? d?nh ho?c t�ch h?p.",
+      "aliases": [
+        "fixed-lens camera",
+        "m�y ?nh ?ng k�nh c? d?nh"
+      ],
+      "keywords": [
+        "built-in lens",
+        "fixed lens"
+      ],
+      "specGroups": [
+        "fixed-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "lens-system",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "compact",
+      "nameVi": "Compact",
+      "nameEn": "Compact camera",
+      "parentId": "fixed-lens-camera",
+      "description": "M�y ?nh compact; gi? ID cu compact.",
+      "aliases": [
+        "compact camera",
+        "compact",
+        "fixed-lens compact camera"
+      ],
+      "keywords": [
+        "point-and-shoot",
+        "m�y ?nh compact"
+      ],
+      "specGroups": [
+        "fixed-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "camera-body",
+      "legacyIds": [
+        "compact"
+      ],
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "compact-standard",
+      "nameVi": "Compact ph? th�ng",
+      "nameEn": "Standard compact camera",
+      "parentId": "compact",
+      "description": "Compact ph? th�ng; ch? ph�n lo?i theo d�ng m�y/t�n model ro.",
+      "aliases": [
+        "standard compact camera",
+        "basic compact camera",
+        "compact camera ph? th�ng"
+      ],
+      "keywords": [
+        "compact ph? th�ng"
+      ],
+      "specGroups": [
+        "fixed-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "tier",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "compact-premium",
+      "nameVi": "Compact cao c?p",
+      "nameEn": "Premium compact camera",
+      "parentId": "compact",
+      "description": "Compact cao c?p v?i ?ng k�nh/c?m bi?n t�ch h?p; kh�ng suy di?n t? t�n compact chung.",
+      "aliases": [
+        "premium compact camera",
+        "high-end compact camera",
+        "compact camera cao c?p"
+      ],
+      "keywords": [
+        "premium compact"
+      ],
+      "specGroups": [
+        "fixed-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "tier",
+      "modelAliases": [
+        "Sony RX100",
+        "Canon PowerShot G",
+        "Fujifilm X100",
+        "Leica Q",
+        "Ricoh GR"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "bridge-superzoom",
+      "nameVi": "Bridge / superzoom",
+      "nameEn": "Bridge / superzoom camera",
+      "parentId": "fixed-lens-camera",
+      "description": "M�y ?nh ki?u bridge ho?c superzoom ?ng k�nh li?n.",
+      "aliases": [
+        "bridge camera",
+        "superzoom camera",
+        "bridge superzoom camera"
+      ],
+      "keywords": [
+        "superzoom",
+        "bridge"
+      ],
+      "specGroups": [
+        "fixed-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "camera-body",
+      "modelAliases": [
+        "Nikon Coolpix P",
+        "Canon PowerShot SX",
+        "Sony RX10",
+        "Panasonic Lumix FZ"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "travel-camera",
+      "nameVi": "M�y ?nh du l?ch",
+      "nameEn": "Travel camera",
+      "parentId": "compact",
+      "description": "Compact hu?ng du l?ch/zoom g?n; c?n t�n d�ng ro.",
+      "aliases": [
+        "travel camera",
+        "travel compact camera",
+        "travel zoom camera"
+      ],
+      "keywords": [
+        "travel zoom",
+        "compact du l?ch"
+      ],
+      "specGroups": [
+        "fixed-lens"
+      ],
+      "scoreable": true,
+      "facetGroup": "use-case",
+      "modelAliases": [
+        "Canon IXUS",
+        "Panasonic Lumix TZ",
+        "Sony Cyber-shot"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "video-camera",
+      "nameVi": "M�y ?nh quay phim / m�y quay",
+      "nameEn": "Video camera and camcorder",
+      "parentId": "camera",
+      "description": "Thi?t b? uu ti�n quay video; con du?i c� th? kh�ng ph� h?p ch?m di?m ?nh th�ng thu?ng.",
+      "aliases": [
+        "video camera",
+        "camcorder",
+        "m�y quay video"
+      ],
+      "keywords": [
+        "video-first camera"
+      ],
+      "specGroups": [
+        "video-camera"
+      ],
+      "scoreable": true,
+      "facetGroup": "device-family",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "cinema-camera",
+      "nameVi": "Cinema camera",
+      "nameEn": "Cinema camera",
+      "parentId": "video-camera",
+      "description": "Camera di?n ?nh chuy�n d?ng; kh�ng so di?m nhu camera ?nh ph? th�ng.",
+      "aliases": [
+        "cinema camera",
+        "digital cinema camera",
+        "m�y quay di?n ?nh"
+      ],
+      "keywords": [
+        "cinema production"
+      ],
+      "specGroups": [
+        "video-camera"
+      ],
+      "scoreable": false,
+      "facetGroup": "professional-video",
+      "scoreNote": "Kh�ng ph� h?p v?i b? di?m m�y ?nh ph? th�ng; c?n ti�u ch� video chuy�n d?ng.",
+      "modelAliases": [
+        "Blackmagic Cinema Camera",
+        "ARRI Alexa",
+        "RED Digital Cinema",
+        "Sony FX"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "home-camcorder",
+      "nameVi": "Camcorder gia d�nh",
+      "nameEn": "Consumer camcorder",
+      "parentId": "video-camera",
+      "description": "Camcorder gia d�nh/du l?ch.",
+      "aliases": [
+        "consumer camcorder",
+        "home camcorder",
+        "camcorder gia d�nh"
+      ],
+      "keywords": [
+        "handycam"
+      ],
+      "specGroups": [
+        "video-camera"
+      ],
+      "scoreable": false,
+      "facetGroup": "camcorder",
+      "scoreNote": "Kh�ng �p d?ng di?m ?nh ph? th�ng; so s�nh theo t�nh nang quay v� ti?n d?ng.",
+      "modelAliases": [
+        "Sony Handycam",
+        "Canon Vixia",
+        "Panasonic HC"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "professional-camcorder",
+      "nameVi": "Camcorder chuy�n nghi?p",
+      "nameEn": "Professional camcorder",
+      "parentId": "video-camera",
+      "description": "Camcorder ENG/production chuy�n nghi?p.",
+      "aliases": [
+        "professional camcorder",
+        "pro camcorder",
+        "camcorder chuy�n nghi?p"
+      ],
+      "keywords": [
+        "eng camcorder"
+      ],
+      "specGroups": [
+        "video-camera"
+      ],
+      "scoreable": false,
+      "facetGroup": "camcorder",
+      "scoreNote": "C?n thang di?m video/ENG ri�ng, kh�ng ph?i di?m m�y ?nh th�ng thu?ng.",
+      "modelAliases": [
+        "Canon XA",
+        "Sony PXW",
+        "Panasonic AG-CX"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "broadcast-camera",
+      "nameVi": "M�y quay broadcast",
+      "nameEn": "Broadcast camera",
+      "parentId": "video-camera",
+      "description": "Camera truy?n h�nh/broadcast.",
+      "aliases": [
+        "broadcast camera",
+        "television camera",
+        "m�y quay truy?n h�nh"
+      ],
+      "keywords": [
+        "broadcast video"
+      ],
+      "specGroups": [
+        "video-camera"
+      ],
+      "scoreable": false,
+      "facetGroup": "professional-video",
+      "scoreNote": "C?n so s�nh h? broadcast, c?ng v� workflow; kh�ng ch?m theo di?m m�y ?nh ph? th�ng.",
+      "modelAliases": [
+        "Sony HDC",
+        "Ikegami broadcast",
+        "Grass Valley camera"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "action-camera",
+      "nameVi": "M�y ?nh h�nh d?ng",
+      "nameEn": "Action camera",
+      "parentId": "camera",
+      "description": "Camera h�nh d?ng nh? g?n; gi? ID d? li?u action-camera v� b? l?c cu action.",
+      "aliases": [
+        "action camera",
+        "action cam",
+        "action camera body"
+      ],
+      "keywords": [
+        "action cam",
+        "camera h�nh d?ng"
+      ],
+      "specGroups": [
+        "action-video"
+      ],
+      "scoreable": true,
+      "facetGroup": "device-family",
+      "legacyIds": [
+        "action",
+        "actioncam"
+      ],
+      "modelAliases": [
+        "GoPro HERO",
+        "DJI Osmo Action",
+        "Insta360 Ace",
+        "AKASO Brave"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "camera-360",
+      "nameVi": "Camera 360�",
+      "nameEn": "360-degree camera",
+      "parentId": "action-camera",
+      "description": "Camera 360 d?; t�n d�ng ro s? ph�n bi?t v?i camera action thu?ng.",
+      "aliases": [
+        "360 camera",
+        "360-degree camera",
+        "camera 360 d?"
+      ],
+      "keywords": [
+        "360 imaging",
+        "360 panorama"
+      ],
+      "specGroups": [
+        "action-video"
+      ],
+      "scoreable": true,
+      "facetGroup": "capture-format",
+      "modelAliases": [
+        "DJI Osmo 360",
+        "Insta360 X",
+        "GoPro MAX",
+        "Ricoh Theta",
+        "Kandao QooCam"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "pocket-camera",
+      "nameVi": "Gimbal / pocket camera",
+      "nameEn": "Gimbal/pocket camera",
+      "parentId": "camera",
+      "description": "Camera d?c l?p c� ch?ng rung v� thi?t k? b? t�i; g?m DJI Osmo Pocket. Kh�ng �p d?ng cho gimbal di?n tho?i.",
+      "aliases": [
+        "pocket camera",
+        "stabilized pocket camera",
+        "gimbal pocket camera",
+        "dji osmo pocket camera"
+      ],
+      "keywords": [
+        "pocket gimbal camera",
+        "camera c?m tay"
+      ],
+      "specGroups": [
+        "pocket-gimbal"
+      ],
+      "scoreable": true,
+      "facetGroup": "device-family",
+      "modelAliases": [
+        "DJI Osmo Pocket",
+        "Osmo Pocket",
+        "DJI Pocket"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "instant-camera",
+      "nameVi": "M�y ?nh l?y li?n",
+      "nameEn": "Instant camera",
+      "parentId": "camera",
+      "description": "M�y ?nh d�ng phim/gi?y ?nh l?y li?n; kh�ng ph� h?p thang di?m c?m bi?n s?.",
+      "aliases": [
+        "instant camera",
+        "instant film camera",
+        "m�y ?nh l?y li?n"
+      ],
+      "keywords": [
+        "instant photography"
+      ],
+      "specGroups": [
+        "instant-film"
+      ],
+      "scoreable": false,
+      "facetGroup": "capture-medium",
+      "scoreNote": "Kh�ng ph� h?p v?i di?m c?m bi?n s?; c?n th�ng s? phim v� ?nh in.",
+      "modelAliases": [
+        "Fujifilm Instax",
+        "Polaroid Now",
+        "Polaroid Go",
+        "Kodak Mini Shot"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "film-camera",
+      "nameVi": "M�y ?nh phim",
+      "nameEn": "Film camera",
+      "parentId": "camera",
+      "description": "M�y ?nh d�ng cu?n phim; kh�ng ch?m theo th�ng s? c?m bi?n s?.",
+      "aliases": [
+        "film camera",
+        "analog camera",
+        "m�y ?nh phim"
+      ],
+      "keywords": [
+        "analogue camera",
+        "35mm film camera"
+      ],
+      "specGroups": [
+        "film-camera"
+      ],
+      "scoreable": false,
+      "facetGroup": "capture-medium",
+      "scoreNote": "Kh�ng c� c?m bi?n s?; so s�nh theo kh? phim, m�n tr?p, ng�m v� l?y n�t.",
+      "modelAliases": [
+        "Leica M-A",
+        "Nikon FM",
+        "Canon AE-1",
+        "Pentax K1000"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "drone-camera",
+      "nameVi": "Camera drone",
+      "nameEn": "Drone camera",
+      "parentId": "camera",
+      "description": "Camera t�ch h?p tr�n drone; t�ch ch?t lu?ng ?nh kh?i th�ng s? bay.",
+      "aliases": [
+        "drone camera",
+        "aerial camera",
+        "camera flycam"
+      ],
+      "keywords": [
+        "aerial imaging",
+        "flycam"
+      ],
+      "specGroups": [
+        "drone-imaging"
+      ],
+      "scoreable": false,
+      "facetGroup": "platform",
+      "scoreNote": "Kh�ng ph� h?p d? ch?m nhu th�n m�y ?nh d?c l?p; c?n t�ch camera, gimbal v� hi?u nang bay.",
+      "modelAliases": [
+        "DJI Mavic",
+        "DJI Mini",
+        "DJI Air",
+        "Autel EVO",
+        "Parrot Anafi"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "webcam",
+      "nameVi": "Webcam / streaming camera",
+      "nameEn": "Webcam/streaming camera",
+      "parentId": "camera",
+      "description": "Webcam ho?c camera ph�t tr?c ti?p, t?i uu cho k?t n?i v� video.",
+      "aliases": [
+        "webcam",
+        "streaming camera",
+        "computer camera",
+        "web camera"
+      ],
+      "keywords": [
+        "live streaming",
+        "usb camera"
+      ],
+      "specGroups": [
+        "webcam"
+      ],
+      "scoreable": false,
+      "facetGroup": "use-case",
+      "scoreNote": "Kh�ng ph� h?p v?i di?m ?nh ch?p th�ng thu?ng; c?n ti�u ch� video, k?t n?i v� streaming.",
+      "modelAliases": [
+        "Logitech Brio",
+        "Elgato Facecam",
+        "Insta360 Link",
+        "Razer Kiyo"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "thermal-camera",
+      "nameVi": "Camera nhi?t",
+      "nameEn": "Thermal camera",
+      "parentId": "camera",
+      "description": "Camera ?nh nhi?t/h?ng ngo?i chuy�n d?ng.",
+      "aliases": [
+        "thermal camera",
+        "infrared camera",
+        "infrared thermal camera",
+        "camera nhi?t"
+      ],
+      "keywords": [
+        "thermal imaging",
+        "infrared imaging"
+      ],
+      "specGroups": [
+        "thermal"
+      ],
+      "scoreable": false,
+      "facetGroup": "sensor-specialty",
+      "scoreNote": "D?i ph? v� d? nh?y nhi?t kh�c camera ?nh thu?ng; kh�ng d�ng c�ng thang di?m.",
+      "modelAliases": [
+        "FLIR",
+        "HIKMICRO",
+        "Seek Thermal"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "specialized-camera",
+      "nameVi": "Camera chuy�n d?ng",
+      "nameEn": "Specialized camera",
+      "parentId": "camera",
+      "description": "Camera khoa h?c, thi�n van, c�ng nghi?p ho?c thi?t b? chuy�n d?ng.",
+      "aliases": [
+        "specialized camera",
+        "scientific camera",
+        "machine-vision camera",
+        "camera chuy�n d?ng"
+      ],
+      "keywords": [
+        "astrophotography camera",
+        "microscope camera",
+        "industrial camera"
+      ],
+      "specGroups": [
+        "specialized"
+      ],
+      "scoreable": false,
+      "facetGroup": "sensor-specialty",
+      "scoreNote": "Th�ng s? ph? thu?c ng�nh; kh�ng ch?m b?ng b? ti�u ch� m�y ?nh ph? th�ng.",
+      "modelAliases": [
+        "ZWO ASI",
+        "Celestron NexImage",
+        "Basler ace",
+        "Teledyne FLIR"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "accessories",
+      "nameVi": "Ph? ki?n quay ch?p",
+      "nameEn": "Imaging accessories",
+      "parentId": null,
+      "description": "Ph? ki?n h? tr? quay/ch?p; kh�ng ph?i thi?t b? ghi h�nh d?c l?p.",
+      "aliases": [
+        "camera accessory",
+        "imaging accessory",
+        "ph? ki?n m�y ?nh"
+      ],
+      "keywords": [
+        "accessory",
+        "rig",
+        "mount"
+      ],
+      "specGroups": [
+        "accessory"
+      ],
+      "scoreable": false,
+      "facetGroup": "device-family",
+      "scoreNote": "Ph? ki?n kh�ng ph?i m�y ?nh d?c l?p.",
+      "modelAliases": [],
+      "brandAliases": []
+    },
+    {
+      "id": "phone-gimbal",
+      "nameVi": "Gimbal di?n tho?i",
+      "nameEn": "Phone gimbal",
+      "parentId": "accessories",
+      "description": "Gimbal g?n di?n tho?i; kh�ng du?c ph�n lo?i th�nh m�y ?nh d?c l?p.",
+      "aliases": [
+        "phone gimbal",
+        "mobile phone gimbal",
+        "smartphone stabilizer",
+        "gimbal di?n tho?i"
+      ],
+      "keywords": [
+        "phone stabilizer",
+        "mobile gimbal"
+      ],
+      "specGroups": [
+        "accessory"
+      ],
+      "scoreable": false,
+      "facetGroup": "accessory",
+      "scoreNote": "Ph? ki?n cho di?n tho?i, kh�ng ph?i m�y ?nh d?c l?p.",
+      "modelAliases": [
+        "DJI Osmo Mobile",
+        "Osmo Mobile",
+        "Insta360 Flow",
+        "Zhiyun Smooth"
+      ],
+      "brandAliases": []
+    },
+    {
+      "id": "unclassified",
+      "nameVi": "Chua ph�n lo?i",
+      "nameEn": "Unclassified",
+      "parentId": null,
+      "description": "Thi?t b? chua nh?n di?n d? ch?c; gi? d? li?u g?c v� kh�ng suy do�n.",
+      "aliases": [
+        "unclassified device",
+        "unknown device type",
+        "chua ph�n lo?i"
+      ],
+      "keywords": [
+        "unknown",
+        "unrecognized"
+      ],
+      "specGroups": [
+        "camera-general"
+      ],
+      "scoreable": true,
+      "facetGroup": "status",
+      "scoreNote": "N?u d? th�ng s? c� ngu?n, v?n c� th? x?p h?ng theo d? li?u da c�.",
+      "legacyIds": [
+        "other",
+        "my-device"
+      ],
+      "modelAliases": [],
+      "brandAliases": []
+    }
+  ]
+}
+
