@@ -38,7 +38,7 @@ function spotsView(){
  if(Number.isFinite(mapPoint?.latitude)&&Number.isFinite(mapPoint?.longitude)){
   const fullMapUrl='https://www.openstreetmap.org/?mlat='+mapPoint.latitude+'&mlon='+mapPoint.longitude+'#map='+(myPosition?'16':'14')+'/'+mapPoint.latitude+'/'+mapPoint.longitude;
   const coordinateText=myPosition?'Vị trí GPS: '+myPosition.latitude.toFixed(5)+', '+myPosition.longitude.toFixed(5)+(myPosition.accuracy?' · độ chính xác khoảng '+Math.round(myPosition.accuracy)+' m':''):'';
-  html+='<div class="planner-map"><div id="plannerMap" class="planner-map-canvas" role="application" aria-label="Bản đồ OpenStreetMap các địa điểm chụp"></div><div class="planner-map-link"><span id="plannerMapMessage" role="status" aria-live="polite">Đang tải bản đồ…</span><a href="'+esc(fullMapUrl)+'" target="_blank" rel="noopener">Mở OpenStreetMap ↗</a><small>© OpenStreetMap contributors</small>'+(coordinateText?'<small>'+esc(coordinateText)+'</small>':'')+'</div></div>';
+  html+='<div class="planner-map"><div id="plannerMap" class="planner-map-canvas" role="application" aria-label="Bản đồ OpenStreetMap các địa điểm chụp"></div><div class="planner-map-link"><span id="plannerMapMessage" role="status" aria-live="polite">Đang tải bản đồ…</span><a href="'+esc(fullMapUrl)+'" target="_blank" rel="noopener">Mở OpenStreetMap ↗</a><small>© OpenFreeMap · © OpenMapTiles · OpenStreetMap</small>'+(coordinateText?'<small>'+esc(coordinateText)+'</small>':'')+'</div></div>';
  }
  html+='<p class="planner-status">'+esc(status)+'</p><div class="planner-spot-grid">';
  html+=items.slice(0,30).map(s=>{const name=s.name||s.tags?.name||'Địa điểm';const lat=s.lat??s.latitude,lon=s.lon??s.longitude;const url=Number.isFinite(Number(lat))&&Number.isFinite(Number(lon))?'https://www.openstreetmap.org/?mlat='+lat+'&mlon='+lon+'#map=16/'+lat+'/'+lon:(s.source||'https://www.openstreetmap.org/search?query='+encodeURIComponent(s.search||name));return '<article><h4>'+esc(name)+'</h4><small>'+(s.curated?'Gợi ý tên · chưa có tọa độ':'OpenStreetMap')+'</small><p>'+esc(s.note||'Giờ mở cửa/quyền chụp: Chưa có dữ liệu; hãy tự xác minh.')+'</p><a class="planner-btn" href="'+esc(url)+'" target="_blank" rel="noopener">Mở bản đồ ↗</a><button class="planner-link" data-select-spot="'+esc(s.id||name)+'">Chọn</button></article>';}).join('');
@@ -98,83 +98,105 @@ async function runPhotographyAI(action){
  render();
 }
 function planView(){const plans=repo.list();const edit=plans.find(p=>p.id===editingPlan)||{};return '<div class="planner-head"><div><h3>Kế hoạch buổi chụp</h3><p>Lưu cục bộ trên thiết bị này.</p></div></div><form class="planner-card planner-form" data-form="plan"><input type="hidden" name="id" value="'+esc(edit.id||'')+'"><label>Tên kế hoạch<input name="title" required value="'+esc(edit.title||'')+'" placeholder="Ví dụ: Chân dung chiều Hồ Tây"></label><div class="planner-row"><label>Ngày<input type="date" name="date" value="'+esc(edit.date||'')+'"></label><label>Thể loại<select name="genre">'+options(Object.entries(genres),edit.genre||genre)+'</select></label><label>Địa điểm<input name="location" value="'+esc(edit.location||pickedSpot?.name||place?.label||'')+'"></label></div><label>Thiết bị<select name="device"><option value="">Chưa chọn</option>'+devices().map(d=>'<option value="'+esc(d.id)+'" '+(edit.device===d.id?'selected':'')+'>'+esc(d.brand+' '+d.model)+'</option>').join('')+'</select></label><label>Đồ mang theo<input name="gear" value="'+esc(edit.gear||'Điện thoại/máy ảnh, pin, thẻ nhớ, khăn lau lens')+'"></label><label>Ghi chú<textarea name="notes">'+esc(edit.notes||'')+'</textarea></label><button class="planner-primary">'+(edit.id?'Cập nhật':'Lưu kế hoạch')+'</button><div class="planner-export-actions"><button type="button" class="planner-btn" data-action="export-plans">JSON</button><button type="button" class="planner-btn" data-action="export-pdf">PDF</button><button type="button" class="planner-btn" data-action="export-png">PNG</button></div></form><div class="planner-plan-list">'+(plans.length?plans.map(p=>'<article><div><h4>'+esc(p.title)+'</h4><p>'+esc([p.date,genres[p.genre],p.location].filter(Boolean).join(' · '))+'</p><p>'+esc(p.notes||'')+'</p></div><button class="planner-link" data-edit-plan="'+esc(p.id)+'">Sửa</button><button class="planner-link danger" data-delete-plan="'+esc(p.id)+'">Xóa</button></article>').join(''):'<div class="planner-empty">Chưa lưu kế hoạch.</div>')+'</div>';}
-let leafletPromise=null,leafletMap=null,mapRenderVersion=0;
-function loadLeaflet(){
-  if(globalThis.L)return Promise.resolve(globalThis.L);
-  if(leafletPromise)return leafletPromise;
-  leafletPromise=new Promise((resolve,reject)=>{
-    const cssId='photolens-leaflet-css';
-    let css=document.getElementById(cssId);
-    const script=document.createElement('script');
-    script.src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js';
-    script.async=true;
-    let cssReady=Boolean(css),scriptReady=false,settled=false;
-    const finish=()=>{
-      if(settled)return;
-      if(cssReady&&scriptReady&&globalThis.L){settled=true;resolve(globalThis.L);}
-    };
-    if(!css){
-      css=document.createElement('link');
-      css.id=cssId;
-      css.rel='stylesheet';
-      css.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css';
-      css.onload=()=>{cssReady=true;finish();};
-      css.onerror=()=>{if(!settled){settled=true;reject(new Error('Không tải được kiểu hiển thị bản đồ.'));}};
-      document.head.append(css);
+let mapLibrePromise=null,plannerMapInstance=null,mapRenderVersion=0;
+function loadMapLibre(){
+  if(mapLibrePromise)return mapLibrePromise;
+  const cssId='photolens-maplibre-css';
+  const cssReady=new Promise((resolve,reject)=>{
+    let link=document.getElementById(cssId);
+    if(link?.dataset.loaded==='true'){resolve();return;}
+    if(!link){
+      link=document.createElement('link');
+      link.id=cssId;
+      link.rel='stylesheet';
+      link.href='https://unpkg.com/maplibre-gl@6.19.0/dist/maplibre-gl.css';
+      document.head.append(link);
     }
-    script.onload=()=>{scriptReady=true;finish();};
-    script.onerror=()=>{if(!settled){settled=true;reject(new Error('Không tải được thư viện bản đồ.'));}};
-    document.head.append(script);
+    link.addEventListener('load',()=>{link.dataset.loaded='true';resolve();},{once:true});
+    link.addEventListener('error',()=>reject(new Error('Không tải được giao diện bản đồ.')),{once:true});
+    if(link.sheet){link.dataset.loaded='true';resolve();}
   });
-  return leafletPromise;
+  const library=import(/* @vite-ignore */ 'https://unpkg.com/maplibre-gl@6.19.0/dist/maplibre-gl.mjs');
+  mapLibrePromise=Promise.all([library,cssReady]).then(([module])=>module);
+  return mapLibrePromise;
 }
 function renderSpotsMap(version){
   const element=$('#plannerMap',panel),message=$('#plannerMapMessage',panel),mapPoint=myPosition||place;
   if(!element||!Number.isFinite(mapPoint?.latitude)||!Number.isFinite(mapPoint?.longitude))return;
-  loadLeaflet().then(L=>{
+  loadMapLibre().then(maplibregl=>{
     if(version!==mapRenderVersion||tab!=='spots'||!$('#plannerMap',panel))return;
-    const center=[mapPoint.latitude,mapPoint.longitude];
-    const map=L.map(element,{scrollWheelZoom:false}).setView(center,myPosition?16:13);
-    leafletMap=map;
-    const statusNode=$('#plannerMapMessage',panel);
-    const tiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
-      maxZoom:19,
-      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>'
+    const center=[mapPoint.longitude,mapPoint.latitude],statusNode=$('#plannerMapMessage',panel);
+    const map=new maplibregl.Map({
+      container:element,
+      style:'https://tiles.openfreemap.org/styles/bright',
+      center,
+      zoom:myPosition?16:13,
+      maxZoom:20,
+      scrollZoom:false,
+      cooperativeGestures:true,
+      attributionControl:true
     });
-    let tileErrors=0;
-    tiles.on('tileload',()=>{if(statusNode&&version===mapRenderVersion)statusNode.textContent='Bản đồ OpenStreetMap';});
-    tiles.on('tileerror',()=>{
-      tileErrors++;
-      if(tileErrors>=2&&statusNode&&version===mapRenderVersion)statusNode.textContent='Bản đồ nền không tải được. Vị trí GPS vẫn hiện trên bản đồ; có thể mở OpenStreetMap bên cạnh.';
+    plannerMapInstance=map;
+    map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-left');
+    let mapErrors=0;
+    map.on('load',()=>{
+      if(version===mapRenderVersion&&statusNode)statusNode.textContent='Đang tải đường phố và nhãn…';
     });
-    tiles.addTo(map);
-    const markers=[];
+    map.on('error',()=>{
+      mapErrors++;
+      if(mapErrors>=2&&version===mapRenderVersion&&statusNode)statusNode.textContent='Một số chi tiết bản đồ chưa tải được. Kiểm tra kết nối mạng hoặc mở OpenStreetMap bên cạnh.';
+    });
+    map.once('idle',()=>{
+      if(version===mapRenderVersion&&statusNode)statusNode.textContent=mapErrors?'Bản đồ đã mở; một số chi tiết tải chưa đầy đủ.':'Bản đồ đường phố đã sẵn sàng';
+    });
+    const locationCoords=[];
     if(myPosition){
-      const icon=L.divIcon({className:'planner-my-location-icon',html:'<span aria-hidden="true"></span>',iconSize:[32,32],iconAnchor:[16,16]});
-      const marker=L.marker([myPosition.latitude,myPosition.longitude],{icon,title:'Vị trí của tôi',alt:'Vị trí GPS hiện tại'}).bindPopup('<strong>Vị trí của tôi</strong><br>Độ chính xác khoảng '+Math.round(myPosition.accuracy||0)+' m').addTo(map);
-      markers.push(marker);
+      const el=document.createElement('div');
+      el.className='planner-my-location-icon';
+      el.setAttribute('role','img');
+      el.setAttribute('aria-label','Vị trí GPS của tôi');
+      el.innerHTML='<span aria-hidden="true"></span>';
+      new maplibregl.Marker({element:el,anchor:'center'})
+        .setLngLat([myPosition.longitude,myPosition.latitude])
+        .setPopup(new maplibregl.Popup({offset:18}).setHTML('<strong>Vị trí của tôi</strong><br>Độ chính xác khoảng '+Math.round(myPosition.accuracy||0)+' m'))
+        .addTo(map);
+      locationCoords.push([myPosition.longitude,myPosition.latitude]);
     }else if(Number.isFinite(place?.latitude)&&Number.isFinite(place?.longitude)){
-      markers.push(L.circleMarker([place.latitude,place.longitude],{radius:8,color:'#ffffff',weight:2,fillColor:'#0b7a5a',fillOpacity:1}).bindPopup('Vị trí tìm kiếm').addTo(map));
+      const el=document.createElement('div');
+      el.className='planner-search-location-dot';
+      el.setAttribute('role','img');
+      el.setAttribute('aria-label','Vị trí tìm kiếm');
+      new maplibregl.Marker({element:el,anchor:'center'})
+        .setLngLat([place.longitude,place.latitude])
+        .setPopup(new maplibregl.Popup({offset:14}).setText('Vị trí tìm kiếm'))
+        .addTo(map);
+      locationCoords.push([place.longitude,place.latitude]);
     }
+    const bounds=new maplibregl.LngLatBounds();
+    for(const [lon,lat] of locationCoords)bounds.extend([lon,lat]);
     spots.filter(s=>Number.isFinite(Number(s.lat))&&Number.isFinite(Number(s.lon))).slice(0,35).forEach(s=>{
       const lat=Number(s.lat),lon=Number(s.lon),name=esc(s.name||s.tags?.name||'Địa điểm');
       const href='https://www.openstreetmap.org/?mlat='+lat+'&mlon='+lon+'#map=16/'+lat+'/'+lon;
-      const marker=L.marker([lat,lon]).bindPopup('<strong>'+name+'</strong><br><a href="'+href+'" target="_blank" rel="noopener">Mở địa điểm trên OpenStreetMap ↗</a>').addTo(map);
-      markers.push(marker);
+      const marker=new maplibregl.Marker({color:'#2484c6'})
+        .setLngLat([lon,lat])
+        .setPopup(new maplibregl.Popup({offset:24}).setHTML('<strong>'+name+'</strong><br><a href="'+href+'" target="_blank" rel="noopener">Mở địa điểm trên OpenStreetMap ↗</a>'))
+        .addTo(map);
+      bounds.extend([lon,lat]);
     });
-    if(myPosition)map.setView(center,16);
-    else{
-      const bounds=L.featureGroup(markers).getBounds();
-      if(bounds.isValid())map.fitBounds(bounds.pad(.12),{maxZoom:15});
-    }
-    window.setTimeout(()=>{if(version===mapRenderVersion)map.invalidateSize();},100);
+    if(myPosition)map.setCenter(center);
+    else if(!bounds.isEmpty())map.fitBounds(bounds,{padding:48,maxZoom:15});
+    const readyTimer=window.setTimeout(()=>{
+      if(version===mapRenderVersion&&statusNode&&mapErrors)statusNode.textContent='Không tải được đầy đủ bản đồ đường phố. Hãy kiểm tra mạng hoặc mở OpenStreetMap bên cạnh.';
+    },12000);
+    map.once('idle',()=>window.clearTimeout(readyTimer));
+    window.setTimeout(()=>{if(version===mapRenderVersion)map.resize();},150);
   }).catch(error=>{
-    if(version===mapRenderVersion&&message)message.textContent=error.message+' Mở OpenStreetMap bằng liên kết bên cạnh.';
+    if(version===mapRenderVersion&&message)message.textContent=(error.message||'Không tải được bản đồ.')+' Hãy mở OpenStreetMap bằng liên kết bên cạnh.';
   });
 }
 function render(){
   if(!panel)return;
-  if(leafletMap){try{leafletMap.remove();}catch{}leafletMap=null;}
+  if(plannerMapInstance){try{plannerMapInstance.remove();}catch{}plannerMapInstance=null;}
   const version=++mapRenderVersion;
   const content={devices:deviceView,weather:weatherView,spots:spotsView,angles:angleView,outfit:outfitView,plans:planView}[tab]();
   panel.innerHTML='<div class="planner-backdrop"><section class="planner-dialog" role="dialog" aria-modal="true" aria-labelledby="planner-title"><header><div><small>PHOTOLENS · LÊN KẾ HOẠCH CHỤP</small><h2 id="planner-title">Thiết bị & kế hoạch chụp</h2></div><button class="planner-close" data-action="close" aria-label="Đóng">×</button></header><nav role="tablist">'+makeTabs()+'</nav><main>'+content+'</main><footer>Thiết bị mẫu chưa xác minh · Tự kiểm tra tình trạng, quy định chụp và an toàn tại chỗ.</footer></section></div>';
