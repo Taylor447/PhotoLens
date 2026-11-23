@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PhotoLens wardrobe templates",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "recordType",
+    "realGarmentCount",
+    "templates"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "recordType": {
+      "const": "procedural-template"
+    },
+    "realGarmentCount": {
+      "const": 0
+    },
+    "templates": {
+      "type": "array",
+      "minItems": 60,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "category",
+          "layer",
+          "layerOrder",
+          "styleTags",
+          "season",
+          "temperatureC",
+          "weather",
+          "materialId",
+          "patternId",
+          "measurementsCm",
+          "shootingNotes",
+          "assets"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^tpl-"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "layer": {
+            "enum": [
+              "base",
+              "mid",
+              "outer",
+              "accessory"
+            ]
+          },
+          "layerOrder": {
+            "type": "integer"
+          },
+          "measurementsCm": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "assets": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

@@ -199,3 +199,64 @@
 .planner-wardrobe-weather-options{display:flex;gap:8px;flex-wrap:wrap}
 .planner-wardrobe-weather-options label{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:3px 9px;border:1px solid var(--border,#d2dde5);border-radius:999px;background:#f6f8f8;font-weight:550}
 .planner-wardrobe-weather-options input{width:18px;height:18px;accent-color:var(--color-accent,#0d7a5e)}
+
+
+/* Wardrobe studio: responsive, local-only paper-doll and procedural 3D */
+.ws-app{color:var(--text,#1b2831);min-width:0}
+.ws-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(270px,.8fr);gap:16px;align-items:start;min-width:0}
+.ws-main,.ws-side{min-width:0;padding:18px;border:1px solid var(--border,#d3dfe7);border-radius:20px;background:var(--surface,#fff)}
+.ws-main h3,.ws-side h3{margin:0 0 12px}
+.ws-toolbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 14px}
+.ws-toolbar label,.ws-side label,.ws-form label{display:grid;gap:6px;min-width:0;color:var(--muted,#405463);font-weight:650}
+.ws-toolbar input,.ws-toolbar select,.ws-side input:not([type=checkbox]):not([type=range]),.ws-form input:not([type=checkbox]),.ws-form select,.ws-form textarea,.ws-side select{box-sizing:border-box;width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--border,#cbd8e1);border-radius:12px;background:#f4f6f7;color:var(--text,#1b2831);font:inherit}
+.ws-form textarea{min-height:84px;resize:vertical}
+.ws-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px;min-width:0}
+.ws-item-card,.ws-look-card{min-width:0;padding:12px;border:1px solid var(--border,#d3dfe7);border-radius:16px;background:#fff;overflow-wrap:anywhere}
+.ws-item-card{display:grid;align-content:start;gap:8px}
+.ws-item-card small{color:var(--muted,#566d7d)}
+.ws-thumb{display:grid;place-items:center;width:100%;height:100px;border-radius:12px;background:#f2f6f4;background:color-mix(in srgb,var(--item,#647d69) 16%,#f5f8f6);color:var(--item,#647d69)}
+.ws-thumb svg{width:80px;height:80px}
+.ws-card-actions,.ws-stage-toolbar,.ws-export{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ws-app button{min-height:44px}
+.ws-app button:focus-visible,.ws-app input:focus-visible,.ws-app select:focus-visible,.ws-app textarea:focus-visible,.ws-app summary:focus-visible{outline:3px solid #2863c5;outline-offset:2px}
+.ws-side{display:grid;gap:10px}
+.ws-side input[type=range]{width:100%;min-height:30px;accent-color:var(--color-accent,#0d7a5e);touch-action:pan-x}
+.ws-form{display:grid;gap:10px;padding:12px 0}
+.ws-form details{padding:10px;border:1px solid var(--border,#d3dfe7);border-radius:12px}
+.ws-form summary,.ws-side summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700}
+.ws-form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ws-closet-list{display:grid;gap:6px;margin-top:12px}
+.ws-closet-list>div{display:flex;align-items:center;gap:9px;min-width:0}
+.ws-closet-list span{flex:1;overflow-wrap:anywhere}
+.ws-stage{min-width:0;min-height:340px;margin:12px 0 18px;border:1px solid var(--border,#d3dfe7);border-radius:18px;background:#edf3f0;overflow:hidden}
+.ws-svg-host{width:100%;height:min(68vh,680px);min-height:360px}
+.ws-svg-host svg{display:block;max-width:100%;margin:auto}
+.ws-three-host{width:100%;height:min(68vh,680px);min-height:380px;overflow:hidden;touch-action:none;background:#edf3f0}
+.ws-three-host canvas{display:block;width:100%;height:100%;outline:none;touch-action:none}
+.ws-three-host canvas:focus-visible{outline:3px solid #2863c5;outline-offset:-3px}
+.ws-measures{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ws-selected-row{display:grid;grid-template-columns:48px minmax(80px,1fr) auto auto;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border,#d3dfe7)}
+.ws-selected-row .ws-thumb{height:44px}
+.ws-selected-row .ws-thumb svg{width:40px;height:40px}
+.ws-selected-row input,.ws-selected-row select{max-width:130px;min-height:44px}
+.ws-compare,.ws-look-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.ws-look-card svg{display:block;width:100%;height:auto}
+.ws-privacy,.ws-disclaimer,.ws-warning{padding:10px 12px;border-radius:12px;background:#f2f6f4;color:#435c58}
+.ws-warning{background:#fff7e7;color:#754e17}
+.ws-app .planner-primary,.ws-app .planner-btn,.ws-app .planner-link{min-height:44px}
+@media(max-width:760px){
+ .ws-layout{grid-template-columns:minmax(0,1fr)}
+ .ws-main{order:-1}
+ .ws-main,.ws-side{padding:13px;border-radius:16px}
+ .ws-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ws-card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .ws-item-card{padding:9px}
+ .ws-stage{min-height:320px}
+ .ws-svg-host{height:58vh;min-height:320px}
+ .ws-three-host{height:58vh;min-height:340px}
+ .ws-selected-row{grid-template-columns:42px minmax(70px,1fr) auto auto}
+ .ws-selected-row select{max-width:100px}
+ .ws-form-row{grid-template-columns:1fr}
+}
+@media(max-width:390px){.ws-toolbar{grid-template-columns:minmax(0,1fr)}.ws-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ws-selected-row{grid-template-columns:38px minmax(64px,1fr) auto}.ws-selected-row select{grid-column:2}.ws-measures{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.ws-app *{scroll-behavior:auto!important;transition:none!important}}

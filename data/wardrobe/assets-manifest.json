@@ -1,0 +1,1095 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "id": "svg:tpl-tops-1",
+      "templateId": "tpl-tops-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-tops-1",
+      "templateId": "tpl-tops-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-tops-2",
+      "templateId": "tpl-tops-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-tops-2",
+      "templateId": "tpl-tops-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-tops-3",
+      "templateId": "tpl-tops-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-tops-3",
+      "templateId": "tpl-tops-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-tops-4",
+      "templateId": "tpl-tops-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-tops-4",
+      "templateId": "tpl-tops-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-tops-5",
+      "templateId": "tpl-tops-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-tops-5",
+      "templateId": "tpl-tops-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-bottoms-1",
+      "templateId": "tpl-bottoms-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-bottoms-1",
+      "templateId": "tpl-bottoms-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-bottoms-2",
+      "templateId": "tpl-bottoms-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-bottoms-2",
+      "templateId": "tpl-bottoms-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-bottoms-3",
+      "templateId": "tpl-bottoms-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-bottoms-3",
+      "templateId": "tpl-bottoms-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-bottoms-4",
+      "templateId": "tpl-bottoms-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-bottoms-4",
+      "templateId": "tpl-bottoms-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-bottoms-5",
+      "templateId": "tpl-bottoms-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-bottoms-5",
+      "templateId": "tpl-bottoms-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-skirts-1",
+      "templateId": "tpl-skirts-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-skirts-1",
+      "templateId": "tpl-skirts-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-skirts-2",
+      "templateId": "tpl-skirts-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-skirts-2",
+      "templateId": "tpl-skirts-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-skirts-3",
+      "templateId": "tpl-skirts-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-skirts-3",
+      "templateId": "tpl-skirts-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-skirts-4",
+      "templateId": "tpl-skirts-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-skirts-4",
+      "templateId": "tpl-skirts-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-skirts-5",
+      "templateId": "tpl-skirts-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-skirts-5",
+      "templateId": "tpl-skirts-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-dresses-1",
+      "templateId": "tpl-dresses-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-dresses-1",
+      "templateId": "tpl-dresses-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-dresses-2",
+      "templateId": "tpl-dresses-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-dresses-2",
+      "templateId": "tpl-dresses-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-dresses-3",
+      "templateId": "tpl-dresses-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-dresses-3",
+      "templateId": "tpl-dresses-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-dresses-4",
+      "templateId": "tpl-dresses-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-dresses-4",
+      "templateId": "tpl-dresses-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-dresses-5",
+      "templateId": "tpl-dresses-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-dresses-5",
+      "templateId": "tpl-dresses-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-outerwear-1",
+      "templateId": "tpl-outerwear-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-outerwear-1",
+      "templateId": "tpl-outerwear-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-outerwear-2",
+      "templateId": "tpl-outerwear-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-outerwear-2",
+      "templateId": "tpl-outerwear-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-outerwear-3",
+      "templateId": "tpl-outerwear-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-outerwear-3",
+      "templateId": "tpl-outerwear-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-outerwear-4",
+      "templateId": "tpl-outerwear-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-outerwear-4",
+      "templateId": "tpl-outerwear-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-outerwear-5",
+      "templateId": "tpl-outerwear-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-outerwear-5",
+      "templateId": "tpl-outerwear-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-shoes-1",
+      "templateId": "tpl-shoes-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-shoes-1",
+      "templateId": "tpl-shoes-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-shoes-2",
+      "templateId": "tpl-shoes-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-shoes-2",
+      "templateId": "tpl-shoes-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-shoes-3",
+      "templateId": "tpl-shoes-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-shoes-3",
+      "templateId": "tpl-shoes-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-shoes-4",
+      "templateId": "tpl-shoes-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-shoes-4",
+      "templateId": "tpl-shoes-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-shoes-5",
+      "templateId": "tpl-shoes-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-shoes-5",
+      "templateId": "tpl-shoes-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-hats-1",
+      "templateId": "tpl-hats-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-hats-1",
+      "templateId": "tpl-hats-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-hats-2",
+      "templateId": "tpl-hats-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-hats-2",
+      "templateId": "tpl-hats-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-hats-3",
+      "templateId": "tpl-hats-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-hats-3",
+      "templateId": "tpl-hats-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-hats-4",
+      "templateId": "tpl-hats-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-hats-4",
+      "templateId": "tpl-hats-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-hats-5",
+      "templateId": "tpl-hats-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-hats-5",
+      "templateId": "tpl-hats-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-bags-1",
+      "templateId": "tpl-bags-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-bags-1",
+      "templateId": "tpl-bags-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-bags-2",
+      "templateId": "tpl-bags-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-bags-2",
+      "templateId": "tpl-bags-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-bags-3",
+      "templateId": "tpl-bags-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-bags-3",
+      "templateId": "tpl-bags-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-bags-4",
+      "templateId": "tpl-bags-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-bags-4",
+      "templateId": "tpl-bags-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-bags-5",
+      "templateId": "tpl-bags-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-bags-5",
+      "templateId": "tpl-bags-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-eyewear-1",
+      "templateId": "tpl-eyewear-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-eyewear-1",
+      "templateId": "tpl-eyewear-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-eyewear-2",
+      "templateId": "tpl-eyewear-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-eyewear-2",
+      "templateId": "tpl-eyewear-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-eyewear-3",
+      "templateId": "tpl-eyewear-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-eyewear-3",
+      "templateId": "tpl-eyewear-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-eyewear-4",
+      "templateId": "tpl-eyewear-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-eyewear-4",
+      "templateId": "tpl-eyewear-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-eyewear-5",
+      "templateId": "tpl-eyewear-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-eyewear-5",
+      "templateId": "tpl-eyewear-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-scarves-1",
+      "templateId": "tpl-scarves-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-scarves-1",
+      "templateId": "tpl-scarves-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-scarves-2",
+      "templateId": "tpl-scarves-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-scarves-2",
+      "templateId": "tpl-scarves-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-scarves-3",
+      "templateId": "tpl-scarves-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-scarves-3",
+      "templateId": "tpl-scarves-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-scarves-4",
+      "templateId": "tpl-scarves-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-scarves-4",
+      "templateId": "tpl-scarves-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-scarves-5",
+      "templateId": "tpl-scarves-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-scarves-5",
+      "templateId": "tpl-scarves-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-jewelry-1",
+      "templateId": "tpl-jewelry-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-jewelry-1",
+      "templateId": "tpl-jewelry-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-jewelry-2",
+      "templateId": "tpl-jewelry-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-jewelry-2",
+      "templateId": "tpl-jewelry-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-jewelry-3",
+      "templateId": "tpl-jewelry-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-jewelry-3",
+      "templateId": "tpl-jewelry-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-jewelry-4",
+      "templateId": "tpl-jewelry-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-jewelry-4",
+      "templateId": "tpl-jewelry-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-jewelry-5",
+      "templateId": "tpl-jewelry-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-jewelry-5",
+      "templateId": "tpl-jewelry-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-hair-1",
+      "templateId": "tpl-hair-1",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-hair-1",
+      "templateId": "tpl-hair-1",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-hair-2",
+      "templateId": "tpl-hair-2",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-hair-2",
+      "templateId": "tpl-hair-2",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-hair-3",
+      "templateId": "tpl-hair-3",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-hair-3",
+      "templateId": "tpl-hair-3",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-hair-4",
+      "templateId": "tpl-hair-4",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-hair-4",
+      "templateId": "tpl-hair-4",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "svg:tpl-hair-5",
+      "templateId": "tpl-hair-5",
+      "format": "svg",
+      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "source": "PhotoLens procedural code",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    },
+    {
+      "id": "three:tpl-hair-5",
+      "templateId": "tpl-hair-5",
+      "format": "three-procedural-geometry",
+      "generator": "features/wardrobe3d.js#addGarments",
+      "source": "PhotoLens procedural code; no external model",
+      "license": "CC0",
+      "author": "PhotoLens project"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "Three.js",
+      "version": "0.187.0",
+      "source": "https://unpkg.com/three@0.187.0/build/three.module.js",
+      "license": "MIT",
+      "author": "Three.js contributors",
+      "loading": "on-demand; 2D fallback if unavailable"
+    }
+  ]
+}
