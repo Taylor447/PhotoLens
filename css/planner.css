@@ -96,3 +96,106 @@
  .planner-angle-choice{padding:14px}
 }
 @media(prefers-reduced-motion:reduce){.planner-sim *{scroll-behavior:auto!important;transition:none!important}}
+
+/* Local wardrobe and lightweight mannequin try-on */
+.planner-wardrobe-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.planner-wardrobe-tabs button,.planner-sim-modes button,.planner-tryon-rotation button{min-height:44px;padding:10px 16px;border:1px solid var(--border,#d2dde5);border-radius:14px;background:#fff;color:var(--text,#1c2933);font:inherit;font-weight:750;cursor:pointer}
+.planner-wardrobe-tabs button.active,.planner-wardrobe-tabs button[aria-pressed=true],.planner-sim-modes button[aria-pressed=true]{background:var(--color-accent,#0d7a5e);border-color:var(--color-accent,#0d7a5e);color:#fff}
+.planner-wardrobe-section{display:grid;gap:16px}
+.planner-wardrobe-section>.planner-card{min-width:0}
+.planner-wardrobe-form,.planner-wardrobe-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.planner-wardrobe-form label,.planner-wardrobe-filters label,.planner-wardrobe-save-outfit label,.planner-wardrobe-rename label{display:grid;gap:6px;min-width:0;font-weight:700;color:var(--muted,#405463)}
+.planner-wardrobe-form input:not([type=color]),.planner-wardrobe-form select,.planner-wardrobe-filters input,.planner-wardrobe-filters select,.planner-wardrobe-save-outfit input,.planner-wardrobe-rename input{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid var(--border,#cbd8e1);border-radius:12px;background:#f3f6f7;color:var(--text,#1c2933);font:inherit}
+.planner-wardrobe-form input[type=color]{width:100%;height:44px;padding:4px;border:1px solid var(--border,#cbd8e1);border-radius:12px}
+.planner-wardrobe-form>.planner-row,.planner-wardrobe-filters{grid-column:1/-1}
+.planner-wardrobe-filters{grid-template-columns:repeat(5,minmax(0,1fr));margin:12px 0}
+.planner-wardrobe-heading,.planner-tryon-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.planner-wardrobe-heading h4,.planner-tryon-heading h4{margin:0 0 5px}
+.planner-wardrobe-heading p,.planner-tryon-heading p{margin:0}
+.planner-wardrobe-list,.planner-wardrobe-samples,.planner-saved-outfits{display:grid;gap:9px}
+.planner-wardrobe-item,.planner-wardrobe-sample,.planner-saved-outfit{display:flex;align-items:center;gap:12px;min-width:0;padding:12px;border:1px solid var(--border,#d2dde5);border-radius:15px;background:#fff}
+.planner-wardrobe-item-main{flex:1;min-width:0}
+.planner-wardrobe-item-main h4{margin:0 0 4px;overflow-wrap:anywhere}
+.planner-wardrobe-item-main p,.planner-wardrobe-item-main small{display:block;margin:0;color:var(--muted,#5b7181)}
+.planner-wardrobe-item-main small{font-size:.83em;margin-top:3px}
+.planner-wardrobe-color,.planner-wardrobe-sample>span{display:block;flex:0 0 34px;width:34px;height:34px;border:1px solid #71827e;border-radius:50%;background:var(--wardrobe-item-color,#64748b)}
+.planner-wardrobe-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap}
+.planner-wardrobe-actions button,.planner-wardrobe-sample button,.planner-wardrobe-rename button,.planner-saved-outfit button{min-height:40px}
+.planner-wardrobe-sample>div{display:grid;flex:1;min-width:0;gap:4px}
+.planner-wardrobe-sample small{color:var(--muted,#5b7181)}
+.planner-saved-outfit{display:grid;align-items:stretch}
+.planner-wardrobe-rename{display:flex;align-items:end;gap:10px;flex-wrap:wrap}
+.planner-wardrobe-rename label{flex:1;min-width:180px}
+.planner-tryon-card{display:grid;gap:16px}
+.planner-sim-modes{display:flex;gap:6px;padding:4px;border:1px solid var(--border,#d2dde5);border-radius:16px;background:#f3f6f7}
+.planner-wardrobe-selection{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.planner-wardrobe-chip{display:inline-flex;align-items:center;gap:7px;max-width:100%;padding:5px 7px;border:1px solid var(--border,#d2dde5);border-radius:999px;background:#fff}
+.planner-wardrobe-chip i{width:16px;height:16px;border-radius:50%;background:var(--wardrobe-item-color,#64748b)}
+.planner-wardrobe-chip button{width:30px;height:30px;border:0;border-radius:50%;background:#edf2f3;color:#263741;font:inherit;cursor:pointer}
+.planner-wardrobe-chip button:disabled{opacity:.35;cursor:default}
+.planner-tryon-preview{display:grid;place-items:center;min-height:450px;overflow:hidden;border:1px solid var(--border,#d2dde5);border-radius:20px;background:#f2f7f4}
+.planner-wardrobe-svg{display:block;width:min(100%,380px);height:auto;max-height:520px}
+.planner-tryon-stage{position:relative;width:100%;height:460px;overflow:hidden;border-radius:18px;touch-action:none;user-select:none}
+.planner-tryon-perspective{position:absolute;inset:0;overflow:hidden;perspective:800px;perspective-origin:50% 42%;transform-style:preserve-3d}
+.planner-tryon-floor{position:absolute;left:8%;right:8%;bottom:-90px;height:230px;border-radius:50%;background:repeating-linear-gradient(0deg,transparent 0 24px,rgba(69,111,98,.12) 25px 26px),repeating-linear-gradient(90deg,transparent 0 24px,rgba(69,111,98,.12) 25px 26px),radial-gradient(ellipse,#dceae3 0%,#edf4f0 70%);transform:rotateX(68deg);transform-origin:center top}
+.planner-avatar{position:absolute;left:calc(50% - 75px);top:34px;width:150px;height:360px;transform-style:preserve-3d;transform:rotateY(var(--wardrobe-yaw,12deg)) rotateX(var(--wardrobe-pitch,10deg));transform-origin:50% 50%;transition:transform .12s ease;outline:none}
+.planner-avatar:focus-visible{outline:3px solid var(--color-accent,#0d7a5e);outline-offset:8px;border-radius:24px}
+.planner-avatar-part,.planner-avatar-garment{position:absolute;box-sizing:border-box;transform-style:preserve-3d}
+.planner-avatar-part{border:1px solid #65737b;background:linear-gradient(100deg,#87949d,#d0d7db 48%,#7d8a93);box-shadow:inset -5px 0 8px rgba(25,41,48,.13)}
+.avatar-head{left:54px;top:1px;width:42px;height:51px;border-radius:48% 48% 45% 45%}
+.avatar-neck{left:67px;top:45px;width:18px;height:22px;border-radius:6px}
+.avatar-torso{left:37px;top:62px;width:76px;height:112px;border-radius:24px 24px 15px 15px;clip-path:polygon(10% 0,90% 0,100% 100%,0 100%)}
+.avatar-arm{top:73px;width:25px;height:119px;border-radius:14px;transform-origin:top center}
+.avatar-arm-left{left:20px;transform:rotate(12deg)}
+.avatar-arm-right{right:20px;transform:rotate(-12deg)}
+.avatar-leg{top:165px;width:29px;height:150px;border-radius:14px 14px 11px 11px;transform-origin:top center}
+.avatar-leg-left{left:44px;transform:rotate(2deg)}
+.avatar-leg-right{right:44px;transform:rotate(-2deg)}
+.avatar-foot{top:302px;width:44px;height:18px;border-radius:60% 30% 20% 25%;background:#68757b}
+.avatar-foot-left{left:30px}
+.avatar-foot-right{right:30px}
+.planner-avatar-garment{border:1px solid rgba(42,60,65,.55);background-color:var(--garment-color,#64748b);background-image:linear-gradient(100deg,rgba(0,0,0,.13),transparent 45%,rgba(255,255,255,.16))}
+.planner-avatar-garment.pattern-stripes{background-image:repeating-linear-gradient(90deg,transparent 0 9px,rgba(255,255,255,.34) 10px 12px),linear-gradient(100deg,rgba(0,0,0,.13),transparent 45%,rgba(255,255,255,.16))}
+.planner-avatar-garment.pattern-dots{background-image:radial-gradient(rgba(255,255,255,.55) 1.5px,transparent 2px);background-size:10px 10px}
+.planner-avatar-garment.pattern-check{background-image:repeating-linear-gradient(0deg,transparent 0 9px,rgba(255,255,255,.28) 10px 11px),repeating-linear-gradient(90deg,transparent 0 9px,rgba(255,255,255,.28) 10px 11px)}
+.avatar-shirt{left:36px;top:61px;width:78px;height:113px;border-radius:23px 23px 13px 13px;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%)}
+.avatar-pants{left:42px;top:166px;width:66px;height:149px;clip-path:polygon(6% 0,94% 0,100% 100%,57% 100%,50% 22%,43% 100%,0 100%)}
+.avatar-dress{left:32px;top:62px;width:86px;height:209px;clip-path:polygon(22% 0,78% 0,91% 44%,100% 100%,0 100%,9% 44%);border-radius:18px 18px 9px 9px}
+.avatar-coat{left:28px;top:61px;width:94px;height:119px;clip-path:polygon(12% 0,88% 0,100% 100%,66% 100%,50% 42%,34% 100%,0 100%);background-image:linear-gradient(90deg,rgba(255,255,255,.16) 49%,rgba(25,38,45,.16) 50%)}
+.avatar-shoes{left:29px;top:299px;width:92px;height:23px;border:0;background:transparent}.avatar-shoes:before,.avatar-shoes:after{content:'';position:absolute;top:2px;width:40px;height:18px;border-radius:60% 30% 20% 25%;background:var(--garment-color,#64748b);border:1px solid rgba(42,60,65,.55)}.avatar-shoes:before{left:0}.avatar-shoes:after{right:0}
+.avatar-accessory{left:54px;top:90px;width:42px;height:35px;border:0;border-bottom:8px solid var(--garment-color,#64748b);border-radius:0 0 20px 20px;background:transparent}
+.planner-tryon-caption{display:block;padding:0 12px 10px;text-align:center;color:var(--muted,#536b7a)}
+.planner-tryon-rotation{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.planner-tryon-rotation button{min-width:44px}
+.planner-sim-note,.planner-sim-notice,.planner-status{color:var(--muted,#536b7a)}
+.planner-sim-notice{padding:10px 12px;border-radius:12px;background:#fff1df;color:#78421b}
+.planner-wardrobe-tabs button:focus-visible,.planner-wardrobe-section button:focus-visible,.planner-wardrobe-section input:focus-visible,.planner-wardrobe-section select:focus-visible{outline:3px solid #3168c8;outline-offset:2px}
+@media(max-width:760px){
+ .planner-wardrobe-form,.planner-wardrobe-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .planner-wardrobe-item{align-items:flex-start;flex-wrap:wrap}
+ .planner-wardrobe-actions{width:100%;justify-content:flex-start}
+ .planner-tryon-heading{align-items:flex-start;flex-direction:column}
+ .planner-sim-modes{width:100%}
+ .planner-sim-modes button{flex:1}
+ .planner-tryon-preview{min-height:380px}
+ .planner-tryon-stage{height:390px}
+ .planner-avatar{top:16px;transform:rotateY(var(--wardrobe-yaw,12deg)) rotateX(var(--wardrobe-pitch,10deg)) scale(.9);transform-origin:top left;left:calc(50% - 67px)}
+}
+@media(max-width:460px){
+ .planner-wardrobe-form,.planner-wardrobe-filters{grid-template-columns:minmax(0,1fr)}
+ .planner-wardrobe-form>.planner-row,.planner-wardrobe-filters{grid-column:1}
+ .planner-wardrobe-sample{align-items:flex-start;flex-wrap:wrap}
+ .planner-wardrobe-sample button{margin-left:44px}
+ .planner-tryon-preview{min-height:350px}
+ .planner-tryon-stage{height:350px}
+ .planner-avatar{transform:rotateY(var(--wardrobe-yaw,12deg)) rotateX(var(--wardrobe-pitch,10deg)) scale(.82);left:calc(50% - 61px)}
+ .planner-tryon-rotation{justify-content:flex-start}
+}
+@media(prefers-reduced-motion:reduce){.planner-avatar{transition:none}}
+
+.planner-wardrobe-weather{flex:2 1 320px;min-width:0;margin:0;padding:10px 12px;border:1px solid var(--border,#cbd8e1);border-radius:12px}
+.planner-wardrobe-weather legend{padding:0 5px;font-weight:700;color:var(--muted,#405463)}
+.planner-wardrobe-weather legend small{font-weight:500}
+.planner-wardrobe-weather-options{display:flex;gap:8px;flex-wrap:wrap}
+.planner-wardrobe-weather-options label{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:3px 9px;border:1px solid var(--border,#d2dde5);border-radius:999px;background:#f6f8f8;font-weight:550}
+.planner-wardrobe-weather-options input{width:18px;height:18px;accent-color:var(--color-accent,#0d7a5e)}

@@ -4,10 +4,11 @@ import { Preferences } from '@capacitor/preferences';
 import spotsSeed from '../data/spots.json';
 import weatherConfig from '../data/weather-scoring.json';
 import {conditionScore,bestHours,solarWindows,angleOptions,outfitOptions,createPlanStore,scoreHours,esc} from '../core/photography.js';
+import {createWardrobeStore,WARDROBE_CATEGORIES,WARDROBE_STYLES,WARDROBE_COLORS,WARDROBE_PATTERNS,WARDROBE_WEATHER,WARDROBE_SAMPLES,filterWardrobeItems,prepareWardrobeTryOn,resolveTryOnMode} from '../core/wardrobe.js';
 
 const $=(s,r=document)=>r.querySelector(s), genres={portrait:'Chân dung',landscape:'Phong cảnh',architecture:'Kiến trúc',street:'Đường phố',night:'Đường phố đêm',moon:'Chụp trăng',cosplay:'Cosplay',documentary:'Tư liệu'};
 
-let panel=null,tab='weather',place={label:'Hà Nội'},forecast=null,myPosition=null,spots=[],pickedSpot=null,genre='portrait',angleGenre='portrait',anglePose='solo',angleScene='',angleIndex=0,simMode='2d',simFallbackMessage='',simHeight=160,simDistance=4,simOrbitX=-8,simOrbitY=12,simDrag=null,editingPlan='',aiResult=null,aiRoute='',aiMessage='',showEstimatedCost=false;
+let panel=null,tab='weather',place={label:'Hà Nội'},forecast=null,myPosition=null,spots=[],pickedSpot=null,genre='portrait',angleGenre='portrait',anglePose='solo',angleScene='',angleIndex=0,simMode='2d',simFallbackMessage='',simHeight=160,simDistance=4,simOrbitX=-8,simOrbitY=12,simDrag=null,wardrobeSection='suggestions',wardrobeMode='2d',wardrobeSelection=[],wardrobeFilters={query:'',category:'all',color:'all',style:'all',weather:'all'},wardrobeEditingId='',wardrobeNotice='',wardrobeStatus='',wardrobeYaw=0,wardrobePitch=10,wardrobeDrag=null,wardrobeRepo=null,editingPlan='',aiResult=null,aiRoute='',aiMessage='',showEstimatedCost=false;
 const repo=createPlanStore();
 const json=(key,fallback)=>{try{const v=JSON.parse(localStorage.getItem(key)||'null');return v??fallback;}catch{return fallback;}};
 
@@ -90,7 +91,82 @@ function anglesView(){
  const cards=suggestions.map((item,index)=>'<button type="button" class="planner-angle-choice'+(index===safeIndex?' active':'')+'" data-angle-index="'+index+'" aria-pressed="'+(index===safeIndex)+'"><small>Gợi ý '+(index+1)+(index===safeIndex?' · Đang mô phỏng':'')+'</small><h4>'+esc(item.name)+'</h4><p><b>Đặt máy:</b> '+esc(item.height)+'. '+esc(item.distance)+'.</p><p><b>Bố cục:</b> '+esc(item.composition)+'</p><p class="planner-pose-tip"><b>Tạo dáng:</b> '+esc(item.poseTip)+'</p><p><b>Mẹo:</b> '+esc(item.tips)+'</p><p><b>Nên tránh:</b> '+esc(item.avoid)+'</p></button>').join('');
  return '<div class="planner-head"><div><h3>Góc chụp & tạo dáng</h3><p>Chọn thể loại và số người để nhận gợi ý góc máy cùng cách tạo dáng tự nhiên.</p></div></div><form class="planner-card planner-form" data-form="angles"><div class="planner-row"><label>Thể loại ảnh<select name="genre">'+options(Object.entries(genres),angleGenre)+'</select></label><label>Chủ thể<select name="poseType">'+options(poseOptions,anglePose)+'</select></label><label>Bối cảnh (không bắt buộc)<input name="scene" maxlength="120" value="'+esc(angleScene)+'" placeholder="Ví dụ: công viên lúc hoàng hôn"></label></div><button class="planner-primary" type="submit">Cập nhật gợi ý</button></form><section class="planner-sim" aria-labelledby="planner-sim-title"><div class="planner-sim-heading"><div><h4 id="planner-sim-title">Mô phỏng: '+esc(selected.name)+'</h4><p>Chọn 2D hoặc 3D. Kéo vùng minh họa 3D để xoay góc nhìn.</p></div><div class="planner-sim-modes" role="group" aria-label="Chế độ mô phỏng"><button type="button" data-sim-mode="2d" aria-pressed="'+(shownMode==='2d')+'">2D</button><button type="button" data-sim-mode="3d" aria-pressed="'+(shownMode==='3d')+'">3D</button></div></div><div class="planner-sim-controls"><label>Độ cao máy ảnh <span><output>'+simHeight+'</output> cm</span><input type="range" min="60" max="220" step="5" value="'+simHeight+'" data-sim-height aria-label="Độ cao máy ảnh tính bằng centimet"></label><label>Khoảng cách máy ảnh <span><output>'+simDistance+'</output> m</span><input type="range" min="2" max="10" step="1" value="'+simDistance+'" data-sim-distance aria-label="Khoảng cách máy ảnh tính bằng mét"></label></div><div class="planner-sim-stage" data-sim-stage data-mode="'+shownMode+'">'+drawing+'</div>'+(fallbackMessage?'<p class="planner-sim-notice" role="status">'+fallbackMessage+'</p>':'')+(shownMode==='3d'?'<div class="planner-sim-orbit" role="group" aria-label="Xoay góc nhìn mô phỏng"><span>Xoay góc nhìn:</span><button type="button" data-orbit-step="left" aria-label="Xoay sang trái">←</button><button type="button" data-orbit-step="right" aria-label="Xoay sang phải">→</button><button type="button" data-orbit-step="up" aria-label="Xoay lên">↑</button><button type="button" data-orbit-step="down" aria-label="Xoay xuống">↓</button><span class="planner-muted">Dùng chuột, cảm ứng hoặc các nút mũi tên.</span></div>':'')+'<p class="planner-sim-note">Sơ đồ mang tính minh họa bố cục và vị trí máy; không mô phỏng chính xác ống kính, phối cảnh hay kích thước thực tế.</p></section><div class="planner-angle-grid">'+cards+'</div>';
 }
-function outfitView(){const current=forecast?.current||{};const bg=json('photolens_bg_color','#56736f');const list=outfitOptions({temp:current.temperature_2m,rain:current.precipitation,wind:current.wind_speed_10m,background:bg,style:json('photolens_outfit_style','Tự nhiên')});return '<div class="planner-head"><div><h3>Trang phục lên ảnh</h3><p>Không suy đoán ngoại hình, vóc dáng, màu da, giới tính hay tuổi.</p></div></div><div class="planner-card planner-row"><label>Phong cách<select data-style>'+options([['Tự nhiên','Tự nhiên'],['Tối giản','Tối giản'],['Điện ảnh','Điện ảnh'],['Năng động','Năng động'],['Cổ điển','Cổ điển']],json('photolens_outfit_style','Tự nhiên'))+'</select></label><label>Màu nền dự kiến<input type="color" data-bg value="'+esc(bg)+'"></label><span>'+ (current.temperature_2m==null?'Chưa có dữ liệu thời tiết':current.temperature_2m+'°C · mưa '+(current.precipitation??'—')+' mm · gió '+(current.wind_speed_10m??'—')+' km/h')+'</span></div><div class="planner-outfit-grid">'+list.map(x=>'<article><h4>'+esc(x.name)+'</h4><p>Màu: '+x.colors.map(c=>'<span class="planner-swatch">'+esc(c)+'</span>').join(' ')+'</p><p>'+esc(x.clothes)+'</p><p>'+esc(x.reason)+'</p><p>Lưu ý: '+esc(x.caution)+'</p></article>').join('')+'</div>';}
+function wardrobeStore(){if(!wardrobeRepo)wardrobeRepo=createWardrobeStore();return wardrobeRepo;}
+function wardrobeCategory(id){return WARDROBE_CATEGORIES.find(x=>x.id===id)?.label||id;}
+function wardrobeStyle(id){return WARDROBE_STYLES.find(x=>x.id===id)?.label||id;}
+function wardrobeColor(item){return /^#[0-9a-f]{6}$/i.test(item?.color||'')?item.color:'#64748b';}
+function wardrobePatternFill(item,id){
+ if(!item)return '#d5dce0';
+ const color=wardrobeColor(item),line='rgba(255,255,255,.46)';
+ let pattern='';
+ if(item.pattern==='stripes')pattern='<path d="M2 0v12M8 0v12" stroke="'+line+'" stroke-width="2"/>';
+ else if(item.pattern==='dots')pattern='<circle cx="3" cy="3" r="1.5" fill="'+line+'"/><circle cx="9" cy="9" r="1.5" fill="'+line+'"/>';
+ else if(item.pattern==='check')pattern='<path d="M0 0h12M0 6h12M0 0v12M6 0v12" stroke="'+line+'" stroke-width="1"/>';
+ return '<pattern id="'+id+'" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="'+color+'"/>'+pattern+'</pattern>';
+}
+function renderWardrobeSvg(items){
+ const byCategory=new Map(items.map(x=>[x.category,x]));
+ const defs=[['top',byCategory.get('tops')],['bottom',byCategory.get('bottoms')],['dress',byCategory.get('dresses')],['coat',byCategory.get('outerwear')],['shoes',byCategory.get('shoes')],['accessory',byCategory.get('accessories')]].map(([id,item])=>wardrobePatternFill(item,'wardrobe-'+id)).join('');
+ const fill=category=>'url(#wardrobe-'+({tops:'top',bottoms:'bottom',dresses:'dress',outerwear:'coat',shoes:'shoes',accessories:'accessory'}[category])+')';
+ const shape={
+  tops:item=>'<path d="M119 103Q160 88 201 103L216 210Q160 228 104 210Z" fill="'+fill(item.category)+'" stroke="#405159" stroke-width="2"/>',
+  bottoms:item=>'<path d="M124 209L117 371L153 374L161 230L168 230L176 374L211 371L196 209Z" fill="'+fill(item.category)+'" stroke="#405159" stroke-width="2"/>',
+  dresses:item=>'<path d="M120 102Q160 87 200 102L213 210L234 348Q160 368 86 348L107 210Z" fill="'+fill(item.category)+'" stroke="#405159" stroke-width="2"/>',
+  outerwear:item=>'<path d="M119 102Q160 88 201 102L220 211L187 218L160 145L133 218L100 211Z" fill="'+fill(item.category)+'" stroke="#405159" stroke-width="2"/><path d="M160 108v95" stroke="#eef2f1" stroke-width="2" opacity=".7"/>',
+  shoes:item=>'<path d="M106 382h35v16h-42q-7-8 7-16ZM181 382h35l7 16h-42Z" fill="'+fill(item.category)+'" stroke="#405159" stroke-width="2"/>',
+  accessories:item=>'<path d="M140 100Q160 130 180 100" fill="none" stroke="'+wardrobeColor(item)+'" stroke-width="10" stroke-linecap="round"/><circle cx="180" cy="123" r="8" fill="'+wardrobeColor(item)+'"/>'
+ };
+ const title=items.length?items.map(x=>x.name).join(', '):'Mannequin trung tính chưa có trang phục';
+ const layers=items.map(item=>shape[item.category]?.(item)||'').join('');
+ return '<svg class="planner-wardrobe-svg" viewBox="0 0 320 430" role="img" aria-label="'+esc('Mô hình 2D: '+title)+'"><title>'+esc(title)+'</title><defs>'+defs+'<linearGradient id="wardrobe-base" x1="0" x2="1"><stop stop-color="#87949d"/><stop offset=".5" stop-color="#d0d7db"/><stop offset="1" stop-color="#7d8a93"/></linearGradient><filter id="wardrobe-shadow"><feGaussianBlur stdDeviation="5"/></filter></defs><ellipse cx="160" cy="408" rx="76" ry="10" fill="#62756f" opacity=".16" filter="url(#wardrobe-shadow)"/><g fill="url(#wardrobe-base)" stroke="#65737b" stroke-width="2"><circle cx="160" cy="54" r="27"/><path d="M148 81h24v20h-24z"/><path d="M118 102Q160 84 202 102L219 211Q160 232 101 211Z"/></g><g fill="none" stroke="url(#wardrobe-base)" stroke-linecap="round"><path d="M119 109L90 129L72 230M201 109L230 129L248 230" stroke-width="22"/><path d="M126 208L119 373M194 208L201 373" stroke-width="30"/></g><path d="M106 390h33M181 390h33" stroke="#55636a" stroke-width="14" stroke-linecap="round"/>'+layers+'</svg>';
+}
+function renderWardrobeAvatar3D(items){
+ const byCategory=new Map(items.map(x=>[x.category,x]));
+ const top=byCategory.get('tops'),bottom=byCategory.get('bottoms'),dress=byCategory.get('dresses'),coat=byCategory.get('outerwear'),shoes=byCategory.get('shoes'),accessory=byCategory.get('accessories');
+ const garment=(item,kind,index)=>item?'<div class="planner-avatar-garment '+kind+' pattern-'+item.pattern+'" style="--garment-color:'+wardrobeColor(item)+';z-index:'+(20+index)+'"></div>':'';
+ const names=items.length?items.map(x=>x.name).join(', '):'Mannequin trung tính chưa có trang phục';
+ return '<div class="planner-tryon-stage" data-tryon-stage data-mode="3d"><div class="planner-tryon-perspective"><div class="planner-tryon-floor"></div><div class="planner-avatar" data-tryon-avatar tabindex="0" role="img" aria-label="'+esc('Mannequin 3D mặc: '+names)+'" style="--wardrobe-yaw:'+wardrobeYaw+'deg;--wardrobe-pitch:'+wardrobePitch+'deg"><div class="planner-avatar-part avatar-head"></div><div class="planner-avatar-part avatar-neck"></div><div class="planner-avatar-part avatar-torso"></div><div class="planner-avatar-part avatar-arm avatar-arm-left"></div><div class="planner-avatar-part avatar-arm avatar-arm-right"></div><div class="planner-avatar-part avatar-leg avatar-leg-left"></div><div class="planner-avatar-part avatar-leg avatar-leg-right"></div><div class="planner-avatar-part avatar-foot avatar-foot-left"></div><div class="planner-avatar-part avatar-foot avatar-foot-right"></div>'+items.map((item,index)=>garment(item,({tops:'avatar-shirt',bottoms:'avatar-pants',dresses:'avatar-dress',outerwear:'avatar-coat',shoes:'avatar-shoes',accessories:'avatar-accessory'})[item.category],index)).join('')+'</div></div><small class="planner-tryon-caption">Mannequin trung tính · Xoay bằng kéo hoặc phím mũi tên</small></div>';
+}
+function wardrobeItemCards(items){
+ if(!items.length)return '<div class="planner-empty">Chưa tìm thấy món đồ phù hợp bộ lọc.</div>';
+ return items.map(item=>{
+  const selected=wardrobeSelection.includes(item.id);
+  return '<article class="planner-wardrobe-item"><span class="planner-wardrobe-color" style="--wardrobe-item-color:'+wardrobeColor(item)+'" aria-label="Màu '+esc(item.colorFamily)+'"></span><div class="planner-wardrobe-item-main"><h4>'+esc(item.name)+'</h4><p>'+esc(wardrobeCategory(item.category))+' · '+esc(wardrobeStyle(item.style))+' · '+esc(WARDROBE_PATTERNS.find(x=>x.id===item.pattern)?.label||'Trơn')+'</p><small>'+esc([item.material,item.season==='all'?'Mọi mùa':item.season,...item.weather.map(w=>WARDROBE_WEATHER.find(x=>x.id===w)?.label||w)].filter(Boolean).join(' · '))+'</small></div><div class="planner-wardrobe-actions"><button type="button" class="planner-btn" data-wardrobe-select="'+esc(item.id)+'" aria-pressed="'+selected+'">'+(selected?'Bỏ khỏi bộ':'Thử phối')+'</button><button type="button" class="planner-link" data-wardrobe-edit="'+esc(item.id)+'">Sửa</button><button type="button" class="planner-link danger" data-wardrobe-delete="'+esc(item.id)+'">Xóa</button></div></article>';
+ }).join('');
+}
+function renderWardrobeCatalog(current){
+ const repo=wardrobeStore(),items=repo.listItems(),filtered=filterWardrobeItems(items,wardrobeFilters,{temp:current.temperature_2m,rain:current.precipitation,wind:current.wind_speed_10m});
+ const editing=items.find(x=>x.id===wardrobeEditingId),weatherOptions=[['all','Mọi thời tiết'],...WARDROBE_WEATHER.filter(x=>x.id!=='all').map(x=>[x.id,x.label])];
+ const sampleCards=WARDROBE_SAMPLES.map(sample=>'<article class="planner-wardrobe-sample"><span class="planner-wardrobe-color" style="--wardrobe-item-color:'+wardrobeColor(sample)+'"></span><div><b>'+esc(sample.name)+'</b><small>'+esc(wardrobeCategory(sample.category))+' · Mẫu minh họa do PhotoLens tự tạo</small></div><button type="button" class="planner-btn" data-wardrobe-sample="'+esc(sample.id)+'">Thêm vào tủ</button></article>').join('');
+ return '<div class="planner-wardrobe-section">'+(wardrobeStatus?'<p class="planner-status" role="status">'+esc(wardrobeStatus)+'</p>':'')+'<section class="planner-card"><h4>Tạo món đồ của bạn</h4><form class="planner-wardrobe-form" data-form="wardrobe-item"><input type="hidden" name="id" value="'+esc(editing?.id||'')+'"><label>Tên món đồ<input name="name" maxlength="80" required value="'+esc(editing?.name||'')+'" placeholder="Ví dụ: Áo khoác denim"></label><div class="planner-row"><label>Loại<select name="category">'+options(WARDROBE_CATEGORIES.map(x=>[x.id,x.label]),editing?.category||'tops')+'</select></label><label>Màu<input name="color" type="color" value="'+wardrobeColor(editing||{color:'#668477'})+'"></label><label>Nhóm màu<select name="colorFamily">'+options(WARDROBE_COLORS.map(x=>[x.id,x.label]),editing?.colorFamily||'neutral')+'</select></label></div><div class="planner-row"><label>Họa tiết<select name="pattern">'+options(WARDROBE_PATTERNS.map(x=>[x.id,x.label]),editing?.pattern||'solid')+'</select></label><label>Chất liệu / độ dày<input name="material" maxlength="80" value="'+esc(editing?.material||'')+'" placeholder="Tùy chọn"></label><label>Phong cách<select name="style">'+options(WARDROBE_STYLES.map(x=>[x.id,x.label]),editing?.style||'casual')+'</select></label></div><div class="planner-row"><label>Mùa<select name="season">'+options([['all','Mọi mùa'],['spring','Xuân'],['summer','Hè'],['autumn','Thu'],['winter','Đông']],editing?.season||'all')+'</select></label><fieldset class="planner-wardrobe-weather"><legend>Thời tiết phù hợp <small>(có thể chọn nhiều)</small></legend><div class="planner-wardrobe-weather-options">'+weatherOptions.map(([id,label])=>'<label><input type="checkbox" name="weather" value="'+esc(id)+'" '+((editing?.weather||['all']).includes(id)?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+'</div></fieldset><label>Ghi chú<input name="note" maxlength="500" value="'+esc(editing?.note||'')+'" placeholder="Tùy chọn"></label></div><div class="planner-row"><button type="submit" class="planner-primary">'+(editing?'Lưu thay đổi':'Thêm vào tủ đồ')+'</button>'+(editing?'<button type="button" class="planner-btn" data-wardrobe-cancel-edit>Hủy sửa</button>':'')+'</div></form></section><section class="planner-card"><div class="planner-wardrobe-heading"><div><h4>Tìm và lọc tủ đồ</h4><p>'+items.length+' món của bạn · '+WARDROBE_SAMPLES.length+' mẫu minh họa để thêm</p></div></div><div class="planner-row planner-wardrobe-filters"><label>Tìm kiếm<input type="search" data-wardrobe-search value="'+esc(wardrobeFilters.query)+'" placeholder="Tên, chất liệu, ghi chú"></label><label>Loại<select data-wardrobe-filter="category">'+options([['all','Tất cả loại'],...WARDROBE_CATEGORIES.map(x=>[x.id,x.label])],wardrobeFilters.category)+'</select></label><label>Màu<select data-wardrobe-filter="color">'+options([['all','Tất cả màu'],...WARDROBE_COLORS.map(x=>[x.id,x.label])],wardrobeFilters.color)+'</select></label><label>Phong cách<select data-wardrobe-filter="style">'+options([['all','Mọi phong cách'],...WARDROBE_STYLES.map(x=>[x.id,x.label])],wardrobeFilters.style)+'</select></label><label>Thời tiết<select data-wardrobe-filter="weather">'+options([['all','Mọi thời tiết'],['current','Phù hợp thời tiết hiện tại'],...weatherOptions.slice(1)],wardrobeFilters.weather)+'</select></label></div><div class="planner-wardrobe-list" data-wardrobe-list>'+wardrobeItemCards(filtered)+'</div></section><section class="planner-card"><h4>Món đồ mẫu</h4><p>Hình khối và dữ liệu minh họa do PhotoLens tạo; không lấy ảnh hay danh mục từ cửa hàng.</p><div class="planner-wardrobe-samples">'+sampleCards+'</div></section></div>';
+}
+function renderSavedWardrobeOutfits(outfits){
+ if(!outfits.length)return '<div class="planner-empty">Chưa có bộ phối nào được lưu.</div>';
+ return outfits.map(outfit=>'<article class="planner-saved-outfit"><div class="planner-wardrobe-heading"><div><h4>'+esc(outfit.name)+'</h4><small>'+outfit.itemIds.length+' món</small></div><button type="button" class="planner-btn" data-wardrobe-load="'+esc(outfit.id)+'">Mặc thử</button></div><form class="planner-wardrobe-rename" data-form="wardrobe-rename"><input type="hidden" name="id" value="'+esc(outfit.id)+'"><label>Đổi tên<input name="name" maxlength="80" required value="'+esc(outfit.name)+'"></label><button type="submit" class="planner-link">Lưu tên</button></form><div class="planner-row"><button type="button" class="planner-link" data-wardrobe-duplicate="'+esc(outfit.id)+'">Nhân bản</button><button type="button" class="planner-link danger" data-wardrobe-delete-outfit="'+esc(outfit.id)+'">Xóa bộ</button></div></article>').join('');
+}
+function renderWardrobeTryOn(){
+ const repo=wardrobeStore(),all=repo.listItems(),prepared=prepareWardrobeTryOn(all,wardrobeSelection,wardrobeMode),items=prepared.items,available=items;
+ const saved=repo.listOutfits(),preview=wardrobeMode==='3d'?renderWardrobeAvatar3D(items):'<div class="planner-tryon-2d">'+renderWardrobeSvg(items)+'</div>';
+ const selected=available.length?available.map((item,index)=>'<span class="planner-wardrobe-chip"><i style="--wardrobe-item-color:'+wardrobeColor(item)+'"></i>'+esc(item.name)+'<button type="button" data-wardrobe-layer="up" data-wardrobe-id="'+esc(item.id)+'" aria-label="Đưa '+esc(item.name)+' lên trên" '+(index===available.length-1?'disabled':'')+'>↑</button><button type="button" data-wardrobe-layer="down" data-wardrobe-id="'+esc(item.id)+'" aria-label="Đưa '+esc(item.name)+' xuống dưới" '+(index===0?'disabled':'')+'>↓</button><button type="button" data-wardrobe-remove="'+esc(item.id)+'" aria-label="Bỏ '+esc(item.name)+' khỏi bộ phối">×</button></span>').join(''):'<p class="planner-muted">Chọn món từ “Tủ đồ của tôi” để thử phối.</p>';
+ return '<div class="planner-wardrobe-section"><section class="planner-card planner-tryon-card"><div class="planner-tryon-heading"><div><h4>Phối trang phục</h4><p>Mannequin trung tính; mô hình CSS chạy cục bộ trên thiết bị.</p></div><div class="planner-sim-modes" role="group" aria-label="Chế độ mô hình"><button type="button" data-wardrobe-mode="2d" aria-pressed="'+(wardrobeMode==='2d')+'">2D</button><button type="button" data-wardrobe-mode="3d" aria-pressed="'+(wardrobeMode==='3d')+'">3D</button></div></div><div class="planner-wardrobe-selection">'+selected+'</div><div class="planner-tryon-preview">'+preview+'</div><div class="planner-tryon-rotation" role="group" aria-label="Xoay mannequin"><button type="button" data-wardrobe-orbit="left" aria-label="Xoay sang trái">←</button><button type="button" data-wardrobe-orbit="right" aria-label="Xoay sang phải">→</button><button type="button" data-wardrobe-orbit="up" aria-label="Ngẩng góc nhìn">↑</button><button type="button" data-wardrobe-orbit="down" aria-label="Hạ góc nhìn">↓</button><span class="planner-muted">Kéo mô hình hoặc dùng phím mũi tên.</span></div><form class="planner-wardrobe-save-outfit" data-form="wardrobe-outfit"><label>Tên bộ phối<input name="name" maxlength="80" required placeholder="Ví dụ: Đi dạo cuối tuần"></label><button class="planner-primary" type="submit" '+(available.length?'':'disabled')+'>Lưu bộ phối</button></form>'+(wardrobeNotice?'<p class="planner-sim-notice" role="status">'+esc(wardrobeNotice)+'</p>':'')+(wardrobeStatus?'<p class="planner-status" role="status">'+esc(wardrobeStatus)+'</p>':'')+'<p class="planner-sim-note">Mô hình chỉ minh họa màu và lớp đồ, không dự báo độ vừa hay hình ảnh thực tế. Dữ liệu tủ đồ được lưu trên thiết bị; PhotoLens không gửi ảnh hoặc dữ liệu phối đồ đi nơi khác.</p></section><section class="planner-card"><h4>Bộ phối đã lưu</h4><div class="planner-saved-outfits">'+renderSavedWardrobeOutfits(saved)+'</div></section></div>';
+}
+function wardrobeSupports3D(){
+ try{
+  if(typeof CSS==='undefined'||!CSS.supports('perspective','600px')||!CSS.supports('transform-style','preserve-3d'))return false;
+  const canvas=document.createElement('canvas');
+  return !!(canvas.getContext('webgl')||canvas.getContext('experimental-webgl'));
+ }catch{return false;}
+}
+function outfitView(){
+ const current=forecast?.current||{},bg=json('photolens_bg_color','#56736f');
+ const list=outfitOptions({temp:current.temperature_2m,rain:current.precipitation,wind:current.wind_speed_10m,background:bg,style:json('photolens_outfit_style','Tự nhiên')});
+ const recommendations='<div class="planner-outfit-grid">'+list.map(x=>'<article><h4>'+esc(x.name)+'</h4><p>Màu: '+x.colors.map(c=>'<span class="planner-swatch">'+esc(c)+'</span>').join(' ')+'</p><p>'+esc(x.clothes)+'</p><p>'+esc(x.reason)+'</p><p>Lưu ý: '+esc(x.caution)+'</p></article>').join('')+'</div>';
+ const currentWeather=current.temperature_2m==null?'Chưa có dữ liệu thời tiết':current.temperature_2m+'°C · mưa '+(current.precipitation??'—')+' mm · gió '+(current.wind_speed_10m??'—')+' km/h';
+ let content=wardrobeSection==='wardrobe'?renderWardrobeCatalog(current):wardrobeSection==='tryon'?renderWardrobeTryOn():recommendations;
+ if(wardrobeSection==='tryon'&&wardrobeMode==='3d'&&!wardrobeSupports3D()){wardrobeMode=resolveTryOnMode('3d',false);wardrobeNotice='Thiết bị chưa hỗ trợ CSS 3D; đã chuyển về mô hình 2D.';content=renderWardrobeTryOn();}
+ else if(wardrobeSection==='tryon'&&wardrobeMode==='3d'){try{content=renderWardrobeTryOn();}catch{wardrobeMode='2d';wardrobeNotice='Không dựng được mô hình 3D; đã chuyển về 2D.';content=renderWardrobeTryOn();}}
+ return '<div class="planner-head"><div><h3>Trang phục lên ảnh</h3><p>Không suy đoán ngoại hình, vóc dáng, màu da, giới tính hay tuổi.</p></div></div><div class="planner-card planner-row"><label>Phong cách<select data-style>'+options([['Tự nhiên','Tự nhiên'],['Tối giản','Tối giản'],['Điện ảnh','Điện ảnh'],['Năng động','Năng động'],['Cổ điển','Cổ điển']],json('photolens_outfit_style','Tự nhiên'))+'</select></label><label>Màu nền dự kiến<input type="color" data-bg value="'+esc(bg)+'"></label><span>'+esc(currentWeather)+'</span></div><nav class="planner-wardrobe-tabs" role="group" aria-label="Khu vực trang phục"><button type="button" data-wardrobe-section="suggestions" aria-pressed="'+(wardrobeSection==='suggestions')+'" class="'+(wardrobeSection==='suggestions'?'active':'')+'">Gợi ý</button><button type="button" data-wardrobe-section="wardrobe" aria-pressed="'+(wardrobeSection==='wardrobe')+'" class="'+(wardrobeSection==='wardrobe'?'active':'')+'">Tủ đồ của tôi</button><button type="button" data-wardrobe-section="tryon" aria-pressed="'+(wardrobeSection==='tryon')+'" class="'+(wardrobeSection==='tryon'?'active':'')+'">Phối đồ 2D/3D</button></nav><div data-wardrobe-content>'+content+'</div>';
+}
 function aiPanel(route){
  if(aiRoute!==route)return '';
  if(aiMessage)return '<div class="planner-card planner-status" role="status">'+esc(aiMessage)+'</div>';
@@ -237,7 +313,7 @@ function render(){
   if(tab==='spots')renderSpotsMap(version);
 }
 function close(){if(panel)panel.hidden=true;$('#photoPlannerButton')?.setAttribute('aria-expanded','false');}
-export async function openPhotographyHub(){if(!panel){panel=document.createElement('div');panel.id='photoPlannerHost';document.body.append(panel);panel.addEventListener('click',click);panel.addEventListener('submit',submit);panel.addEventListener('input',updateRange);panel.addEventListener('change',change);panel.addEventListener('pointerdown',orbitStart);panel.addEventListener('pointermove',orbitMove);panel.addEventListener('pointerup',orbitEnd);panel.addEventListener('pointercancel',orbitEnd);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel&&!panel.hidden)close();});}showEstimatedCost=(Capacitor.isNativePlatform()?(await Preferences.get({key:'photolens_show_cost'})).value:localStorage.getItem('photolens_show_cost'))==='true';panel.hidden=false;$('#photoPlannerButton')?.setAttribute('aria-expanded','true');render();panel.querySelector('.planner-close')?.focus();}
+export async function openPhotographyHub(){if(!panel){panel=document.createElement('div');panel.id='photoPlannerHost';document.body.append(panel);panel.addEventListener('click',click);panel.addEventListener('submit',submit);panel.addEventListener('input',updateRange);panel.addEventListener('change',change);panel.addEventListener('pointerdown',orbitStart);panel.addEventListener('pointermove',orbitMove);panel.addEventListener('pointerup',orbitEnd);panel.addEventListener('pointercancel',orbitEnd);panel.addEventListener('pointerdown',wardrobeOrbitStart);panel.addEventListener('pointermove',wardrobeOrbitMove);panel.addEventListener('pointerup',wardrobeOrbitEnd);panel.addEventListener('pointercancel',wardrobeOrbitEnd);panel.addEventListener('keydown',wardrobeKeydown);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel&&!panel.hidden)close();});}showEstimatedCost=(Capacitor.isNativePlatform()?(await Preferences.get({key:'photolens_show_cost'})).value:localStorage.getItem('photolens_show_cost'))==='true';panel.hidden=false;$('#photoPlannerButton')?.setAttribute('aria-expanded','true');render();panel.querySelector('.planner-close')?.focus();}
 async function jsonFetch(url,opt={},timeout=12000){const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),timeout);try{const res=await fetch(url,{...opt,signal:ctl.signal});const data=await res.json().catch(()=>null);if(!res.ok)throw new Error(data?.reason||'HTTP '+res.status);return data;}finally{clearTimeout(timer);}}
 async function loadForecast(p){const key='photolens_weather_'+p.latitude.toFixed(2)+'_'+p.longitude.toFixed(2);let cache=json(key,null);if(cache&&Date.now()-cache.fetchedAt<20*60*1000){forecast=cache;status='Dữ liệu đã lưu gần đây.';render();return;}const base={latitude:p.latitude,longitude:p.longitude,timezone:'auto'};const u=new URL('https://api.open-meteo.com/v1/forecast');u.search=new URLSearchParams({...base,current:'temperature_2m,apparent_temperature,precipitation,cloud_cover,wind_speed_10m',hourly:'temperature_2m,precipitation_probability,cloud_cover,visibility,wind_speed_10m,uv_index',daily:'sunrise,sunset,temperature_2m_max,temperature_2m_min,precipitation_probability_max',forecast_days:'7'});const aq=new URL('https://air-quality-api.open-meteo.com/v1/air-quality');aq.search=new URLSearchParams({...base,hourly:'pm2_5',forecast_days:'5'});const pair=await Promise.all([jsonFetch(u),jsonFetch(aq).catch(()=>null)]);const air=pair[1]?.hourly,airByTime=new Map((air?.time||[]).map((time,i)=>[time,air.pm2_5?.[i]??null]));forecast={...pair[0],hourly:{...pair[0].hourly,pm2_5:(pair[0].hourly?.time||[]).map(time=>airByTime.get(time)??null)},pm25:air?.pm2_5?.[0]??null,fetchedAt:Date.now(),cached:false};save(key,forecast);status='';render();}
 async function findWeather(name){status='Đang tìm địa điểm và dự báo…';render();try{const geo=new URL('https://geocoding-api.open-meteo.com/v1/search');geo.search=new URLSearchParams({name:name,count:'1',language:'vi',format:'json',countryCode:'VN'});const g=await jsonFetch(geo);const x=g.results?.[0];if(!x)throw new Error('Không tìm thấy địa điểm.');place={label:[x.name,x.admin1,x.country].filter(Boolean).join(', '),latitude:x.latitude,longitude:x.longitude};await loadForecast(place);}catch(e){status='Không tải được dự báo: '+e.message;const key=Number.isFinite(place?.latitude)&&Number.isFinite(place?.longitude)?'photolens_weather_'+place.latitude.toFixed(2)+'_'+place.longitude.toFixed(2):'';const old=key?json(key,null):null;if(old)forecast={...old,cached:true};render();}}
@@ -325,6 +401,41 @@ function orbitMove(e){
  orbitTransform();
 }
 function orbitEnd(){simDrag=null;}
+function updateWardrobeAvatarTransform(){
+ const avatar=panel?.querySelector('[data-tryon-avatar]');
+ if(avatar){avatar.style.setProperty('--wardrobe-yaw',wardrobeYaw+'deg');avatar.style.setProperty('--wardrobe-pitch',wardrobePitch+'deg');}
+}
+function wardrobeOrbit(direction){
+ if(direction==='left')wardrobeYaw-=12;
+ if(direction==='right')wardrobeYaw+=12;
+ if(direction==='up')wardrobePitch=Math.max(-24,wardrobePitch-8);
+ if(direction==='down')wardrobePitch=Math.min(24,wardrobePitch+8);
+ updateWardrobeAvatarTransform();
+}
+function wardrobeOrbitStart(e){
+ const stage=e.target.closest('[data-tryon-stage][data-mode="3d"]');
+ if(!stage||e.target.closest('button,input'))return;
+ wardrobeDrag={x:e.clientX,y:e.clientY,yaw:wardrobeYaw,pitch:wardrobePitch};
+ try{stage.setPointerCapture(e.pointerId);}catch{}
+}
+function wardrobeOrbitMove(e){
+ if(!wardrobeDrag)return;
+ wardrobeYaw=wardrobeDrag.yaw+(e.clientX-wardrobeDrag.x)*.55;
+ wardrobePitch=Math.max(-24,Math.min(24,wardrobeDrag.pitch+(e.clientY-wardrobeDrag.y)*.35));
+ updateWardrobeAvatarTransform();
+}
+function wardrobeOrbitEnd(){wardrobeDrag=null;}
+function wardrobeKeydown(e){
+ if(!e.target.matches('[data-tryon-avatar]')||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
+ e.preventDefault();
+ wardrobeOrbit(({ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'})[e.key]);
+}
+function wardrobeSearchInput(e){
+ if(!e.target.matches('[data-wardrobe-search]'))return;
+ wardrobeFilters.query=e.target.value;
+ const current=forecast?.current||{},list=panel?.querySelector('[data-wardrobe-list]');
+ if(list)list.innerHTML=wardrobeItemCards(filterWardrobeItems(wardrobeStore().listItems(),wardrobeFilters,{temp:current.temperature_2m,rain:current.precipitation,wind:current.wind_speed_10m}));
+}
 async function click(e){
   const tabButton=e.target.closest('[data-tab]');
   if(tabButton){tab=tabButton.dataset.tab;render();if(tab==='weather'&&!forecast&&place?.label==='Hà Nội')findWeather('Hà Nội');return;}
@@ -334,6 +445,31 @@ async function click(e){
   if(simButton){simFallbackMessage='';simMode=simButton.dataset.simMode==='3d'?'3d':'2d';render();return;}
   const orbitButton=e.target.closest('[data-orbit-step]');
   if(orbitButton){const step=orbitButton.dataset.orbitStep;if(step==='left')simOrbitY=simClamp(simOrbitY-8,-55,55);if(step==='right')simOrbitY=simClamp(simOrbitY+8,-55,55);if(step==='up')simOrbitX=simClamp(simOrbitX-6,-28,24);if(step==='down')simOrbitX=simClamp(simOrbitX+6,-28,24);orbitTransform();return;}
+  const wardrobeTab=e.target.closest('[data-wardrobe-section]');
+  if(wardrobeTab){wardrobeSection=wardrobeTab.dataset.wardrobeSection;render();return;}
+  const wardrobeModeButton=e.target.closest('[data-wardrobe-mode]');
+  if(wardrobeModeButton){wardrobeMode=wardrobeModeButton.dataset.wardrobeMode==='3d'?'3d':'2d';wardrobeNotice='';render();return;}
+  const sampleButton=e.target.closest('[data-wardrobe-sample]');
+  if(sampleButton){const sample=WARDROBE_SAMPLES.find(x=>x.id===sampleButton.dataset.wardrobeSample);if(sample&&wardrobeStore().saveItem(sample)){wardrobeStatus='Đã thêm món minh họa vào tủ đồ trên thiết bị này.';}else wardrobeStatus='Không lưu được món đồ vào bộ nhớ thiết bị.';render();return;}
+  const selectButton=e.target.closest('[data-wardrobe-select]');
+  if(selectButton){const item=wardrobeStore().listItems().find(x=>x.id===selectButton.dataset.wardrobeSelect);if(item){const same=wardrobeStore().listItems().filter(x=>wardrobeSelection.includes(x.id)&&x.category===item.category).map(x=>x.id);wardrobeSelection=wardrobeSelection.filter(id=>!same.includes(id));if(!same.includes(item.id))wardrobeSelection.push(item.id);}wardrobeSection='tryon';render();return;}
+  const removeChip=e.target.closest('[data-wardrobe-remove]');
+  if(removeChip){wardrobeSelection=wardrobeSelection.filter(id=>id!==removeChip.dataset.wardrobeRemove);render();return;}
+  const layerButton=e.target.closest('[data-wardrobe-layer]');
+  if(layerButton){const from=wardrobeSelection.indexOf(layerButton.dataset.wardrobeId),to=from+(layerButton.dataset.wardrobeLayer==='up'?1:-1);if(from>=0&&to>=0&&to<wardrobeSelection.length){[wardrobeSelection[from],wardrobeSelection[to]]=[wardrobeSelection[to],wardrobeSelection[from]];render();}return;}
+  const editButton=e.target.closest('[data-wardrobe-edit]');
+  if(editButton){wardrobeEditingId=editButton.dataset.wardrobeEdit;wardrobeSection='wardrobe';render();return;}
+  if(e.target.closest('[data-wardrobe-cancel-edit]')){wardrobeEditingId='';render();return;}
+  const deleteItem=e.target.closest('[data-wardrobe-delete]');
+  if(deleteItem){const id=deleteItem.dataset.wardrobeDelete;if(wardrobeStore().removeItem(id)){wardrobeSelection=wardrobeSelection.filter(x=>x!==id);if(wardrobeEditingId===id)wardrobeEditingId='';wardrobeStatus='Đã xóa món đồ.';}else wardrobeStatus='Không xóa được món đồ khỏi bộ nhớ.';render();return;}
+  const loadOutfit=e.target.closest('[data-wardrobe-load]');
+  if(loadOutfit){const outfit=wardrobeStore().listOutfits().find(x=>x.id===loadOutfit.dataset.wardrobeLoad);if(outfit){wardrobeSelection=outfit.itemIds.slice();wardrobeSection='tryon';}render();return;}
+  const duplicateOutfit=e.target.closest('[data-wardrobe-duplicate]');
+  if(duplicateOutfit){const copy=wardrobeStore().duplicateOutfit(duplicateOutfit.dataset.wardrobeDuplicate);wardrobeStatus=copy?'Đã nhân bản bộ phối.':'Không thể nhân bản bộ phối.';render();return;}
+  const deleteOutfit=e.target.closest('[data-wardrobe-delete-outfit]');
+  if(deleteOutfit){wardrobeStore().removeOutfit(deleteOutfit.dataset.wardrobeDeleteOutfit);wardrobeStatus='Đã xóa bộ phối.';render();return;}
+  const orbitWardrobe=e.target.closest('[data-wardrobe-orbit]');
+  if(orbitWardrobe){wardrobeOrbit(orbitWardrobe.dataset.wardrobeOrbit);return;}
   const action=e.target.closest('[data-action]')?.dataset.action;
   if(action==='ai-spots'){await runPhotographyAI(action);return;}
   if(action==='locate')locate();
@@ -350,6 +486,22 @@ async function submit(e){
   e.preventDefault();const form=e.target,fd=new FormData(form);
   if(form.dataset.form==='weather'){findWeather(String(fd.get('place')||'').trim());return;}
   if(form.dataset.form==='angles'){angleGenre=String(fd.get('genre')||'portrait');anglePose=String(fd.get('poseType')||'solo');angleScene=String(fd.get('scene')||'').trim();angleIndex=0;simFallbackMessage='';simHeight=160;simDistance=4;render();return;}
+  if(form.dataset.form==='wardrobe-item'){
+   const input=Object.fromEntries(fd),selectedWeather=fd.getAll('weather').map(String);
+   input.weather=!selectedWeather.length||selectedWeather.includes('all')?['all']:selectedWeather;
+   if(input.id==='')delete input.id;
+   const saved=wardrobeStore().saveItem(input);
+   if(!saved){wardrobeStatus='Hãy nhập tên món đồ hợp lệ; dữ liệu lưu trên thiết bị không đổi.';render();return;}
+   wardrobeEditingId='';wardrobeStatus=input.id?'Đã cập nhật món đồ trên thiết bị.':'Đã thêm món đồ vào tủ đồ trên thiết bị.';render();return;
+  }
+  if(form.dataset.form==='wardrobe-outfit'){
+   const saved=wardrobeStore().saveOutfit({name:fd.get('name'),itemIds:wardrobeSelection});
+   wardrobeStatus=saved?'Đã lưu bộ phối trên thiết bị.':'Chọn ít nhất một món trước khi lưu bộ phối.';render();return;
+  }
+  if(form.dataset.form==='wardrobe-rename'){
+   const renamed=wardrobeStore().renameOutfit(String(fd.get('id')||''),String(fd.get('name')||''));
+   wardrobeStatus=renamed?'Đã đổi tên bộ phối.':'Không đổi được tên bộ phối.';render();return;
+  }
   if(form.dataset.form==='plan'){const plan=Object.fromEntries(fd);const saved=repo.save(plan);if(!saved){alert('Không lưu được kế hoạch.');return;}editingPlan='';status='Đã lưu kế hoạch trên thiết bị.';render();}
 }
 function updateSimulation(){
@@ -360,6 +512,7 @@ function updateSimulation(){
  catch{simMode='2d';simFallbackMessage='Không tải được mô phỏng 3D; đã tự chuyển về 2D.';render();}
 }
 function updateRange(e){
+ if(e.target.matches('[data-wardrobe-search]')){wardrobeSearchInput(e);return;}
  if(!e.target.matches('[data-sim-height],[data-sim-distance]'))return;
  const value=Number(e.target.value);
  if(e.target.matches('[data-sim-height]'))simHeight=value||160;
@@ -369,6 +522,7 @@ function updateRange(e){
  updateSimulation();
 }
 function change(e){
+  if(e.target.matches('[data-wardrobe-filter]')){wardrobeFilters[e.target.dataset.wardrobeFilter]=e.target.value;render();return;}
   if(e.target.matches('[data-genre]')){genre=e.target.value;render();}
   if(e.target.matches('[data-bg]')){save('photolens_bg_color',e.target.value);tab='outfit';render();}
   if(e.target.matches('[data-style]')){save('photolens_outfit_style',e.target.value);render();}
