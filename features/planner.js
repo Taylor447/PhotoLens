@@ -197,7 +197,7 @@ function showMyLocation(){
   const {latitude,longitude,accuracy}=position.coords;
   if(!Number.isFinite(latitude)||!Number.isFinite(longitude)){status='Thiết bị trả về tọa độ không hợp lệ.';render();return;}
   myPosition={latitude,longitude,accuracy:Number.isFinite(accuracy)?accuracy:null};
-  status='Đã đánh dấu vị trí GPS của bạn. Tọa độ chỉ được hiển thị trên thiết bị; không gửi tới AI.';
+  status='Đã đánh dấu vị trí GPS của bạn. PhotoLens không gửi tọa độ này tới AI; bản đồ nền được tải từ OpenStreetMap.';
   render();
  },error=>{
   const messages={
