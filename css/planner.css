@@ -47,3 +47,8 @@
 .planner-map-link small{color:var(--color-text-muted)}
 .planner-map .leaflet-popup-content{line-height:1.5}
 @media(max-width:760px){.planner-map-canvas{height:300px;min-height:240px}.planner-map-link{gap:8px}}
+
+.planner-map-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.planner-my-location-icon{display:flex!important;align-items:center;justify-content:center;background:transparent;border:0}
+.planner-my-location-icon span{display:block;width:18px;height:18px;border:3px solid #fff;border-radius:50%;background:#0b7a5a;box-shadow:0 0 0 8px rgba(11,122,90,.25),0 2px 8px rgba(0,0,0,.42)}
+@media(max-width:760px){.planner-head{flex-wrap:wrap}.planner-map-actions{width:100%;justify-content:flex-start}.planner-map-actions button{flex:1 1 auto}}
