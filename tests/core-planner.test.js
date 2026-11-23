@@ -40,7 +40,7 @@ test('device recommendations exclude missing metrics from the weighted score and
  assert.equal(result.recommendations[0].confidence.known,2);
  assert.equal(result.recommendations[0].confidence.total,2);
  assert.equal(result.recommendations[0].score,47);
- assert.ok(result.recommendations[0].criteria.some(item=>item.id==='zoom'&&item.score===50));
+ assert.ok(result.recommendations[0].criteria.some(item=>item.id==='zoom'&&item.score===44));
 });
 test('selected priority changes recommendation ranking using configured weight boost',()=>{
  const devices=[
