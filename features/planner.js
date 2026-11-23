@@ -6,9 +6,9 @@ import spotsSeed from '../data/spots.json';
 import scoreConfig from '../data/device-scoring.json';
 import weatherConfig from '../data/weather-scoring.json';
 import {DEVICE_FIELDS,expandDevice,compareDevices,deviceScore,recommendDevices,conditionScore,bestHours,solarWindows,outfitOptions,createPlanStore,scoreHours,esc} from '../core/photography.js';
-import {describeDeviceType,getDeviceType,getDeviceTypes,normalizeDeviceText,normalizeDeviceTypeFilter,searchDeviceTypes} from '../core/device-types.js';
 
 const $=(s,r=document)=>r.querySelector(s), genres={portrait:'Chân dung',landscape:'Phong cảnh',architecture:'Kiến trúc',street:'Đường phố',night:'Đường phố đêm',moon:'Chụp trăng',cosplay:'Cosplay',documentary:'Tư liệu'};
+const recommendationTypes={all:'Mọi loại',phone:'Điện thoại',mirrorless:'Mirrorless',dslr:'DSLR',compact:'Compact',action:'Action camera'};
 const recommendationPurposes={portrait:'Chân dung',travel:'Du lịch',lowLight:'Thiếu sáng',landscape:'Phong cảnh',architecture:'Kiến trúc',sports:'Thể thao / động vật',video:'Video / vlog',editing:'Hậu kỳ'};
 
 let panel=null,tab='devices',place={label:'Hà Nội'},forecast=null,myPosition=null,spots=[],pickedSpot=null,genre='portrait',onlyDiff=false,editingPlan='',aiResult=null,aiRoute='',aiMessage='',showEstimatedCost=false;
@@ -23,82 +23,14 @@ const get=(o,path)=>path.split('.').reduce((a,k)=>a&&a[k],o);
 const fmt=(v,u='')=>v===null||v===undefined||v===''?'Chưa có dữ liệu':String(Array.isArray(v)?v.join(', '):v)+(u?' '+u:'');
 const safeHttpUrl=value=>{try{const url=new URL(value);return url.protocol==='https:'||url.protocol==='http:'?url.href:'';}catch{return '';}};
 const options=(data,current)=>data.map(x=>'<option value="'+esc(x[0])+'" '+(x[0]===current?'selected':'')+'>'+esc(x[1])+'</option>').join('');
-function deviceTypeDepth(type){let depth=0,parent=type?.parentId;while(parent){depth++;parent=getDeviceType(parent)?.parentId;}return Math.min(depth,4);}
-function deviceTypePath(type){const path=[];let parent=type?.parentId?getDeviceType(type.parentId):null;while(parent){path.unshift(parent.nameVi);parent=parent.parentId?getDeviceType(parent.parentId):null;}return [...path,type?.nameVi||'Chưa phân loại'].join(' › ');}
-function deviceTypeOptionMarkup(id,label,searchText,depth,scoreable,selected){
- return '<button type="button" role="option" id="planner-rec-type-option-'+esc(id)+'" data-device-type-option="'+esc(id)+'" data-search-text="'+esc(searchText)+'" data-depth="'+depth+'" aria-selected="'+(selected?'true':'false')+'" class="planner-type-option"><span>'+esc(label)+'</span>'+(scoreable===false?'<small>Không chấm điểm ảnh thường</small>':'')+'</button>';
-}
-function deviceTypePickerMarkup(selected){
- const selectedId=normalizeDeviceTypeFilter(selected||'all');
- const selectedType=selectedId==='all'?null:getDeviceType(selectedId);
- const selectedLabel=selectedType?.nameVi||'Tất cả thiết bị';
- const typeOptions=getDeviceTypes().filter(type=>type.id!=='unclassified');
- const optionsHtml=deviceTypeOptionMarkup('all','Tất cả thiết bị','all tat ca moi loai',0,true,selectedId==='all')+
-  typeOptions.map(type=>deviceTypeOptionMarkup(type.id,deviceTypePath(type),[type.id,type.nameVi,type.nameEn,...(type.aliases||[]),...(type.modelAliases||[]),...(type.brandAliases||[]),...(type.keywords||[])].join(' '),deviceTypeDepth(type),type.scoreable,selectedId===type.id)).join('')+
-  (()=>{const type=getDeviceType('unclassified');return deviceTypeOptionMarkup(type.id,deviceTypePath(type),[type.id,type.nameVi,type.nameEn,...(type.aliases||[]),...(type.keywords||[])].join(' '),0,type.scoreable,selectedId===type.id);})();
- return '<div class="planner-type-picker"><label for="planner-rec-type-search">Loại thiết bị</label><div class="planner-type-search-row"><input id="planner-rec-type-search" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="planner-rec-type-listbox" autocomplete="off" data-device-type-search placeholder="Tìm tên Việt/Anh hoặc alias"><button type="button" class="planner-btn planner-type-toggle" data-device-type-toggle aria-label="Mở danh sách loại thiết bị" aria-controls="planner-rec-type-listbox" aria-expanded="false">▾</button></div><input type="hidden" name="type" data-device-type-value value="'+esc(selectedId)+'"><p class="planner-type-current" data-device-type-current role="status" aria-live="polite">Đang lọc theo: '+esc(selectedLabel)+(selectedType?.scoreable===false?' · không chấm điểm ảnh thường':'')+'</p><div id="planner-rec-type-listbox" class="planner-type-listbox" role="listbox" aria-label="Nhóm và loại thiết bị" hidden>'+optionsHtml+'</div><p class="planner-type-results" data-device-type-results role="status" aria-live="polite" hidden></p></div>';
-}
-function filterDeviceTypeOptions(query){
- const input=$('[data-device-type-search]',panel),list=$('[data-device-type-listbox]',panel),status=$('[data-device-type-results]',panel),selected=$('[data-device-type-value]',panel)?.value||'all';
- if(!input||!list)return;
- const normalized=normalizeDeviceText(query),matches=new Set(searchDeviceTypes(query).map(type=>type.id));
- let visible=0;
- for(const option of list.querySelectorAll('[data-device-type-option]')){
-  const id=option.dataset.deviceTypeOption;
-  const show=!normalized||(id==='all'?['all','any','tat ca','tat ca thiet bi','moi loai'].some(term=>term.includes(normalized)||normalized.includes(term)):matches.has(id));
-  option.hidden=!show;option.dataset.active='false';option.setAttribute('aria-selected',String(id===selected));if(show)visible++;
- }
- list.hidden=false;input.setAttribute('aria-expanded','true');input.removeAttribute('aria-activedescendant');
- const toggle=$('[data-device-type-toggle]',panel);toggle?.setAttribute('aria-expanded','true');
- if(status){status.hidden=false;status.textContent=visible?visible+' loại phù hợp. Dùng phím mũi tên rồi Enter, hoặc chạm để chọn.':'Không tìm thấy loại phù hợp. Chọn “Chưa phân loại” nếu chưa nhận diện chắc chắn.';}
-}
-function hideDeviceTypeOptions(clearSearch=false){
- const input=$('[data-device-type-search]',panel),list=$('[data-device-type-listbox]',panel),status=$('[data-device-type-results]',panel),toggle=$('[data-device-type-toggle]',panel);
- if(clearSearch&&input)input.value='';
- if(input){input.setAttribute('aria-expanded','false');input.removeAttribute('aria-activedescendant');}
- if(list)list.hidden=true;
- if(status)status.hidden=true;
- toggle?.setAttribute('aria-expanded','false');
-}
-function selectDeviceType(id){
- const selectedId=normalizeDeviceTypeFilter(id||'all'),hidden=$('[data-device-type-value]',panel),current=$('[data-device-type-current]',panel);
- const type=selectedId==='all'?null:getDeviceType(selectedId);
- if(hidden)hidden.value=selectedId;
- if(current)current.textContent='Đang lọc theo: '+(type?.nameVi||'Tất cả thiết bị')+(type?.scoreable===false?' · không chấm điểm ảnh thường':'');
- hideDeviceTypeOptions(true);
-}
-function handleDeviceTypeInput(e){if(e.target.matches('[data-device-type-search]'))filterDeviceTypeOptions(e.target.value);}
-function handleDeviceTypeKeydown(e){
- if(!e.target.matches('[data-device-type-search]'))return;
- const input=e.target,list=$('[data-device-type-listbox]',panel);
- if(e.key==='Escape'){e.preventDefault();hideDeviceTypeOptions(true);return;}
- if(e.key==='ArrowDown'||e.key==='ArrowUp'){
-  e.preventDefault();if(list.hidden)filterDeviceTypeOptions(input.value);
-  const options=[...list.querySelectorAll('[data-device-type-option]:not([hidden])')];
-  if(!options.length)return;
-  const activeId=input.getAttribute('aria-activedescendant');
-  let index=options.findIndex(option=>option.id===activeId);
-  index=e.key==='ArrowDown'?Math.min(options.length-1,index+1):Math.max(0,index<0?options.length-1:index-1);
-  options.forEach(option=>option.dataset.active='false');
-  options[index].dataset.active='true';input.setAttribute('aria-activedescendant',options[index].id);options[index].scrollIntoView({block:'nearest'});
-  return;
- }
- if(e.key==='Enter'){
-  e.preventDefault();if(list.hidden)filterDeviceTypeOptions(input.value);
-  const options=[...list.querySelectorAll('[data-device-type-option]:not([hidden])')];
-  const active=list.querySelector('[data-active="true"]');
-  if(active)selectDeviceType(active.dataset.deviceTypeOption);
-  else if(options.length===1)selectDeviceType(options[0].dataset.deviceTypeOption);
- }
-}
-
 function makeTabs(){return [['devices','Thiết bị'],['weather','Thời tiết'],['spots','Địa điểm'],['outfit','Trang phục'],['plans','Kế hoạch']].map(x=>'<button role="tab" aria-selected="'+(tab===x[0])+'" class="'+(tab===x[0]?'active':'')+'" data-tab="'+x[0]+'">'+x[1]+'</button>').join('');}
 function deviceRecommendationView(all){
  const p=recommendationPrefs||{type:'all',purpose:'portrait',budget:'',currentDeviceId:'',priorities:[]};
  const result=recommendDevices(all,p,scoreConfig);
+ const typeOptions=Object.entries(recommendationTypes);
  const purposeOptions=Object.entries(recommendationPurposes);
  const priorityOptions=Object.entries(scoreConfig.recommendation.criteria||{}).map(([id,criterion])=>'<label><input form="planner-rec-form" type="checkbox" name="priority" value="'+esc(id)+'" '+(p.priorities?.includes(id)?'checked':'')+'> '+esc(criterion.label||id)+'</label>').join('');
- let html='<section class="planner-card planner-rec"><div class="planner-head"><div><h3>Thiết bị đề xuất</h3><p>Xếp hạng cục bộ theo dữ liệu thiết bị đang có. Điểm tham khảo, không phải điểm đánh giá camera.</p></div></div><form id="planner-rec-form" class="planner-rec-form" data-form="device-recommendation"><div class="planner-row">'+deviceTypePickerMarkup(p.type||'all')+'<label>Mục đích<select name="purpose">'+options(purposeOptions,p.purpose||'portrait')+'</select></label><label>Ngân sách (VND, không bắt buộc)<input name="budget" type="number" min="0" step="100000" inputmode="numeric" value="'+esc(p.budget||'')+'" placeholder="Ví dụ: 20000000"></label><label>Thiết bị hiện tại<select name="currentDeviceId"><option value="">Không chọn</option>'+all.map(device=>'<option value="'+esc(device.id)+'" '+(p.currentDeviceId===device.id?'selected':'')+'>'+esc(device.brand+' '+device.model)+'</option>').join('')+'</select></label></div></form>';
+ let html='<section class="planner-card planner-rec"><div class="planner-head"><div><h3>Thiết bị đề xuất</h3><p>Xếp hạng cục bộ theo dữ liệu thiết bị đang có. Điểm tham khảo, không phải điểm đánh giá camera.</p></div></div><form id="planner-rec-form" class="planner-rec-form" data-form="device-recommendation"><div class="planner-row"><label>Loại thiết bị<select name="type">'+options(typeOptions,p.type||'all')+'</select></label><label>Mục đích<select name="purpose">'+options(purposeOptions,p.purpose||'portrait')+'</select></label><label>Ngân sách (VND, không bắt buộc)<input name="budget" type="number" min="0" step="100000" inputmode="numeric" value="'+esc(p.budget||'')+'" placeholder="Ví dụ: 20000000"></label><label>Thiết bị hiện tại<select name="currentDeviceId"><option value="">Không chọn</option>'+all.map(device=>'<option value="'+esc(device.id)+'" '+(p.currentDeviceId===device.id?'selected':'')+'>'+esc(device.brand+' '+device.model)+'</option>').join('')+'</select></label></div></form>';
  if(result.notice)html+='<p class="planner-muted" role="status">'+esc(result.notice)+'</p>';
  if(!result.recommendations.length)html+='<p class="planner-empty" role="status">'+esc(result.message)+'</p>';
  else html+='<div class="planner-rec-grid">'+result.recommendations.map((item,index)=>{
@@ -292,7 +224,7 @@ function render(){
   if(tab==='spots')renderSpotsMap(version);
 }
 function close(){if(panel)panel.hidden=true;$('#photoPlannerButton')?.setAttribute('aria-expanded','false');}
-export async function openPhotographyHub(){if(!panel){panel=document.createElement('div');panel.id='photoPlannerHost';document.body.append(panel);panel.addEventListener('click',click);panel.addEventListener('submit',submit);panel.addEventListener('change',change);panel.addEventListener('input',handleDeviceTypeInput);panel.addEventListener('keydown',handleDeviceTypeKeydown);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel&&!panel.hidden)close();});}showEstimatedCost=(Capacitor.isNativePlatform()?(await Preferences.get({key:'photolens_show_cost'})).value:localStorage.getItem('photolens_show_cost'))==='true';panel.hidden=false;$('#photoPlannerButton')?.setAttribute('aria-expanded','true');render();panel.querySelector('.planner-close')?.focus();}
+export async function openPhotographyHub(){if(!panel){panel=document.createElement('div');panel.id='photoPlannerHost';document.body.append(panel);panel.addEventListener('click',click);panel.addEventListener('submit',submit);panel.addEventListener('change',change);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel&&!panel.hidden)close();});}showEstimatedCost=(Capacitor.isNativePlatform()?(await Preferences.get({key:'photolens_show_cost'})).value:localStorage.getItem('photolens_show_cost'))==='true';panel.hidden=false;$('#photoPlannerButton')?.setAttribute('aria-expanded','true');render();panel.querySelector('.planner-close')?.focus();}
 async function jsonFetch(url,opt={},timeout=12000){const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),timeout);try{const res=await fetch(url,{...opt,signal:ctl.signal});const data=await res.json().catch(()=>null);if(!res.ok)throw new Error(data?.reason||'HTTP '+res.status);return data;}finally{clearTimeout(timer);}}
 async function loadForecast(p){const key='photolens_weather_'+p.latitude.toFixed(2)+'_'+p.longitude.toFixed(2);let cache=json(key,null);if(cache&&Date.now()-cache.fetchedAt<20*60*1000){forecast=cache;status='Dữ liệu đã lưu gần đây.';render();return;}const base={latitude:p.latitude,longitude:p.longitude,timezone:'auto'};const u=new URL('https://api.open-meteo.com/v1/forecast');u.search=new URLSearchParams({...base,current:'temperature_2m,apparent_temperature,precipitation,cloud_cover,wind_speed_10m',hourly:'temperature_2m,precipitation_probability,cloud_cover,visibility,wind_speed_10m,uv_index',daily:'sunrise,sunset,temperature_2m_max,temperature_2m_min,precipitation_probability_max',forecast_days:'7'});const aq=new URL('https://air-quality-api.open-meteo.com/v1/air-quality');aq.search=new URLSearchParams({...base,hourly:'pm2_5',forecast_days:'5'});const pair=await Promise.all([jsonFetch(u),jsonFetch(aq).catch(()=>null)]);const air=pair[1]?.hourly,airByTime=new Map((air?.time||[]).map((time,i)=>[time,air.pm2_5?.[i]??null]));forecast={...pair[0],hourly:{...pair[0].hourly,pm2_5:(pair[0].hourly?.time||[]).map(time=>airByTime.get(time)??null)},pm25:air?.pm2_5?.[0]??null,fetchedAt:Date.now(),cached:false};save(key,forecast);status='';render();}
 async function findWeather(name){status='Đang tìm địa điểm và dự báo…';render();try{const geo=new URL('https://geocoding-api.open-meteo.com/v1/search');geo.search=new URLSearchParams({name:name,count:'1',language:'vi',format:'json',countryCode:'VN'});const g=await jsonFetch(geo);const x=g.results?.[0];if(!x)throw new Error('Không tìm thấy địa điểm.');place={label:[x.name,x.admin1,x.country].filter(Boolean).join(', '),latitude:x.latitude,longitude:x.longitude};await loadForecast(place);}catch(e){status='Không tải được dự báo: '+e.message;const key=Number.isFinite(place?.latitude)&&Number.isFinite(place?.longitude)?'photolens_weather_'+place.latitude.toFixed(2)+'_'+place.longitude.toFixed(2):'';const old=key?json(key,null):null;if(old)forecast={...old,cached:true};render();}}
@@ -363,7 +295,7 @@ async function findSpots(){
   render();
 }
 async function findSpotsWithFallback(){try{await findSpots();}catch(error){status='Không tải được Overpass: '+(error.message||'lỗi kết nối')+'. Danh sách địa điểm tuyển chọn vẫn dùng được.';render();}}
-async function click(e){const typeOption=e.target.closest('[data-device-type-option]');if(typeOption){selectDeviceType(typeOption.dataset.deviceTypeOption);return;}if(e.target.closest('[data-device-type-toggle]')){const search=$('[data-device-type-search]',panel);filterDeviceTypeOptions(search?.value||'');search?.focus();return;}const t=e.target.closest('[data-tab]');if(t){tab=t.dataset.tab;render();if(tab==='weather'&&!forecast&&place?.label==='Hà Nội')findWeather('Hà Nội');return;}const a=e.target.closest('[data-action]')?.dataset.action;if(['ai-devices','ai-spots'].includes(a)){await runPhotographyAI(a);return;}if(a==='locate')locate();if(a==='show-my-location')showMyLocation();if(a==='find-spots')findSpotsWithFallback();if(a==='change-city'){tab='weather';forecast=null;render();}if(a==='close')close();if(e.target.matches('[data-compare-device]')){const id=e.target.dataset.compareDevice,ids=json('photolens_compare_devices',['huawei-p60-pro','samsung-s21-ultra']);while(ids.length<3)ids.push('');let slot=ids.findIndex(value=>!value);if(slot<0)slot=2;ids[slot]=id;save('photolens_compare_devices',ids);status='Đã thêm thiết bị vào vị trí '+String.fromCharCode(65+slot)+' trong màn hình so sánh.';render();return;}if(a==='add-device'){const brand=prompt('Hãng thiết bị:');if(!brand)return;const model=prompt('Tên máy:');if(!model)return;const all=json('photolens_my_devices_v1',[]);let extra={};const raw=prompt('Thông số đã đối chiếu, dạng JSON (để trống nếu chưa có):','');if(raw){try{extra=JSON.parse(raw);if(!extra||typeof extra!=='object'||Array.isArray(extra))throw new Error();}catch{alert('JSON không hợp lệ; thiết bị chưa được lưu.');return;}}all.push({...extra,id:'mine-'+Date.now(),brand,model,type:'my-device',verified:false,userCreated:true,note:'Thông số do người dùng cung cấp; chưa xác minh.'});if(!save('photolens_my_devices_v1',all))alert('Không lưu được thiết bị.');render();}if(e.target.matches('[data-delete-device]')){save('photolens_my_devices_v1',myDevices().filter(d=>d.id!==e.target.dataset.deleteDevice));render();}if(e.target.matches('[data-select-spot]')){pickedSpot=spots.find(s=>s.id===e.target.dataset.selectSpot)||spotsSeed.find(s=>s.id===e.target.dataset.selectSpot);status='Đã chọn địa điểm cho kế hoạch.';render();}if(e.target.matches('[data-delete-plan]')){repo.remove(e.target.dataset.deletePlan);render();}if(e.target.matches('[data-edit-plan]')){editingPlan=e.target.dataset.editPlan;tab='plans';render();}if(a==='export-plans')exportPlans();}
+async function click(e){const t=e.target.closest('[data-tab]');if(t){tab=t.dataset.tab;render();if(tab==='weather'&&!forecast&&place?.label==='Hà Nội')findWeather('Hà Nội');return;}const a=e.target.closest('[data-action]')?.dataset.action;if(['ai-devices','ai-spots'].includes(a)){await runPhotographyAI(a);return;}if(a==='locate')locate();if(a==='show-my-location')showMyLocation();if(a==='find-spots')findSpotsWithFallback();if(a==='change-city'){tab='weather';forecast=null;render();}if(a==='close')close();if(e.target.matches('[data-compare-device]')){const id=e.target.dataset.compareDevice,ids=json('photolens_compare_devices',['huawei-p60-pro','samsung-s21-ultra']);while(ids.length<3)ids.push('');let slot=ids.findIndex(value=>!value);if(slot<0)slot=2;ids[slot]=id;save('photolens_compare_devices',ids);status='Đã thêm thiết bị vào vị trí '+String.fromCharCode(65+slot)+' trong màn hình so sánh.';render();return;}if(a==='add-device'){const brand=prompt('Hãng thiết bị:');if(!brand)return;const model=prompt('Tên máy:');if(!model)return;const all=json('photolens_my_devices_v1',[]);let extra={};const raw=prompt('Thông số đã đối chiếu, dạng JSON (để trống nếu chưa có):','');if(raw){try{extra=JSON.parse(raw);if(!extra||typeof extra!=='object'||Array.isArray(extra))throw new Error();}catch{alert('JSON không hợp lệ; thiết bị chưa được lưu.');return;}}all.push({...extra,id:'mine-'+Date.now(),brand,model,type:'my-device',verified:false,userCreated:true,note:'Thông số do người dùng cung cấp; chưa xác minh.'});if(!save('photolens_my_devices_v1',all))alert('Không lưu được thiết bị.');render();}if(e.target.matches('[data-delete-device]')){save('photolens_my_devices_v1',myDevices().filter(d=>d.id!==e.target.dataset.deleteDevice));render();}if(e.target.matches('[data-select-spot]')){pickedSpot=spots.find(s=>s.id===e.target.dataset.selectSpot)||spotsSeed.find(s=>s.id===e.target.dataset.selectSpot);status='Đã chọn địa điểm cho kế hoạch.';render();}if(e.target.matches('[data-delete-plan]')){repo.remove(e.target.dataset.deletePlan);render();}if(e.target.matches('[data-edit-plan]')){editingPlan=e.target.dataset.editPlan;tab='plans';render();}if(a==='export-plans')exportPlans();}
 async function submit(e){e.preventDefault();const f=e.target,fd=new FormData(f);if(f.dataset.form==='weather'){findWeather(String(fd.get('place')||'').trim());return;}if(f.dataset.form==='device-recommendation'){recommendationPrefs={type:String(fd.get('type')||'all'),purpose:String(fd.get('purpose')||'portrait'),budget:String(fd.get('budget')||''),currentDeviceId:String(fd.get('currentDeviceId')||''),priorities:fd.getAll('priority').map(String)};save('photolens_device_recommendation_v1',recommendationPrefs);render();return;}if(f.dataset.form==='plan'){const p=Object.fromEntries(fd);const saved=repo.save(p);if(!saved){alert('Không lưu được kế hoạch.');return;}editingPlan='';status='Đã lưu kế hoạch trên thiết bị.';render();}}
 function change(e){if(e.target.matches('[data-device]')){let ids=json('photolens_compare_devices',['huawei-p60-pro','samsung-s21-ultra']);ids[Number(e.target.dataset.device)]=e.target.value||'';save('photolens_compare_devices',ids);render();}if(e.target.matches('[data-diff]')){onlyDiff=e.target.checked;render();}if(e.target.matches('[data-genre]')){genre=e.target.value;render();}if(e.target.matches('[data-purpose]')){const p=e.target.value;const list=devices().filter(d=>json('photolens_compare_devices',[]).includes(d.id));const grid=$('.planner-score-grid');if(grid)grid.innerHTML=list.map(d=>{const s=deviceScore(d,p,scoreConfig);return '<article><b>'+esc(d.brand+' '+d.model)+'</b><strong>'+(s.score===null?'Chưa đủ dữ liệu':s.score+'/100')+'</strong></article>';}).join('');}if(e.target.matches('[data-bg]')){save('photolens_bg_color',e.target.value);tab='outfit';render();}if(e.target.matches('[data-style]')){save('photolens_outfit_style',e.target.value);render();}}
 async function exportPlans(format='json'){
@@ -399,4 +331,3 @@ async function deliverBlob(blob,name){
  download(blob,name);
 }
 function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);}
-
