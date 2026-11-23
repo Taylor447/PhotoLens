@@ -7,7 +7,7 @@ import {conditionScore,bestHours,solarWindows,angleOptions,outfitOptions,createP
 
 const $=(s,r=document)=>r.querySelector(s), genres={portrait:'Chân dung',landscape:'Phong cảnh',architecture:'Kiến trúc',street:'Đường phố',night:'Đường phố đêm',moon:'Chụp trăng',cosplay:'Cosplay',documentary:'Tư liệu'};
 
-let panel=null,tab='weather',place={label:'Hà Nội'},forecast=null,myPosition=null,spots=[],pickedSpot=null,genre='portrait',angleGenre='portrait',anglePose='solo',angleScene='',angleIndex=0,simMode='2d',simHeight=160,simDistance=4,simOrbitX=-8,simOrbitY=12,simDrag=null,editingPlan='',aiResult=null,aiRoute='',aiMessage='',showEstimatedCost=false;
+let panel=null,tab='weather',place={label:'Hà Nội'},forecast=null,myPosition=null,spots=[],pickedSpot=null,genre='portrait',angleGenre='portrait',anglePose='solo',angleScene='',angleIndex=0,simMode='2d',simFallbackMessage='',simHeight=160,simDistance=4,simOrbitX=-8,simOrbitY=12,simDrag=null,editingPlan='',aiResult=null,aiRoute='',aiMessage='',showEstimatedCost=false;
 const repo=createPlanStore();
 const json=(key,fallback)=>{try{const v=JSON.parse(localStorage.getItem(key)||'null');return v??fallback;}catch{return fallback;}};
 
@@ -81,11 +81,11 @@ function anglesView(){
  const suggestions=angleOptions(angleGenre,'người trong ảnh',angleScene,anglePose);
  const safeIndex=simClamp(angleIndex,0,suggestions.length-1);
  const selected=suggestions[safeIndex];
- let fallbackMessage='';
+ let fallbackMessage=simFallbackMessage;
  let shownMode=simMode;
- if(shownMode==='3d'&&typeof document.createElementNS!=='function'){shownMode='2d';simMode='2d';fallbackMessage='Thiết bị không hỗ trợ SVG cần thiết; đã chuyển về mô phỏng 2D.';}
+ if(shownMode==='3d'&&typeof document.createElementNS!=='function'){shownMode='2d';simMode='2d';fallbackMessage='Thiết bị không hỗ trợ SVG cần thiết; đã chuyển về mô phỏng 2D.';simFallbackMessage=fallbackMessage;}
  let drawing='';
- try{drawing=simulatorSvg(selected,safeIndex,shownMode);}catch{shownMode='2d';simMode='2d';drawing=simulatorSvg(selected,safeIndex,'2d');fallbackMessage='Không tải được mô phỏng 3D; đã tự chuyển về 2D.';}
+ try{drawing=simulatorSvg(selected,safeIndex,shownMode);}catch{shownMode='2d';simMode='2d';drawing=simulatorSvg(selected,safeIndex,'2d');fallbackMessage='Không tải được mô phỏng 3D; đã tự chuyển về 2D.';simFallbackMessage=fallbackMessage;}
  const poseOptions=[['solo','Một người'],['couple','Cặp đôi'],['group','Nhóm bạn']];
  const cards=suggestions.map((item,index)=>'<button type="button" class="planner-angle-choice'+(index===safeIndex?' active':'')+'" data-angle-index="'+index+'" aria-pressed="'+(index===safeIndex)+'"><small>Gợi ý '+(index+1)+(index===safeIndex?' · Đang mô phỏng':'')+'</small><h4>'+esc(item.name)+'</h4><p><b>Đặt máy:</b> '+esc(item.height)+'. '+esc(item.distance)+'.</p><p><b>Bố cục:</b> '+esc(item.composition)+'</p><p class="planner-pose-tip"><b>Tạo dáng:</b> '+esc(item.poseTip)+'</p><p><b>Mẹo:</b> '+esc(item.tips)+'</p><p><b>Nên tránh:</b> '+esc(item.avoid)+'</p></button>').join('');
  return '<div class="planner-head"><div><h3>Góc chụp & tạo dáng</h3><p>Chọn thể loại và số người để nhận gợi ý góc máy cùng cách tạo dáng tự nhiên.</p></div></div><form class="planner-card planner-form" data-form="angles"><div class="planner-row"><label>Thể loại ảnh<select name="genre">'+options(Object.entries(genres),angleGenre)+'</select></label><label>Chủ thể<select name="poseType">'+options(poseOptions,anglePose)+'</select></label><label>Bối cảnh (không bắt buộc)<input name="scene" maxlength="120" value="'+esc(angleScene)+'" placeholder="Ví dụ: công viên lúc hoàng hôn"></label></div><button class="planner-primary" type="submit">Cập nhật gợi ý</button></form><section class="planner-sim" aria-labelledby="planner-sim-title"><div class="planner-sim-heading"><div><h4 id="planner-sim-title">Mô phỏng: '+esc(selected.name)+'</h4><p>Chọn 2D hoặc 3D. Kéo vùng minh họa 3D để xoay góc nhìn.</p></div><div class="planner-sim-modes" role="group" aria-label="Chế độ mô phỏng"><button type="button" data-sim-mode="2d" aria-pressed="'+(shownMode==='2d')+'">2D</button><button type="button" data-sim-mode="3d" aria-pressed="'+(shownMode==='3d')+'">3D</button></div></div><div class="planner-sim-controls"><label>Độ cao máy ảnh <span><output>'+simHeight+'</output> cm</span><input type="range" min="60" max="220" step="5" value="'+simHeight+'" data-sim-height aria-label="Độ cao máy ảnh tính bằng centimet"></label><label>Khoảng cách máy ảnh <span><output>'+simDistance+'</output> m</span><input type="range" min="2" max="10" step="1" value="'+simDistance+'" data-sim-distance aria-label="Khoảng cách máy ảnh tính bằng mét"></label></div><div class="planner-sim-stage" data-sim-stage data-mode="'+shownMode+'">'+drawing+'</div>'+(fallbackMessage?'<p class="planner-sim-notice" role="status">'+fallbackMessage+'</p>':'')+(shownMode==='3d'?'<div class="planner-sim-orbit" role="group" aria-label="Xoay góc nhìn mô phỏng"><span>Xoay góc nhìn:</span><button type="button" data-orbit-step="left" aria-label="Xoay sang trái">←</button><button type="button" data-orbit-step="right" aria-label="Xoay sang phải">→</button><button type="button" data-orbit-step="up" aria-label="Xoay lên">↑</button><button type="button" data-orbit-step="down" aria-label="Xoay xuống">↓</button><span class="planner-muted">Dùng chuột, cảm ứng hoặc các nút mũi tên.</span></div>':'')+'<p class="planner-sim-note">Sơ đồ mang tính minh họa bố cục và vị trí máy; không mô phỏng chính xác ống kính, phối cảnh hay kích thước thực tế.</p></section><div class="planner-angle-grid">'+cards+'</div>';
@@ -237,7 +237,7 @@ function render(){
   if(tab==='spots')renderSpotsMap(version);
 }
 function close(){if(panel)panel.hidden=true;$('#photoPlannerButton')?.setAttribute('aria-expanded','false');}
-export async function openPhotographyHub(){if(!panel){panel=document.createElement('div');panel.id='photoPlannerHost';document.body.append(panel);panel.addEventListener('click',click);panel.addEventListener('submit',submit);panel.addEventListener('change',change);panel.addEventListener('pointerdown',orbitStart);panel.addEventListener('pointermove',orbitMove);panel.addEventListener('pointerup',orbitEnd);panel.addEventListener('pointercancel',orbitEnd);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel&&!panel.hidden)close();});}showEstimatedCost=(Capacitor.isNativePlatform()?(await Preferences.get({key:'photolens_show_cost'})).value:localStorage.getItem('photolens_show_cost'))==='true';panel.hidden=false;$('#photoPlannerButton')?.setAttribute('aria-expanded','true');render();panel.querySelector('.planner-close')?.focus();}
+export async function openPhotographyHub(){if(!panel){panel=document.createElement('div');panel.id='photoPlannerHost';document.body.append(panel);panel.addEventListener('click',click);panel.addEventListener('submit',submit);panel.addEventListener('input',updateRange);panel.addEventListener('change',change);panel.addEventListener('pointerdown',orbitStart);panel.addEventListener('pointermove',orbitMove);panel.addEventListener('pointerup',orbitEnd);panel.addEventListener('pointercancel',orbitEnd);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel&&!panel.hidden)close();});}showEstimatedCost=(Capacitor.isNativePlatform()?(await Preferences.get({key:'photolens_show_cost'})).value:localStorage.getItem('photolens_show_cost'))==='true';panel.hidden=false;$('#photoPlannerButton')?.setAttribute('aria-expanded','true');render();panel.querySelector('.planner-close')?.focus();}
 async function jsonFetch(url,opt={},timeout=12000){const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),timeout);try{const res=await fetch(url,{...opt,signal:ctl.signal});const data=await res.json().catch(()=>null);if(!res.ok)throw new Error(data?.reason||'HTTP '+res.status);return data;}finally{clearTimeout(timer);}}
 async function loadForecast(p){const key='photolens_weather_'+p.latitude.toFixed(2)+'_'+p.longitude.toFixed(2);let cache=json(key,null);if(cache&&Date.now()-cache.fetchedAt<20*60*1000){forecast=cache;status='Dữ liệu đã lưu gần đây.';render();return;}const base={latitude:p.latitude,longitude:p.longitude,timezone:'auto'};const u=new URL('https://api.open-meteo.com/v1/forecast');u.search=new URLSearchParams({...base,current:'temperature_2m,apparent_temperature,precipitation,cloud_cover,wind_speed_10m',hourly:'temperature_2m,precipitation_probability,cloud_cover,visibility,wind_speed_10m,uv_index',daily:'sunrise,sunset,temperature_2m_max,temperature_2m_min,precipitation_probability_max',forecast_days:'7'});const aq=new URL('https://air-quality-api.open-meteo.com/v1/air-quality');aq.search=new URLSearchParams({...base,hourly:'pm2_5',forecast_days:'5'});const pair=await Promise.all([jsonFetch(u),jsonFetch(aq).catch(()=>null)]);const air=pair[1]?.hourly,airByTime=new Map((air?.time||[]).map((time,i)=>[time,air.pm2_5?.[i]??null]));forecast={...pair[0],hourly:{...pair[0].hourly,pm2_5:(pair[0].hourly?.time||[]).map(time=>airByTime.get(time)??null)},pm25:air?.pm2_5?.[0]??null,fetchedAt:Date.now(),cached:false};save(key,forecast);status='';render();}
 async function findWeather(name){status='Đang tìm địa điểm và dự báo…';render();try{const geo=new URL('https://geocoding-api.open-meteo.com/v1/search');geo.search=new URLSearchParams({name:name,count:'1',language:'vi',format:'json',countryCode:'VN'});const g=await jsonFetch(geo);const x=g.results?.[0];if(!x)throw new Error('Không tìm thấy địa điểm.');place={label:[x.name,x.admin1,x.country].filter(Boolean).join(', '),latitude:x.latitude,longitude:x.longitude};await loadForecast(place);}catch(e){status='Không tải được dự báo: '+e.message;const key=Number.isFinite(place?.latitude)&&Number.isFinite(place?.longitude)?'photolens_weather_'+place.latitude.toFixed(2)+'_'+place.longitude.toFixed(2):'';const old=key?json(key,null):null;if(old)forecast={...old,cached:true};render();}}
@@ -329,9 +329,9 @@ async function click(e){
   const tabButton=e.target.closest('[data-tab]');
   if(tabButton){tab=tabButton.dataset.tab;render();if(tab==='weather'&&!forecast&&place?.label==='Hà Nội')findWeather('Hà Nội');return;}
   const angleChoice=e.target.closest('[data-angle-index]');
-  if(angleChoice){angleIndex=Number(angleChoice.dataset.angleIndex)||0;simHeight=[160,120,200][angleIndex]||160;simDistance=[4,5,4][angleIndex]||4;render();return;}
+  if(angleChoice){simFallbackMessage='';angleIndex=Number(angleChoice.dataset.angleIndex)||0;simHeight=[160,120,200][angleIndex]||160;simDistance=[4,5,4][angleIndex]||4;render();return;}
   const simButton=e.target.closest('[data-sim-mode]');
-  if(simButton){simMode=simButton.dataset.simMode==='3d'?'3d':'2d';render();return;}
+  if(simButton){simFallbackMessage='';simMode=simButton.dataset.simMode==='3d'?'3d':'2d';render();return;}
   const orbitButton=e.target.closest('[data-orbit-step]');
   if(orbitButton){const step=orbitButton.dataset.orbitStep;if(step==='left')simOrbitY=simClamp(simOrbitY-8,-55,55);if(step==='right')simOrbitY=simClamp(simOrbitY+8,-55,55);if(step==='up')simOrbitX=simClamp(simOrbitX-6,-28,24);if(step==='down')simOrbitX=simClamp(simOrbitX+6,-28,24);orbitTransform();return;}
   const action=e.target.closest('[data-action]')?.dataset.action;
@@ -349,12 +349,26 @@ async function click(e){
 async function submit(e){
   e.preventDefault();const form=e.target,fd=new FormData(form);
   if(form.dataset.form==='weather'){findWeather(String(fd.get('place')||'').trim());return;}
-  if(form.dataset.form==='angles'){angleGenre=String(fd.get('genre')||'portrait');anglePose=String(fd.get('poseType')||'solo');angleScene=String(fd.get('scene')||'').trim();angleIndex=0;simHeight=160;simDistance=4;render();return;}
+  if(form.dataset.form==='angles'){angleGenre=String(fd.get('genre')||'portrait');anglePose=String(fd.get('poseType')||'solo');angleScene=String(fd.get('scene')||'').trim();angleIndex=0;simFallbackMessage='';simHeight=160;simDistance=4;render();return;}
   if(form.dataset.form==='plan'){const plan=Object.fromEntries(fd);const saved=repo.save(plan);if(!saved){alert('Không lưu được kế hoạch.');return;}editingPlan='';status='Đã lưu kế hoạch trên thiết bị.';render();}
 }
+function updateSimulation(){
+ const stage=panel?.querySelector('[data-sim-stage]');
+ if(!stage)return;
+ const suggestions=angleOptions(angleGenre,'người trong ảnh',angleScene,anglePose),index=simClamp(angleIndex,0,suggestions.length-1);
+ try{stage.innerHTML=simulatorSvg(suggestions[index],index,simMode);stage.dataset.mode=simMode;}
+ catch{simMode='2d';simFallbackMessage='Không tải được mô phỏng 3D; đã tự chuyển về 2D.';render();}
+}
+function updateRange(e){
+ if(!e.target.matches('[data-sim-height],[data-sim-distance]'))return;
+ const value=Number(e.target.value);
+ if(e.target.matches('[data-sim-height]'))simHeight=value||160;
+ else simDistance=value||4;
+ const output=e.target.closest('label')?.querySelector('output');
+ if(output)output.textContent=String(value);
+ updateSimulation();
+}
 function change(e){
-  if(e.target.matches('[data-sim-height]')){simHeight=Number(e.target.value)||160;render();return;}
-  if(e.target.matches('[data-sim-distance]')){simDistance=Number(e.target.value)||4;render();return;}
   if(e.target.matches('[data-genre]')){genre=e.target.value;render();}
   if(e.target.matches('[data-bg]')){save('photolens_bg_color',e.target.value);tab='outfit';render();}
   if(e.target.matches('[data-style]')){save('photolens_outfit_style',e.target.value);render();}
