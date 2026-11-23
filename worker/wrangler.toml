@@ -2,16 +2,15 @@ name = "photolens-ai-proxy"
 main = "src/index.js"
 compatibility_date = "2026-11-21"
 
-[observability]
-enabled = true
-head_sampling_rate = 1
+# Đặt Worker gần dịch vụ upstream; Google có thể vẫn từ chối một số IP egress.
+[placement]
+mode = "smart"
 
 [vars]
-# Model được cấu hình ở đây; API key chỉ được lưu bằng wrangler secret.
-GEMINI_MODEL = "gemini-3.8-flash"
-# Thay https://photolens.example.com bằng origin web thực tế trước khi deploy.
-ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173,https://localhost,capacitor://localhost,photolens://app,https://photolens.example.com"
-
+GEMINI_MODEL = "gemini-3.5-flash-lite"
+ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,https://localhost,capacitor://localhost,photolens://app,https://taylor447.github.io"
+# Có thể giới hạn origin, phân tách bằng dấu phẩy. Ví dụ gồm web, Android, Electron và local dev:
+# ALLOWED_ORIGINS = "https://your-domain.example,https://localhost,null,http://localhost:5173"
 [[ratelimits]]
 name = "PHOTO_AI_LIMITER"
 namespace_id = "1001"

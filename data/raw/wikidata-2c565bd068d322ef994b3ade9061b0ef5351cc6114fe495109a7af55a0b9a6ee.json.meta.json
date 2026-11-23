@@ -1,7 +1,0 @@
-{
-  "sourceUrl": "https://query.wikidata.org/sparql?query=SELECT+%3Fitem+%3FitemLabel+%3FbrandLabel+%3Fdate+%3FclassLabel+WHERE+%7B+VALUES+%3Fclass+%7B+wd%3AQ22645+wd%3AQ19723414+%7D+%3Fitem+wdt%3AP31%2Fwdt%3AP279*+%3Fclass%3B+wdt%3AP176+%3Fbrand.+OPTIONAL+%7B+%3Fitem+wdt%3AP571+%3Fdate.+%7D+SERVICE+wikibase%3Alabel+%7B+bd%3AserviceParam+wikibase%3Alanguage+%22en%22.+%7D+%7D+ORDER+BY+%3FitemLabel+LIMIT+300&format=json",
-  "retrievedAt": "2026-11-23",
-  "sha256": "2c565bd068d322ef994b3ade9061b0ef5351cc6114fe495109a7af55a0b9a6ee",
-  "license": "CC0-1.0",
-  "userAgent": "PhotoLensDataPipeline/1.0 (+https://github.com/Taylor447/PhotoLens)"
-}

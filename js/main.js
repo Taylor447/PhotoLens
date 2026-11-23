@@ -28,11 +28,13 @@ const icons = {
   theme: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>')
 };
 
+const brandMark = `<img src="${import.meta.env.BASE_URL}assets/photolens-logo.png" alt="" />`
+
 const root = $('#app');
 root.innerHTML = `
   <main class="shell">
     <header class="topbar">
-      <div class="brand"><div class="brand-mark">${icons.photo}</div><div><div class="brand-name">PhotoLens</div><div class="brand-sub">Nhìn ảnh kỹ hơn một chút</div></div></div>
+      <div class="brand"><div class="brand-mark">${brandMark}</div><div><div class="brand-name">PhotoLens</div><div class="brand-sub">Analysis &amp; Editor</div></div></div>
       <div class="top-actions">
         <button class="icon-btn" id="themeBtn" title="Chuyển giao diện sáng/tối" aria-label="Chuyển giao diện sáng/tối" aria-pressed="false">${icons.theme}</button>
         <button class="icon-btn" id="settingsBtn" title="Cấu hình AI" aria-label="Cấu hình AI">${icons.sparkle}</button>
@@ -40,7 +42,7 @@ root.innerHTML = `
       </div>
     </header>
     <section class="hero">
-      <div><div class="eyebrow">PHÂN TÍCH HÌNH ẢNH</div><h1>Ảnh của bạn, nhìn bằng dữ liệu.</h1><p>Đo kỹ thuật ngay trên thiết bị. AI chỉ hoạt động khi bạn cấu hình Worker proxy.</p></div>
+      <div><div class="eyebrow">PHÂN TÍCH HÌNH ẢNH</div><h1>Ảnh của bạn.</h1></div>
       <nav class="mode-switch" role="tablist" aria-label="Chế độ">
         <button class="active" role="tab" aria-selected="true" data-mode="single">${icons.photo}<span>Phân tích</span></button>
         <button role="tab" aria-selected="false" data-mode="compare">${icons.compare}<span>So sánh</span></button>
@@ -57,9 +59,8 @@ root.innerHTML = `
       </article>`).join('')}
     </section>
     <div class="overlay-legend" id="overlayLegend" hidden><span><i class="red"></i>Cháy sáng</span><span><i class="blue"></i>Mất chi tiết tối</span><span><i class="green"></i>Cạnh tương phản cao</span><span><i class="white"></i>Lưới 1/3</span></div>
-    <section class="control-row">
-      <div class="privacy">${icons.lock}<span>Chỉ số kỹ thuật được tính cục bộ. Ảnh chỉ gửi tới AI khi Worker đã cấu hình.</span></div>
-      <div class="controls"><button class="primary-btn" id="analyzeBtn">${icons.sparkle}<span>Phân tích ảnh</span></button><button class="soft-btn" id="overlayBtn" aria-pressed="false">${icons.grid} Lưới & vùng</button><button class="ghost-btn" id="clearBtn">${icons.trash} Xóa ảnh</button></div>
+    <section class="control-row controls-only">
+      <div class="controls"><button class="primary-btn" id="analyzeBtn">${icons.sparkle}<span>Phân tích ảnh</span></button><button class="soft-btn" id="overlayBtn" aria-pressed="false">${icons.grid} Lưới & vùng</button><button class="soft-btn" id="editBtn">${icons.sparkle} Chỉnh ảnh</button><button class="soft-btn" id="studioCameraBtn">${icons.camera} Camera</button><button class="ghost-btn" id="clearBtn">${icons.trash} Xóa ảnh</button></div>
     </section>
     <section id="report" class="report" aria-live="polite" aria-atomic="false"><div class="empty-state"><div class="empty-orb">${icons.chart}</div><strong>Sẵn sàng xem ảnh của bạn</strong><p>Tải một ảnh lên để xem chỉ số kỹ thuật, hoặc bật So sánh để đối chiếu hai ảnh.</p></div></section>
   </main>
@@ -93,20 +94,24 @@ try {
 function toast(message) { const el = $('#toast'); el.textContent = message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => el.classList.remove('show'), 2800); }
 // Worker/API có thể trả lỗi lồng nhau; tránh hiển thị [object Object] trong giao diện.
 function readableErrorMessage(value, fallback = 'Không thể kết nối AI. Các chỉ số cục bộ vẫn được giữ.') {
+  const regionBlocked = 'Google Gemini từ chối vị trí IP mà Worker dùng để gọi API. PhotoLens đã bật Smart Placement trong cấu hình; hãy deploy lại Worker và chờ Cloudflare tối ưu vị trí (có thể đến 15 phút). Nếu vẫn lỗi, cần đổi nơi chạy backend hoặc gửi báo cáo tới Google. Báo cáo cục bộ vẫn đầy đủ.';
+  const messages = {
+    ORIGIN_NOT_ALLOWED: 'Worker chưa cho phép địa chỉ của ứng dụng. Hãy dùng http://localhost:5173 hoặc thêm đúng origin vào ALLOWED_ORIGINS rồi deploy lại Worker.',
+    KEY_NOT_CONFIGURED: 'Worker chưa được cấu hình secret GEMINI_API_KEY.',
+    GEMINI_AUTH: 'Gemini từ chối API key. Hãy kiểm tra secret GEMINI_API_KEY trên Cloudflare.',
+    GEMINI_RATE_LIMIT: 'Gemini đang giới hạn yêu cầu. Hãy thử lại sau ít phút.',
+    GEMINI_REGION_BLOCKED: regionBlocked
+  };
   let current = value;
   for (let depth = 0; depth < 5; depth++) {
-    if (typeof current === 'string' && current.trim()) return current.trim();
     if (current instanceof Error) { current = current.message; continue; }
+    if (typeof current === 'string' && current.trim()) {
+      return /user location is not supported for the api use/i.test(current) ? regionBlocked : current.trim();
+    }
     if (!current || typeof current !== 'object') break;
+    if (typeof current.code === 'string' && messages[current.code]) return messages[current.code];
     if (current.message != null) { current = current.message; continue; }
     if (current.error != null) { current = current.error; continue; }
-    const messages = {
-      ORIGIN_NOT_ALLOWED: 'Worker chưa cho phép địa chỉ của ứng dụng. Hãy dùng http://localhost:5173 hoặc thêm đúng origin vào ALLOWED_ORIGINS rồi deploy lại Worker.',
-      KEY_NOT_CONFIGURED: 'Worker chưa được cấu hình secret GEMINI_API_KEY.',
-      GEMINI_AUTH: 'Gemini từ chối API key. Hãy kiểm tra secret GEMINI_API_KEY trên Cloudflare.',
-      GEMINI_RATE_LIMIT: 'Gemini đang giới hạn yêu cầu. Hãy thử lại sau ít phút.'
-    };
-    if (typeof current.code === 'string' && messages[current.code]) return messages[current.code];
     break;
   }
   return fallback;
@@ -197,6 +202,8 @@ for (const id of ['A','B']) {
 $('#overlayBtn').addEventListener('click', () => { showOverlay = !showOverlay; $('#overlayBtn').classList.toggle('active', showOverlay); $('#overlayBtn').setAttribute('aria-pressed', String(showOverlay)); $('#overlayLegend').hidden = !showOverlay; Object.keys(slots).forEach(drawOverlay); });
 $('#clearBtn').addEventListener('click', clearAll);
 $('#analyzeBtn').addEventListener('click', runAnalysis);
+$('#editBtn').addEventListener('click', () => launchStudio('editor'));
+$('#studioCameraBtn').addEventListener('click', () => launchStudio('camera'));
 $('#historyBtn').addEventListener('click', showHistory);
 $('#mobileHistory').addEventListener('click', showHistory);
 $('#settingsBtn').addEventListener('click', showSettings);
@@ -311,6 +318,73 @@ async function takePhoto(id) {
     return;
   }
   const input = $(`[data-input="${id}"]`); input.setAttribute('capture','environment'); input.click(); setTimeout(() => input.removeAttribute('capture'), 1000);
+}
+
+
+async function captureStudioPhoto() {
+  const permission = await Camera.requestPermissions({ permissions: ['camera'] });
+  if (permission.camera !== 'granted') throw new Error('Cần cho phép PhotoLens dùng camera để chụp ảnh.');
+  const photo = await Camera.getPhoto({ quality: 95, allowEditing: false, resultType: CameraResultType.Uri, source: CameraSource.Camera, width: 2400 });
+  const response = await fetch(photo.webPath);
+  const blob = await response.blob();
+  return new File([blob], `PhotoLens-${Date.now()}.jpg`, { type: blob.type || 'image/jpeg' });
+}
+
+async function shareStudioPhoto(blob, filename) {
+  if (!Capacitor.isNativePlatform()) return false;
+  try {
+    const base64 = await blobToBase64(blob);
+    const saved = await Filesystem.writeFile({ path: filename, data: base64, directory: Directory.Cache, recursive: true });
+    await Share.share({ title: 'PhotoLens', url: saved.uri, dialogTitle: 'Chia sẻ ảnh' });
+    return true;
+  } catch (error) {
+    console.warn('Không dùng được bảng chia sẻ native:', error);
+    return false;
+  }
+}
+
+async function detectStudioWatermarks(file) {
+  if (!(await loadAiEnabled())) throw new Error('AI đang tắt. Hãy bật Dùng AI trong Cài đặt AI.');
+  const endpoint = await getAiEndpoint();
+  if (!endpoint) throw new Error('Chưa cấu hình URL Cloudflare Worker.');
+  const { data } = await prepareAiJpeg({ file });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 45_000);
+  try {
+    const response = await fetch(`${endpoint.replace(/\/+$/, '')}/analyze`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode: 'watermarks', images: [data] }), signal: controller.signal
+    });
+    const body = await response.json().catch(() => null);
+    if (!response.ok) throw new Error(body?.error?.message || `Worker trả HTTP ${response.status}.`);
+    return body?.watermarks || [];
+  } catch (error) {
+    if (error?.name === 'AbortError') throw new Error('Worker phản hồi quá lâu. Hãy thử lại.');
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function launchStudio(startView = 'editor') {
+  try {
+    const { openStudio } = await import('./studio.js');
+    openStudio({
+      file: slots.A?.file || null,
+      startView,
+      onCapture: file => addFile('A', file),
+      nativeCapture: Capacitor.isNativePlatform() ? captureStudioPhoto : null,
+      nativeShare: Capacitor.isNativePlatform() ? shareStudioPhoto : null,
+      getAiStatus: async () => ({ enabled: await loadAiEnabled(), endpoint: await getAiEndpoint() }),
+      detectWatermarks: detectStudioWatermarks,
+      openAiSettings: showSettings
+    });
+  } catch (error) {
+    console.error('PhotoLens Studio failed to open:', error);
+    const orphan=document.getElementById('photoStudio');
+    if(orphan){orphan.remove();document.body.style.overflow='';}
+    toast('Studio gặp lỗi khi khởi tạo. Hãy tải lại trang để nhận bản sửa mới.');
+  }
 }
 
 function removeSlot(id) {
@@ -466,7 +540,7 @@ async function runAnalysis() {
               const response = await fetch(`${endpoint.replace(/\/+$/, '')}/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: targetIds.length === 2 ? 'compare' : 'single', images: targetIds.map(id => prepared[id].data) }),
+                body: JSON.stringify({ mode: targetIds.length === 2 ? 'compare' : 'single', deepAnalysis: (await getPreference('photolens_deep_analysis')) === 'true', images: targetIds.map(id => prepared[id].data) }),
                 signal: controller.signal
               });
               const data = await response.json().catch(() => null);
@@ -907,7 +981,9 @@ async function showSettings() {
   await loadAiEnabled();
   const endpoint = await getAiEndpoint();
   const envLocked = Boolean(ENV_AI_ENDPOINT);
-  openModal(`<h2>Cài đặt AI</h2><p>Ảnh được đo ngay trên thiết bị. Khi bật AI, chỉ bản JPEG đã thu nhỏ tối đa 1024 px và đã loại EXIF/GPS mới được gửi tới Cloudflare Worker.</p><label for="proxyInput">URL Cloudflare Worker</label><input id="proxyInput" type="url" placeholder="https://photolens-ai.ten-ban.workers.dev" value="${escapeAttr(endpoint)}" ${envLocked ? 'readonly' : ''} aria-describedby="endpointHelp"><p id="endpointHelp">${envLocked ? 'URL này do biến VITE_AI_ENDPOINT của bản build cung cấp.' : 'Nhập địa chỉ Worker gốc; ứng dụng sẽ gọi /health và /analyze.'}</p><label class="setting-toggle" for="settingsUseAi"><input type="checkbox" id="settingsUseAi" ${aiEnabled ? 'checked' : ''}><span>Dùng AI</span></label><div class="ai-status" role="status" aria-live="polite"><span id="aiStatusBadge" class="ai-status-badge">${endpoint ? 'Đang kiểm tra' : 'Chưa cấu hình'}</span><span id="aiStatusReason">${endpoint ? 'Đang kiểm tra kết nối Worker…' : 'Nhập URL Worker rồi kiểm tra kết nối.'}</span></div><div class="modal-actions settings-actions"><button class="ghost-btn" id="checkAiBtn" type="button" aria-label="Kiểm tra kết nối AI">Kiểm tra kết nối</button><button class="ghost-btn" id="closeModal" type="button">Đóng</button><button class="primary-btn" id="saveAiSettings" type="button">Lưu cài đặt</button></div>`);
+  const deepAnalysis = (await getPreference('photolens_deep_analysis')) === 'true';
+  const showCost = (await getPreference('photolens_show_cost')) === 'true';
+  openModal(`<h2>Cài đặt AI</h2><p>Ảnh được đo ngay trên thiết bị. Khi bật AI, chỉ bản JPEG đã thu nhỏ tối đa 1024 px và đã loại EXIF/GPS mới được gửi tới Cloudflare Worker.</p><label for="proxyInput">URL Cloudflare Worker</label><input id="proxyInput" type="url" placeholder="https://photolens-ai.ten-ban.workers.dev" value="${escapeAttr(endpoint)}" ${envLocked ? 'readonly' : ''} aria-describedby="endpointHelp"><p id="endpointHelp">${envLocked ? 'URL này do biến VITE_AI_ENDPOINT của bản build cung cấp.' : 'Nhập địa chỉ Worker gốc; ứng dụng sẽ gọi /health và /analyze.'}</p><label class="setting-toggle" for="settingsUseAi"><input type="checkbox" id="settingsUseAi" ${aiEnabled ? 'checked' : ''}><span>Dùng AI</span></label><label class="setting-toggle" for="settingsDeepAnalysis"><input type="checkbox" id="settingsDeepAnalysis" ${deepAnalysis ? 'checked' : ''}><span>Phân tích sâu (có thể dùng nhiều token hơn)</span></label><label class="setting-toggle" for="settingsShowCost"><input type="checkbox" id="settingsShowCost" ${showCost ? 'checked' : ''}><span>Hiện ước tính token và chi phí nếu Worker có cấu hình giá</span></label><div class="ai-status" role="status" aria-live="polite"><span id="aiStatusBadge" class="ai-status-badge">${endpoint ? 'Đang kiểm tra' : 'Chưa cấu hình'}</span><span id="aiStatusReason">${endpoint ? 'Đang kiểm tra kết nối Worker…' : 'Nhập URL Worker rồi kiểm tra kết nối.'}</span></div><div class="modal-actions settings-actions"><button class="ghost-btn" id="checkAiBtn" type="button" aria-label="Kiểm tra kết nối AI">Kiểm tra kết nối</button><button class="ghost-btn" id="closeModal" type="button">Đóng</button><button class="primary-btn" id="saveAiSettings" type="button">Lưu cài đặt</button></div>`);
 
   const setStatus = (state, reason) => {
     const badge = $('#aiStatusBadge');
@@ -949,6 +1025,8 @@ async function showSettings() {
     try {
       if (!ENV_AI_ENDPOINT) await setPreference('photolens_worker_url', value);
       await setPreference('photolens_ai_enabled', aiEnabled);
+      await setPreference('photolens_deep_analysis', $('#settingsDeepAnalysis')?.checked || false);
+      await setPreference('photolens_show_cost', $('#settingsShowCost')?.checked || false);
     } catch { toast('Không lưu được cài đặt AI trên thiết bị.'); return; }
     closeModal();
     toast(aiEnabled ? 'Đã lưu cài đặt AI.' : 'Đã tắt AI; chỉ số cục bộ vẫn hoạt động.');
@@ -1037,21 +1115,33 @@ if (Capacitor.isNativePlatform()) {
 try { applyTheme(localStorage.getItem('photolens_theme') || 'dark'); } catch { applyTheme('dark'); }
 showOnboarding();
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && !window.photolens) {
-  window.addEventListener('load', () => navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(error => console.info('PWA offline cache unavailable:', error.message)));
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`, { updateViaCache: 'none' })
+      .then(registration => registration.update().catch(() => {}))
+      .catch(error => console.info('PWA offline cache unavailable:', error.message));
+  });
 }
 
 
 window.addEventListener("pagehide", () => { activeAiController?.abort(new DOMException("Da roi trang.", "AbortError")); });
 
-// Chỉ tải các công cụ lập kế hoạch sau lần mở đầu tiên.
+// Công cụ thiết bị và kế hoạch tải riêng sau khi người dùng mở.
 const plannerLaunch = document.createElement('button');
-plannerLaunch.id = 'photoPlannerButton'; plannerLaunch.type = 'button'; plannerLaunch.className = 'planner-launch';
-plannerLaunch.setAttribute('aria-haspopup', 'dialog'); plannerLaunch.setAttribute('aria-expanded', 'false');
+plannerLaunch.id = 'photoPlannerButton';
+plannerLaunch.type = 'button';
+plannerLaunch.className = 'soft-btn planner-launch';
+plannerLaunch.setAttribute('aria-haspopup', 'dialog');
+plannerLaunch.setAttribute('aria-expanded', 'false');
 plannerLaunch.setAttribute('aria-label', 'Mở thiết bị và kế hoạch chụp ảnh');
 plannerLaunch.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16v14H4zM8 7l1.5-3h5L16 7"/><circle cx="12" cy="14" r="3.5"/><path d="M18 2v4M16 4h4"/></svg><span>Thiết bị & chụp</span>';
 $('.top-actions')?.insertBefore(plannerLaunch, $('#settingsBtn'));
 let plannerModulePromise;
 plannerLaunch.addEventListener('click', async () => {
-  try { const planner = await (plannerModulePromise ||= import('../features/planner.js')); planner.openPhotographyHub(); }
-  catch (error) { console.error('Không tải được công cụ chụp ảnh:', error); toast('Không mở được công cụ chụp ảnh. Hãy tải lại trang.'); }
+  try {
+    const planner = await (plannerModulePromise ||= import('../features/planner.js'));
+    planner.openPhotographyHub();
+  } catch (error) {
+    console.error('Không tải được công cụ chụp ảnh:', error);
+    toast('Không mở được công cụ chụp ảnh. Hãy tải lại trang.');
+  }
 });

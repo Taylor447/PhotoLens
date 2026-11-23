@@ -1,11 +1,7 @@
 // Các thuật toán độc lập nền tảng, chạy trên ImageData trong Web Worker.
-import { calculateScores, SCORE_CONFIG } from './config.js';
 const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
 
 export function analyzePixels({ data, width, height, fileSize = 0 }) {
-  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1 || !data || data.length < width * height * 4) {
-    throw new Error('Dữ liệu pixel hoặc kích thước ảnh không hợp lệ.');
-  }
   const histR = new Array(256).fill(0), histG = new Array(256).fill(0), histB = new Array(256).fill(0), histY = new Array(256).fill(0);
   let sumY = 0, sumY2 = 0, sumSat = 0, clipped = 0, crushed = 0, warm = 0, cool = 0;
   const pixels = [];
@@ -24,36 +20,27 @@ export function analyzePixels({ data, width, height, fileSize = 0 }) {
     ordinal++; n++;
     warm += Math.max(0, r - b); cool += Math.max(0, b - r);
   }
-  if (n === 0) throw new Error('Ảnh không có pixel để phân tích.');
   const mean = sumY / n;
   const contrast = Math.sqrt(Math.max(0, sumY2 / n - mean * mean));
   const sharp = laplacianVariance(data, width, height);
   const palette = kMeans(pixels, 5, 9);
   const temp = warm + cool === 0 ? 0 : (warm - cool) / (warm + cool);
   const luma = [...histY];
-  const clippedPercent = clipped / n * 100, crushedPercent = crushed / n * 100;
-  const saturationPercent = sumSat / n * 100;
-  const noiseEstimate = estimateNoise(data, width, height);
-  const normalizedScores = calculateScores({
-    meanBrightness: mean, clippedPercent, crushedPercent, contrast,
-    saturation: saturationPercent, sharpnessVariance: sharp,
-    noiseValue: noiseEstimate.value, megapixels: width * height / 1e6
-  });
-  const [exposureScore, contrastScore, colorScore, sharpScore, detailScore] = [
-    normalizedScores.exposure, normalizedScores.contrast, normalizedScores.color,
-    normalizedScores.sharpness, normalizedScores.detail
-  ];
+  const sharpScore = clamp(Math.round(100 * (1 - Math.exp(-sharp / 450))), 0, 100);
+  const exposureScore = clamp(Math.round(100 - Math.abs(mean - 128) * .68 - Math.abs(clipped / n * 100 - 2) * 2), 0, 100);
+  const contrastScore = clamp(Math.round(100 - Math.abs(contrast - 58) * .7), 0, 100);
+  const colorScore = clamp(Math.round(100 - Math.abs(sumSat / n * 100 - 38) * .55), 0, 100);
+  const technicalScore = Math.round((sharpScore * .28 + exposureScore * .32 + contrastScore * .20 + colorScore * .20));
   return {
     width, height, aspectRatio: width / height, fileSize,
-    meanBrightness: round(mean, 1), contrast: round(contrast, 1), saturation: round(saturationPercent, 1),
+    meanBrightness: round(mean, 1), contrast: round(contrast, 1), saturation: round(sumSat / n * 100, 1),
     sharpness: round(sharp, 2), sharpnessScore: sharpScore,
-    noiseEstimate, noiseScore: normalizedScores.noise,
-    highlightsClipped: round(clippedPercent, 2), shadowsCrushed: round(crushedPercent, 2),
+    noiseEstimate: estimateNoise(data, width, height),
+    highlightsClipped: round(clipped / n * 100, 2), shadowsCrushed: round(crushed / n * 100, 2),
     colorTemperature: temp > .08 ? 'Ấm' : temp < -.08 ? 'Lạnh' : 'Trung tính',
     temperatureBias: round(temp * 100, 1), palette,
     histogram: { r: histR, g: histG, b: histB, y: luma },
-    normalizedScores, technicalScore: normalizedScores.total,
-    localScores: [exposureScore, contrastScore, colorScore, sharpScore, detailScore]
+    technicalScore, localScores: [exposureScore, contrastScore, colorScore, sharpScore, clamp(100 - Math.round((clipped + crushed) / n * 350), 0, 100)]
   };
 }
 
@@ -108,12 +95,6 @@ function round(n, digits) { const p = 10 ** digits; return Math.round(n * p) / p
 
 export const scoreLabels = ['Ánh sáng', 'Tương phản', 'Màu sắc', 'Độ nét', 'Chi tiết'];
 export function metricRows(a, b) {
-  const quality = (m) => m.normalizedScores || {
-    noise: m.noiseScore ?? Math.max(0, Math.round(100 - (m.noiseEstimate?.value || 0) * 5)),
-    highlights: Math.max(0, Math.round(100 - (m.highlightsClipped || 0) * SCORE_CONFIG.thresholds.detailLossPenaltyPerPercent)),
-    shadows: Math.max(0, Math.round(100 - (m.shadowsCrushed || 0) * SCORE_CONFIG.thresholds.detailLossPenaltyPerPercent))
-  };
-  const qa = quality(a), qb = b ? quality(b) : null;
   const rows = [
     ['Độ phân giải', `${a.width} × ${a.height}`, b ? `${b.width} × ${b.height}` : '', a.width * a.height / 1e6, b ? b.width * b.height / 1e6 : null, 'higher'],
     ['Tỉ lệ khung hình', `${a.aspectRatio.toFixed(2)}:1`, b ? `${b.aspectRatio.toFixed(2)}:1` : '', a.aspectRatio, b?.aspectRatio, 'neutral'],
@@ -123,10 +104,6 @@ export function metricRows(a, b) {
     ['Độ bão hòa', `${a.saturation}%`, b ? `${b.saturation}%` : '', a.saturation, b?.saturation, 'neutral'],
     ['Độ nét (Laplacian)', a.sharpness, b?.sharpness ?? '', a.sharpness, b?.sharpness, 'higher'],
     ['Nhiễu ước lượng', `${a.noiseEstimate.level} (${a.noiseEstimate.value})`, b ? `${b.noiseEstimate.level} (${b.noiseEstimate.value})` : '', a.noiseEstimate.value, b?.noiseEstimate.value, 'lower'],
-    ['Điểm chất lượng nhiễu', `${qa.noise}/100`, b ? `${qb.noise}/100` : '', qa.noise, qb?.noise, 'higher'],
-    ['Điểm giữ vùng sáng', `${qa.highlights}/100`, b ? `${qb.highlights}/100` : '', qa.highlights, qb?.highlights, 'higher'],
-    ['Điểm giữ vùng tối', `${qa.shadows}/100`, b ? `${qb.shadows}/100` : '', qa.shadows, qb?.shadows, 'higher'],
-    ['Điểm tổng kỹ thuật', `${a.technicalScore}/100`, b ? `${b.technicalScore}/100` : '', a.technicalScore, b?.technicalScore, 'higher'],
     ['Vùng cháy sáng', `${a.highlightsClipped}%`, b ? `${b.highlightsClipped}%` : '', a.highlightsClipped, b?.highlightsClipped, 'lower'],
     ['Vùng tối mất chi tiết', `${a.shadowsCrushed}%`, b ? `${b.shadowsCrushed}%` : '', a.shadowsCrushed, b?.shadowsCrushed, 'lower'],
     ['Nhiệt độ màu', a.colorTemperature, b?.colorTemperature ?? '', null, null, 'neutral']

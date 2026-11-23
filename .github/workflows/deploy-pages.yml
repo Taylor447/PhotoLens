@@ -31,8 +31,6 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Restore Rollup Linux binary omitted from the lockfile
-        run: npm install --no-save --ignore-scripts --no-audit --no-fund @rollup/rollup-linux-x64-gnu@4.68.8
       - name: Run core tests
         run: npm run test:unit
       - name: Build site
