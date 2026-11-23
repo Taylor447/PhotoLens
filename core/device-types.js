@@ -9,7 +9,7 @@ export function normalizeDeviceText(value) {
   return String(value ?? '')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[dD]/g, 'd')
+    .replace(/[đĐ]/g, 'd')
     .toLocaleLowerCase('vi-VN')
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
@@ -201,7 +201,7 @@ export function describeDeviceType(device) {
   const specific = classification.matchedIds.filter(id =>
     !classification.matchedIds.some(other => other !== id && isDescendantOf(other, id))
   );
-  return specific.map(id => byId.get(id)?.nameVi).filter(Boolean).join(' � ') || byId.get(classification.primaryId)?.nameVi || 'Chua ph�n lo?i';
+  return specific.map(id => byId.get(id)?.nameVi).filter(Boolean).join(' · ') || byId.get(classification.primaryId)?.nameVi || 'Chưa phân loại';
 }
 
 export function searchDeviceTypes(query = '') {

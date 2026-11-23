@@ -2,7 +2,7 @@
   "version": 1,
   "parameterGroups": {
     "phone-imaging": {
-      "nameVi": "Di?n tho?i",
+      "nameVi": "Điện thoại",
       "fields": [
         "sensor.size",
         "sensor.megapixels",
@@ -12,10 +12,10 @@
         "power.weightG",
         "durability.rating"
       ],
-      "description": "Th�ng tin c?m bi?n, ?ng k�nh t�ch h?p, video, tr?ng lu?ng v� d? b?n khi c� ngu?n."
+      "description": "Thông tin cảm biến, ống kính tích hợp, video, trọng lượng và độ bền khi có nguồn."
     },
     "interchangeable-lens": {
-      "nameVi": "M�y ?nh ?ng k�nh r?i",
+      "nameVi": "Máy ảnh ống kính rời",
       "fields": [
         "sensor.size",
         "sensor.megapixels",
@@ -27,10 +27,10 @@
         "video.maxResolution",
         "video.maxFps"
       ],
-      "description": "C?m bi?n, ng�m, l?y n�t, ch?p li�n ti?p v� video; ti�u c?/kh?u d? ph? thu?c ?ng k�nh."
+      "description": "Cảm biến, ngàm, lấy nét, chụp liên tiếp và video; tiêu cự/khẩu độ phụ thuộc ống kính."
     },
     "fixed-lens": {
-      "nameVi": "M�y ?nh ?ng k�nh li?n",
+      "nameVi": "Máy ảnh ống kính liền",
       "fields": [
         "sensor.size",
         "sensor.megapixels",
@@ -41,10 +41,10 @@
         "video.maxResolution",
         "power.weightG"
       ],
-      "description": "C?m bi?n, d?i ti�u c?, kh?u d?, zoom quang v� kh?i lu?ng."
+      "description": "Cảm biến, dải tiêu cự, khẩu độ, zoom quang và khối lượng."
     },
     "video-camera": {
-      "nameVi": "M�y quay phim",
+      "nameVi": "Máy quay phim",
       "fields": [
         "sensor.size",
         "video.maxResolution",
@@ -55,10 +55,10 @@
         "lens.mount",
         "power.weightG"
       ],
-      "description": "D?nh d?ng v� th?i lu?ng quay, ng�m/?ng k�nh v� c�c k?t n?i video."
+      "description": "Định dạng và thời lượng quay, ngàm/ống kính và các kết nối video."
     },
     "action-video": {
-      "nameVi": "M�y ?nh h�nh d?ng",
+      "nameVi": "Máy ảnh hành động",
       "fields": [
         "sensor.size",
         "sensor.megapixels",
@@ -68,7 +68,7 @@
         "durability.rating",
         "power.weightG"
       ],
-      "description": "Video, ch?ng rung, d? b?n v� tr?ng lu?ng."
+      "description": "Video, chống rung, độ bền và trọng lượng."
     },
     "pocket-gimbal": {
       "nameVi": "Gimbal/pocket camera",
@@ -81,10 +81,10 @@
         "video.stabilization",
         "power.weightG"
       ],
-      "description": "Camera t�ch h?p, ch?ng rung co h?c/di?n t?, video v� kh?i lu?ng."
+      "description": "Camera tích hợp, chống rung cơ học/điện tử, video và khối lượng."
     },
     "instant-film": {
-      "nameVi": "M�y ?nh l?y li?n",
+      "nameVi": "Máy ảnh lấy liền",
       "fields": [
         "film.format",
         "image.size",
@@ -92,10 +92,10 @@
         "focus.mode",
         "power.weightG"
       ],
-      "description": "Kh? phim/?nh, ti�u c?, ch? d? l?y n�t v� kh?i lu?ng."
+      "description": "Khổ phim/ảnh, tiêu cự, chế độ lấy nét và khối lượng."
     },
     "film-camera": {
-      "nameVi": "M�y ?nh phim",
+      "nameVi": "Máy ảnh phim",
       "fields": [
         "film.format",
         "lens.mount",
@@ -103,7 +103,7 @@
         "focus.mode",
         "power.weightG"
       ],
-      "description": "Kh? phim, ng�m, m�n tr?p, l?y n�t v� kh?i lu?ng."
+      "description": "Khổ phim, ngàm, màn trập, lấy nét và khối lượng."
     },
     "drone-imaging": {
       "nameVi": "Camera drone",
@@ -115,7 +115,7 @@
         "gimbal.axes",
         "flight.timeMinutes"
       ],
-      "description": "C?n t�ch th�ng s? camera kh?i th�ng s? bay; kh�ng �p d?ng di?m m�y ?nh th�ng thu?ng."
+      "description": "Cần tách thông số camera khỏi thông số bay; không áp dụng điểm máy ảnh thông thường."
     },
     "webcam": {
       "nameVi": "Webcam/streaming",
@@ -126,20 +126,20 @@
         "interface.connection",
         "focus.autofocus"
       ],
-      "description": "D? ph�n gi?i video, t?c d? khung h�nh, k?t n?i v� l?y n�t."
+      "description": "Độ phân giải video, tốc độ khung hình, kết nối và lấy nét."
     },
     "thermal": {
-      "nameVi": "Camera nhi?t",
+      "nameVi": "Camera nhiệt",
       "fields": [
         "thermal.resolution",
         "thermal.sensitivity",
         "thermal.range",
         "lens.fieldOfView"
       ],
-      "description": "D? ph�n gi?i nhi?t, d? nh?y v� d?i do; kh�ng so s�nh nhu camera ?nh thu?ng."
+      "description": "Độ phân giải nhiệt, độ nhạy và dải đo; không so sánh như camera ảnh thường."
     },
     "specialized": {
-      "nameVi": "Camera chuy�n d?ng",
+      "nameVi": "Camera chuyên dụng",
       "fields": [
         "sensor.type",
         "sensor.size",
@@ -147,20 +147,20 @@
         "interface.connection",
         "environment.rating"
       ],
-      "description": "Ch?n th�ng s? theo m?c d�ch chuy�n m�n; kh�ng d�ng thang di?m m�y ?nh ph? th�ng."
+      "description": "Chọn thông số theo mục đích chuyên môn; không dùng thang điểm máy ảnh phổ thông."
     },
     "accessory": {
-      "nameVi": "Ph? ki?n quay ch?p",
+      "nameVi": "Phụ kiện quay chụp",
       "fields": [
         "compatibility.devices",
         "stabilization.axes",
         "power.battery",
         "power.weightG"
       ],
-      "description": "Ph? ki?n kh�ng ph?i m�y ?nh d?c l?p."
+      "description": "Phụ kiện không phải máy ảnh độc lập."
     },
     "camera-general": {
-      "nameVi": "Th�ng s? m�y ?nh",
+      "nameVi": "Thông số máy ảnh",
       "fields": [
         "sensor.size",
         "sensor.megapixels",
@@ -169,7 +169,7 @@
         "video.maxFps",
         "power.weightG"
       ],
-      "description": "Nh�m th�ng tin chung; ch? luu th�ng s? c� ngu?n."
+      "description": "Nhóm thông tin chung; chỉ lưu thông số có nguồn."
     }
   },
   "classificationPolicy": {
@@ -180,16 +180,16 @@
   "types": [
     {
       "id": "phone",
-      "nameVi": "Di?n tho?i",
+      "nameVi": "Điện thoại",
       "nameEn": "Phone",
       "parentId": null,
-      "description": "Di?n tho?i c� camera t�ch h?p.",
+      "description": "Điện thoại có camera tích hợp.",
       "aliases": [
         "phone",
         "smartphone",
         "mobile phone",
-        "di?n tho?i",
-        "di?n tho?i di d?ng"
+        "điện thoại",
+        "điện thoại di động"
       ],
       "keywords": [
         "mobile",
@@ -211,7 +211,7 @@
       "nameVi": "Android",
       "nameEn": "Android phone",
       "parentId": "phone",
-      "description": "Di?n tho?i ch?y Android; ph�n lo?i n?n t?ng khi c� model ho?c lo?i g?c ph� h?p.",
+      "description": "Điện thoại chạy Android; phân loại nền tảng khi có model hoặc loại gốc phù hợp.",
       "aliases": [
         "android phone",
         "android smartphone"
@@ -265,7 +265,7 @@
       "nameVi": "iPhone",
       "nameEn": "iPhone",
       "parentId": "phone",
-      "description": "Di?n tho?i Apple iPhone.",
+      "description": "Điện thoại Apple iPhone.",
       "aliases": [
         "ios phone",
         "apple smartphone",
@@ -289,10 +289,10 @@
     },
     {
       "id": "phone-foldable",
-      "nameVi": "Di?n tho?i g?p",
+      "nameVi": "Điện thoại gập",
       "nameEn": "Foldable phone",
       "parentId": "phone",
-      "description": "Di?n tho?i c� m�n h�nh g?p; t�n d�ng ph?i nh?n di?n ro.",
+      "description": "Điện thoại có màn hình gập; tên dòng phải nhận diện rõ.",
       "aliases": [
         "foldable phone",
         "folding phone",
@@ -323,10 +323,10 @@
     },
     {
       "id": "phone-rugged",
-      "nameVi": "Di?n tho?i si�u b?n",
+      "nameVi": "Điện thoại siêu bền",
       "nameEn": "Rugged phone",
       "parentId": "phone",
-      "description": "Di?n tho?i thi?t k? b?n/ch?ng ch?u; nh?n di?n theo d�ng m�y c? th?.",
+      "description": "Điện thoại thiết kế bền/chống chịu; nhận diện theo dòng máy cụ thể.",
       "aliases": [
         "rugged phone",
         "rugged smartphone",
@@ -353,10 +353,10 @@
     },
     {
       "id": "phone-gaming",
-      "nameVi": "Di?n tho?i gaming",
+      "nameVi": "Điện thoại gaming",
       "nameEn": "Gaming phone",
       "parentId": "phone",
-      "description": "Di?n tho?i thu?c d�ng gaming chuy�n d?ng.",
+      "description": "Điện thoại thuộc dòng gaming chuyên dụng.",
       "aliases": [
         "gaming phone",
         "gaming smartphone"
@@ -379,10 +379,10 @@
     },
     {
       "id": "phone-camera",
-      "nameVi": "Di?n tho?i t?p trung camera",
+      "nameVi": "Điện thoại tập trung camera",
       "nameEn": "Camera-focused phone",
       "parentId": "phone",
-      "description": "D�ng di?n tho?i c� d?nh v? camera ro trong t�n thuong m?i.",
+      "description": "Dòng điện thoại có định vị camera rõ trong tên thương mại.",
       "aliases": [
         "camera-focused phone",
         "camera-centric phone",
@@ -409,16 +409,16 @@
     },
     {
       "id": "camera",
-      "nameVi": "M�y ?nh & thi?t b? quay ch?p",
+      "nameVi": "Máy ảnh & thiết bị quay chụp",
       "nameEn": "Camera and imaging device",
       "parentId": null,
-      "description": "Nh�m g?c cho m�y ?nh s?, m�y quay v� thi?t b? ghi h�nh.",
+      "description": "Nhóm gốc cho máy ảnh số, máy quay và thiết bị ghi hình.",
       "aliases": [
         "camera",
         "digital camera",
         "imaging device",
-        "m�y ?nh",
-        "m�y quay"
+        "máy ảnh",
+        "máy quay"
       ],
       "keywords": [
         "photography",
@@ -434,10 +434,10 @@
     },
     {
       "id": "interchangeable-lens-camera",
-      "nameVi": "M�y ?nh ?ng k�nh r?i",
+      "nameVi": "Máy ảnh ống kính rời",
       "nameEn": "Interchangeable-lens camera",
       "parentId": "camera",
-      "description": "M�y ?nh cho ph�p thay ?ng k�nh.",
+      "description": "Máy ảnh cho phép thay ống kính.",
       "aliases": [
         "interchangeable-lens camera",
         "camera with interchangeable lenses",
@@ -445,7 +445,7 @@
       ],
       "keywords": [
         "interchangeable lens",
-        "?ng k�nh r?i"
+        "ống kính rời"
       ],
       "specGroups": [
         "interchangeable-lens"
@@ -460,7 +460,7 @@
       "nameVi": "Mirrorless",
       "nameEn": "Mirrorless camera",
       "parentId": "interchangeable-lens-camera",
-      "description": "M�y ?nh ?ng k�nh r?i kh�ng guong l?t; gi? ID cu mirrorless.",
+      "description": "Máy ảnh ống kính rời không gương lật; giữ ID cũ mirrorless.",
       "aliases": [
         "mirrorless camera",
         "mirrorless",
@@ -468,7 +468,7 @@
       ],
       "keywords": [
         "mirrorless camera body",
-        "kh�ng guong l?t"
+        "không gương lật"
       ],
       "specGroups": [
         "interchangeable-lens"
@@ -495,7 +495,7 @@
       "nameVi": "Mirrorless full-frame",
       "nameEn": "Full-frame mirrorless",
       "parentId": "mirrorless",
-      "description": "D�ng c?m bi?n full-frame ch? khi d? li?u ngu?n ghi ro.",
+      "description": "Dòng cảm biến full-frame chỉ khi dữ liệu nguồn ghi rõ.",
       "aliases": [
         "full-frame mirrorless",
         "full frame mirrorless camera"
@@ -517,7 +517,7 @@
       "nameVi": "Mirrorless APS-C",
       "nameEn": "APS-C mirrorless",
       "parentId": "mirrorless",
-      "description": "D�ng c?m bi?n APS-C ch? khi d? li?u ngu?n ghi ro.",
+      "description": "Dòng cảm biến APS-C chỉ khi dữ liệu nguồn ghi rõ.",
       "aliases": [
         "aps-c mirrorless",
         "aps-c mirrorless camera"
@@ -539,7 +539,7 @@
       "nameVi": "Mirrorless Micro Four Thirds",
       "nameEn": "Micro Four Thirds mirrorless",
       "parentId": "mirrorless",
-      "description": "D�ng Micro Four Thirds ch? khi d? li?u ngu?n ghi ro.",
+      "description": "Dòng Micro Four Thirds chỉ khi dữ liệu nguồn ghi rõ.",
       "aliases": [
         "micro four thirds mirrorless",
         "mft mirrorless",
@@ -564,7 +564,7 @@
       "nameVi": "Mirrorless medium format",
       "nameEn": "Medium-format mirrorless",
       "parentId": "mirrorless",
-      "description": "D�ng medium format ch? khi d? li?u ngu?n ghi ro.",
+      "description": "Dòng medium format chỉ khi dữ liệu nguồn ghi rõ.",
       "aliases": [
         "medium-format mirrorless",
         "medium format mirrorless camera"
@@ -586,7 +586,7 @@
       "nameVi": "DSLR",
       "nameEn": "Digital single-lens reflex camera",
       "parentId": "interchangeable-lens-camera",
-      "description": "M�y ?nh DSLR; gi? ID cu dslr.",
+      "description": "Máy ảnh DSLR; giữ ID cũ dslr.",
       "aliases": [
         "dslr",
         "digital slr camera",
@@ -594,7 +594,7 @@
       ],
       "keywords": [
         "digital slr",
-        "m�y ?nh ph?n x? s?"
+        "máy ảnh phản xạ số"
       ],
       "specGroups": [
         "interchangeable-lens"
@@ -616,7 +616,7 @@
       "nameVi": "DSLR full-frame",
       "nameEn": "Full-frame DSLR",
       "parentId": "dslr",
-      "description": "D�ng DSLR full-frame ch? khi d? li?u ngu?n ghi ro.",
+      "description": "Dòng DSLR full-frame chỉ khi dữ liệu nguồn ghi rõ.",
       "aliases": [
         "full-frame dslr",
         "full frame dslr camera"
@@ -638,7 +638,7 @@
       "nameVi": "DSLR APS-C",
       "nameEn": "APS-C DSLR",
       "parentId": "dslr",
-      "description": "D�ng DSLR APS-C ch? khi d? li?u ngu?n ghi ro.",
+      "description": "Dòng DSLR APS-C chỉ khi dữ liệu nguồn ghi rõ.",
       "aliases": [
         "aps-c dslr",
         "aps-c dslr camera"
@@ -660,7 +660,7 @@
       "nameVi": "DSLR medium format",
       "nameEn": "Medium-format DSLR",
       "parentId": "dslr",
-      "description": "D�ng medium format ch? khi d? li?u ngu?n ghi ro.",
+      "description": "Dòng medium format chỉ khi dữ liệu nguồn ghi rõ.",
       "aliases": [
         "medium-format dslr",
         "medium format dslr camera"
@@ -679,13 +679,13 @@
     },
     {
       "id": "fixed-lens-camera",
-      "nameVi": "M�y ?nh ?ng k�nh li?n",
+      "nameVi": "Máy ảnh ống kính liền",
       "nameEn": "Fixed-lens camera",
       "parentId": "camera",
-      "description": "M�y ?nh c� ?ng k�nh c? d?nh ho?c t�ch h?p.",
+      "description": "Máy ảnh có ống kính cố định hoặc tích hợp.",
       "aliases": [
         "fixed-lens camera",
-        "m�y ?nh ?ng k�nh c? d?nh"
+        "máy ảnh ống kính cố định"
       ],
       "keywords": [
         "built-in lens",
@@ -704,7 +704,7 @@
       "nameVi": "Compact",
       "nameEn": "Compact camera",
       "parentId": "fixed-lens-camera",
-      "description": "M�y ?nh compact; gi? ID cu compact.",
+      "description": "Máy ảnh compact; giữ ID cũ compact.",
       "aliases": [
         "compact camera",
         "compact",
@@ -712,7 +712,7 @@
       ],
       "keywords": [
         "point-and-shoot",
-        "m�y ?nh compact"
+        "máy ảnh compact"
       ],
       "specGroups": [
         "fixed-lens"
@@ -727,17 +727,17 @@
     },
     {
       "id": "compact-standard",
-      "nameVi": "Compact ph? th�ng",
+      "nameVi": "Compact phổ thông",
       "nameEn": "Standard compact camera",
       "parentId": "compact",
-      "description": "Compact ph? th�ng; ch? ph�n lo?i theo d�ng m�y/t�n model ro.",
+      "description": "Compact phổ thông; chỉ phân loại theo dòng máy/tên model rõ.",
       "aliases": [
         "standard compact camera",
         "basic compact camera",
-        "compact camera ph? th�ng"
+        "compact camera phổ thông"
       ],
       "keywords": [
-        "compact ph? th�ng"
+        "compact phổ thông"
       ],
       "specGroups": [
         "fixed-lens"
@@ -749,14 +749,14 @@
     },
     {
       "id": "compact-premium",
-      "nameVi": "Compact cao c?p",
+      "nameVi": "Compact cao cấp",
       "nameEn": "Premium compact camera",
       "parentId": "compact",
-      "description": "Compact cao c?p v?i ?ng k�nh/c?m bi?n t�ch h?p; kh�ng suy di?n t? t�n compact chung.",
+      "description": "Compact cao cấp với ống kính/cảm biến tích hợp; không suy diễn từ tên compact chung.",
       "aliases": [
         "premium compact camera",
         "high-end compact camera",
-        "compact camera cao c?p"
+        "compact camera cao cấp"
       ],
       "keywords": [
         "premium compact"
@@ -780,7 +780,7 @@
       "nameVi": "Bridge / superzoom",
       "nameEn": "Bridge / superzoom camera",
       "parentId": "fixed-lens-camera",
-      "description": "M�y ?nh ki?u bridge ho?c superzoom ?ng k�nh li?n.",
+      "description": "Máy ảnh kiểu bridge hoặc superzoom ống kính liền.",
       "aliases": [
         "bridge camera",
         "superzoom camera",
@@ -805,10 +805,10 @@
     },
     {
       "id": "travel-camera",
-      "nameVi": "M�y ?nh du l?ch",
+      "nameVi": "Máy ảnh du lịch",
       "nameEn": "Travel camera",
       "parentId": "compact",
-      "description": "Compact hu?ng du l?ch/zoom g?n; c?n t�n d�ng ro.",
+      "description": "Compact hướng du lịch/zoom gọn; cần tên dòng rõ.",
       "aliases": [
         "travel camera",
         "travel compact camera",
@@ -816,7 +816,7 @@
       ],
       "keywords": [
         "travel zoom",
-        "compact du l?ch"
+        "compact du lịch"
       ],
       "specGroups": [
         "fixed-lens"
@@ -832,14 +832,14 @@
     },
     {
       "id": "video-camera",
-      "nameVi": "M�y ?nh quay phim / m�y quay",
+      "nameVi": "Máy ảnh quay phim / máy quay",
       "nameEn": "Video camera and camcorder",
       "parentId": "camera",
-      "description": "Thi?t b? uu ti�n quay video; con du?i c� th? kh�ng ph� h?p ch?m di?m ?nh th�ng thu?ng.",
+      "description": "Thiết bị ưu tiên quay video; con dưới có thể không phù hợp chấm điểm ảnh thông thường.",
       "aliases": [
         "video camera",
         "camcorder",
-        "m�y quay video"
+        "máy quay video"
       ],
       "keywords": [
         "video-first camera"
@@ -857,11 +857,11 @@
       "nameVi": "Cinema camera",
       "nameEn": "Cinema camera",
       "parentId": "video-camera",
-      "description": "Camera di?n ?nh chuy�n d?ng; kh�ng so di?m nhu camera ?nh ph? th�ng.",
+      "description": "Camera điện ảnh chuyên dụng; không so điểm như camera ảnh phổ thông.",
       "aliases": [
         "cinema camera",
         "digital cinema camera",
-        "m�y quay di?n ?nh"
+        "máy quay điện ảnh"
       ],
       "keywords": [
         "cinema production"
@@ -871,7 +871,7 @@
       ],
       "scoreable": false,
       "facetGroup": "professional-video",
-      "scoreNote": "Kh�ng ph� h?p v?i b? di?m m�y ?nh ph? th�ng; c?n ti�u ch� video chuy�n d?ng.",
+      "scoreNote": "Không phù hợp với bộ điểm máy ảnh phổ thông; cần tiêu chí video chuyên dụng.",
       "modelAliases": [
         "Blackmagic Cinema Camera",
         "ARRI Alexa",
@@ -882,14 +882,14 @@
     },
     {
       "id": "home-camcorder",
-      "nameVi": "Camcorder gia d�nh",
+      "nameVi": "Camcorder gia đình",
       "nameEn": "Consumer camcorder",
       "parentId": "video-camera",
-      "description": "Camcorder gia d�nh/du l?ch.",
+      "description": "Camcorder gia đình/du lịch.",
       "aliases": [
         "consumer camcorder",
         "home camcorder",
-        "camcorder gia d�nh"
+        "camcorder gia đình"
       ],
       "keywords": [
         "handycam"
@@ -899,7 +899,7 @@
       ],
       "scoreable": false,
       "facetGroup": "camcorder",
-      "scoreNote": "Kh�ng �p d?ng di?m ?nh ph? th�ng; so s�nh theo t�nh nang quay v� ti?n d?ng.",
+      "scoreNote": "Không áp dụng điểm ảnh phổ thông; so sánh theo tính năng quay và tiện dụng.",
       "modelAliases": [
         "Sony Handycam",
         "Canon Vixia",
@@ -909,14 +909,14 @@
     },
     {
       "id": "professional-camcorder",
-      "nameVi": "Camcorder chuy�n nghi?p",
+      "nameVi": "Camcorder chuyên nghiệp",
       "nameEn": "Professional camcorder",
       "parentId": "video-camera",
-      "description": "Camcorder ENG/production chuy�n nghi?p.",
+      "description": "Camcorder ENG/production chuyên nghiệp.",
       "aliases": [
         "professional camcorder",
         "pro camcorder",
-        "camcorder chuy�n nghi?p"
+        "camcorder chuyên nghiệp"
       ],
       "keywords": [
         "eng camcorder"
@@ -926,7 +926,7 @@
       ],
       "scoreable": false,
       "facetGroup": "camcorder",
-      "scoreNote": "C?n thang di?m video/ENG ri�ng, kh�ng ph?i di?m m�y ?nh th�ng thu?ng.",
+      "scoreNote": "Cần thang điểm video/ENG riêng, không phải điểm máy ảnh thông thường.",
       "modelAliases": [
         "Canon XA",
         "Sony PXW",
@@ -936,14 +936,14 @@
     },
     {
       "id": "broadcast-camera",
-      "nameVi": "M�y quay broadcast",
+      "nameVi": "Máy quay broadcast",
       "nameEn": "Broadcast camera",
       "parentId": "video-camera",
-      "description": "Camera truy?n h�nh/broadcast.",
+      "description": "Camera truyền hình/broadcast.",
       "aliases": [
         "broadcast camera",
         "television camera",
-        "m�y quay truy?n h�nh"
+        "máy quay truyền hình"
       ],
       "keywords": [
         "broadcast video"
@@ -953,7 +953,7 @@
       ],
       "scoreable": false,
       "facetGroup": "professional-video",
-      "scoreNote": "C?n so s�nh h? broadcast, c?ng v� workflow; kh�ng ch?m theo di?m m�y ?nh ph? th�ng.",
+      "scoreNote": "Cần so sánh hệ broadcast, cổng và workflow; không chấm theo điểm máy ảnh phổ thông.",
       "modelAliases": [
         "Sony HDC",
         "Ikegami broadcast",
@@ -963,10 +963,10 @@
     },
     {
       "id": "action-camera",
-      "nameVi": "M�y ?nh h�nh d?ng",
+      "nameVi": "Máy ảnh hành động",
       "nameEn": "Action camera",
       "parentId": "camera",
-      "description": "Camera h�nh d?ng nh? g?n; gi? ID d? li?u action-camera v� b? l?c cu action.",
+      "description": "Camera hành động nhỏ gọn; giữ ID dữ liệu action-camera và bộ lọc cũ action.",
       "aliases": [
         "action camera",
         "action cam",
@@ -974,7 +974,7 @@
       ],
       "keywords": [
         "action cam",
-        "camera h�nh d?ng"
+        "camera hành động"
       ],
       "specGroups": [
         "action-video"
@@ -995,14 +995,14 @@
     },
     {
       "id": "camera-360",
-      "nameVi": "Camera 360�",
+      "nameVi": "Camera 360°",
       "nameEn": "360-degree camera",
       "parentId": "action-camera",
-      "description": "Camera 360 d?; t�n d�ng ro s? ph�n bi?t v?i camera action thu?ng.",
+      "description": "Camera 360 độ; tên dòng rõ sẽ phân biệt với camera action thường.",
       "aliases": [
         "360 camera",
         "360-degree camera",
-        "camera 360 d?"
+        "camera 360 độ"
       ],
       "keywords": [
         "360 imaging",
@@ -1027,7 +1027,7 @@
       "nameVi": "Gimbal / pocket camera",
       "nameEn": "Gimbal/pocket camera",
       "parentId": "camera",
-      "description": "Camera d?c l?p c� ch?ng rung v� thi?t k? b? t�i; g?m DJI Osmo Pocket. Kh�ng �p d?ng cho gimbal di?n tho?i.",
+      "description": "Camera độc lập có chống rung và thiết kế bỏ túi; gồm DJI Osmo Pocket. Không áp dụng cho gimbal điện thoại.",
       "aliases": [
         "pocket camera",
         "stabilized pocket camera",
@@ -1036,7 +1036,7 @@
       ],
       "keywords": [
         "pocket gimbal camera",
-        "camera c?m tay"
+        "camera cầm tay"
       ],
       "specGroups": [
         "pocket-gimbal"
@@ -1052,14 +1052,14 @@
     },
     {
       "id": "instant-camera",
-      "nameVi": "M�y ?nh l?y li?n",
+      "nameVi": "Máy ảnh lấy liền",
       "nameEn": "Instant camera",
       "parentId": "camera",
-      "description": "M�y ?nh d�ng phim/gi?y ?nh l?y li?n; kh�ng ph� h?p thang di?m c?m bi?n s?.",
+      "description": "Máy ảnh dùng phim/giấy ảnh lấy liền; không phù hợp thang điểm cảm biến số.",
       "aliases": [
         "instant camera",
         "instant film camera",
-        "m�y ?nh l?y li?n"
+        "máy ảnh lấy liền"
       ],
       "keywords": [
         "instant photography"
@@ -1069,7 +1069,7 @@
       ],
       "scoreable": false,
       "facetGroup": "capture-medium",
-      "scoreNote": "Kh�ng ph� h?p v?i di?m c?m bi?n s?; c?n th�ng s? phim v� ?nh in.",
+      "scoreNote": "Không phù hợp với điểm cảm biến số; cần thông số phim và ảnh in.",
       "modelAliases": [
         "Fujifilm Instax",
         "Polaroid Now",
@@ -1080,14 +1080,14 @@
     },
     {
       "id": "film-camera",
-      "nameVi": "M�y ?nh phim",
+      "nameVi": "Máy ảnh phim",
       "nameEn": "Film camera",
       "parentId": "camera",
-      "description": "M�y ?nh d�ng cu?n phim; kh�ng ch?m theo th�ng s? c?m bi?n s?.",
+      "description": "Máy ảnh dùng cuộn phim; không chấm theo thông số cảm biến số.",
       "aliases": [
         "film camera",
         "analog camera",
-        "m�y ?nh phim"
+        "máy ảnh phim"
       ],
       "keywords": [
         "analogue camera",
@@ -1098,7 +1098,7 @@
       ],
       "scoreable": false,
       "facetGroup": "capture-medium",
-      "scoreNote": "Kh�ng c� c?m bi?n s?; so s�nh theo kh? phim, m�n tr?p, ng�m v� l?y n�t.",
+      "scoreNote": "Không có cảm biến số; so sánh theo khổ phim, màn trập, ngàm và lấy nét.",
       "modelAliases": [
         "Leica M-A",
         "Nikon FM",
@@ -1112,7 +1112,7 @@
       "nameVi": "Camera drone",
       "nameEn": "Drone camera",
       "parentId": "camera",
-      "description": "Camera t�ch h?p tr�n drone; t�ch ch?t lu?ng ?nh kh?i th�ng s? bay.",
+      "description": "Camera tích hợp trên drone; tách chất lượng ảnh khỏi thông số bay.",
       "aliases": [
         "drone camera",
         "aerial camera",
@@ -1127,7 +1127,7 @@
       ],
       "scoreable": false,
       "facetGroup": "platform",
-      "scoreNote": "Kh�ng ph� h?p d? ch?m nhu th�n m�y ?nh d?c l?p; c?n t�ch camera, gimbal v� hi?u nang bay.",
+      "scoreNote": "Không phù hợp để chấm như thân máy ảnh độc lập; cần tách camera, gimbal và hiệu năng bay.",
       "modelAliases": [
         "DJI Mavic",
         "DJI Mini",
@@ -1142,7 +1142,7 @@
       "nameVi": "Webcam / streaming camera",
       "nameEn": "Webcam/streaming camera",
       "parentId": "camera",
-      "description": "Webcam ho?c camera ph�t tr?c ti?p, t?i uu cho k?t n?i v� video.",
+      "description": "Webcam hoặc camera phát trực tiếp, tối ưu cho kết nối và video.",
       "aliases": [
         "webcam",
         "streaming camera",
@@ -1158,7 +1158,7 @@
       ],
       "scoreable": false,
       "facetGroup": "use-case",
-      "scoreNote": "Kh�ng ph� h?p v?i di?m ?nh ch?p th�ng thu?ng; c?n ti�u ch� video, k?t n?i v� streaming.",
+      "scoreNote": "Không phù hợp với điểm ảnh chụp thông thường; cần tiêu chí video, kết nối và streaming.",
       "modelAliases": [
         "Logitech Brio",
         "Elgato Facecam",
@@ -1169,15 +1169,15 @@
     },
     {
       "id": "thermal-camera",
-      "nameVi": "Camera nhi?t",
+      "nameVi": "Camera nhiệt",
       "nameEn": "Thermal camera",
       "parentId": "camera",
-      "description": "Camera ?nh nhi?t/h?ng ngo?i chuy�n d?ng.",
+      "description": "Camera ảnh nhiệt/hồng ngoại chuyên dụng.",
       "aliases": [
         "thermal camera",
         "infrared camera",
         "infrared thermal camera",
-        "camera nhi?t"
+        "camera nhiệt"
       ],
       "keywords": [
         "thermal imaging",
@@ -1188,7 +1188,7 @@
       ],
       "scoreable": false,
       "facetGroup": "sensor-specialty",
-      "scoreNote": "D?i ph? v� d? nh?y nhi?t kh�c camera ?nh thu?ng; kh�ng d�ng c�ng thang di?m.",
+      "scoreNote": "Dải phổ và độ nhạy nhiệt khác camera ảnh thường; không dùng cùng thang điểm.",
       "modelAliases": [
         "FLIR",
         "HIKMICRO",
@@ -1198,15 +1198,15 @@
     },
     {
       "id": "specialized-camera",
-      "nameVi": "Camera chuy�n d?ng",
+      "nameVi": "Camera chuyên dụng",
       "nameEn": "Specialized camera",
       "parentId": "camera",
-      "description": "Camera khoa h?c, thi�n van, c�ng nghi?p ho?c thi?t b? chuy�n d?ng.",
+      "description": "Camera khoa học, thiên văn, công nghiệp hoặc thiết bị chuyên dụng.",
       "aliases": [
         "specialized camera",
         "scientific camera",
         "machine-vision camera",
-        "camera chuy�n d?ng"
+        "camera chuyên dụng"
       ],
       "keywords": [
         "astrophotography camera",
@@ -1218,7 +1218,7 @@
       ],
       "scoreable": false,
       "facetGroup": "sensor-specialty",
-      "scoreNote": "Th�ng s? ph? thu?c ng�nh; kh�ng ch?m b?ng b? ti�u ch� m�y ?nh ph? th�ng.",
+      "scoreNote": "Thông số phụ thuộc ngành; không chấm bằng bộ tiêu chí máy ảnh phổ thông.",
       "modelAliases": [
         "ZWO ASI",
         "Celestron NexImage",
@@ -1229,14 +1229,14 @@
     },
     {
       "id": "accessories",
-      "nameVi": "Ph? ki?n quay ch?p",
+      "nameVi": "Phụ kiện quay chụp",
       "nameEn": "Imaging accessories",
       "parentId": null,
-      "description": "Ph? ki?n h? tr? quay/ch?p; kh�ng ph?i thi?t b? ghi h�nh d?c l?p.",
+      "description": "Phụ kiện hỗ trợ quay/chụp; không phải thiết bị ghi hình độc lập.",
       "aliases": [
         "camera accessory",
         "imaging accessory",
-        "ph? ki?n m�y ?nh"
+        "phụ kiện máy ảnh"
       ],
       "keywords": [
         "accessory",
@@ -1248,21 +1248,21 @@
       ],
       "scoreable": false,
       "facetGroup": "device-family",
-      "scoreNote": "Ph? ki?n kh�ng ph?i m�y ?nh d?c l?p.",
+      "scoreNote": "Phụ kiện không phải máy ảnh độc lập.",
       "modelAliases": [],
       "brandAliases": []
     },
     {
       "id": "phone-gimbal",
-      "nameVi": "Gimbal di?n tho?i",
+      "nameVi": "Gimbal điện thoại",
       "nameEn": "Phone gimbal",
       "parentId": "accessories",
-      "description": "Gimbal g?n di?n tho?i; kh�ng du?c ph�n lo?i th�nh m�y ?nh d?c l?p.",
+      "description": "Gimbal gắn điện thoại; không được phân loại thành máy ảnh độc lập.",
       "aliases": [
         "phone gimbal",
         "mobile phone gimbal",
         "smartphone stabilizer",
-        "gimbal di?n tho?i"
+        "gimbal điện thoại"
       ],
       "keywords": [
         "phone stabilizer",
@@ -1273,7 +1273,7 @@
       ],
       "scoreable": false,
       "facetGroup": "accessory",
-      "scoreNote": "Ph? ki?n cho di?n tho?i, kh�ng ph?i m�y ?nh d?c l?p.",
+      "scoreNote": "Phụ kiện cho điện thoại, không phải máy ảnh độc lập.",
       "modelAliases": [
         "DJI Osmo Mobile",
         "Osmo Mobile",
@@ -1284,14 +1284,14 @@
     },
     {
       "id": "unclassified",
-      "nameVi": "Chua ph�n lo?i",
+      "nameVi": "Chưa phân loại",
       "nameEn": "Unclassified",
       "parentId": null,
-      "description": "Thi?t b? chua nh?n di?n d? ch?c; gi? d? li?u g?c v� kh�ng suy do�n.",
+      "description": "Thiết bị chưa nhận diện đủ chắc; giữ dữ liệu gốc và không suy đoán.",
       "aliases": [
         "unclassified device",
         "unknown device type",
-        "chua ph�n lo?i"
+        "chưa phân loại"
       ],
       "keywords": [
         "unknown",
@@ -1302,7 +1302,7 @@
       ],
       "scoreable": true,
       "facetGroup": "status",
-      "scoreNote": "N?u d? th�ng s? c� ngu?n, v?n c� th? x?p h?ng theo d? li?u da c�.",
+      "scoreNote": "Nếu đủ thông số có nguồn, vẫn có thể xếp hạng theo dữ liệu đã có.",
       "legacyIds": [
         "other",
         "my-device"

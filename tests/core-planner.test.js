@@ -5,7 +5,7 @@ import {compareDevices,deviceScore,recommendDevices,conditionScore,angleOptions,
 import {classifyDeviceType,getDeviceType,isDeviceTypeScoreable,matchesDeviceType,normalizeDeviceText,normalizeDeviceTypeFilter,resolveDeviceTypeAlias,searchDeviceTypes} from '../core/device-types.js';
 test('unknown device facts are not fabricated and unknown rows are not called different',()=>{const rows=compareDevices([expandDevice({sensor:{megapixels:null}}),expandDevice({sensor:{megapixels:24}})],true);assert.equal(rows.some(r=>r.path==='sensor.megapixels'),false);});
 test('device score requires two available numeric facts',()=>{const cfg={purposes:{x:{'sensor.megapixels':{min:0,max:50,weight:.5},'power.weightG':{min:100,max:1000,weight:.5,direction:'lower'}}}};assert.equal(deviceScore({sensor:{megapixels:20},power:{weightG:null}},'x',cfg).score,null);assert.equal(deviceScore({sensor:{megapixels:25},power:{weightG:550}},'x',cfg).score,50);});
-test('weather score explains missing data and computes when there are inputs',()=>{assert.equal(conditionScore({},'portrait',{weights:{portrait:{rain:.3,wind:.2}}}).score,null);const s=conditionScore({rain:0,wind:4,cloud:35,visibility:100},'portrait',{weights:{portrait:{rain:.3,wind:.2,cloud:.18,visibility:.14}}});assert.ok(s.score>0);assert.equal(s.factors.visibility,100);assert.match(s.why,/tham kh?o/);});
+test('weather score explains missing data and computes when there are inputs',()=>{assert.equal(conditionScore({},'portrait',{weights:{portrait:{rain:.3,wind:.2}}}).score,null);const s=conditionScore({rain:0,wind:4,cloud:35,visibility:100},'portrait',{weights:{portrait:{rain:.3,wind:.2,cloud:.18,visibility:.14}}});assert.ok(s.score>0);assert.equal(s.factors.visibility,100);assert.match(s.why,/tham khảo/);});
 test('angle and outfit suggestions have three options and no appearance judgments',()=>{assert.equal(angleOptions('architecture').length,3);const text=JSON.stringify(outfitOptions({temp:30,background:'#234567'}));assert.equal(/skin|gender|age|body/i.test(text),false);});
 test('hourly conditions cover the next 48 hours only',()=>{const time=Array.from({length:60},(_,i)=>new Date(Date.now()+(i+1)*3600000).toISOString().slice(0,16));const rows=scoreHours({time,precipitation_probability:time.map(()=>0),wind_speed_10m:time.map(()=>2),cloud_cover:time.map(()=>30),visibility:time.map(()=>10000),uv_index:time.map(()=>1)},'portrait',0,{weights:{portrait:{rain:.5,wind:.5}}});assert.ok(rows.length>=46&&rows.length<=49);assert.ok(rows.every(x=>x.timestamp<=Date.now()+48*3600000));});
 test('solar windows preserve location local time',()=>{const x=solarWindows('2026-11-22T06:00','2026-11-22T17:00');assert.equal(x.rise,'06:00');assert.equal(x.estimated,true);});
@@ -14,7 +14,7 @@ test('plans can be saved, updated, and removed',()=>{const m=new Map();const s=c
 const recommendationFixtureConfig={recommendation:{
  minimumKnownCriteria:2,maximumResults:5,priorityBoost:4,
  criteria:{
-  imageQuality:{label:'Ch?t lu?ng ?nh',fields:[{path:'sensor.megapixels',min:0,max:100,direction:'higher',weight:1}]},
+  imageQuality:{label:'Chất lượng ảnh',fields:[{path:'sensor.megapixels',min:0,max:100,direction:'higher',weight:1}]},
   zoom:{label:'Zoom',fields:[{path:'lens.opticalZoom',min:1,max:10,direction:'higher',weight:1}]}
  },
  purposeWeights:{travel:{imageQuality:.5,zoom:.5},portrait:{imageQuality:.8,zoom:.2}}
@@ -61,7 +61,7 @@ test('budget filtering refuses unknown or non-VND prices and explains the missin
  const result=recommendDevices(devices,{type:'phone',purpose:'travel',budget:10000000},recommendationFixtureConfig);
  assert.equal(result.recommendations.length,0);
  assert.equal(result.unknownPriceCount,2);
- assert.match(result.message,/gi� VND da bi?t/);
+ assert.match(result.message,/giá VND đã biết/);
 });
 test('action camera aliases match the action type filter',()=>{
  const devices=[{id:'action',brand:'A',model:'Action',type:'action-camera',sensor:{megapixels:40},lens:{opticalZoom:4}}];
@@ -147,6 +147,6 @@ test('non-scoreable groups are not ranked by the ordinary camera recommendation 
  const device={id:'film',brand:'Maker',model:'Film camera',type:'film-camera',sensor:{megapixels:50},lens:{opticalZoom:6}};
  const result=recommendDevices([device],{type:'film-camera',purpose:'travel'},recommendationFixtureConfig);
  assert.equal(result.recommendations.length,0);
- assert.match(result.message,/kh�ng ph� h?p/);
+ assert.match(result.message,/không phù hợp/);
 });
 
