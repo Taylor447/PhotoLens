@@ -1,3 +1,4 @@
+import {getDeviceType,isDeviceTypeScoreable,matchesDeviceType,normalizeDeviceTypeFilter} from './device-types.js';
 const clamp=(n,min=0,max=100)=>Math.min(max,Math.max(min,n));
 const num=v=>v===null||v===undefined||v===''||!Number.isFinite(Number(v))?null:Number(v);
 export const DEVICE_FIELDS=[
@@ -25,13 +26,6 @@ function recommendationNumber(device,field){
  const match=String(raw).match(/-?\\d+(?:[.,]\\d+)?/);
  return match?Number(match[0].replace(',','.')):null;
 }
-function recommendationType(type){
- const value=String(type||'other').toLowerCase().trim().replace(/[ _]+/g,'-');
- if(['action-camera','actioncam','action-cam'].includes(value))return 'action';
- if(['smartphone','mobile-phone'].includes(value))return 'phone';
- if(value==='my-device')return 'other';
- return value;
-}
 function recommendationPriceVnd(device){
  const raw=device?.power?.price;
  let amount=null,currency='';
@@ -55,12 +49,14 @@ export function recommendDevices(devices,filters={},configuration={}){
  const purpose=purposes[filters.purpose]||purposes.portrait||{};
  const activeCriteria=Object.entries(purpose).filter(([id,weight])=>criteriaConfig[id]&&Number.isFinite(Number(weight))&&Number(weight)>0);
  const current=(filters.currentDeviceId?devices.find(device=>device.id===filters.currentDeviceId):null)||null;
- const requestedType=String(filters.type||'all');
- const effectiveType=requestedType!=='all'?recommendationType(requestedType):(current?recommendationType(current.type):'all');
- const typedCandidates=devices.map(expandDevice).filter(device=>
-  (!effectiveType||effectiveType==='all'||recommendationType(device.type)===effectiveType)&&
-  (!current||device.id!==current.id)
+ const requestedType=normalizeDeviceTypeFilter(filters.type||'all');
+ const currentType=current?normalizeDeviceTypeFilter(current.type):'all';
+ const effectiveType=requestedType!=='all'?requestedType:(current?currentType:'all');
+ const matchingCandidates=devices.map(expandDevice).filter(device=>
+  matchesDeviceType(device,effectiveType)&&(!current||device.id!==current.id)
  );
+ const excludedUnscoreableCount=matchingCandidates.filter(device=>!isDeviceTypeScoreable(device)).length;
+ const typedCandidates=matchingCandidates.filter(isDeviceTypeScoreable);
  const budget=Number(filters.budget);
  const hasBudget=Number.isFinite(budget)&&budget>0;
  const unknownPriceCount=hasBudget?typedCandidates.filter(device=>recommendationPriceVnd(device)===null).length:0;
@@ -98,11 +94,15 @@ export function recommendDevices(devices,filters={},configuration={}){
  }).filter(result=>result.score!==null).sort((a,b)=>b.score-a.score||String(a.device.brand+' '+a.device.model).localeCompare(String(b.device.brand+' '+b.device.model)));
  let message='';
  if(!ranked.length){
-  if(hasBudget&&typedCandidates.length&&candidates.length===0)message='Không có mẫu nào có giá VND đã biết nằm trong ngân sách này.';
+  const selectedType=getDeviceType(effectiveType);
+  if(effectiveType!=='all'&&selectedType.scoreable===false)message='Loại '+selectedType.nameVi+' được giữ để phân loại/lọc nhưng không phù hợp với bộ chấm điểm máy ảnh thông thường.';
+  else if(matchingCandidates.length&&!typedCandidates.length)message='Các thiết bị khớp thuộc nhóm không phù hợp với bộ chấm điểm ảnh thông thường.';
+  else if(hasBudget&&typedCandidates.length&&candidates.length===0)message='Không có mẫu nào có giá VND đã biết nằm trong ngân sách này.';
   else if(!typedCandidates.length)message='Không có thiết bị nào khớp loại hoặc thiết bị nâng cấp đã chọn.';
   else message='Chưa có đủ thông số có nguồn để xếp hạng. Cần ít nhất '+minimum+' tiêu chí có dữ liệu.';
  }
  const notices=[];
+ if(excludedUnscoreableCount)notices.push('Đã loại '+excludedUnscoreableCount+' thiết bị chuyên dụng khỏi điểm máy ảnh thông thường.');
  if(hasBudget&&unknownPriceCount)notices.push(unknownPriceCount+' thiết bị chưa có giá VND nên không thể xác nhận theo ngân sách.');
  if(hasBudget&&overBudgetCount)notices.push(overBudgetCount+' thiết bị có giá đã biết vượt ngân sách.');
  return {recommendations:ranked.slice(0,Math.max(1,Number(config.maximumResults)||5)),message,notice:notices.join(' '),candidateCount:typedCandidates.length,eligibleCount:candidates.length,unknownPriceCount,overBudgetCount};
