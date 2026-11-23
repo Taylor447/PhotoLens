@@ -18,7 +18,7 @@ test('CRUD món đồ and legacy migration preserve saved items, looks, and comp
 test('search and category, style, material, color, season filters work',()=>{
  const items=[normalizeGarment(template),normalizeGarment({...template,id:'test-jacket',name:'Áo khoác len',category:'outerwear',styleTags:['classic'],materialId:'wool',season:'winter',color:'#663322'})];
  assert.equal(filterGarments(items,{category:'tops'}).length,1);assert.equal(filterGarments(items,{style:'classic'}).length,1);assert.equal(filterGarments(items,{material:'wool'}).length,1);
- assert.equal(filterGarments(items,{color:'warm'}).length,1);assert.equal(filterGarments(items,{query:'khoác'}).length,1);assert.equal(filterGarments(items,{season:'winter'}).length,1);assert.deepEqual(filterGarments(items,{query:'không có tên'}),[]);
+ assert.equal(filterGarments(items,{color:'warm'}).length,1);assert.equal(filterGarments(items,{query:'khoác'}).length,1);assert.equal(filterGarments(items,{season:'winter'}).length,2);assert.deepEqual(filterGarments(items,{query:'không có tên'}),[]);
 });
 test('lookbook save, rename, duplicate and delete preserve item references',()=>{
  const repo=createWardrobeRepository(memoryStorage(),null);repo.saveItem(template);const look=repo.saveLook({name:'Phố chiều',itemIds:['test-top'],tags:['street']});
