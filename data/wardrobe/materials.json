@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "materials": [
+    {
+      "id": "cotton",
+      "name": "Cotton",
+      "weightClass": "light",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "linen",
+      "name": "Linen",
+      "weightClass": "medium",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "denim",
+      "name": "Denim",
+      "weightClass": "heavy",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "wool",
+      "name": "Len",
+      "weightClass": "light",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "silk",
+      "name": "Lụa",
+      "weightClass": "medium",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "leather",
+      "name": "Da",
+      "weightClass": "heavy",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "polyester",
+      "name": "Polyester",
+      "weightClass": "light",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "nylon",
+      "name": "Nylon",
+      "weightClass": "medium",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "viscose",
+      "name": "Viscose",
+      "weightClass": "heavy",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "satin",
+      "name": "Satin",
+      "weightClass": "light",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "twill",
+      "name": "Twill",
+      "weightClass": "medium",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "jersey",
+      "name": "Jersey",
+      "weightClass": "heavy",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "canvas",
+      "name": "Canvas",
+      "weightClass": "light",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "chiffon",
+      "name": "Chiffon",
+      "weightClass": "medium",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "velvet",
+      "name": "Nhung",
+      "weightClass": "heavy",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "fleece",
+      "name": "Nỉ lông",
+      "weightClass": "light",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "technical",
+      "name": "Vải kỹ thuật",
+      "weightClass": "medium",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "knit",
+      "name": "Vải dệt kim",
+      "weightClass": "heavy",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "lace",
+      "name": "Ren",
+      "weightClass": "light",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "tulle",
+      "name": "Tuyn",
+      "weightClass": "medium",
+      "physicalProperties": null,
+      "provenance": {
+        "source": "PhotoLens-generated metadata",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    }
+  ]
+}

@@ -1,0 +1,445 @@
+{
+  "schemaVersion": 1,
+  "patterns": [
+    {
+      "id": "solid",
+      "name": "Trơn",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "thin-stripe",
+      "name": "Kẻ sọc nhỏ",
+      "moireRisk": true,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "wide-stripe",
+      "name": "Kẻ sọc lớn",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "pinstripe",
+      "name": "Kẻ phấn",
+      "moireRisk": true,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "vertical-stripe",
+      "name": "Sọc dọc",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "horizontal-stripe",
+      "name": "Sọc ngang",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "gingham",
+      "name": "Gingham",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "plaid",
+      "name": "Caro",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "windowpane",
+      "name": "Ô cửa sổ",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "houndstooth",
+      "name": "Houndstooth",
+      "moireRisk": true,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "polka-small",
+      "name": "Chấm bi nhỏ",
+      "moireRisk": true,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "polka-large",
+      "name": "Chấm bi lớn",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "micro-dot",
+      "name": "Chấm li ti",
+      "moireRisk": true,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "floral-small",
+      "name": "Hoa nhỏ",
+      "moireRisk": true,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "floral-large",
+      "name": "Hoa lớn",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "botanical",
+      "name": "Lá cách điệu",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "tropical",
+      "name": "Nhiệt đới",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "abstract",
+      "name": "Trừu tượng",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "geometric",
+      "name": "Hình học",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "chevron",
+      "name": "Zigzag",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "wave",
+      "name": "Sóng",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "diamond",
+      "name": "Thoi",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "argyle",
+      "name": "Quả trám",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "paisley",
+      "name": "Paisley cách điệu",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "camouflage",
+      "name": "Ngụy trang",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "camo-soft",
+      "name": "Ngụy trang mềm",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "pixel-grid",
+      "name": "Lưới pixel",
+      "moireRisk": true,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "checker",
+      "name": "Bàn cờ",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "color-block",
+      "name": "Mảng màu",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "gradient",
+      "name": "Chuyển sắc",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "speckle",
+      "name": "Hạt li ti",
+      "moireRisk": true,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "brush",
+      "name": "Nét cọ",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "marble",
+      "name": "Đá cẩm thạch",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "ikat",
+      "name": "Ikat cách điệu",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "batik",
+      "name": "Batik cách điệu",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "embroidered",
+      "name": "Thêu hình học",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "lace-motif",
+      "name": "Ren lặp",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "star",
+      "name": "Ngôi sao",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "moon",
+      "name": "Mặt trăng",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    },
+    {
+      "id": "cloud",
+      "name": "Mây cách điệu",
+      "moireRisk": false,
+      "repeatable": true,
+      "provenance": {
+        "source": "PhotoLens-generated code",
+        "license": "CC0",
+        "author": "PhotoLens project"
+      }
+    }
+  ]
+}

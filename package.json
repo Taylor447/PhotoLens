@@ -13,7 +13,7 @@
     "electron:build": "npm run build && electron-builder",
     "worker:dev": "npx wrangler dev --config worker/wrangler.toml",
     "worker:deploy": "npx wrangler deploy --config worker/wrangler.toml",
-    "test:unit": "node --test tests/core-planner.test.js",
+    "test:unit": "node --test tests/core-planner.test.js tests/wardrobe-studio.test.js tests/worker-outfit.test.js && node tools/assets/validate-wardrobe.mjs",
     "test": "npm run test:unit && npm run build"
   },
   "dependencies": {

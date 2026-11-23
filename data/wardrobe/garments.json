@@ -1,0 +1,2647 @@
+{
+  "schemaVersion": 1,
+  "recordType": "procedural-template",
+  "realGarmentCount": 0,
+  "templates": [
+    {
+      "id": "tpl-tops-1",
+      "name": "Áo thun cơ bản",
+      "category": "tops",
+      "legacyCategory": "tops",
+      "layer": "base",
+      "layerOrder": 20,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "cotton",
+      "patternId": "solid",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:tops-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-tops-2",
+      "name": "Sơ mi dáng thẳng",
+      "category": "tops",
+      "legacyCategory": "tops",
+      "layer": "base",
+      "layerOrder": 20,
+      "styleTags": [
+        "classic",
+        "traditional"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "wool",
+      "patternId": "plaid",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:tops-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-tops-3",
+      "name": "Áo dài minh họa",
+      "category": "tops",
+      "legacyCategory": "tops",
+      "layer": "base",
+      "layerOrder": 20,
+      "styleTags": [
+        "traditional",
+        "cosplay"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "polyester",
+      "patternId": "floral-large",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:tops-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-tops-4",
+      "name": "Áo bà ba minh họa",
+      "category": "tops",
+      "legacyCategory": "tops",
+      "layer": "base",
+      "layerOrder": 20,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "satin",
+      "patternId": "diamond",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:tops-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-tops-5",
+      "name": "Áo giáp cosplay",
+      "category": "tops",
+      "legacyCategory": "tops",
+      "layer": "base",
+      "layerOrder": 20,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "canvas",
+      "patternId": "color-block",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:tops-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-bottoms-1",
+      "name": "Quần ống đứng",
+      "category": "bottoms",
+      "legacyCategory": "bottoms",
+      "layer": "base",
+      "layerOrder": 30,
+      "styleTags": [
+        "minimal",
+        "streetwear"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "fleece",
+      "patternId": "embroidered",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:bottoms-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-bottoms-2",
+      "name": "Quần jogger",
+      "category": "bottoms",
+      "legacyCategory": "bottoms",
+      "layer": "base",
+      "layerOrder": 30,
+      "styleTags": [
+        "streetwear",
+        "active"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "lace",
+      "patternId": "wide-stripe",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:bottoms-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-bottoms-3",
+      "name": "Quần short",
+      "category": "bottoms",
+      "legacyCategory": "bottoms",
+      "layer": "base",
+      "layerOrder": 30,
+      "styleTags": [
+        "active",
+        "traditional"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "linen",
+      "patternId": "houndstooth",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:bottoms-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-bottoms-4",
+      "name": "Quần chùng minh họa",
+      "category": "bottoms",
+      "legacyCategory": "bottoms",
+      "layer": "base",
+      "layerOrder": 30,
+      "styleTags": [
+        "traditional",
+        "cosplay"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "silk",
+      "patternId": "tropical",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:bottoms-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-bottoms-5",
+      "name": "Quần giáp cosplay",
+      "category": "bottoms",
+      "legacyCategory": "bottoms",
+      "layer": "base",
+      "layerOrder": 30,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "nylon",
+      "patternId": "paisley",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:bottoms-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-skirts-1",
+      "name": "Chân váy chữ A",
+      "category": "skirts",
+      "legacyCategory": "accessories",
+      "layer": "base",
+      "layerOrder": 30,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "twill",
+      "patternId": "speckle",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:skirts-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-skirts-2",
+      "name": "Chân váy xếp ly",
+      "category": "skirts",
+      "legacyCategory": "accessories",
+      "layer": "base",
+      "layerOrder": 30,
+      "styleTags": [
+        "classic",
+        "traditional"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "chiffon",
+      "patternId": "star",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:skirts-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-skirts-3",
+      "name": "Váy nhiều lớp cosplay",
+      "category": "skirts",
+      "legacyCategory": "accessories",
+      "layer": "base",
+      "layerOrder": 30,
+      "styleTags": [
+        "traditional",
+        "cosplay"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "technical",
+      "patternId": "vertical-stripe",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:skirts-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-skirts-4",
+      "name": "Váy dài",
+      "category": "skirts",
+      "legacyCategory": "accessories",
+      "layer": "base",
+      "layerOrder": 30,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "tulle",
+      "patternId": "polka-large",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:skirts-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-skirts-5",
+      "name": "Váy tối giản",
+      "category": "skirts",
+      "legacyCategory": "accessories",
+      "layer": "base",
+      "layerOrder": 30,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "denim",
+      "patternId": "geometric",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:skirts-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-dresses-1",
+      "name": "Đầm tối giản",
+      "category": "dresses",
+      "legacyCategory": "dresses",
+      "layer": "base",
+      "layerOrder": 25,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "leather",
+      "patternId": "camo-soft",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:dresses-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-dresses-2",
+      "name": "Đầm cổ vuông",
+      "category": "dresses",
+      "legacyCategory": "dresses",
+      "layer": "base",
+      "layerOrder": 25,
+      "styleTags": [
+        "classic",
+        "traditional"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "viscose",
+      "patternId": "marble",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:dresses-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-dresses-3",
+      "name": "Áo tứ thân minh họa",
+      "category": "dresses",
+      "legacyCategory": "dresses",
+      "layer": "base",
+      "layerOrder": 25,
+      "styleTags": [
+        "traditional",
+        "cosplay"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "jersey",
+      "patternId": "cloud",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:dresses-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-dresses-4",
+      "name": "Đầm cosplay",
+      "category": "dresses",
+      "legacyCategory": "dresses",
+      "layer": "base",
+      "layerOrder": 25,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "velvet",
+      "patternId": "gingham",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:dresses-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-dresses-5",
+      "name": "Đầm suông",
+      "category": "dresses",
+      "legacyCategory": "dresses",
+      "layer": "base",
+      "layerOrder": 25,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "knit",
+      "patternId": "floral-small",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:dresses-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-outerwear-1",
+      "name": "Áo khoác ngắn",
+      "category": "outerwear",
+      "legacyCategory": "outerwear",
+      "layer": "outer",
+      "layerOrder": 50,
+      "styleTags": [
+        "classic",
+        "streetwear"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "cotton",
+      "patternId": "wave",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:outerwear-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-outerwear-2",
+      "name": "Blazer thẳng",
+      "category": "outerwear",
+      "legacyCategory": "outerwear",
+      "layer": "outer",
+      "layerOrder": 50,
+      "styleTags": [
+        "streetwear",
+        "active"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "wool",
+      "patternId": "checker",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:outerwear-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-outerwear-3",
+      "name": "Áo choàng cosplay",
+      "category": "outerwear",
+      "legacyCategory": "outerwear",
+      "layer": "outer",
+      "layerOrder": 50,
+      "styleTags": [
+        "active",
+        "traditional"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "polyester",
+      "patternId": "batik",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:outerwear-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-outerwear-4",
+      "name": "Áo khoác thể thao",
+      "category": "outerwear",
+      "legacyCategory": "outerwear",
+      "layer": "outer",
+      "layerOrder": 50,
+      "styleTags": [
+        "traditional",
+        "cosplay"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "satin",
+      "patternId": "thin-stripe",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:outerwear-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-outerwear-5",
+      "name": "Áo khoác truyền thống minh họa",
+      "category": "outerwear",
+      "legacyCategory": "outerwear",
+      "layer": "outer",
+      "layerOrder": 50,
+      "styleTags": [
+        "cosplay",
+        "classic"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "canvas",
+      "patternId": "windowpane",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:outerwear-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-shoes-1",
+      "name": "Giày bệt",
+      "category": "shoes",
+      "legacyCategory": "shoes",
+      "layer": "accessory",
+      "layerOrder": 10,
+      "styleTags": [
+        "minimal",
+        "streetwear"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "fleece",
+      "patternId": "botanical",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:shoes-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-shoes-2",
+      "name": "Giày thể thao",
+      "category": "shoes",
+      "legacyCategory": "shoes",
+      "layer": "accessory",
+      "layerOrder": 10,
+      "styleTags": [
+        "streetwear",
+        "active"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "lace",
+      "patternId": "argyle",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:shoes-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-shoes-3",
+      "name": "Bốt thấp",
+      "category": "shoes",
+      "legacyCategory": "shoes",
+      "layer": "accessory",
+      "layerOrder": 10,
+      "styleTags": [
+        "active",
+        "cosplay"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "linen",
+      "patternId": "gradient",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:shoes-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-shoes-4",
+      "name": "Giày quai",
+      "category": "shoes",
+      "legacyCategory": "shoes",
+      "layer": "accessory",
+      "layerOrder": 10,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "silk",
+      "patternId": "lace-motif",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:shoes-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-shoes-5",
+      "name": "Ủng cosplay",
+      "category": "shoes",
+      "legacyCategory": "shoes",
+      "layer": "accessory",
+      "layerOrder": 10,
+      "styleTags": [
+        "minimal",
+        "streetwear"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "nylon",
+      "patternId": "pinstripe",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:shoes-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-hats-1",
+      "name": "Nón vành",
+      "category": "hats",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 60,
+      "styleTags": [
+        "minimal",
+        "streetwear"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "twill",
+      "patternId": "polka-small",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:hats-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-hats-2",
+      "name": "Mũ lưỡi trai",
+      "category": "hats",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 60,
+      "styleTags": [
+        "streetwear",
+        "traditional"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "chiffon",
+      "patternId": "abstract",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:hats-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-hats-3",
+      "name": "Nón lá minh họa",
+      "category": "hats",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 60,
+      "styleTags": [
+        "traditional",
+        "cosplay"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "technical",
+      "patternId": "camouflage",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:hats-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-hats-4",
+      "name": "Mũ len",
+      "category": "hats",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 60,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "tulle",
+      "patternId": "brush",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:hats-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-hats-5",
+      "name": "Mũ giáp cosplay",
+      "category": "hats",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 60,
+      "styleTags": [
+        "minimal",
+        "streetwear"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "denim",
+      "patternId": "moon",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:hats-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-bags-1",
+      "name": "Túi vai",
+      "category": "bags",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 61,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "leather",
+      "patternId": "horizontal-stripe",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:bags-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-bags-2",
+      "name": "Túi tote",
+      "category": "bags",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 61,
+      "styleTags": [
+        "classic",
+        "streetwear"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "viscose",
+      "patternId": "micro-dot",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:bags-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-bags-3",
+      "name": "Túi chéo",
+      "category": "bags",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 61,
+      "styleTags": [
+        "streetwear",
+        "cosplay"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "jersey",
+      "patternId": "chevron",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:bags-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-bags-4",
+      "name": "Túi nhỏ",
+      "category": "bags",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 61,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "velvet",
+      "patternId": "pixel-grid",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:bags-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-bags-5",
+      "name": "Túi đạo cụ cosplay",
+      "category": "bags",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 61,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "knit",
+      "patternId": "ikat",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:bags-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-eyewear-1",
+      "name": "Kính tròn",
+      "category": "eyewear",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 62,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "cotton",
+      "patternId": "solid",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:eyewear-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-eyewear-2",
+      "name": "Kính vuông",
+      "category": "eyewear",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 62,
+      "styleTags": [
+        "classic",
+        "active"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "wool",
+      "patternId": "plaid",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:eyewear-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-eyewear-3",
+      "name": "Kính trang trí",
+      "category": "eyewear",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 62,
+      "styleTags": [
+        "active",
+        "cosplay"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "polyester",
+      "patternId": "floral-large",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:eyewear-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-eyewear-4",
+      "name": "Kính thể thao",
+      "category": "eyewear",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 62,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "satin",
+      "patternId": "diamond",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:eyewear-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-eyewear-5",
+      "name": "Kính cosplay",
+      "category": "eyewear",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 62,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "canvas",
+      "patternId": "color-block",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": null,
+      "assets": {
+        "svg": {
+          "id": "svg:eyewear-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-scarves-1",
+      "name": "Khăn quàng",
+      "category": "scarves",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 63,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "fleece",
+      "patternId": "embroidered",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:scarves-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-scarves-2",
+      "name": "Khăn vuông",
+      "category": "scarves",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 63,
+      "styleTags": [
+        "classic",
+        "traditional"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "lace",
+      "patternId": "wide-stripe",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:scarves-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-scarves-3",
+      "name": "Khăn choàng dài",
+      "category": "scarves",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 63,
+      "styleTags": [
+        "traditional",
+        "cosplay"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "linen",
+      "patternId": "houndstooth",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:scarves-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-scarves-4",
+      "name": "Khăn ống",
+      "category": "scarves",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 63,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "silk",
+      "patternId": "tropical",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:scarves-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-scarves-5",
+      "name": "Khăn cách điệu",
+      "category": "scarves",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 63,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "nylon",
+      "patternId": "paisley",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:scarves-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-jewelry-1",
+      "name": "Vòng cổ hình học",
+      "category": "jewelry",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 64,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "twill",
+      "patternId": "speckle",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:jewelry-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-jewelry-2",
+      "name": "Vòng tay",
+      "category": "jewelry",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 64,
+      "styleTags": [
+        "classic",
+        "traditional"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "chiffon",
+      "patternId": "star",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:jewelry-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-jewelry-3",
+      "name": "Khuyên tai",
+      "category": "jewelry",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 64,
+      "styleTags": [
+        "traditional",
+        "cosplay"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "technical",
+      "patternId": "vertical-stripe",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:jewelry-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-jewelry-4",
+      "name": "Trâm cài",
+      "category": "jewelry",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 64,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "tulle",
+      "patternId": "polka-large",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:jewelry-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-jewelry-5",
+      "name": "Trang sức cosplay",
+      "category": "jewelry",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 64,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "denim",
+      "patternId": "geometric",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:jewelry-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-hair-1",
+      "name": "Băng đô",
+      "category": "hair",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 65,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "all",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "leather",
+      "patternId": "camo-soft",
+      "fit": "regular",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:hair-1",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-hair-2",
+      "name": "Kẹp tóc",
+      "category": "hair",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 65,
+      "styleTags": [
+        "classic",
+        "traditional"
+      ],
+      "season": "spring",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "viscose",
+      "patternId": "marble",
+      "fit": "relaxed",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:hair-2",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-hair-3",
+      "name": "Trâm tóc minh họa",
+      "category": "hair",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 65,
+      "styleTags": [
+        "traditional",
+        "cosplay"
+      ],
+      "season": "summer",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "jersey",
+      "patternId": "cloud",
+      "fit": "oversize",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:hair-3",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-hair-4",
+      "name": "Nơ vải",
+      "category": "hair",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 65,
+      "styleTags": [
+        "cosplay",
+        "minimal"
+      ],
+      "season": "autumn",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "velvet",
+      "patternId": "gingham",
+      "fit": "slim",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": false,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:hair-4",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    },
+    {
+      "id": "tpl-hair-5",
+      "name": "Phụ kiện cosplay",
+      "category": "hair",
+      "legacyCategory": "accessories",
+      "layer": "accessory",
+      "layerOrder": 65,
+      "styleTags": [
+        "minimal",
+        "classic"
+      ],
+      "season": "winter",
+      "temperatureC": {
+        "min": null,
+        "max": null
+      },
+      "weather": {
+        "rain": null,
+        "wind": null
+      },
+      "materialId": "knit",
+      "patternId": "floral-small",
+      "fit": "layered",
+      "recolorableRegions": [
+        "main"
+      ],
+      "sizeTable": [],
+      "measurementsCm": null,
+      "measurementSource": null,
+      "shootingNotes": {
+        "moireRisk": true,
+        "reflective": null,
+        "wrinkle": null,
+        "highlight": null
+      },
+      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "assets": {
+        "svg": {
+          "id": "svg:hair-5",
+          "provenance": "generated-by-photolens"
+        },
+        "glb": null
+      }
+    }
+  ]
+}
