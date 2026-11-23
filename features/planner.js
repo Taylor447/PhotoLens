@@ -4,10 +4,11 @@ import { Preferences } from '@capacitor/preferences';
 import spotsSeed from '../data/spots.json';
 import weatherConfig from '../data/weather-scoring.json';
 import {conditionScore,bestHours,solarWindows,angleOptions,outfitOptions,createPlanStore,scoreHours,esc} from '../core/photography.js';
+import {createAngleSimulation3D,calculateCameraFov,renderPhotoFrameSvg,analyzeSubjectFraming,SENSOR_PRESETS} from './angle-simulation-3d.js';
 
 const $=(s,r=document)=>r.querySelector(s), genres={portrait:'Chân dung',landscape:'Phong cảnh',architecture:'Kiến trúc',street:'Đường phố',night:'Đường phố đêm',moon:'Chụp trăng',cosplay:'Cosplay',documentary:'Tư liệu'};
 
-let panel=null,tab='weather',place={label:'Hà Nội'},forecast=null,myPosition=null,spots=[],pickedSpot=null,genre='portrait',angleGenre='portrait',anglePose='solo',angleScene='',angleIndex=0,simMode='2d',simFallbackMessage='',simHeight=160,simDistance=4,simOrbitX=-8,simOrbitY=12,simDrag=null,editingPlan='',aiResult=null,aiRoute='',aiMessage='',showEstimatedCost=false;
+let panel=null,angle3DInstance=null,tab='weather',place={label:'Hà Nội'},forecast=null,myPosition=null,spots=[],pickedSpot=null,genre='portrait',angleGenre='portrait',anglePose='solo',angleScene='',angleIndex=0,simMode='2d',simFallbackMessage='',simHeight=160,simDistance=4,simFocal=35,simSubjectHeight=170,simSensor='fullFrame',simSensorWidth=36,simSensorHeight=24,simOrientation='portrait',simOrbitX=28,simOrbitY=30,editingPlan='',aiResult=null,aiRoute='',aiMessage='',showEstimatedCost=false;
 const repo=createPlanStore();
 const json=(key,fallback)=>{try{const v=JSON.parse(localStorage.getItem(key)||'null');return v??fallback;}catch{return fallback;}};
 
@@ -36,59 +37,48 @@ function spotsView(){
  return html;
 }
 const simClamp=(n,min,max)=>Math.min(max,Math.max(min,n));
+const simNum=n=>Number.isFinite(n)?Number(n.toFixed(1)):0;
+const framingText=config=>{const result=analyzeSubjectFraming(config);return result.cropped?'Một phần chủ thể bị cắt khỏi khung; thử lùi máy, giảm tiêu cự hoặc đổi hướng khung.':'Toàn bộ chủ thể nằm trong khung theo thông số đã chọn.';};
 function simPerson(x,y,scale=1,color='#0b7a5a'){
- return '<g transform="translate('+x+' '+y+') scale('+scale+')" stroke="'+color+'" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="0" cy="-56" r="10" fill="'+color+'" stroke="none"/><path d="M0 -44 L0 -16 M-15 -35 L0 -42 L15 -35 M-15 -35 L-22 -13 M15 -35 L22 -13 M0 -16 L-12 0 M0 -16 L12 0 M-12 0 L-16 17 M12 0 L16 17"/></g>';
+ return '<g transform="translate('+x+' '+y+') scale('+scale+')" stroke="'+color+'" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="0" cy="-56" r="10" fill="'+color+'" stroke="none"/><path d="M0 -44L0 -16M-15 -35L0 -42L15 -35M-15 -35L-22 -13M15 -35L22 -13M0 -16L-12 0M0 -16L12 0M-12 0L-16 17M12 0L16 17"/></g>';
 }
 function simPeople(centerX,groundY,scale=1){
  const positions=anglePose==='solo'?[0]:anglePose==='couple'?[-20,20]:[-42,-21,0,21,42];
  return positions.map((offset,i)=>simPerson(centerX+offset,groundY,scale,i%2?'#476e83':'#0b7a5a')).join('');
 }
-function orbitSvgTransform(){const yaw=simOrbitY*Math.PI/180,sx=(.68+.32*Math.cos(yaw)).toFixed(3),shift=Math.round(Math.sin(yaw)*16);return 'translate('+shift+' 0) translate(340 186) scale('+sx+' 1) translate(-340 -186) skewX('+Math.round(simOrbitX*.2)+')';}
 function cameraSymbol(x,y){
  return '<g transform="translate('+x+' '+y+')" stroke="#183c3c" stroke-width="3" stroke-linejoin="round"><path d="M-19 -9h11l5 -7h18l5 7h7v25h-46z" fill="#ffffff"/><circle cx="3" cy="3" r="9" fill="#d8eee6"/><circle cx="3" cy="3" r="4" fill="#0b7a5a"/><path d="M-11 16l-8 18M10 16l8 18M-11 16l-15 18M10 16l15 18" fill="none" stroke-linecap="round"/></g>';
 }
-function framePreview(cx,cy,w,h,offset){
- const lines='<path d="M'+(cx+w/3)+' '+cy+'v'+h+'M'+(cx+2*w/3)+' '+cy+'v'+h+'M'+cx+' '+(cy+h/3)+'h'+w+'M'+cx+' '+(cy+2*h/3)+'h'+w+'" stroke="#6e8a89" stroke-width="1" stroke-dasharray="4 4"/>';
- const previewPositions=anglePose==='solo'?[offset]:anglePose==='couple'?[offset-12,offset+12]:[-24,-12,0,12,24].map(x=>x+offset);
- const people=previewPositions.map((x,i)=>'<g transform="translate('+(cx+w/2+x)+' '+(cy+h-18)+') scale(.38)" stroke="'+(i%2?'#476e83':'#0b7a5a')+'" stroke-width="7" stroke-linecap="round" fill="none"><circle cy="-56" r="10" fill="'+(i%2?'#476e83':'#0b7a5a')+'" stroke="none"/><path d="M0 -44v28m-15 -19l15 -9 15 9m-15 19l-12 22m12 -22l12 22"/></g>').join('');
- return '<rect x="'+cx+'" y="'+cy+'" width="'+w+'" height="'+h+'" rx="8" fill="#f7fbf9" stroke="#76928d" stroke-width="2"/>'+lines+people;
+function angleSimulationConfig(){
+ const preset=SENSOR_PRESETS[simSensor]||SENSOR_PRESETS.fullFrame;
+ return {angleIndex,pose:anglePose,cameraHeight:simHeight,distance:simDistance,focalLength:simFocal,subjectHeight:simSubjectHeight,sensorWidth:simSensor==='custom'?simSensorWidth:preset.width,sensorHeight:simSensor==='custom'?simSensorHeight:preset.height,orientation:simOrientation,orbitPitch:simOrbitX,orbitYaw:simOrbitY};
 }
-function simulatorSvg(item,index,mode){
- const high=index===2,low=index===1;
- const subjectX=simClamp(300+(simDistance-2)*14,300,450),ground=285;
- const camY=simClamp(ground-(simHeight-45)*.58,120,245);
- const aimY=high?ground-142:low?ground-187:ground-164;
- const frameOffset=index===0?-22:index===1?0:22;
- const markers=Array.from({length:5},(_,i)=>'<path d="M'+(i*100)+' 0v340" stroke="#dfe8e5" stroke-width="1"/>').join('');
- const floorLines=Array.from({length:6},(_,i)=>'<path d="M'+(24+i*86)+' 270L'+(65+i*65)+' 315" stroke="#bed1ca" stroke-width="1"/>').join('');
- const people=simPeople(subjectX,ground,1);
- const camera=cameraSymbol(100,camY);
- const viewCone='<path d="M125 '+(camY-7)+'L'+(subjectX-18)+' '+(aimY-66)+'L'+(subjectX-18)+' '+(ground+8)+'Z" fill="rgba(11,122,90,.12)" stroke="#0b7a5a" stroke-width="2" stroke-dasharray="7 5"/>';
- const distance='<path d="M100 326H'+subjectX+'" stroke="#536e78" stroke-width="1.5" stroke-dasharray="5 5"/><path d="M100 321v10M'+subjectX+' 321v10" stroke="#536e78" stroke-width="1.5"/><text x="'+((100+subjectX)/2)+'" y="322" text-anchor="middle" fill="#344b56" font-size="13">'+simDistance+' m · khoảng cách</text>';
- let diagram;
- if(mode==='2d'){
-  const heightMark='<path d="M54 '+camY+'V'+ground+'" stroke="#536e78" stroke-width="1.5" stroke-dasharray="4 4"/><path d="M49 '+camY+'h10M49 '+ground+'h10" stroke="#536e78" stroke-width="1.5"/><text x="38" y="'+((camY+ground)/2)+'" transform="rotate(-90 38 '+((camY+ground)/2)+')" text-anchor="middle" fill="#344b56" font-size="12">'+simHeight+' cm</text>';
-  diagram='<svg viewBox="0 0 760 350" role="img" aria-label="Sơ đồ 2D: máy ảnh, hướng nhìn, khoảng cách, độ cao và khung ảnh dự kiến"><title>Sơ đồ 2D góc chụp '+esc(item.name)+'</title><rect width="760" height="350" rx="14" fill="#f4f8f6"/><path d="M20 '+ground+'H505" stroke="#81958f" stroke-width="3"/>'+markers+floorLines+viewCone+camera+people+'<text x="100" y="'+(camY-30)+'" text-anchor="middle" fill="#183c3c" font-size="13" font-weight="700">Máy ảnh</text><text x="'+subjectX+'" y="302" text-anchor="middle" fill="#183c3c" font-size="13" font-weight="700">Chủ thể</text><text x="248" y="'+(aimY-75)+'" text-anchor="middle" fill="#0b7a5a" font-size="12">Vùng nhìn / hướng máy</text>'+heightMark+distance+'<text x="620" y="32" text-anchor="middle" fill="#183c3c" font-size="13" font-weight="700">Khung ảnh dự kiến · lưới 1/3</text>'+framePreview(540,48,160,235,frameOffset)+'</svg>';
- } else {
-  const rot=orbitSvgTransform();
-  const floor='<polygon points="35,264 270,205 520,265 280,335" fill="#e2eee8" stroke="#9cb3aa" stroke-width="2"/>'+Array.from({length:5},(_,i)=>'<path d="M'+(70+i*48)+' '+(255-i*12)+'L'+(280+i*2)+' 327" stroke="#bdd0c7" stroke-width="1"/>').join('')+'<path d="M42 270L515 270M95 251L465 287M145 238L414 302" stroke="#c7d8d0" stroke-width="1"/>';
-  const frustum='<path d="M122 '+(camY-5)+'L540 72L540 282Z" fill="rgba(11,122,90,.10)" stroke="#0b7a5a" stroke-width="2" stroke-dasharray="7 5"/>';
-  diagram='<svg viewBox="0 0 760 370" role="img" aria-label="Mô phỏng phối cảnh 3D gồm máy ảnh, mannequin, mặt sàn và vùng nhìn"><title>Phối cảnh 3D minh họa góc chụp '+esc(item.name)+'</title><rect width="760" height="370" rx="14" fill="#f4f8f6"/><g data-orbit-world transform="'+rot+'">'+floor+frustum+camera+people+'<text x="103" y="'+(camY-30)+'" text-anchor="middle" fill="#183c3c" font-size="13" font-weight="700">Máy ảnh</text><text x="'+subjectX+'" y="310" text-anchor="middle" fill="#183c3c" font-size="13" font-weight="700">Mannequin'+(anglePose==='solo'?'':' × '+(anglePose==='couple'?2:5))+'</text><text x="335" y="102" text-anchor="middle" fill="#0b7a5a" font-size="12">Vùng nhìn</text><text x="100" y="354" fill="#344b56" font-size="12">Sàn / phối cảnh minh họa</text></g><text x="635" y="33" text-anchor="middle" fill="#183c3c" font-size="13" font-weight="700">Khung ảnh · lưới 1/3</text>'+framePreview(550,48,165,235,frameOffset)+'<text x="630" y="306" text-anchor="middle" fill="#344b56" font-size="12">'+simDistance+' m</text></svg>';
- }
- return diagram;
+function simulatorSvg(item,index,config){
+ const ground=300,pxPerMeter=34,cameraX=100,lensX=125,subjectX=cameraX+config.distance*pxPerMeter;
+ const cameraY=ground-config.cameraHeight/100*pxPerMeter,targetY=ground-config.subjectHeight/100*.9*pxPerMeter;
+ const dx=subjectX-lensX,aim=Math.atan2(targetY-cameraY,dx);
+ const fov=calculateCameraFov(config.focalLength,config.sensorWidth,config.sensorHeight,config.orientation);
+ const topY=cameraY+dx*Math.tan(aim-fov.verticalRadians/2),bottomY=cameraY+dx*Math.tan(aim+fov.verticalRadians/2);
+ const cone='<path d="M125 '+simNum(cameraY)+'L'+simNum(subjectX)+' '+simNum(topY)+'L'+simNum(subjectX)+' '+simNum(bottomY)+'Z" fill="rgba(11,122,90,.13)" stroke="#0b7a5a" stroke-width="2" stroke-dasharray="7 5"/>';
+ const height='<path d="M54 '+simNum(cameraY)+'V'+ground+'" stroke="#536e78" stroke-width="1.5" stroke-dasharray="4 4"/><path d="M49 '+simNum(cameraY)+'h10M49 '+ground+'h10" stroke="#536e78" stroke-width="1.5"/><text x="39" y="'+simNum((cameraY+ground)/2)+'" transform="rotate(-90 39 '+simNum((cameraY+ground)/2)+')" text-anchor="middle" fill="#344b56" font-size="12">'+config.cameraHeight+' cm</text>';
+ const distance='<path d="M'+lensX+' 329H'+simNum(subjectX)+'" stroke="#536e78" stroke-width="1.5" stroke-dasharray="5 5"/><path d="M'+lensX+' 324v10M'+simNum(subjectX)+' 324v10" stroke="#536e78" stroke-width="1.5"/><text x="'+simNum((lensX+subjectX)/2)+'" y="322" text-anchor="middle" fill="#344b56" font-size="13">'+config.distance+' m</text>';
+ const scale=config.subjectHeight/170*.70;
+ const people=simPeople(subjectX,ground,scale);
+ const grid=Array.from({length:6},(_,i)=>'<path d="M'+(i*100)+' 0v340" stroke="#dfe8e5" stroke-width="1"/>').join('');
+ return '<svg viewBox="0 0 520 350" role="img" aria-label="Sơ đồ 2D theo độ cao, khoảng cách, tiêu cự và kích thước cảm biến"><title>'+esc(item.name)+' · góc nhìn '+simNum(fov.vertical)+' độ dọc</title><defs><marker id="angle-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="#0b7a5a"/></marker></defs><rect width="520" height="350" rx="14" fill="#f4f8f6"/>'+grid+'<path d="M20 '+ground+'H510" stroke="#81958f" stroke-width="3"/>'+cone+cameraSymbol(cameraX,cameraY)+'<path d="M125 '+simNum(cameraY)+'L'+simNum(subjectX)+' '+simNum(targetY)+'" stroke="#0b7a5a" stroke-width="2" marker-end="url(#angle-arrow)"/>'+people+'<text x="'+cameraX+'" y="'+simNum(cameraY-34)+'" text-anchor="middle" fill="#183c3c" font-size="13" font-weight="700">Máy ảnh</text><text x="'+simNum(subjectX)+'" y="'+simNum(ground+18)+'" text-anchor="middle" fill="#183c3c" font-size="13" font-weight="700">Chủ thể · '+config.subjectHeight+' cm</text>'+height+distance+'<text x="260" y="26" text-anchor="middle" fill="#183c3c" font-size="12" font-weight="700">Vùng nhìn thật theo tiêu cự · '+config.focalLength+' mm · FOV '+simNum(fov.vertical)+'° dọc</text></svg>';
 }
 function anglesView(){
  const suggestions=angleOptions(angleGenre,'người trong ảnh',angleScene,anglePose);
- const safeIndex=simClamp(angleIndex,0,suggestions.length-1);
- const selected=suggestions[safeIndex];
- let fallbackMessage=simFallbackMessage;
- let shownMode=simMode;
- if(shownMode==='3d'&&typeof document.createElementNS!=='function'){shownMode='2d';simMode='2d';fallbackMessage='Thiết bị không hỗ trợ SVG cần thiết; đã chuyển về mô phỏng 2D.';simFallbackMessage=fallbackMessage;}
- let drawing='';
- try{drawing=simulatorSvg(selected,safeIndex,shownMode);}catch{shownMode='2d';simMode='2d';drawing=simulatorSvg(selected,safeIndex,'2d');fallbackMessage='Không tải được mô phỏng 3D; đã tự chuyển về 2D.';simFallbackMessage=fallbackMessage;}
+ const safeIndex=simClamp(angleIndex,0,suggestions.length-1),selected=suggestions[safeIndex],config=angleSimulationConfig();
+ const fov=calculateCameraFov(config.focalLength,config.sensorWidth,config.sensorHeight,config.orientation);
  const poseOptions=[['solo','Một người'],['couple','Cặp đôi'],['group','Nhóm bạn']];
  const cards=suggestions.map((item,index)=>'<button type="button" class="planner-angle-choice'+(index===safeIndex?' active':'')+'" data-angle-index="'+index+'" aria-pressed="'+(index===safeIndex)+'"><small>Gợi ý '+(index+1)+(index===safeIndex?' · Đang mô phỏng':'')+'</small><h4>'+esc(item.name)+'</h4><p><b>Đặt máy:</b> '+esc(item.height)+'. '+esc(item.distance)+'.</p><p><b>Bố cục:</b> '+esc(item.composition)+'</p><p class="planner-pose-tip"><b>Tạo dáng:</b> '+esc(item.poseTip)+'</p><p><b>Mẹo:</b> '+esc(item.tips)+'</p><p><b>Nên tránh:</b> '+esc(item.avoid)+'</p></button>').join('');
- return '<div class="planner-head"><div><h3>Góc chụp & tạo dáng</h3><p>Chọn thể loại và số người để nhận gợi ý góc máy cùng cách tạo dáng tự nhiên.</p></div></div><form class="planner-card planner-form" data-form="angles"><div class="planner-row"><label>Thể loại ảnh<select name="genre">'+options(Object.entries(genres),angleGenre)+'</select></label><label>Chủ thể<select name="poseType">'+options(poseOptions,anglePose)+'</select></label><label>Bối cảnh (không bắt buộc)<input name="scene" maxlength="120" value="'+esc(angleScene)+'" placeholder="Ví dụ: công viên lúc hoàng hôn"></label></div><button class="planner-primary" type="submit">Cập nhật gợi ý</button></form><section class="planner-sim" aria-labelledby="planner-sim-title"><div class="planner-sim-heading"><div><h4 id="planner-sim-title">Mô phỏng: '+esc(selected.name)+'</h4><p>Chọn 2D hoặc 3D. Kéo vùng minh họa 3D để xoay góc nhìn.</p></div><div class="planner-sim-modes" role="group" aria-label="Chế độ mô phỏng"><button type="button" data-sim-mode="2d" aria-pressed="'+(shownMode==='2d')+'">2D</button><button type="button" data-sim-mode="3d" aria-pressed="'+(shownMode==='3d')+'">3D</button></div></div><div class="planner-sim-controls"><label>Độ cao máy ảnh <span><output>'+simHeight+'</output> cm</span><input type="range" min="60" max="220" step="5" value="'+simHeight+'" data-sim-height aria-label="Độ cao máy ảnh tính bằng centimet"></label><label>Khoảng cách máy ảnh <span><output>'+simDistance+'</output> m</span><input type="range" min="2" max="10" step="1" value="'+simDistance+'" data-sim-distance aria-label="Khoảng cách máy ảnh tính bằng mét"></label></div><div class="planner-sim-stage" data-sim-stage data-mode="'+shownMode+'">'+drawing+'</div>'+(fallbackMessage?'<p class="planner-sim-notice" role="status">'+fallbackMessage+'</p>':'')+(shownMode==='3d'?'<div class="planner-sim-orbit" role="group" aria-label="Xoay góc nhìn mô phỏng"><span>Xoay góc nhìn:</span><button type="button" data-orbit-step="left" aria-label="Xoay sang trái">←</button><button type="button" data-orbit-step="right" aria-label="Xoay sang phải">→</button><button type="button" data-orbit-step="up" aria-label="Xoay lên">↑</button><button type="button" data-orbit-step="down" aria-label="Xoay xuống">↓</button><span class="planner-muted">Dùng chuột, cảm ứng hoặc các nút mũi tên.</span></div>':'')+'<p class="planner-sim-note">Sơ đồ mang tính minh họa bố cục và vị trí máy; không mô phỏng chính xác ống kính, phối cảnh hay kích thước thực tế.</p></section><div class="planner-angle-grid">'+cards+'</div>';
+ const sensorOptions=Object.entries(SENSOR_PRESETS).map(([id,x])=>[id,x.label]);
+ const sensor=SENSOR_PRESETS[simSensor]||SENSOR_PRESETS.fullFrame;
+ const customFields=simSensor==='custom'?'<div class="planner-sim-custom"><label>Rộng cảm biến<input type="number" min="1" max="60" step="0.1" value="'+simSensorWidth+'" data-sim-sensor-width aria-label="Chiều rộng cảm biến tính bằng milimet"></label><label>Cao cảm biến<input type="number" min="1" max="60" step="0.1" value="'+simSensorHeight+'" data-sim-sensor-height aria-label="Chiều cao cảm biến tính bằng milimet"></label></div>':'<small class="planner-sim-sensor-note">'+esc(sensor.width)+' × '+esc(sensor.height)+' mm · '+(simSensor==='apsc'?'Kích thước tham chiếu, có thể khác theo hãng':'kích thước tham chiếu')+'</p>';
+ const stage=simMode==='3d'?'<div class="planner-sim-stage" data-sim-stage data-mode="3d"><canvas data-sim-canvas tabindex="0" role="img" aria-label="Cảnh 3D tương tác; kéo để xoay hoặc dùng phím mũi tên"></canvas><div class="planner-sim-legend"><span><i class="camera"></i>Máy ảnh và tripod</span><span><i class="person"></i>Mannequin</span><span><i class="frustum"></i>Vùng nhìn theo tiêu cự</span></div></div>':'<div class="planner-sim-stage" data-sim-stage data-mode="2d">'+simulatorSvg(selected,safeIndex,config)+'</div>';
+ const framing=analyzeSubjectFraming(config),frame='<aside class="planner-sim-frame" data-orientation="'+simOrientation+'"><div><h5>Khung ảnh dự kiến</h5><p data-sim-fov>FOV '+simNum(fov.horizontal)+'° ngang / '+simNum(fov.vertical)+'° dọc</p></div><div data-sim-frame>'+renderPhotoFrameSvg(config)+'</div><small data-sim-fit class="'+(framing.cropped?'is-cropped':'is-fit')+'">'+framingText(config)+'</small><small>Ước tính từ thông số bên trái; mannequin là hình minh họa.</small></aside>';
+ return '<div class="planner-head"><div><h3>Góc chụp & tạo dáng</h3><p>Chọn thể loại và số người để nhận gợi ý góc máy cùng cách tạo dáng tự nhiên.</p></div></div><form class="planner-card planner-form" data-form="angles"><div class="planner-row"><label>Thể loại ảnh<select name="genre">'+options(Object.entries(genres),angleGenre)+'</select></label><label>Chủ thể<select name="poseType">'+options(poseOptions,anglePose)+'</select></label><label>Bối cảnh (không bắt buộc)<input name="scene" maxlength="120" value="'+esc(angleScene)+'" placeholder="Ví dụ: công viên lúc hoàng hôn"></label></div><button class="planner-primary" type="submit">Cập nhật gợi ý</button></form><section class="planner-sim" aria-labelledby="planner-sim-title"><div class="planner-sim-heading"><div><h4 id="planner-sim-title">Mô phỏng: '+esc(selected.name)+'</h4><p>Điều chỉnh máy, ống kính, cảm biến và chủ thể; thông số áp dụng cho cả khung hình 2D/3D.</p></div><div class="planner-sim-modes" role="group" aria-label="Chế độ mô phỏng"><button type="button" data-sim-mode="2d" aria-pressed="'+(simMode==='2d')+'">2D</button><button type="button" data-sim-mode="3d" aria-pressed="'+(simMode==='3d')+'">3D</button></div></div><div class="planner-sim-controls"><label>Độ cao máy ảnh <span><output>'+simHeight+'</output> cm</span><input type="range" min="60" max="220" step="5" value="'+simHeight+'" data-sim-height aria-label="Độ cao máy ảnh tính bằng centimet"></label><label>Khoảng cách máy ảnh <span><output>'+simDistance+'</output> m</span><input type="range" min="2" max="10" step="1" value="'+simDistance+'" data-sim-distance aria-label="Khoảng cách máy ảnh tính bằng mét"></label><label>Tiêu cự thực <span><output>'+simFocal+'</output> mm</span><input type="range" min="14" max="200" step="1" value="'+simFocal+'" data-sim-focal aria-label="Tiêu cự vật lý tính bằng milimet"></label><label>Chiều cao chủ thể <span><output>'+simSubjectHeight+'</output> cm</span><input type="range" min="140" max="200" step="1" value="'+simSubjectHeight+'" data-sim-subject-height aria-label="Chiều cao chủ thể tính bằng centimet"></label><label>Định dạng cảm biến<select data-sim-sensor>'+options(sensorOptions,simSensor)+'</select>'+customFields+'</label><div class="planner-sim-orientation"><span>Hướng khung ảnh</span><div role="group" aria-label="Hướng khung ảnh"><button type="button" data-sim-orientation="portrait" aria-pressed="'+(simOrientation==='portrait')+'">Dọc</button><button type="button" data-sim-orientation="landscape" aria-pressed="'+(simOrientation==='landscape')+'">Ngang</button></div></div></div><div class="planner-sim-layout">'+stage+frame+'</div>'+(simFallbackMessage?'<p class="planner-sim-notice" role="status">'+esc(simFallbackMessage)+'</p>':'')+(simMode==='3d'?'<div class="planner-sim-orbit" role="group" aria-label="Điều khiển góc nhìn"><span>Xoay cảnh:</span><button type="button" data-orbit-step="left" aria-label="Xoay sang trái">←</button><button type="button" data-orbit-step="right" aria-label="Xoay sang phải">→</button><button type="button" data-orbit-step="up" aria-label="Nâng góc nhìn">↑</button><button type="button" data-orbit-step="down" aria-label="Hạ góc nhìn">↓</button><span class="planner-muted">Kéo cảnh hoặc dùng phím mũi tên.</span></div>':'')+'<p class="planner-sim-note">FOV được tính từ tiêu cự và kích thước cảm biến đã chọn. Máy ảnh, mannequins, ánh sáng và phông nền là mô hình 3D minh họa; ảnh thực tế còn phụ thuộc ống kính, crop, lấy nét, méo quang học, ánh sáng và tư thế.</p></section><div class="planner-angle-grid">'+cards+'</div>';
 }
 function outfitView(){const current=forecast?.current||{};const bg=json('photolens_bg_color','#56736f');const list=outfitOptions({temp:current.temperature_2m,rain:current.precipitation,wind:current.wind_speed_10m,background:bg,style:json('photolens_outfit_style','Tự nhiên')});return '<div class="planner-head"><div><h3>Trang phục lên ảnh</h3><p>Không suy đoán ngoại hình, vóc dáng, màu da, giới tính hay tuổi.</p></div></div><div class="planner-card planner-row"><label>Phong cách<select data-style>'+options([['Tự nhiên','Tự nhiên'],['Tối giản','Tối giản'],['Điện ảnh','Điện ảnh'],['Năng động','Năng động'],['Cổ điển','Cổ điển']],json('photolens_outfit_style','Tự nhiên'))+'</select></label><label>Màu nền dự kiến<input type="color" data-bg value="'+esc(bg)+'"></label><span>'+ (current.temperature_2m==null?'Chưa có dữ liệu thời tiết':current.temperature_2m+'°C · mưa '+(current.precipitation??'—')+' mm · gió '+(current.wind_speed_10m??'—')+' km/h')+'</span></div><div class="planner-outfit-grid">'+list.map(x=>'<article><h4>'+esc(x.name)+'</h4><p>Màu: '+x.colors.map(c=>'<span class="planner-swatch">'+esc(c)+'</span>').join(' ')+'</p><p>'+esc(x.clothes)+'</p><p>'+esc(x.reason)+'</p><p>Lưu ý: '+esc(x.caution)+'</p></article>').join('')+'</div>';}
 function aiPanel(route){
@@ -228,16 +218,18 @@ function renderSpotsMap(version){
 }
 function render(){
   if(!panel)return;
+  if(angle3DInstance){angle3DInstance.dispose();angle3DInstance=null;}
   if(plannerMapInstance){try{plannerMapInstance.remove();}catch{}plannerMapInstance=null;}
   const version=++mapRenderVersion;
   const content=({weather:weatherView,spots:spotsView,angles:anglesView,outfit:outfitView,plans:planView}[tab]||weatherView)();
   panel.innerHTML='<div class="planner-backdrop"><section class="planner-dialog" role="dialog" aria-modal="true" aria-labelledby="planner-title"><header><div><small>PHOTOLENS · LÊN KẾ HOẠCH CHỤP</small><h2 id="planner-title">Công cụ chụp ảnh</h2></div><button class="planner-close" data-action="close" aria-label="Đóng">×</button></header><nav role="tablist">'+makeTabs()+'</nav><main>'+content+'</main><footer>Dự báo và gợi ý mang tính tham khảo · Tự kiểm tra quy định chụp và an toàn tại chỗ.</footer></section></div>';
   panel.querySelector('[data-action="close"]').onclick=close;
   panel.querySelector('.planner-backdrop').onclick=e=>{if(e.target.classList.contains('planner-backdrop'))close();};
+  if(tab==='angles'&&simMode==='3d')mountAngle3DSimulation();
   if(tab==='spots')renderSpotsMap(version);
 }
-function close(){if(panel)panel.hidden=true;$('#photoPlannerButton')?.setAttribute('aria-expanded','false');}
-export async function openPhotographyHub(){if(!panel){panel=document.createElement('div');panel.id='photoPlannerHost';document.body.append(panel);panel.addEventListener('click',click);panel.addEventListener('submit',submit);panel.addEventListener('input',updateRange);panel.addEventListener('change',change);panel.addEventListener('pointerdown',orbitStart);panel.addEventListener('pointermove',orbitMove);panel.addEventListener('pointerup',orbitEnd);panel.addEventListener('pointercancel',orbitEnd);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel&&!panel.hidden)close();});}showEstimatedCost=(Capacitor.isNativePlatform()?(await Preferences.get({key:'photolens_show_cost'})).value:localStorage.getItem('photolens_show_cost'))==='true';panel.hidden=false;$('#photoPlannerButton')?.setAttribute('aria-expanded','true');render();panel.querySelector('.planner-close')?.focus();}
+function close(){if(angle3DInstance){angle3DInstance.dispose();angle3DInstance=null;}if(panel)panel.hidden=true;$('#photoPlannerButton')?.setAttribute('aria-expanded','false');}
+export async function openPhotographyHub(){if(!panel){panel=document.createElement('div');panel.id='photoPlannerHost';document.body.append(panel);panel.addEventListener('click',click);panel.addEventListener('submit',submit);panel.addEventListener('input',updateRange);panel.addEventListener('change',change);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel&&!panel.hidden)close();});}showEstimatedCost=(Capacitor.isNativePlatform()?(await Preferences.get({key:'photolens_show_cost'})).value:localStorage.getItem('photolens_show_cost'))==='true';panel.hidden=false;$('#photoPlannerButton')?.setAttribute('aria-expanded','true');render();panel.querySelector('.planner-close')?.focus();}
 async function jsonFetch(url,opt={},timeout=12000){const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),timeout);try{const res=await fetch(url,{...opt,signal:ctl.signal});const data=await res.json().catch(()=>null);if(!res.ok)throw new Error(data?.reason||'HTTP '+res.status);return data;}finally{clearTimeout(timer);}}
 async function loadForecast(p){const key='photolens_weather_'+p.latitude.toFixed(2)+'_'+p.longitude.toFixed(2);let cache=json(key,null);if(cache&&Date.now()-cache.fetchedAt<20*60*1000){forecast=cache;status='Dữ liệu đã lưu gần đây.';render();return;}const base={latitude:p.latitude,longitude:p.longitude,timezone:'auto'};const u=new URL('https://api.open-meteo.com/v1/forecast');u.search=new URLSearchParams({...base,current:'temperature_2m,apparent_temperature,precipitation,cloud_cover,wind_speed_10m',hourly:'temperature_2m,precipitation_probability,cloud_cover,visibility,wind_speed_10m,uv_index',daily:'sunrise,sunset,temperature_2m_max,temperature_2m_min,precipitation_probability_max',forecast_days:'7'});const aq=new URL('https://air-quality-api.open-meteo.com/v1/air-quality');aq.search=new URLSearchParams({...base,hourly:'pm2_5',forecast_days:'5'});const pair=await Promise.all([jsonFetch(u),jsonFetch(aq).catch(()=>null)]);const air=pair[1]?.hourly,airByTime=new Map((air?.time||[]).map((time,i)=>[time,air.pm2_5?.[i]??null]));forecast={...pair[0],hourly:{...pair[0].hourly,pm2_5:(pair[0].hourly?.time||[]).map(time=>airByTime.get(time)??null)},pm25:air?.pm2_5?.[0]??null,fetchedAt:Date.now(),cached:false};save(key,forecast);status='';render();}
 async function findWeather(name){status='Đang tìm địa điểm và dự báo…';render();try{const geo=new URL('https://geocoding-api.open-meteo.com/v1/search');geo.search=new URLSearchParams({name:name,count:'1',language:'vi',format:'json',countryCode:'VN'});const g=await jsonFetch(geo);const x=g.results?.[0];if(!x)throw new Error('Không tìm thấy địa điểm.');place={label:[x.name,x.admin1,x.country].filter(Boolean).join(', '),latitude:x.latitude,longitude:x.longitude};await loadForecast(place);}catch(e){status='Không tải được dự báo: '+e.message;const key=Number.isFinite(place?.latitude)&&Number.isFinite(place?.longitude)?'photolens_weather_'+place.latitude.toFixed(2)+'_'+place.longitude.toFixed(2):'';const old=key?json(key,null):null;if(old)forecast={...old,cached:true};render();}}
@@ -308,43 +300,28 @@ async function findSpots(){
   render();
 }
 async function findSpotsWithFallback(){try{await findSpots();}catch(error){status='Không tải được Overpass: '+(error.message||'lỗi kết nối')+'. Danh sách địa điểm tuyển chọn vẫn dùng được.';render();}}
-function orbitTransform(){
- const world=panel?.querySelector('[data-orbit-world]');
- if(world)world.setAttribute('transform',orbitSvgTransform());
-}
-function orbitStart(e){
- const stage=e.target.closest('[data-sim-stage][data-mode="3d"]');
- if(!stage||e.target.closest('button,input'))return;
- simDrag={x:e.clientX,y:e.clientY,startX:simOrbitX,startY:simOrbitY};
- try{stage.setPointerCapture(e.pointerId);}catch{}
-}
-function orbitMove(e){
- if(!simDrag)return;
- simOrbitY=simClamp(simDrag.startY+(e.clientX-simDrag.x)*.35,-55,55);
- simOrbitX=simClamp(simDrag.startX+(e.clientY-simDrag.y)*.25,-28,24);
- orbitTransform();
-}
-function orbitEnd(){simDrag=null;}
 async function click(e){
-  const tabButton=e.target.closest('[data-tab]');
-  if(tabButton){tab=tabButton.dataset.tab;render();if(tab==='weather'&&!forecast&&place?.label==='Hà Nội')findWeather('Hà Nội');return;}
-  const angleChoice=e.target.closest('[data-angle-index]');
-  if(angleChoice){simFallbackMessage='';angleIndex=Number(angleChoice.dataset.angleIndex)||0;simHeight=[160,120,200][angleIndex]||160;simDistance=[4,5,4][angleIndex]||4;render();return;}
-  const simButton=e.target.closest('[data-sim-mode]');
-  if(simButton){simFallbackMessage='';simMode=simButton.dataset.simMode==='3d'?'3d':'2d';render();return;}
-  const orbitButton=e.target.closest('[data-orbit-step]');
-  if(orbitButton){const step=orbitButton.dataset.orbitStep;if(step==='left')simOrbitY=simClamp(simOrbitY-8,-55,55);if(step==='right')simOrbitY=simClamp(simOrbitY+8,-55,55);if(step==='up')simOrbitX=simClamp(simOrbitX-6,-28,24);if(step==='down')simOrbitX=simClamp(simOrbitX+6,-28,24);orbitTransform();return;}
-  const action=e.target.closest('[data-action]')?.dataset.action;
-  if(action==='ai-spots'){await runPhotographyAI(action);return;}
-  if(action==='locate')locate();
-  if(action==='show-my-location')showMyLocation();
-  if(action==='find-spots')findSpotsWithFallback();
-  if(action==='change-city'){tab='weather';forecast=null;render();}
-  if(action==='close')close();
-  if(e.target.matches('[data-select-spot]')){pickedSpot=spots.find(s=>s.id===e.target.dataset.selectSpot)||spotsSeed.find(s=>s.id===e.target.dataset.selectSpot);status='Đã chọn địa điểm cho kế hoạch.';render();}
-  if(e.target.matches('[data-delete-plan]')){repo.remove(e.target.dataset.deletePlan);render();}
-  if(e.target.matches('[data-edit-plan]')){editingPlan=e.target.dataset.editPlan;tab='plans';render();}
-  if(action==='export-plans')exportPlans();
+ const tabButton=e.target.closest('[data-tab]');
+ if(tabButton){tab=tabButton.dataset.tab;render();if(tab==='weather'&&!forecast&&place?.label==='Hà Nội')findWeather('Hà Nội');return;}
+ const angleChoice=e.target.closest('[data-angle-index]');
+ if(angleChoice){simFallbackMessage='';angleIndex=Number(angleChoice.dataset.angleIndex)||0;simHeight=[160,120,200][angleIndex]||160;simDistance=[4,5,4][angleIndex]||4;render();return;}
+ const simButton=e.target.closest('[data-sim-mode]');
+ if(simButton){simFallbackMessage='';simMode=simButton.dataset.simMode==='3d'?'3d':'2d';render();return;}
+ const orientationButton=e.target.closest('[data-sim-orientation]');
+ if(orientationButton){simOrientation=orientationButton.dataset.simOrientation==='landscape'?'landscape':'portrait';render();return;}
+ const orbitButton=e.target.closest('[data-orbit-step]');
+ if(orbitButton&&angle3DInstance){const step=orbitButton.dataset.orbitStep;if(step==='left')angle3DInstance.orbit(-8,0);if(step==='right')angle3DInstance.orbit(8,0);if(step==='up')angle3DInstance.orbit(0,-6);if(step==='down')angle3DInstance.orbit(0,6);return;}
+ const action=e.target.closest('[data-action]')?.dataset.action;
+ if(action==='ai-spots'){await runPhotographyAI(action);return;}
+ if(action==='locate')locate();
+ if(action==='show-my-location')showMyLocation();
+ if(action==='find-spots')findSpotsWithFallback();
+ if(action==='change-city'){tab='weather';forecast=null;render();}
+ if(action==='close')close();
+ if(e.target.matches('[data-select-spot]')){pickedSpot=spots.find(s=>s.id===e.target.dataset.selectSpot)||spotsSeed.find(s=>s.id===e.target.dataset.selectSpot);status='Đã chọn địa điểm cho kế hoạch.';render();}
+ if(e.target.matches('[data-delete-plan]')){repo.remove(e.target.dataset.deletePlan);render();}
+ if(e.target.matches('[data-edit-plan]')){editingPlan=e.target.dataset.editPlan;tab='plans';render();}
+ if(action==='export-plans')exportPlans();
 }
 async function submit(e){
   e.preventDefault();const form=e.target,fd=new FormData(form);
@@ -352,23 +329,53 @@ async function submit(e){
   if(form.dataset.form==='angles'){angleGenre=String(fd.get('genre')||'portrait');anglePose=String(fd.get('poseType')||'solo');angleScene=String(fd.get('scene')||'').trim();angleIndex=0;simFallbackMessage='';simHeight=160;simDistance=4;render();return;}
   if(form.dataset.form==='plan'){const plan=Object.fromEntries(fd);const saved=repo.save(plan);if(!saved){alert('Không lưu được kế hoạch.');return;}editingPlan='';status='Đã lưu kế hoạch trên thiết bị.';render();}
 }
+function mountAngle3DSimulation(){
+ const canvas=panel?.querySelector('[data-sim-canvas]');
+ if(!canvas)return;
+ let instance;
+ try{
+  instance=createAngleSimulation3D(canvas,angleSimulationConfig(),error=>{
+   if(angle3DInstance!==instance)return;
+   angle3DInstance.dispose();angle3DInstance=null;simMode='2d';
+   simFallbackMessage='WebGL không khả dụng hoặc gặp lỗi; PhotoLens đã chuyển về mô phỏng 2D.';
+   render();
+  },(yaw,pitch)=>{simOrbitY=yaw;simOrbitX=pitch;});
+  angle3DInstance=instance;
+ }catch{
+  simMode='2d';simFallbackMessage='Thiết bị hoặc trình duyệt không hỗ trợ WebGL; đã chuyển về mô phỏng 2D.';
+  render();
+ }
+}
 function updateSimulation(){
  const stage=panel?.querySelector('[data-sim-stage]');
  if(!stage)return;
- const suggestions=angleOptions(angleGenre,'người trong ảnh',angleScene,anglePose),index=simClamp(angleIndex,0,suggestions.length-1);
- try{stage.innerHTML=simulatorSvg(suggestions[index],index,simMode);stage.dataset.mode=simMode;}
- catch{simMode='2d';simFallbackMessage='Không tải được mô phỏng 3D; đã tự chuyển về 2D.';render();}
+ const suggestions=angleOptions(angleGenre,'người trong ảnh',angleScene,anglePose),index=simClamp(angleIndex,0,suggestions.length-1),config=angleSimulationConfig();
+ if(simMode==='3d'){angle3DInstance?.update(config);}
+ else stage.innerHTML=simulatorSvg(suggestions[index],index,config);
+ const frame=panel?.querySelector('[data-sim-frame]');
+ if(frame)frame.innerHTML=renderPhotoFrameSvg(config);
+ const fov=calculateCameraFov(config.focalLength,config.sensorWidth,config.sensorHeight,config.orientation);
+ const readout=panel?.querySelector('[data-sim-fov]');
+ if(readout)readout.textContent='FOV '+simNum(fov.horizontal)+'° ngang / '+simNum(fov.vertical)+'° dọc';
+ const fit=panel?.querySelector('[data-sim-fit]'),framing=analyzeSubjectFraming(config);
+ if(fit){fit.textContent=framingText(config);fit.classList.toggle('is-cropped',framing.cropped);fit.classList.toggle('is-fit',!framing.cropped);}
 }
 function updateRange(e){
- if(!e.target.matches('[data-sim-height],[data-sim-distance]'))return;
- const value=Number(e.target.value);
- if(e.target.matches('[data-sim-height]'))simHeight=value||160;
- else simDistance=value||4;
- const output=e.target.closest('label')?.querySelector('output');
+ const target=e.target;
+ if(!target.matches('[data-sim-height],[data-sim-distance],[data-sim-focal],[data-sim-subject-height],[data-sim-sensor-width],[data-sim-sensor-height]'))return;
+ const value=Number(target.value);
+ if(target.matches('[data-sim-height]'))simHeight=simClamp(value||160,60,220);
+ else if(target.matches('[data-sim-distance]'))simDistance=simClamp(value||4,2,10);
+ else if(target.matches('[data-sim-focal]'))simFocal=simClamp(value||50,14,200);
+ else if(target.matches('[data-sim-subject-height]'))simSubjectHeight=simClamp(value||170,140,200);
+ else if(target.matches('[data-sim-sensor-width]'))simSensorWidth=simClamp(value||36,1,60);
+ else if(target.matches('[data-sim-sensor-height]'))simSensorHeight=simClamp(value||24,1,60);
+ const output=target.closest('label')?.querySelector('output');
  if(output)output.textContent=String(value);
  updateSimulation();
 }
 function change(e){
+  if(e.target.matches('[data-sim-sensor]')){simSensor=e.target.value;render();return;}
   if(e.target.matches('[data-genre]')){genre=e.target.value;render();}
   if(e.target.matches('[data-bg]')){save('photolens_bg_color',e.target.value);tab='outfit';render();}
   if(e.target.matches('[data-style]')){save('photolens_outfit_style',e.target.value);render();}
