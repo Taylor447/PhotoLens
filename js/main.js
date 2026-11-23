@@ -1125,15 +1125,15 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
 
 window.addEventListener("pagehide", () => { activeAiController?.abort(new DOMException("Da roi trang.", "AbortError")); });
 
-// Công cụ thiết bị và kế hoạch tải riêng sau khi người dùng mở.
+// Công cụ chụp ảnh tải riêng sau khi người dùng mở.
 const plannerLaunch = document.createElement('button');
 plannerLaunch.id = 'photoPlannerButton';
 plannerLaunch.type = 'button';
 plannerLaunch.className = 'soft-btn planner-launch';
 plannerLaunch.setAttribute('aria-haspopup', 'dialog');
 plannerLaunch.setAttribute('aria-expanded', 'false');
-plannerLaunch.setAttribute('aria-label', 'Mở thiết bị và kế hoạch chụp ảnh');
-plannerLaunch.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16v14H4zM8 7l1.5-3h5L16 7"/><circle cx="12" cy="14" r="3.5"/><path d="M18 2v4M16 4h4"/></svg><span>Thiết bị & chụp</span>';
+plannerLaunch.setAttribute('aria-label', 'Mở công cụ chụp ảnh');
+plannerLaunch.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16v14H4zM8 7l1.5-3h5L16 7"/><circle cx="12" cy="14" r="3.5"/><path d="M18 2v4M16 4h4"/></svg><span>Kế hoạch chụp</span>';
 $('.top-actions')?.insertBefore(plannerLaunch, $('#settingsBtn'));
 let plannerModulePromise;
 plannerLaunch.addEventListener('click', async () => {
