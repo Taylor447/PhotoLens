@@ -1787,7 +1787,7 @@
   "models": [
     {
       "id": "u2netp-saliency-cutout",
-      "name": "U�-NetP salient-object background cutout",
+      "name": "U²-NetP salient-object background cutout",
       "version": "25dee37ab19c5b6ad64ba6578eba63f1ae07720c",
       "source": "https://huggingface.co/edgetools/u2netp/resolve/25dee37ab19c5b6ad64ba6578eba63f1ae07720c/u2netp.onnx",
       "modelCard": "https://huggingface.co/edgetools/u2netp/blob/25dee37ab19c5b6ad64ba6578eba63f1ae07720c/README.md",

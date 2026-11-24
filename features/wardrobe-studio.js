@@ -1,3 +1,4 @@
+import legacyNames from '../data/wardrobe/legacy-preview-names.json';
 import {createOutfitState,resolveOutfit,outfitViewSettings} from '../core/wardrobe/outfit-state.js';
 import {buildComposeRequest,resolveComposeChoice,COMPOSE_PATH} from '../core/wardrobe/compose-contract.js';
 import {downloadFile,shareFile} from '../core/share-file.js';
@@ -17,7 +18,14 @@ const outfit=createOutfitState();
 let compareIds=[],section='catalog',cameraDistance=450,cameraHeight=135,focalLength=50,useAngleCamera=true,sceneLight='overcast',turntable=false,cloth=true,sceneController=null,filters={query:'',category:'all',style:'all',color:'all',material:'all',pattern:'all',season:'all',weather:'all',favorite:'all',collection:'all'},editing='',message='',flatLay=false,pose='standing',height=170,tint='#9ba5a2',bg='#f2f6f4',measures={},saveMeasures=false,includeOuter=false,queryTimer,cleanScene=null,collectionName='',lookTags='',editingLookId='',dressCode='',anchorId='',capsuleLooks=[],composeController=null,seed=21;
 const previewUrls=new Set(),cutoutResults=new WeakMap();
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const items=()=>repo.listItems();
+const templatesById = new Map(templates.map(item => [item.id, item]));
+const items = () => repo.listItems().map(item => {
+ const key = item.id.replace(/^closet-/, '');
+ const original = templatesById.get(key);
+ if (!original || !item.isTemplate) return item;
+ const legacy = Array.from(item.name, c => c.codePointAt(0).toString(16)).join('-');
+ return {...item, assets: item.assets || original.assets, name: legacyNames[key] === legacy ? original.name : item.name};
+});
 const available=()=>{
  const closet=items(),ids=new Set(closet.map(item=>item.id));
  return [...closet,...templates.filter(x=>!ids.has('closet-'+x.id)).map(x=>({...x,isTemplate:true,color:'#647d69',colorFamily:'green'}))];
