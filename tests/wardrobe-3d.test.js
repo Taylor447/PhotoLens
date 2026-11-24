@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Ray,Triangle,Vector3} from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MANNEQUIN_PRESETS, createMannequinAnchors, normalizeGarment} from '../core/wardrobe-engine.js';
 import {calculateFit,chooseSize,parseSizeRows} from '../core/fit/measurements.js';
 import {
   BONE_NAMES, MORPH_NAMES, POSE_NAMES, BODY_CLIP_LIMIT, MAX_SCENE_TRIANGLES,
-  buildStudioGeometry, buildBodyMorphs, measurePenetration, poseSurfacePoint
+  buildStudioGeometry, buildBodyMorphs, findLayerCrossings, measurePenetration, poseSurfacePoint
 } from '../features/wardrobe/studio3d/geometry.js';
 import {inspectGarmentGlb} from '../features/wardrobe/studio3d/glb.js';
 import {makeProceduralGarmentGlb,packGlb} from '../features/wardrobe/studio3d/export-glb.js';
@@ -195,11 +196,59 @@ test('all 60 procedural garments stay below 1% vertex penetration for 4 presets,
  t.diagnostic(JSON.stringify({combinations,testedVertices:tested,penetratingVertices:inside,maxVertexRatio:maximum,maxSingleGarmentSceneTriangles:maxTriangles,denseSceneTriangles:dense.triangles+2}));
 });
 
-test('procedural GLB is a real v2 asset in metres and preflight excludes external files and excessive triangles',()=>{
+test('the 60 catalogue templates have distinct 3D meshes without relying on their names or colors',()=>{
+ const fingerprints=new Map();
+ for(const item of templates){
+  const {garments:[{parts}]}=buildStudioGeometry(MANNEQUIN_PRESETS[1],[{...item,color:'#627970',name:'Fixture'}],{radial:12});
+  assert.ok(parts.length,item.id);
+  const signature=JSON.stringify(parts.map(({points,indices})=>[points,indices]));
+  assert.ok(!fingerprints.has(signature),item.id+' shares a mesh with '+fingerprints.get(signature));
+  fingerprints.set(signature,item.id);
+ }
+ assert.equal(fingerprints.size,60);
+});
+
+test('draped skirts and split áo dài panels cover trousers in both walking and sitting poses',t=>{
+ const byId=id=>templates.find(item=>item.id===id);
+ let cases=0;
+ for(const radial of [12,20])for(const pose of ['standing','step','sitting']){
+  for(const [upper,pants] of [['tpl-skirts-4','tpl-bottoms-1'],['tpl-tops-3','tpl-bottoms-4']]){
+   const model=buildStudioGeometry(MANNEQUIN_PRESETS[1],[byId(upper),byId(pants)],{radial,pose});
+   const crossings=findLayerCrossings(model.garments,model.transforms,{firstPerPair:false});
+   assert.deepEqual(crossings,[],upper+'/'+pants+'/'+pose+'/'+radial);
+   cases++;
+  }
+ }
+ t.diagnostic(JSON.stringify({layerCases:cases}));
+});
+
+test('the layer checker finds crossing faces with exterior vertices',()=>{
+ const triangle=(id,points)=>({item:{id},parts:[{points,bone:'Root',indices:[0,1,2]}]});
+ const layers=[
+  triangle('horizontal',[[-1,0,-1],[1,0,-1],[0,0,1]]),
+  triangle('vertical',[[0,-1,-.5],[0,1,-.5],[0,0,.5]])
+ ];
+ const transforms=new Map([['Root',{toWorld:p=>p}]]);
+ assert.equal(findLayerCrossings(layers,transforms)[0]?.crossings,1);
+});
+
+test('procedural GLB is a real skinned v2 asset in metres and preflight excludes external files and excessive triangles',async()=>{
  const b=makeProceduralGarmentGlb(templates[0]),info=inspectGarmentGlb(b);
  assert.equal(info.contract.unit,'m');
  assert.equal(info.contract.upAxis,'Y');
- assert.ok(info.triangles>0&&info.triangles<1000);
+ assert.equal(info.contract.binding,'rigged');
+ assert.deepEqual(info.json.skins[0].joints.map(i=>info.json.nodes[i].name),BONE_NAMES);
+ assert.ok(info.triangles>0&&info.triangles<12_000);
+ const gltf=await new GLTFLoader().parseAsync(b.buffer,'');
+ const meshes=[];
+ gltf.scene.traverse(node=>{if(node.isSkinnedMesh)meshes.push(node);});
+ assert.ok(meshes.length>0);
+ for(const mesh of meshes){
+  const weights=mesh.geometry.getAttribute('skinWeight');
+  assert.equal(weights.count,mesh.geometry.getAttribute('position').count);
+  for(let i=0;i<weights.count;i++)
+   assert.ok(Math.abs(weights.getX(i)+weights.getY(i)+weights.getZ(i)+weights.getW(i)-1)<1e-6);
+ }
  assert.throws(()=>inspectGarmentGlb(b,{triangleBudget:1}),/tam giác/);
  const binOffset=28+new DataView(b.buffer).getUint32(12,true),binary=b.subarray(binOffset);
  info.json.buffers[0].uri='https://example.invalid/asset.bin';

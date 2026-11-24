@@ -74,3 +74,15 @@ Kiểm tra cục bộ gồm 47 unit test, Vite build và kiểm tra manifest/ass
 - Bản sửa dựng lại các vòng ngang bao quanh phần thân dưới đã tạo dáng ngồi, dự trù khoảng dịch chuyển của mô phỏng vải. Cùng quy tắc áp dụng cho phần chân váy của đầm. Flat-lay dùng dáng tham chiếu đứng.
 - 80 ca kiểm tra giao giữa mặt váy và thân ở tư thế ngồi đạt, gồm 10 mẫu váy/đầm × 4 preset × 2 mức chi tiết. Bộ kiểm tra xuyên đỉnh trên 60 mẫu đo 0/238.384 đỉnh, qua 1.920 tổ hợp. Cảnh thử nhiều món có 28.890 tam giác, gồm sàn.
 - Kiểm thử hồi quy dựng chân váy xếp ly trên canvas sau khi chọn tư thế ngồi. Ảnh đối chiếu sử dụng Vite preview trong Edge. Kết quả này đo va chạm thân với phần lai váy, chưa đo giao nhau giữa các lớp vải.
+
+## GĐ4 · Trang phục 3D và chồng lớp
+
+| Hạng mục | Trạng thái | Bằng chứng |
+|---|---|---|
+| Hình học theo mẫu | PASS trong phép kiểm tra phân biệt lưới | 60 lưới sinh bằng mã, 12 danh mục. Bộ kiểm tra đặt cùng tên và màu rồi so tọa độ và chỉ số mặt. Áo và quần lấy phần bề mặt tương ứng của rig, cắt cổ/tay/gấu, giữ trọng số khớp. Áo dài minh họa có hai tà xẻ bên. Giày, mũ, túi, kính, khăn, trang sức và phụ kiện tóc có tiết diện/chi tiết theo mẫu. |
+| GLB | PASS cho tệp sinh và tải kiểm thử | CLI sinh GLB 2 nhúng skeleton theo quy ước 17 xương, inverse bind, normal và trọng số đã chuẩn hóa. GLTFLoader đọc trực tiếp tệp trong unit test. Kho có 0 tệp GLB đóng gói. |
+| Xuyên thân | PASS trong phạm vi phép thử | 0/1.088.640 đỉnh xuyên thân trong 1.920 ca. Phép kiểm tra giao cắt phần váy/đầm với thân đạt 80/80 ca ngồi. Cảnh thử nhiều lớp có 37.014 tam giác, gồm sàn. |
+| Giao nhau giữa các lớp | PARTIAL | Lớp ngoài che miền trùng trên thân áo/quần theo thứ tự mặc. Tà áo dài và váy lấy cả bề mặt quần đã tạo dáng khi dựng độ rủ. 12/12 ca của hai bộ mẫu áo dài/quần và váy/quần đạt phép thử giao cắt mặt trên tư thế đứng, bước, ngồi và hai mức chi tiết. Khảo sát bổ sung vẫn tìm thấy một số giao cắt ở tay hoặc gấu áo khoác. Studio hiển thị tên các cặp còn giao nhau. |
+| UV, chất liệu và thiết bị | PARTIAL | Vật liệu PBR sinh theo mẫu tiếp tục dùng các map vải hiện có. Các mảnh may mô phỏng dùng tọa độ chiếu tham chiếu, các lai dùng tọa độ dọc theo vòng. Còn cần UV riêng cho các mảnh phức tạp và số đo FPS trên thiết bị thật. |
+
+Tệp triển khai gồm `garment-cuts.js`, `tailored-mesh.js`, `accessory-shells.js`, `surface-crossings.js`, `geometry.js`, `skirt-drape.js`, `export-glb.js` và `wardrobe3d.js`. Ảnh so sánh gồm áo thun, sơ mi, áo dài, áo bà ba, bộ blazer và áo trong, quần jogger và váy ở tư thế ngồi. PR #14 giữ trạng thái draft trong khi kiểm định.

@@ -9,10 +9,14 @@ const MOTION_CM = CLOTH_MAX_DISPLACEMENT_CM;
 export function lowerBodyInPelvisSpace(body, posePoint, pelvis){
   const points = body.points.map((_, index) => pelvis.toRest(posePoint(index)));
   const torsoOrLeg = body.skin.map(weights => weights.some(([joint]) => /^(Pelvis|Spine|Thigh_|Shin_|Foot_)/.test(joint)));
+  return pelvisTriangles(points,body.indices,torsoOrLeg);
+}
+
+export function pelvisTriangles(points,indices,include){
   const triangles = [];
-  for (let i = 0; i < body.indices.length; i += 3) {
-    const ids = body.indices.slice(i, i + 3);
-    if (!ids.every(id => torsoOrLeg[id])) continue;
+  for (let i = 0; i < indices.length; i += 3) {
+    const ids = indices.slice(i, i + 3);
+    if (include && !ids.every(id => include[id])) continue;
     const vertices = ids.map(id => points[id]);
     const ys = vertices.map(([, y]) => y);
     triangles.push({vertices, minY: Math.min(...ys), maxY: Math.max(...ys)});
@@ -76,7 +80,7 @@ export function fitSkirtToPose(descriptor, lowerBody, radial, tessellate){
     });
   });
   const supports = rows.map(({rx, rz}, row) => normals.map(([nx, nz], i) => Math.max(
-      Math.hypot(rx * nx, rz * nz),
+      Math.hypot(rx * nx, rz * nz)+(descriptor.pleats?(1+Math.cos((i+.5)*TAU/segments*descriptor.pleats))*(rows.at(-1).y-rows[row].y)*.013:0),
       bands[row - 1]?.[i] ?? -Infinity,
       bands[row]?.[i] ?? -Infinity
   )));

@@ -159,7 +159,10 @@ test('continuous mannequin renders each pose and rotates in the Studio 3D canvas
  await page.locator('[data-ws-cloth]').uncheck();
  const bareSitting=await capture('mannequin-sitting-no-cloth');
  await page.locator('[data-ws-wear="tpl-skirts-2"]').click();
- expect((await capture('mannequin-sitting-pleated-skirt')).equals(bareSitting)).toBe(false);
+ const skirt=await capture('mannequin-sitting-pleated-skirt');
+ expect(skirt.equals(bareSitting)).toBe(false);
+ await page.locator('[data-ws-wear="tpl-bottoms-1"]').click();
+ expect((await capture('mannequin-sitting-skirt-over-trousers')).equals(skirt)).toBe(false);
  expect(errors).toEqual([]);
 });
 

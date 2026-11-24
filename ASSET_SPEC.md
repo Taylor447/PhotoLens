@@ -72,7 +72,7 @@ Place the following metadata at **asset.extras.photoLens** in the GLB JSON:
 ## Tools and validation
 
 - **npm run test:unit** validates catalog records and provenance, checks mannequin topology, skin weights and posed triangle crossings at both levels of detail, checks garment vertex penetration across presets and poses, and tests GLB validation and fit arithmetic.
-- **node tools/assets/wardrobe-asset.mjs generate tpl-tops-1 output** creates a standalone procedural GLB, SVG thumbnail and a SHA-256 manifest. Generated files are local outputs and are not bundled by default.
+- **node tools/assets/wardrobe-asset.mjs generate tpl-tops-1 output** creates a skinned GLB in metres, an SVG thumbnail and a SHA-256 manifest. The GLB stores the reference skeleton and the weights for each vertex. Generate it for the intended body reference before importing. Generated files are local outputs.
 - **node tools/assets/wardrobe-asset.mjs inspect FILE** validates a GLB or project SVG. **node tools/assets/wardrobe-asset.mjs manifest FILE OUTPUT_JSON SOURCE LICENSE AUTHOR** checks a file and records its provenance.
 - **node tools/assets/wardrobe-asset.mjs compress INPUT_GLB OUTPUT_GLB** requires a local native gltfpack build with Basis Universal. It produces meshopt and KTX2 as applicable, preserves the PhotoLens contract and validates the result. Draco files can be authored with a separate encoder and loaded directly.
 

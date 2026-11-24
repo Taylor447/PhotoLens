@@ -1,4 +1,4 @@
-import {bodyRayExits, buildBodyMorphs, buildStudioGeometry, BODY_CLIP_LIMIT, MAX_PROCEDURAL_ITEMS, MAX_SCENE_TRIANGLES} from './wardrobe/studio3d/geometry.js';
+import {bodyRayExits, buildBodyMorphs, buildStudioGeometry, findLayerCrossings, BODY_CLIP_LIMIT, MAX_PROCEDURAL_ITEMS, MAX_SCENE_TRIANGLES} from './wardrobe/studio3d/geometry.js';
 import {inspectGarmentGlb} from './wardrobe/studio3d/glb.js';
 import {createMaterialFactory} from './wardrobe/studio3d/materials.js';
 
@@ -241,7 +241,10 @@ export async function mountWardrobe3D(host,{
   };
   externalSignal?.addEventListener('abort',dispose,{once:true,signal});
   try{
-    const lowPower=deviceIsLimited(), model=buildStudioGeometry(mannequin,items,{pose:flatLay?'standing':pose,radial:lowPower?12:20});
+    const lowPower=deviceIsLimited(), geometryOptions={pose:flatLay?'standing':pose,flatLay};
+    let model=buildStudioGeometry(mannequin,items,{...geometryOptions,radial:lowPower?12:20});
+    if(model.triangles+2>MAX_SCENE_TRIANGLES)
+      model=buildStudioGeometry(mannequin,items,{...geometryOptions,radial:12});
     if(items.length>MAX_PROCEDURAL_ITEMS)onMessage('Studio 3D đang dùng '+MAX_PROCEDURAL_ITEMS+' món đầu của bộ phối.');
     const scene=new T.Scene();scene.background=new T.Color(hasColor(background)?background:'#edf3f0');
     const camera=new T.PerspectiveCamera(35,1,.5,3000);
@@ -348,6 +351,13 @@ export async function mountWardrobe3D(host,{
     if(cloth&&rig&&clothMeshes.length){
       if(lowPower||reduceMotion)onMessage('Mô phỏng vải đang tắt theo cấu hình thiết bị hoặc giảm chuyển động.');
       else startCloth({model,meshes:clothMeshes,windKmh,signal,invalidate,lowPower});
+    }
+    if(rig){
+      const pairs=findLayerCrossings(model.garments,model.transforms);
+      if(pairs.length){
+        const details=pairs.slice(0,3).map(({inner,outer})=>inner.name+' / '+outer.name).join(', ');
+        onMessage('Một số lớp giao nhau ở tư thế này. '+details+(pairs.length>3?' và '+(pairs.length-3)+' cặp khác.':'.'));
+      }
     }
     if(rig)void mountImportedLayers({T,renderer,rig,root,model,source,signal,onMessage,invalidate,addCleanup:fn=>cleanups.push(fn)})
       .catch(()=>{if(!signal.aborted)onMessage('Không tải được bộ đọc GLB. Studio hiển thị mẫu hình học thay thế.');});
