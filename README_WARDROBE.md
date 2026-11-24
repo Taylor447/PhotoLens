@@ -24,3 +24,7 @@ Fit values are arithmetic differences between user-entered measurements and opti
 ## Development
 
 Run `npm run test:unit` for core, migration, Worker schema, and manifest checks. Run `npm run build` for the Vite build. `npm run worker:deploy` deploys the optional Worker route when a Cloudflare account is configured; GitHub Pages does not deploy the Worker.
+
+## Architecture and asset contract
+
+See [WARDROBE_ARCHITECTURE.md](WARDROBE_ARCHITECTURE.md) for module boundaries, shared centimetre measurements, privacy limits, and stage gates, and [ASSET_SPEC.md](ASSET_SPEC.md) for the asset coordinate, provenance, and validation rules.
