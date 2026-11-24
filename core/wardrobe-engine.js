@@ -120,36 +120,90 @@ export function resolveStudioMode(mode,webgl=true){return mode==='3d'&&webgl?'3d
 export function reconcileLook(items=[],ids=[]){const map=new Map(items.map(x=>[x.id,x]));return [...new Set(ids)].map(x=>map.get(x)).filter(Boolean).sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));}
 export function inspectTemplateBounds(template,preset){const keys=['heightCm','shoulderCm','chestCm','waistCm','hipCm'];const measurable=keys.every(x=>Number.isFinite(Number(preset?.[x])));const clearance=Number(template?.virtualShellClearanceCm??1.5)*Number(preset?.heightCm||170)/170;return{measurable,clearanceCm:Number(clearance.toFixed(2)),violates:measurable&&clearance<=0,method:'procedural shell margin proxy; not triangle intersection'};}
 export function applyOutfitAction(items=[],seed=1){let n=(Number(seed)||1)>>>0;const rand=()=>((n=(n*1664525+1013904223)>>>0)/4294967296);const groups=new Map();for(const x of items){if(!groups.has(x.category))groups.set(x.category,[]);groups.get(x.category).push(x);}return[...groups.values()].map(a=>a[Math.floor(rand()*a.length)]).slice(0,8);}
+export const MANNEQUIN_DEFAULTS_CM=Object.freeze({heightCm:170,shoulders:40,chest:90,waist:74,hips:96,sleeve:58,inseam:78,neck:34});
+export const MANNEQUIN_PRESETS=Object.freeze([
+ {id:'reference-a',label:'Tham chiếu A',heightCm:160,shoulders:36,chest:82,waist:66,hips:88,sleeve:54,inseam:72,neck:31},
+ {id:'reference-b',label:'Tham chiếu B',heightCm:170,shoulders:40,chest:90,waist:74,hips:96,sleeve:58,inseam:78,neck:34},
+ {id:'reference-c',label:'Tham chiếu C',heightCm:180,shoulders:44,chest:102,waist:86,hips:108,sleeve:63,inseam:84,neck:37},
+ {id:'reference-d',label:'Tham chiếu D',heightCm:165,shoulders:38,chest:104,waist:90,hips:112,sleeve:57,inseam:75,neck:36}
+]);
+const MANNEQUIN_LIMITS_CM={heightCm:[140,210],shoulders:[30,60],chest:[60,150],waist:[45,140],hips:[60,160],sleeve:[40,90],inseam:[55,110],neck:[25,55]};
+export function normalizeMannequin(value={}){
+ const out={};for(const [key,limits] of Object.entries(MANNEQUIN_LIMITS_CM)){const raw=value?.[key],n=raw===null||raw===''?NaN:Number(raw);out[key]=Number.isFinite(n)?Math.min(limits[1],Math.max(limits[0],n)):MANNEQUIN_DEFAULTS_CM[key];}
+ return out;
+}
+export function createMannequinAnchors(value={}){
+ const m=normalizeMannequin(value),scale=360/m.heightCm,cx=205,top=42,y=cm=>top+cm*scale,ratio=r=>top+m.heightCm*r*scale;
+ const shoulderHalf=m.shoulders/2,torsoHalf=(cm)=>cm*.2;
+ const anchors={
+  centerX:cx,scalePxPerCm:scale,heightCm:m.heightCm,head:{cx,cy:ratio(.09),rx:Math.min(24,m.neck*.58*scale),ry:Math.min(27,m.neck*.68*scale)},
+  neck:{left:cx-m.neck*.22*scale,right:cx+m.neck*.22*scale,top:ratio(.14),bottom:ratio(.20)},
+  shoulders:{left:cx-shoulderHalf*scale,right:cx+shoulderHalf*scale,y:ratio(.22)},
+  armpits:{left:cx-torsoHalf(m.chest)*scale,right:cx+torsoHalf(m.chest)*scale,y:ratio(.32)},
+  chest:{left:cx-torsoHalf(m.chest)*scale,right:cx+torsoHalf(m.chest)*scale,y:ratio(.34)},
+  waist:{left:cx-torsoHalf(m.waist)*scale,right:cx+torsoHalf(m.waist)*scale,y:ratio(.52)},
+  hips:{left:cx-torsoHalf(m.hips)*scale,right:cx+torsoHalf(m.hips)*scale,y:ratio(.63)},
+  crotch:{cx,y:ratio(.75)},knees:{left:cx-9*scale,right:cx+9*scale,y:ratio(.88)},
+  ankles:{left:cx-8*scale,right:cx+8*scale,y:ratio(.98)},
+  wrists:{left:cx-m.sleeve*.50*scale,right:cx+m.sleeve*.50*scale,y:Math.min(ratio(.62),ratio(.22)+m.sleeve*scale)},
+  feet:{left:cx-14*scale,right:cx+14*scale,y:ratio(1)}
+ };
+ return Object.freeze({...anchors,measurementsCm:m});
+}
+const svgPathPoints=d=>[...String(d||'').matchAll(/-?\d+(?:\.\d+)?/g)].map(m=>Number(m[0]));
+export function garmentSvgGeometry(item={},anchors=createMannequinAnchors()){
+ const a=anchors,m=a.measurementsCm,cx=a.centerX,waist=a.waist,hips=a.hips,shoulder=a.shoulders,arm=a.wrists;
+ const p=item.parameters||{},wide=p.width==='wide'?1.18:p.width==='slim'?.86:1,long=p.length==='long'?1.22:p.length==='short'?.78:1;
+ let paths=[],category=item.category;
+ if(category==='tops'||category==='outerwear'){
+  const bottom=Math.min(a.ankles.y-45,waist.y+(category==='outerwear'?Math.max(40,m.hips*.54*long):Math.max(28,22*long)));
+  const sw=Math.max(5,m.sleeve*.13*a.scalePxPerCm),sl=Math.min(arm.y-shoulder.y,25*a.scalePxPerCm);
+  paths.push('M '+shoulder.left+' '+shoulder.y+' Q '+cx+' '+(shoulder.y-12)+' '+shoulder.right+' '+shoulder.y+' L '+(shoulder.right+sw)+' '+(shoulder.y+sl*.72)+' L '+(arm.right+sw*.35)+' '+(arm.y+sl*.14)+' L '+(arm.right)+' '+arm.y+' L '+(a.armpits.right+3)+' '+(a.armpits.y+8)+' L '+(cx+(waist.right-cx)*wide)+' '+(waist.y+12)+' L '+(cx+(waist.right-cx)*wide)+' '+bottom+' L '+(cx-(waist.right-cx)*wide)+' '+bottom+' L '+(cx-(cx-waist.left)*wide)+' '+(waist.y+12)+' L '+(a.armpits.left-3)+' '+(a.armpits.y+8)+' L '+arm.left+' '+arm.y+' L '+(arm.left-sw*.35)+' '+(shoulder.y+sl*.14)+' L '+(shoulder.left-sw)+' '+(shoulder.y+sl*.72)+' Z');
+ }else if(category==='bottoms'){
+  const bottom=a.ankles.y-8,mid=a.crotch.y;
+  paths.push('M '+(waist.left-5)+' '+(waist.y-3)+' L '+(waist.right+5)+' '+(waist.y-3)+' L '+(hips.right+7)+' '+(mid-4)+' L '+(cx+4)+' '+mid+' L '+(cx+2)+' '+bottom+' L '+(cx-13)+' '+bottom+' L '+(cx-18)+' '+mid+' L '+(hips.left-7)+' '+(mid-4)+' Z');
+  paths.push('M '+(cx+3)+' '+mid+' L '+(hips.right-5)+' '+(mid-7)+' L '+(cx+17)+' '+(mid+35)+' L '+(cx+13)+' '+bottom+' L '+(cx+1)+' '+bottom+' Z');
+ }else if(category==='skirts'){
+  const bottom=hips.y+(a.ankles.y-hips.y)*.66*long,hw=(hips.right-hips.left)*.5*wide;
+  paths.push('M '+(cx-hw*.82)+' '+(hips.y-5)+' Q '+cx+' '+(hips.y+4)+' '+(cx+hw*.82)+' '+(hips.y-5)+' L '+(cx+hw*1.6)+' '+bottom+' Q '+cx+' '+(bottom+12)+' '+(cx-hw*1.6)+' '+bottom+' Z');
+ }else if(category==='dresses'){
+  const bottom=hips.y+(a.ankles.y-hips.y)*.72*long;
+  paths.push('M '+shoulder.left+' '+shoulder.y+' Q '+cx+' '+(shoulder.y-12)+' '+shoulder.right+' '+shoulder.y+' L '+(hips.right*.92)+' '+(hips.y+5)+' L '+(cx+(hips.right-cx)*1.65)+' '+bottom+' Q '+cx+' '+(bottom+10)+' '+(cx-(hips.right-cx)*1.65)+' '+bottom+' L '+(hips.left*1.12)+' '+(hips.y+5)+' Z');
+ }else if(category==='shoes'){
+  paths.push('M '+(a.feet.left-10)+' '+(a.feet.y-5)+' Q '+(cx-4)+' '+(a.feet.y-18)+' '+cx+' '+a.feet.y+' L '+(cx-4)+' '+(a.feet.y+12)+' L '+(a.feet.left-15)+' '+(a.feet.y+12)+' Z','M '+cx+' '+a.feet.y+' Q '+(cx+6)+' '+(a.feet.y-16)+' '+(a.feet.right+10)+' '+(a.feet.y-5)+' L '+(a.feet.right+16)+' '+(a.feet.y+12)+' L '+(cx+5)+' '+(a.feet.y+12)+' Z');
+ }else if(category==='hats'){
+  paths.push('M '+(cx-30)+' '+(a.head.cy-16)+' Q '+cx+' '+(a.head.cy-a.head.ry-14)+' '+(cx+30)+' '+(a.head.cy-16)+' L '+(cx+28)+' '+(a.head.cy+4)+' L '+(cx-28)+' '+(a.head.cy+4)+' Z','M '+(cx-43)+' '+(a.head.cy+3)+' Q '+cx+' '+(a.head.cy-5)+' '+(cx+43)+' '+(a.head.cy+3)+' L '+(cx+40)+' '+(a.head.cy+10)+' L '+(cx-40)+' '+(a.head.cy+10)+' Z');
+ }else if(category==='eyewear'){
+  paths.push('M '+(cx-27)+' '+(a.head.cy-2)+' L '+(cx-4)+' '+(a.head.cy-2)+' L '+(cx-4)+' '+(a.head.cy+14)+' L '+(cx-27)+' '+(a.head.cy+14)+' Z M '+(cx+4)+' '+(a.head.cy-2)+' L '+(cx+27)+' '+(a.head.cy-2)+' L '+(cx+27)+' '+(a.head.cy+14)+' L '+(cx+4)+' '+(a.head.cy+14)+' Z M '+(cx-4)+' '+(a.head.cy+4)+' L '+(cx+4)+' '+(a.head.cy+4));
+ }else if(category==='bags'||category==='accessories'){
+  paths.push('M '+(cx+28)+' '+(hips.y-8)+' L '+(cx+74)+' '+(hips.y-8)+' L '+(cx+74)+' '+(hips.y+44)+' L '+(cx+28)+' '+(hips.y+44)+' Z M '+(cx+35)+' '+(hips.y-8)+' Q '+(cx+35)+' '+(hips.y-32)+' '+(cx+51)+' '+(hips.y-32)+' Q '+(cx+67)+' '+(hips.y-32)+' '+(cx+67)+' '+(hips.y-8));
+ }else if(category==='scarves'){
+  paths.push('M '+(cx-10)+' '+(a.neck.bottom-2)+' Q '+cx+' '+(a.neck.bottom+5)+' '+(cx+10)+' '+(a.neck.bottom-2)+' L '+(cx+5)+' '+(a.neck.bottom+60)+' L '+(cx-7)+' '+(a.neck.bottom+60)+' Z');
+ }else if(category==='jewelry'||category==='hair'){
+  paths.push('M '+(cx-22)+' '+(a.head.cy-a.head.ry+2)+' Q '+cx+' '+(a.head.cy-a.head.ry-16)+' '+(cx+22)+' '+(a.head.cy-a.head.ry+2)+' L '+(cx+22)+' '+(a.head.cy-a.head.ry+10)+' Q '+cx+' '+(a.head.cy-a.head.ry)+' '+(cx-22)+' '+(a.head.cy-a.head.ry+10)+' Z');
+ }else{
+  paths.push('M '+(cx-20)+' '+(waist.y-10)+' h 40 v 40 h -40 z');
+ }
+ return {paths,anchors:a};
+}
+export function inspectSvgGarmentClipping(item,anchors=createMannequinAnchors(),bounds={width:410,height:450}){
+ const paths=garmentSvgGeometry(item,anchors).paths,coords=paths.flatMap(svgPathPoints),xs=coords.filter((_,i)=>i%2===0),ys=coords.filter((_,i)=>i%2===1);
+ const outside=coords.length?xs.filter(x=>x<0||x>bounds.width).length+ys.filter(y=>y<0||y>bounds.height).length:0,total=coords.length;
+ return {passed:total>0&&outside===0,vertexCount:Math.floor(total/2),outsideCoordinateCount:outside,clippingRatio:total?outside/total:1,method:'SVG control-point bounds in 410×450 viewBox; does not measure 3D body penetration'};
+}
 export function buildSvgLook(items=[],options={}){
- const bg=colorOk(options.background)?options.background:'#f2f6f4',tone=colorOk(options.mannequinTone)?options.mannequinTone:'#9ba5a2';
- const pose=options.pose==='lean'?'translate(8 0) rotate(-4 205 220)':options.pose==='step'?'skewX(-3)':options.pose==='sitting'?'translate(0 16) scale(1 .94)':'';
- const human='<g fill="'+tone+'" opacity=".68"><circle cx="205" cy="64" r="24"/><path d="M184 91Q205 80 226 91L242 230L228 250L225 340L240 390H215L199 285L190 390H164L181 340L178 250L160 230Z"/><path d="M178 117 145 215m52-98 29 98M180 250 166 326m46-76 22 76" fill="none" stroke="'+tone+'" stroke-width="14" stroke-linecap="round"/></g>';
+ const bg=colorOk(options.background)?options.background:'#f2f6f4',tone=colorOk(options.mannequinTone)?options.mannequinTone:'#9ba5a2',anchors=createMannequinAnchors(options.mannequin||options.measurements||{}),pose=options.pose==='lean'?'translate(8 0) rotate(-4 205 220)':options.pose==='step'?'skewX(-3)':options.pose==='sitting'?'translate(0 16) scale(1 .94)':'';
+ const a=anchors,cx=a.centerX,body='M '+a.neck.left+' '+a.neck.bottom+' L '+a.shoulders.left+' '+a.shoulders.y+' L '+a.armpits.left+' '+a.armpits.y+' L '+a.waist.left+' '+a.waist.y+' L '+a.hips.left+' '+a.hips.y+' L '+(cx-8)+' '+a.crotch.y+' L '+(cx-14)+' '+a.ankles.y+' L '+(cx-25)+' '+a.ankles.y+' L '+(cx-8)+' '+a.crotch.y+' L '+a.hips.right+' '+a.hips.y+' L '+a.waist.right+' '+a.waist.y+' L '+a.armpits.right+' '+a.armpits.y+' L '+a.shoulders.right+' '+a.shoulders.y+' L '+a.neck.right+' '+a.neck.bottom+' Z';
+ const human='<g fill="'+tone+'" opacity=".68"><ellipse cx="'+cx+'" cy="'+a.head.cy+'" rx="'+a.head.rx+'" ry="'+a.head.ry+'"/><path d="'+body+'"/><path d="M '+a.shoulders.left+' '+a.shoulders.y+' L '+a.wrists.left+' '+a.wrists.y+' M '+a.shoulders.right+' '+a.shoulders.y+' L '+a.wrists.right+' '+a.wrists.y+' M '+(cx-5)+' '+a.crotch.y+' L '+a.knees.left+' '+a.knees.y+' L '+a.ankles.left+' '+a.ankles.y+' M '+(cx+5)+' '+a.crotch.y+' L '+a.knees.right+' '+a.knees.y+' L '+a.ankles.right+' '+a.ankles.y+'" fill="none" stroke="'+tone+'" stroke-width="'+Math.max(8,a.scalePxPerCm*8)+'" stroke-linecap="round" stroke-linejoin="round"/></g>';
  const defs='<defs><pattern id="ws-stripe" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 0V12" stroke="#fff" stroke-opacity=".55" stroke-width="3"/></pattern><pattern id="ws-check" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M0 0H18M0 0V18" stroke="#fff" stroke-opacity=".45" stroke-width="2"/></pattern><pattern id="ws-dot" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2" fill="#fff" fill-opacity=".7"/></pattern><pattern id="ws-wave" width="24" height="14" patternUnits="userSpaceOnUse"><path d="M0 7Q6 0 12 7T24 7" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/></pattern></defs>';
- const pathFor=(x)=>{switch(x.category){
-  case'tops':case'outerwear':return'M165 112Q205 94 245 112L270 220L245 230L235 175L230 270L180 270L175 175L165 230L140 220Z';
-  case'bottoms':return'M172 245L238 245L250 390L215 390L205 285L195 390L160 390Z';
-  case'skirts':return'M170 245Q205 260 240 245L280 370Q205 390 130 370Z';
-  case'dresses':return'M174 112Q205 95 236 112L245 270Q275 330 278 375Q205 394 132 375Q137 330 165 270Z';
-  case'shoes':return'M150 385h44l-5 18h-66q0-14 27-18Zm28 0h44l27 18q0 14-68 0Z';
-  case'hats':return'M165 74Q205 35 245 74L240 103H170Z';
-  case'bags':return'M167 145h76v85h-76zM185 145q0-28 20-28t20 28';
-  case'eyewear':return'M166 77h35v28h-35zM209 77h35v28h-35zM201 88h8';
-  case'scarves':return'M176 110q29 2 52 0l-8 116-22-1z';
-  case'jewelry':case'hair':return'M180 78q25-22 50 0v12q-25-12-50 0z';
-  default:return'M180 145h50v50h-50z';
- }};
- const patternFor=(id)=>['thin-stripe','wide-stripe','pinstripe','vertical-stripe','horizontal-stripe'].includes(id)?'ws-stripe':['gingham','plaid','windowpane','check','herringbone'].includes(id)?'ws-check':['polka-small','polka-large','dots','stars','floral-small'].includes(id)?'ws-dot':['wave','zigzag','scallop'].includes(id)?'ws-wave':'';
+ const patternFor=id=>['thin-stripe','wide-stripe','pinstripe','vertical-stripe','horizontal-stripe'].includes(id)?'ws-stripe':['gingham','plaid','windowpane','check','herringbone'].includes(id)?'ws-check':['polka-small','polka-large','dots','stars','floral-small'].includes(id)?'ws-dot':['wave','zigzag','scallop'].includes(id)?'ws-wave':'';
  const sorted=items.slice().sort((x,y)=>(x.layerOrder||0)-(y.layerOrder||0));
- const shapes=sorted.map((x,i)=>{const c=colorOk(x.color)?x.color:'#647d69',d=pathFor(x),width=x.parameters?.width==='wide'?1.12:x.parameters?.width==='slim'?.9:1,length=x.parameters?.length==='long'?1.1:x.parameters?.length==='short'?.9:1;
-  const tx=options.flatLay?[55,155,255,355][i%4]:205,ty=options.flatLay?(i<4?120:300):230,scale=options.flatLay?0.38:1;
-  const body=x.category==='tops'||x.category==='outerwear';
-  const neckline=body?'<path d="'+(x.parameters?.neck==='v'?'M188 106 205 130 222 106':x.parameters?.neck==='square'?'M188 108v14h34v-14':x.parameters?.neck==='high'?'M190 105h30v9h-30':'M190 108q15 14 30 0')+'" fill="none" stroke="#fff" stroke-opacity=".58" stroke-width="3"/>':'';
-  const extras=x.category==='outerwear'?'<path d="M205 111v145m-7-112h2m-2 20h2m-2 20h2" stroke="#fff" stroke-opacity=".65" stroke-width="3"/>':'';
-  const pat=patternFor(x.patternId);
-  return'<g transform="translate('+tx+' '+ty+') scale('+scale*width+' '+scale*length+') translate(-205 -230)"><path data-garment="'+text(x.id,80).replace(/[^\w-]/g,'')+'" d="'+d+'" fill="'+c+'" stroke="#52625e" stroke-width="3" vector-effect="non-scaling-stroke"/> '+(pat?'<path d="'+d+'" fill="url(#'+pat+')" opacity=".9"/>':'')+neckline+extras+'</g>';
+ const shapes=sorted.map((x,i)=>{const c=colorOk(x.color)?x.color:'#647d69',geometry=garmentSvgGeometry(x,a),pat=patternFor(x.patternId),path=geometry.paths.map(d=>'<path data-garment="'+text(x.id,80).replace(/[^\w-]/g,'')+'" d="'+d+'" fill="'+c+'" stroke="#52625e" stroke-width="2.5" vector-effect="non-scaling-stroke"/>').join(''),pattern=pat?geometry.paths.map(d=>'<path d="'+d+'" fill="url(#'+pat+')" opacity=".8"/>').join(''):'';
+  if(!options.flatLay)return '<g>'+path+pattern+'</g>';
+  const tx=[52,154,256,358][i%4],ty=i<4?126:306;return '<g transform="translate('+tx+' '+ty+') scale(.32) translate(-205 -230)">'+path+pattern+'</g>';
  }).join('');
- const flatHint=options.flatLay?'<text x="205" y="425" text-anchor="middle" fill="#52625e" font-size="14">Bày phẳng · bố cục minh họa</text>':'<text x="205" y="425" text-anchor="middle" fill="#52625e" font-size="14">Mô phỏng 2D · tham khảo, không phải rập may</text>';
- return'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 410 450" role="img" aria-label="'+(options.flatLay?'Bố cục trang phục flat-lay':'Mannequin và trang phục minh họa')+'" style="width:100%;height:100%">'+defs+'<rect width="410" height="450" rx="24" fill="'+bg+'"/>'+(!options.flatLay?'<g transform="'+pose+'">'+human+'</g>':'')+'<g transform="'+pose+'">'+shapes+'</g>'+flatHint+'</svg>';
+ const flatHint=options.flatLay?'<text x="205" y="425" text-anchor="middle" fill="#52625e" font-size="14">Bày phẳng · bố cục minh họa</text>':'<text x="205" y="435" text-anchor="middle" fill="#52625e" font-size="13">Mô phỏng hình học tham khảo · kích thước quy đổi cm</text>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 410 450" role="img" aria-label="'+(options.flatLay?'Bố cục trang phục flat-lay':'Ma-nơ-canh và trang phục minh họa theo số đo cm')+'" style="width:100%;height:100%">'+defs+'<rect width="410" height="450" rx="24" fill="'+bg+'"/>'+(!options.flatLay?'<g transform="'+pose+'">'+human+'</g>':'')+'<g transform="'+(options.flatLay?'':pose)+'">'+shapes+'</g>'+flatHint+'</svg>';
 }
 export function safeSvgText(s){
  if(typeof s!=='string'||s.length>2_000_000)return null;

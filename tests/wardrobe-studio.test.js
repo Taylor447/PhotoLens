@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createWardrobeRepository,LEGACY_ITEMS,LEGACY_LOOKS,filterGarments,normalizeGarment,calculateFit,chooseSize,contrastRatio,colorHarmony,scoreLook,resolveStudioMode,reconcileLook,inspectTemplateBounds,buildSvgLook,safeSvgText,classifyWardrobeAsset,hasSupportedImageHeader,validGlbHeader} from '../core/wardrobe-engine.js';
+import {createWardrobeRepository,LEGACY_ITEMS,LEGACY_LOOKS,filterGarments,normalizeGarment,calculateFit,chooseSize,contrastRatio,colorHarmony,scoreLook,resolveStudioMode,reconcileLook,inspectTemplateBounds,buildSvgLook,safeSvgText,MANNEQUIN_DEFAULTS_CM,MANNEQUIN_PRESETS,normalizeMannequin,createMannequinAnchors,garmentSvgGeometry,inspectSvgGarmentClipping,classifyWardrobeAsset,hasSupportedImageHeader,validGlbHeader} from '../core/wardrobe-engine.js';
 import {readFileSync} from 'node:fs';
 function memoryStorage(){const map=new Map();return{getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,String(v)),removeItem:k=>map.delete(k)};}
 const template={id:'test-top',name:'Áo test',category:'tops',color:'#336699',styleTags:['casual'],materialId:'cotton',patternId:'solid',measurementsCm:{chest:100,waist:82},layerOrder:20};
@@ -37,6 +37,19 @@ test('2D generation, 3D fallback, shared ordering, fit and size limits are expli
 test('generated data has unique template IDs and no invented commercial products',()=>{
  const g=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url))),m=JSON.parse(readFileSync(new URL('../data/wardrobe/materials.json',import.meta.url))),p=JSON.parse(readFileSync(new URL('../data/wardrobe/patterns.json',import.meta.url)));
  assert.equal(g.schemaVersion,1);assert.equal(g.templates.length,60);assert.equal(g.realGarmentCount,0);assert.equal(new Set(g.templates.map(x=>x.id)).size,g.templates.length);assert.ok(m.materials.length>=20);assert.ok(p.patterns.length>=40);
+});
+
+test('shared mannequin dimensions clamp in cm and scale all 2D anchors within the stage',()=>{
+ const bounded=normalizeMannequin({heightCm:1,shoulders:500,chest:-1,waist:10000,hips:1,sleeve:0,inseam:999,neck:99});
+ assert.deepEqual(bounded,{heightCm:140,shoulders:60,chest:60,waist:140,hips:60,sleeve:40,inseam:110,neck:55});
+ for(const p of MANNEQUIN_PRESETS){const a=createMannequinAnchors(p);assert.equal(a.heightCm,p.heightCm);assert.ok(Math.abs(a.ankles.y-394.8)<1e-8);assert.equal(a.feet.y,402);assert.equal(a.scalePxPerCm,360/p.heightCm);assert.ok(a.shoulders.left<a.shoulders.right);assert.ok(a.hips.left<a.hips.right);}
+ assert.equal(normalizeMannequin({}).heightCm,MANNEQUIN_DEFAULTS_CM.heightCm);
+});
+test('all 60 procedural garment templates remain inside the 2D SVG viewBox for all four reference presets',()=>{
+ const g=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url)));
+ let checked=0;
+ for(const preset of MANNEQUIN_PRESETS){const anchors=createMannequinAnchors(preset);for(const garment of g.templates){const geometry=garmentSvgGeometry(garment,anchors);assert.ok(geometry.paths.length,garment.id+' has no 2D path');const clipping=inspectSvgGarmentClipping(garment,anchors);assert.equal(clipping.passed,true,preset.id+' / '+garment.id+': '+JSON.stringify(clipping));assert.equal(clipping.clippingRatio,0);checked++;}}
+ assert.equal(checked,240);
 });
 
 test('local binary import validates declared type/signature and refuses phantom storage',async()=>{

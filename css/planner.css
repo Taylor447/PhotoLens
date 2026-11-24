@@ -234,7 +234,7 @@
 .ws-three-host{width:100%;height:min(68vh,680px);min-height:380px;overflow:hidden;touch-action:none;background:#edf3f0}
 .ws-three-host canvas{display:block;width:100%;height:100%;outline:none;touch-action:none}
 .ws-three-host canvas:focus-visible{outline:3px solid #2863c5;outline-offset:-3px}
-.ws-measures{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ws-measures{display:grid;grid-template-columns:1fr;gap:10px}.ws-measure-control{display:grid;gap:8px;padding:12px;border:1px solid var(--border,#d3dfe7);border-radius:14px;background:var(--surface,#fff);font-size:16px}.ws-measure-control label{font-size:16px}.ws-measure-control output{font-weight:700;color:var(--text,#18302a)}.ws-measure-control input[type=number]{min-height:44px}.ws-measure-range{display:grid;grid-template-columns:1fr;gap:4px}.ws-measure-control input[type=range]{width:100%;min-height:44px;accent-color:var(--color-accent,#0d7a5e);touch-action:pan-x}
 .ws-selected-row{display:grid;grid-template-columns:48px minmax(80px,1fr) auto auto;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border,#d3dfe7)}
 .ws-selected-row .ws-thumb{height:44px}
 .ws-selected-row .ws-thumb svg{width:40px;height:40px}

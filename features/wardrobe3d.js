@@ -1,3 +1,4 @@
+import {normalizeMannequin} from '../core/wardrobe-engine.js';
 const THREE_URL='https://unpkg.com/three@0.187.0/build/three.module.js';
 let threeModule;
 export function supportsWebGL(){try{const c=document.createElement('canvas');return Boolean(window.WebGLRenderingContext&&(c.getContext('webgl2')||c.getContext('webgl')));}catch{return false;}}
@@ -18,8 +19,9 @@ function clothes(T,group,items,scale){
   if(x.category==='jewelry'||x.category==='hair')ball(T,group,m,[0,x.category==='hair'?207*scale:172*scale,3],[10*scale,4*scale,8*scale]);
  }
 }
-export async function mountWardrobe3D(host,{items=[],measurements={},heightCm=170,flatLay=false,pose='standing',mannequinTone='#9ba5a2',distanceCm=450,cameraHeightCm=135}={}){
+export async function mountWardrobe3D(host,{items=[],measurements={},mannequin=null,heightCm=170,flatLay=false,pose='standing',mannequinTone='#9ba5a2',distanceCm=450,cameraHeightCm=135}={}){
  if(!host||!supportsWebGL())throw new Error('WebGL unavailable');
+ const dims=normalizeMannequin({...measurements,...(mannequin||{}),heightCm:mannequin?.heightCm??heightCm});heightCm=dims.heightCm;
  const T=await getThree();if(!supportsWebGL())throw new Error('WebGL unavailable');
  const width=Math.max(host.clientWidth||640,280),height=Math.max(host.clientHeight||480,340),scene=new T.Scene();scene.background=new T.Color('#edf3f0');
  const camera=new T.PerspectiveCamera(34,width/height,.1,10000);camera.position.set(0,135,450);
@@ -31,7 +33,7 @@ export async function mountWardrobe3D(host,{items=[],measurements={},heightCm=17
  const person=new T.Group();if(pose==='lean')person.rotation.z=-.08;scene.add(person);
  if(!flatLay){
   const grey=mat(T,mannequinTone,.95),scale=Math.max(.65,Math.min(1.4,(Number(heightCm)||170)/215));
-  const chest=Number(measurements.chest)||92,waist=Number(measurements.waist)||76,hips=Number(measurements.hips)||98,shoulders=Number(measurements.shoulders)||40;
+  const chest=dims.chest,waist=dims.waist,hips=dims.hips,shoulders=dims.shoulders;
   ball(T,person,grey,[0,198*scale,0],[13*scale,17*scale,13*scale]);ball(T,person,grey,[0,148*scale,0],[Math.max(27,shoulders*.8)*scale,40*scale,19*scale]);ball(T,person,grey,[0,103*scale,0],[Math.max(25,waist*.52)*scale,25*scale,18*scale]);ball(T,person,grey,[0,90*scale,0],[Math.max(27,hips*.48)*scale,18*scale,18*scale]);
   for(const side of [-1,1]){ball(T,person,grey,[side*36*scale,150*scale,0],[9*scale,29*scale,10*scale]);ball(T,person,grey,[side*39*scale,118*scale,1],[7.5*scale,28*scale,8*scale]);const thigh=new T.Mesh(new T.CylinderGeometry(10.5*scale,9.5*scale,44*scale,10),grey);thigh.position.set(side*16*scale,(pose==='sitting'?80:61)*scale,0);thigh.rotation.z=pose==='sitting'?side*.8:pose==='step'?side*.15:0;person.add(thigh);const calf=new T.Mesh(new T.CylinderGeometry(9*scale,7*scale,42*scale,10),grey);calf.position.set(side*16*scale,22*scale,0);calf.rotation.z=pose==='step'?-side*.14:0;person.add(calf);}
   clothes(T,person,items,scale);

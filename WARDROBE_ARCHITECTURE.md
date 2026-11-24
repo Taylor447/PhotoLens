@@ -8,8 +8,8 @@ This document describes the current PhotoLens source for the GĐ0 baseline, foll
 |---|---|---|
 | Planner tabs and weather/background context | `features/planner.js` | Keep quick suggestions intact; pass only selected background, genre, and weather into wardrobe views. |
 | Catalog, local closet, editor, lookbook, interaction state | `features/wardrobe-studio.js` | Split view/controller concerns as the wardrobe modules are built. |
-| Garment normalization, IndexedDB/localStorage repository, fit arithmetic, color rules, score, SVG rendering | `core/wardrobe-engine.js` | Separate storage, fit, color, and rules into independently testable modules. |
-| Procedural 3D mannequin and garment shapes | `features/wardrobe3d.js` | Treat this as an illustrative renderer until calibrated geometry and intersection checks exist. |
+| Garment normalization, IndexedDB/localStorage repository, fit arithmetic, color rules, score, SVG rendering, shared mannequin anchors | `core/wardrobe-engine.js` | Keep shared parameters in centimetres; fit arithmetic remains separate from physical fit claims. |
+| Procedural 3D mannequin and garment shapes | `features/wardrobe3d.js` | Still illustrative; share the 2D centimetre input, but do not claim 3D collision or garment penetration measurements. |
 | Static procedural data and asset provenance | `data/wardrobe/*` | Keep catalog templates separate from user-owned closet records. |
 | Optional candidate-constrained AI | `worker/src/index.js` | The Worker receives filtered item IDs and non-body facts only; local rules remain the offline path. |
 | Shared visual tokens and planner styling | `css/tokens.css`, `css/planner.css`, `css/studio.css` | Reuse existing tokens; keep controls readable and touch targets large. |
@@ -39,7 +39,7 @@ Every shipped render asset has a stable ID and a matching manifest record with s
 
 ### Mannequin measurements
 
-The 2D and 3D views must consume the same optional, user-entered measurement object. Canonical dimensions are centimetres:
+The 2D and 3D views consume one normalized mannequin object in centimetres. UI reference defaults and the four presets are synthetic drawing references; only a value the user enters or a preset they select is a user-provided measurement. A blank fit record stays blank; reference geometry is not silently saved or sent to AI. Canonical dimensions are centimetres:
 
 - `heightCm`: floor to crown.
 - `shoulderWidthCm`: left-to-right shoulder landmark distance, not circumference.
@@ -49,7 +49,7 @@ The 2D and 3D views must consume the same optional, user-entered measurement obj
 
 Unknown measurements are `null`; do not fill defaults into the user's measurement record. A neutral mannequin render may use a documented drawing proportion, but it must be labelled an illustration, not a measurement.
 
-The existing `core/wardrobe-engine.js` currently accepts the legacy keys `shoulders`, `chest`, `waist`, `hips`, `sleeve`, `inseam`, and `neck`. Migrate saved records at the repository boundary before using the canonical `*Cm` contract; do not silently reinterpret the legacy values.
+The current interface accepts `heightCm`, `shoulders`, `chest`, `waist`, `hips`, `sleeve`, `inseam`, and `neck`; each is a centimetre value. Bounds are explicit in `normalizeMannequin`. `createMannequinAnchors` maps them into one 410×450 2D stage. These abbreviated keys are not yet the fully documented semantic `*Cm` contract above; garment-size records need landmark metadata before their differences can be presented as physical ease.
 
 ### Fit and collision language
 
@@ -67,7 +67,7 @@ Body measurements, clothing photos, and imported SVG/GLB files stay on device. A
 |---|---|---|
 | GĐ0 | Architecture, asset contract, and strict catalog schema | Schema/data/provenance checks and repository build/unit CI. |
 | GĐ1 | Searchable catalog, local closet, imports | Accurate counts separated into templates, verified real garments, and user imports; privacy and migration tests. |
-| GĐ2 | Shared mannequin data and 2D studio | Unit tests for centimetre mapping, layer order, export, and SVG bounds. |
+| GĐ2 | Shared mannequin data and measurement-driven 2D anchor geometry | Unit tests cover centimetre clamping, the single anchor transform, existing layer order, and all 60 template SVG bounds across four references (240 path-bound checks). This is not a 3D intersection test. |
 | GĐ3 | Deterministic rules, explanations, lookbook, weather/background context | Unit tests for fit arithmetic, color/contrast, rule constraints, scores, and local fallback. |
 | GĐ4 | 3D renderer and numeric fit | Calibrated asset checks and actual intersection tests across each declared preset/template combination; no proxy reported as clipping. |
 | GĐ5 | 2D/3D synchronization, Worker compose, planner linkage | Contract tests prove AI IDs are a subset of the filtered candidate IDs and no body data leaves the device. |
@@ -75,4 +75,4 @@ Body measurements, clothing photos, and imported SVG/GLB files stay on device. A
 | GĐ7 | Optional ML / photo try-on | Disabled by default; model and dataset license, execution location, and independent evaluation reported before enabling. |
 | GĐ8 | Performance and release documentation | CI, accessibility, offline/WebGL fallback, performance measurements, and final inventory report. |
 
-Only GĐ0 is covered by this architecture change. Later-stage capabilities must not be described as delivered until their evidence exists.
+GĐ0 and GĐ1 provide the catalog contract; GĐ2 adds a shared centimetre mannequin input and 2D anchor geometry. Later-stage capabilities must not be described as delivered until their evidence exists.
