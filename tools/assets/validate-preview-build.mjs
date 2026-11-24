@@ -17,4 +17,4 @@ for(const asset of thumbnails){
  const bytes=readFileSync(built);
  assert.equal(createHash(bytes),asset.sha256,'Built preview differs from manifest: '+asset.path);
 }
-function createHash(bytes){return hash(bytes).digest('hex');}
+function createHash(bytes){return hash('sha256').update(bytes).digest('hex');}
