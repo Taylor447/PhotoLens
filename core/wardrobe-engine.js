@@ -1,18 +1,18 @@
 export const DB_NAME='photolens-wardrobe', DB_VERSION=1;
 export const STATE_KEY='photolens_wardrobe_studio_v1', LEGACY_ITEMS='photolens_wardrobe_v1', LEGACY_LOOKS='photolens_outfits_v1';
-export const MEASURE_KEYS=['shoulders','chest','waist','hips','sleeve','inseam','neck'];
+import {MEASURE_KEYS,normalizeMeasures,normalizeSizeTable,calculateFit,chooseSize} from './fit/measurements.js';
+export {MEASURE_KEYS,normalizeMeasures,normalizeSizeTable,calculateFit,chooseSize};
 export const CATEGORIES={tops:'Áo',bottoms:'Quần',skirts:'Váy',dresses:'Váy / đầm',outerwear:'Áo khoác',shoes:'Giày dép',hats:'Mũ',bags:'Túi',eyewear:'Kính',scarves:'Khăn',jewelry:'Trang sức',hair:'Phụ kiện tóc',accessories:'Phụ kiện'};
 export const STYLES={minimal:'Tối giản',vintage:'Vintage',streetwear:'Streetwear',office:'Công sở',active:'Thể thao',traditional:'Truyền thống',cosplay:'Cosplay',classic:'Cổ điển',cinematic:'Điện ảnh',casual:'Thường ngày'};
 const allowedCategories=new Set(Object.keys(CATEGORIES)),allowedStyles=new Set(Object.keys(STYLES)),text=(x,n=160)=>String(x??'').trim().slice(0,n),id=()=>globalThis.crypto?.randomUUID?.()||'ws-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8),colorOk=x=>/^#[0-9a-f]{6}$/i.test(String(x||''));
-const cm=x=>{const n=Number(x);return Number.isFinite(n)&&n>0&&n<=300?n:null;};
-export function normalizeMeasures(v){if(!v||typeof v!=='object')return null;const out={};for(const k of MEASURE_KEYS){const n=cm(v[k]);if(n!==null)out[k]=n;}return Object.keys(out).length?out:null;}
 function colorFamily(color){if(!colorOk(color))return'custom';const s=color.slice(1),r=parseInt(s.slice(0,2),16),g=parseInt(s.slice(2,4),16),b=parseInt(s.slice(4,6),16),mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(mx-mn<26)return'neutral';if(r>g*1.2&&r>b*1.2)return'warm';if(b>r*1.13&&b>g*1.07)return'blue';if(g>r*1.1&&g>b*1.03)return'green';if(r>g*1.16&&b>g*1.06)return'purple';if(r>g*1.2)return'red';return'custom';}
 export function normalizeGarment(v={}){
  const category=allowedCategories.has(v.category)?v.category:'',name=text(v.name,100);if(!category||!name)return null;
  const styles=Array.isArray(v.styleTags)?v.styleTags.filter(x=>allowedStyles.has(x)):allowedStyles.has(v.style)?[v.style]:[];
  const season=['all','spring','summer','autumn','winter'].includes(v.season)?v.season:'all';
- const min=Number(v.temperatureC?.min),max=Number(v.temperatureC?.max),params=v.parameters||{};
- return {id:text(v.id,120)||id(),name,category,legacyCategory:['tops','bottoms','dresses','outerwear','shoes'].includes(category)?category:'accessories',layer:['base','mid','outer','accessory'].includes(v.layer)?v.layer:category==='outerwear'?'outer':['shoes','hats','bags','eyewear','scarves','jewelry','hair','accessories'].includes(category)?'accessory':'base',layerOrder:Number.isFinite(Number(v.layerOrder))?Number(v.layerOrder):20,color:colorOk(v.color)?v.color.toLowerCase():'#647d69',colorFamily:['neutral','blue','green','warm','red','purple'].includes(v.colorFamily)?v.colorFamily:colorFamily(v.color),patternId:(({'stripes':'thin-stripe','dots':'polka-small','check':'gingham'})[text(v.patternId||v.pattern,60)]||text(v.patternId||v.pattern,60)||'solid'),legacyPatternId:text(v.legacyPatternId||(['stripes','dots','check'].includes(v.pattern)?v.pattern:''),60)||null,materialId:text(v.materialId||v.material,60),fit:['slim','regular','relaxed','oversize','layered'].includes(v.fit)?v.fit:'regular',styleTags:[...new Set(styles)],season,temperatureC:{min:Number.isFinite(min)?min:null,max:Number.isFinite(max)?max:null},weather:{rain:typeof v.weather?.rain==='boolean'?v.weather.rain:null,wind:typeof v.weather?.wind==='boolean'?v.weather.wind:null},weatherTags:Array.isArray(v.weather)?[...new Set(v.weather.map(x=>text(x,30)).filter(Boolean))]:Array.isArray(v.weatherTags)?[...new Set(v.weatherTags.map(x=>text(x,30)).filter(Boolean))]:[],measurementsCm:normalizeMeasures(v.measurementsCm),notes:text(v.notes||v.note,1000),favorite:Boolean(v.favorite),isTemplate:Boolean(v.isTemplate),collections:Array.isArray(v.collections)?v.collections.map(x=>text(x,40)).filter(Boolean).slice(0,12):[],parameters:{neck:['crew','v','square','high'].includes(params.neck)?params.neck:'crew',sleeve:['short','long','sleeveless','wide'].includes(params.sleeve)?params.sleeve:'short',length:['short','regular','long'].includes(params.length)?params.length:'regular',width:['slim','regular','wide'].includes(params.width)?params.width:'regular',pleats:Math.max(0,Math.min(8,Number(params.pleats)||0))},shootingNotes:v.shootingNotes&&typeof v.shootingNotes==='object'?v.shootingNotes:{},imageAssetId:text(v.imageAssetId,120)||null,vectorAssetId:text(v.vectorAssetId,120)||null,createdAt:v.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
+ const temp=value=>value==null||value===''?null:Number(value);
+ const min=temp(v.temperatureC?.min),max=temp(v.temperatureC?.max),params=v.parameters||{};
+ return {id:text(v.id,120)||id(),name,category,legacyCategory:['tops','bottoms','dresses','outerwear','shoes'].includes(category)?category:'accessories',layer:['base','mid','outer','accessory'].includes(v.layer)?v.layer:category==='outerwear'?'outer':['shoes','hats','bags','eyewear','scarves','jewelry','hair','accessories'].includes(category)?'accessory':'base',layerOrder:Number.isFinite(Number(v.layerOrder))?Number(v.layerOrder):20,color:colorOk(v.color)?v.color.toLowerCase():'#647d69',colorFamily:['neutral','blue','green','warm','red','purple'].includes(v.colorFamily)?v.colorFamily:colorFamily(v.color),patternId:(({'stripes':'thin-stripe','dots':'polka-small','check':'gingham'})[text(v.patternId||v.pattern,60)]||text(v.patternId||v.pattern,60)||'solid'),legacyPatternId:text(v.legacyPatternId||(['stripes','dots','check'].includes(v.pattern)?v.pattern:''),60)||null,materialId:text(v.materialId||v.material,60),fit:['slim','regular','relaxed','oversize','layered'].includes(v.fit)?v.fit:'regular',styleTags:[...new Set(styles)],season,temperatureC:{min:Number.isFinite(min)?min:null,max:Number.isFinite(max)?max:null},weather:{rain:typeof v.weather?.rain==='boolean'?v.weather.rain:null,wind:typeof v.weather?.wind==='boolean'?v.weather.wind:null},weatherTags:Array.isArray(v.weather)?[...new Set(v.weather.map(x=>text(x,30)).filter(Boolean))]:Array.isArray(v.weatherTags)?[...new Set(v.weatherTags.map(x=>text(x,30)).filter(Boolean))]:[],measurementsCm:normalizeMeasures(v.measurementsCm),sizeTable:normalizeSizeTable(v.sizeTable),sizeTableVersion:text(v.sizeTableVersion,40)||null,measurementSource:text(v.measurementSource,200)||null,notes:text(v.notes||v.note,1000),favorite:Boolean(v.favorite),isTemplate:Boolean(v.isTemplate),collections:Array.isArray(v.collections)?v.collections.map(x=>text(x,40)).filter(Boolean).slice(0,12):[],parameters:{neck:['crew','v','square','high'].includes(params.neck)?params.neck:'crew',sleeve:['short','long','sleeveless','wide'].includes(params.sleeve)?params.sleeve:'short',length:['short','regular','long'].includes(params.length)?params.length:'regular',width:['slim','regular','wide'].includes(params.width)?params.width:'regular',pleats:Math.max(0,Math.min(8,Number(params.pleats)||0))},shootingNotes:v.shootingNotes&&typeof v.shootingNotes==='object'?v.shootingNotes:{},imageAssetId:text(v.imageAssetId,120)||null,vectorAssetId:text(v.vectorAssetId,120)||null,createdAt:v.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
 }
 function parse(storage,key,fallback){try{return JSON.parse(storage?.getItem(key)||'null')??fallback;}catch{return fallback;}}
 function cleanState(s={}){const unique=new Map();for(const raw of Array.isArray(s.items)?s.items:[]){const item=normalizeGarment(raw);if(item)unique.set(item.id,{...(unique.get(item.id)||{}),...item});}const looks=new Map();for(const x of Array.isArray(s.looks)?s.looks:[])if(x?.id&&x?.name&&Array.isArray(x.itemIds))looks.set(String(x.id),{...x,itemIds:[...new Set(x.itemIds.map(String))],tags:Array.isArray(x.tags)?x.tags.map(y=>text(y,40)).filter(Boolean):[]});return{schemaVersion:1,items:[...unique.values()],looks:[...looks.values()],assets:Array.isArray(s.assets)?s.assets:[]};}
@@ -76,11 +76,6 @@ export function filterGarments(items=[],filters={},weather={}){
   return !q||[x.name,x.category,x.materialId,x.patternId,...(x.styleTags||[]),...(x.weatherTags||[]),...(x.collections||[]),x.notes].join(' ').toLocaleLowerCase('vi').includes(q);
  });
 }
-export function calculateFit(body={},garment={}){
- const b=normalizeMeasures(body),g=normalizeMeasures(garment.measurementsCm);if(!b||!g)return{available:false,details:[],message:'Chưa có đủ số đo do người dùng tự nhập.'};
- const details=MEASURE_KEYS.filter(k=>b[k]!=null&&g[k]!=null).map(key=>({key,bodyCm:b[key],garmentCm:g[key],easeCm:Number((g[key]-b[key]).toFixed(1))}));return{available:Boolean(details.length),details,message:details.length?'So sánh số đo nhập tay; không bảo đảm độ vừa thật.':'Chưa có dữ liệu đo tương ứng.'};
-}
-export function chooseSize(body={},table=[]){const rows=(table||[]).filter(x=>normalizeMeasures(x.measurementsCm));if(!rows.length)return{size:null,reason:'Chưa có bảng size hoặc số đo.'};const ranked=rows.map(x=>({size:x.size,score:calculateFit(body,{measurementsCm:x.measurementsCm}).details.reduce((n,y)=>n+Math.abs(y.easeCm),0)})).sort((a,b)=>a.score-b.score);return{size:ranked[0]?.size||null,reason:'Chọn theo số đo nhập tay; không bảo đảm vừa thật.'};}
 export function contrastRatio(fg,bg){const lum=c=>{if(!colorOk(c))return null;const a=[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);return .2126*a[0]+.7152*a[1]+.0722*a[2];},a=lum(fg),b=lum(bg);return a===null||b===null?null:Number(((Math.max(a,b)+.05)/(Math.min(a,b)+.05)).toFixed(2));}
 export function colorHarmony(items=[]){
  const hues=items.map(x=>{if(!colorOk(x.color))return null;const r=parseInt(x.color.slice(1,3),16)/255,g=parseInt(x.color.slice(3,5),16)/255,b=parseInt(x.color.slice(5,7),16)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;if(d<.08)return null;let h=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;return((h*60)+360)%360;}).filter(x=>x!==null);
@@ -169,20 +164,29 @@ export function normalizeMannequin(value={}){
  const out={};for(const [key,limits] of Object.entries(MANNEQUIN_LIMITS_CM)){const raw=value?.[key],n=raw===null||raw===''?NaN:Number(raw);out[key]=Number.isFinite(n)?Math.min(limits[1],Math.max(limits[0],n)):MANNEQUIN_DEFAULTS_CM[key];}
  return out;
 }
+export function createMannequinLandmarks(value){
+ const m=normalizeMannequin(value), height=m.heightCm;
+ const ankle=height*.02, crotch=ankle+m.inseam;
+ const headHeight=height*.128, neckTop=height-headHeight*.98;
+ const shoulder=Math.max(height*.78,Math.min(neckTop-2,crotch+24));
+ const torso=shoulder-crotch;
+ return {m,ankle,crotch,headHeight,neckTop,shoulder,pelvis:crotch+torso*.21,waist:crotch+torso*.52,chest:crotch+torso*.82,knee:ankle+m.inseam*.48,wrist:shoulder-m.sleeve};
+}
 export function createMannequinAnchors(value={}){
- const m=normalizeMannequin(value),scale=360/m.heightCm,cx=205,top=42,y=cm=>top+cm*scale,ratio=r=>top+m.heightCm*r*scale;
+ const landmarks=createMannequinLandmarks(value),m=landmarks.m,scale=360/m.heightCm,cx=205,top=42;
+ const y=cm=>top+cm*scale,ratio=r=>y(m.heightCm*r),fromFloor=cm=>y(m.heightCm-cm);
  const shoulderHalf=m.shoulders/2,torsoHalf=(cm)=>cm*.2;
  const anchors={
-  centerX:cx,scalePxPerCm:scale,heightCm:m.heightCm,head:{cx,cy:ratio(.09),rx:Math.min(24,m.neck*.58*scale),ry:Math.min(27,m.neck*.68*scale)},
-  neck:{left:cx-m.neck*.22*scale,right:cx+m.neck*.22*scale,top:ratio(.14),bottom:ratio(.20)},
-  shoulders:{left:cx-shoulderHalf*scale,right:cx+shoulderHalf*scale,y:ratio(.22)},
-  armpits:{left:cx-torsoHalf(m.chest)*scale,right:cx+torsoHalf(m.chest)*scale,y:ratio(.32)},
-  chest:{left:cx-torsoHalf(m.chest)*scale,right:cx+torsoHalf(m.chest)*scale,y:ratio(.34)},
-  waist:{left:cx-torsoHalf(m.waist)*scale,right:cx+torsoHalf(m.waist)*scale,y:ratio(.52)},
-  hips:{left:cx-torsoHalf(m.hips)*scale,right:cx+torsoHalf(m.hips)*scale,y:ratio(.63)},
-  crotch:{cx,y:ratio(.75)},knees:{left:cx-9*scale,right:cx+9*scale,y:ratio(.88)},
-  ankles:{left:cx-8*scale,right:cx+8*scale,y:ratio(.98)},
-  wrists:{left:cx-m.sleeve*.50*scale,right:cx+m.sleeve*.50*scale,y:Math.min(ratio(.62),ratio(.22)+m.sleeve*scale)},
+  centerX:cx,scalePxPerCm:scale,heightCm:m.heightCm,head:{cx,cy:fromFloor(landmarks.neckTop+landmarks.headHeight*.49),rx:Math.min(24,m.neck*.58*scale),ry:Math.min(27,m.neck*.68*scale)},
+  neck:{left:cx-m.neck*.22*scale,right:cx+m.neck*.22*scale,top:fromFloor(landmarks.neckTop),bottom:fromFloor(landmarks.shoulder)},
+  shoulders:{left:cx-shoulderHalf*scale,right:cx+shoulderHalf*scale,y:fromFloor(landmarks.shoulder)},
+  armpits:{left:cx-torsoHalf(m.chest)*scale,right:cx+torsoHalf(m.chest)*scale,y:fromFloor((landmarks.shoulder+landmarks.chest)/2)},
+  chest:{left:cx-torsoHalf(m.chest)*scale,right:cx+torsoHalf(m.chest)*scale,y:fromFloor(landmarks.chest)},
+  waist:{left:cx-torsoHalf(m.waist)*scale,right:cx+torsoHalf(m.waist)*scale,y:fromFloor(landmarks.waist)},
+  hips:{left:cx-torsoHalf(m.hips)*scale,right:cx+torsoHalf(m.hips)*scale,y:fromFloor(landmarks.pelvis)},
+  crotch:{cx,y:fromFloor(landmarks.crotch)},knees:{left:cx-9*scale,right:cx+9*scale,y:fromFloor(landmarks.knee)},
+  ankles:{left:cx-8*scale,right:cx+8*scale,y:fromFloor(landmarks.ankle)},
+  wrists:{left:cx-m.sleeve*.50*scale,right:cx+m.sleeve*.50*scale,y:fromFloor(landmarks.wrist)},
   feet:{left:cx-14*scale,right:cx+14*scale,y:ratio(1)}
  };
  return Object.freeze({...anchors,measurementsCm:m});
@@ -235,7 +239,7 @@ export function buildSvgLook(items=[],options={}){
  const defs='<defs><pattern id="ws-stripe" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 0V12" stroke="#fff" stroke-opacity=".55" stroke-width="3"/></pattern><pattern id="ws-check" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M0 0H18M0 0V18" stroke="#fff" stroke-opacity=".45" stroke-width="2"/></pattern><pattern id="ws-dot" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2" fill="#fff" fill-opacity=".7"/></pattern><pattern id="ws-wave" width="24" height="14" patternUnits="userSpaceOnUse"><path d="M0 7Q6 0 12 7T24 7" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/></pattern></defs>';
  const patternFor=id=>['thin-stripe','wide-stripe','pinstripe','vertical-stripe','horizontal-stripe'].includes(id)?'ws-stripe':['gingham','plaid','windowpane','check','herringbone'].includes(id)?'ws-check':['polka-small','polka-large','dots','stars','floral-small'].includes(id)?'ws-dot':['wave','zigzag','scallop'].includes(id)?'ws-wave':'';
  const sorted=items.slice().sort((x,y)=>(x.layerOrder||0)-(y.layerOrder||0));
- const shapes=sorted.map((x,i)=>{const c=colorOk(x.color)?x.color:'#647d69',geometry=garmentSvgGeometry(x,a),pat=patternFor(x.patternId),path=geometry.paths.map(d=>'<path data-garment="'+text(x.id,80).replace(/[^\w-]/g,'')+'" d="'+d+'" fill="'+c+'" stroke="#52625e" stroke-width="2.5" vector-effect="non-scaling-stroke"/>').join(''),pattern=pat?geometry.paths.map(d=>'<path d="'+d+'" fill="url(#'+pat+')" opacity=".8"/>').join(''):'';
+ const shapes=sorted.map((x,i)=>{const c=colorOk(x.color)?x.color:'#647d69',geometry=garmentSvgGeometry(x,a),pat=patternFor(x.patternId),path=geometry.paths.map(d=>'<path data-garment="'+text(x.id,80).replace(/[^\w-]/g,'')+'" data-region="main" d="'+d+'" fill="'+c+'" stroke="#52625e" stroke-width="2.5" vector-effect="non-scaling-stroke"/>').join(''),pattern=pat?geometry.paths.map(d=>'<path d="'+d+'" fill="url(#'+pat+')" opacity=".8"/>').join(''):'';
   if(!options.flatLay)return '<g>'+path+pattern+'</g>';
   const tx=[52,154,256,358][i%4],ty=i<4?126:306;return '<g transform="translate('+tx+' '+ty+') scale(.32) translate(-205 -230)">'+path+pattern+'</g>';
  }).join('');

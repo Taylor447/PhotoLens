@@ -9,7 +9,7 @@ This document describes the current PhotoLens source for the GĐ0 baseline, foll
 | Planner tabs and weather/background context | `features/planner.js` | Keep quick suggestions intact; pass only selected background, genre, and weather into wardrobe views. |
 | Catalog, local closet, editor, lookbook, interaction state | `features/wardrobe-studio.js` | Split view/controller concerns as the wardrobe modules are built. |
 | Garment normalization, IndexedDB/localStorage repository, fit arithmetic, color rules, score, SVG rendering, shared mannequin anchors | `core/wardrobe-engine.js` | Keep shared parameters in centimetres; fit arithmetic remains separate from physical fit claims. |
-| Procedural 3D mannequin and garment shapes | `features/wardrobe3d.js` | Still illustrative; share the 2D centimetre input, but do not claim 3D collision or garment penetration measurements. |
+| Procedural 3D mannequin and garment shapes | `features/wardrobe3d.js` | Shared centimetre input, skinned procedural geometry, local GLB attachment, and measured vertex penetration against the posed body mesh. |
 | Static procedural data and asset provenance | `data/wardrobe/*` | Keep catalog templates separate from user-owned closet records. |
 | Optional candidate-constrained AI | `worker/src/index.js` | The Worker receives filtered item IDs and non-body facts only; local rules remain the offline path. |
 | Shared visual tokens and planner styling | `css/tokens.css`, `css/planner.css`, `css/studio.css` | Reuse existing tokens; keep controls readable and touch targets large. |
@@ -69,7 +69,7 @@ Body measurements, clothing photos, and imported SVG/GLB files stay on device. A
 | GĐ1 | Searchable catalog, local closet, imports | Accurate counts separated into templates, verified real garments, and user imports; privacy and migration tests. |
 | GĐ2 | Shared mannequin data and measurement-driven 2D anchor geometry | Unit tests cover centimetre clamping, the single anchor transform, existing layer order, and all 60 template SVG bounds across four references (240 path-bound checks). This is not a 3D intersection test. |
 | GĐ3 | Deterministic rules, explanations, lookbook, weather/background context | Unit tests cover fit arithmetic, contrast, layer order, known large-pattern collisions, weather warnings, seed stability, anchor selection, and capsule categories. Rules cannot infer missing material or size data. |
-| GĐ4 | 3D renderer and numeric fit | Calibrated asset checks and actual intersection tests across each declared preset/template combination; no proxy reported as clipping. |
+| GĐ4 | Rigged 3D renderer, size selection, and numeric fit | Tests evaluate posed body triangles and garment vertices across presets, poses and LODs. Standalone asset tooling checks the GLB and SVG contracts, budgets and provenance. Device FPS remains a GĐ8 gate. |
 | GĐ5 | 2D/3D synchronization, Worker compose, planner linkage | Contract tests prove AI IDs are a subset of the filtered candidate IDs and no body data leaves the device. |
 | GĐ6 | Parameterized garment builder | Generated assets pass the same schema, bounds, provenance, and export checks. |
 | GĐ7 | Optional ML / photo try-on | Disabled by default; model and dataset license, execution location, and independent evaluation reported before enabling. |

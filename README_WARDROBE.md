@@ -7,7 +7,7 @@ The existing quick suggestions remain available beside a local catalog, Studio 2
 - 60 generated illustration templates across 12 categories (5 each).
 - 20 material labels and 40 repeatable pattern definitions.
 - 0 verified retail products and 0 sourced size tables.
-- 120 template asset references: one SVG renderer and one procedural 3D renderer per template. There are no sourced retail images or bundled GLB models. Three.js 0.187.0 and ONNX Runtime Web 1.23.2 load on demand under MIT licenses.
+- 120 template asset references: one SVG renderer and one procedural 3D renderer per template. There are no sourced retail images or bundled GLB models. Three.js 0.187.0 and ONNX Runtime Web 1.23.2 load on demand under MIT licenses. The shipped decoder provenance is in the manifest.
 
 Templates are not real garments. Unknown measurements and material properties remain empty; see `DATA_TODO.md`.
 
@@ -22,9 +22,10 @@ The optional cutout starts only after the user presses its button. The browser w
 
 The rule score is a transparent heuristic, not a visual-quality guarantee. Manual temperature, rain, and wind inputs are available when forecast data is absent. Lookbook supports local save, tags, rename, duplicate, compare, and SVG/PNG/PDF export.
 
-Studio 2D uses a shared centimetre mannequin record, four deliberately illustrative reference presets, bounded custom measurements, and parameterized SVG anchor geometry. Color, motif, pose, and flat-lay controls remain available. Reference dimensions are synthetic UI defaults, not population statistics or inferred body data. An automated test checks all 60 template paths against the 410×450 SVG viewBox for each of the four presets (240 combinations); this verifies 2D path bounds only, not garment-to-body penetration. Studio 3D uses low-poly procedural geometry with pointer/touch rotation, pinch/scroll zoom, arrow-key rotation, and camera height/distance sliders. If WebGL or the pinned Three.js module cannot load, the interface returns to 2D. Three.js loads on demand from the pinned CDN version recorded in the asset manifest.
+Studio 2D uses a shared centimetre mannequin record, four deliberately illustrative reference presets, bounded custom measurements, and parameterized SVG anchor geometry. Color, motif, pose, and flat-lay controls remain available. Reference dimensions are synthetic UI defaults, not population statistics or inferred body data. An automated test checks all 60 template paths against the 410×450 SVG viewBox for each of the four presets (240 combinations); this verifies 2D path bounds only, not garment-to-body penetration. Studio 3D renders a rigged procedural mannequin with eight measurement morphs. Rotation, pinch and keyboard controls, turntable, five lighting presets and optional camera settings from Góc chụp are available. The cloth worker updates skirts, dresses and capes on supported devices. Local GLB imports must follow the PhotoLens units and anchor contract. The browser falls back to Studio 2D if WebGL2 fails.
 
-Fit values are arithmetic differences between user-entered measurements and optional garment measurements. They do not predict drape, actual fit, body shape, or collisions. There is no trained model, photo segmentation, rigged GLB mannequin, morph-target fitting, cloth simulation, or triangle-level clipping test. Performance targets have not been benchmarked.
+Size recommendations and signed differences in centimetres require comparable measurements. The catalog contains no measured physical garments or sourced size tables. The user can supply those dimensions in the local closet. The 3D vertex penetration gate for generated assets is 1% or less against posed body geometry. Garment-to-garment contact, true cloth drape and real-world fit are outside this result. Browser FPS targets need device measurements.
+
 
 ## Development
 

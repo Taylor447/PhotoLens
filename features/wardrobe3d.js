@@ -1,52 +1,353 @@
-import {normalizeMannequin} from '../core/wardrobe-engine.js';
-const THREE_URL='https://unpkg.com/three@0.187.0/build/three.module.js';
-let threeModule;
-export function supportsWebGL(){try{const c=document.createElement('canvas');return Boolean(window.WebGLRenderingContext&&(c.getContext('webgl2')||c.getContext('webgl')));}catch{return false;}}
-async function getThree(){return threeModule||(threeModule=import(/* @vite-ignore */ THREE_URL));}
-const mat=(T,color,roughness=.9)=>new T.MeshStandardMaterial({color,roughness,metalness:0});
-function ball(T,parent,m,pos,size){const x=new T.Mesh(new T.SphereGeometry(1,14,10),m);x.position.set(...pos);x.scale.set(...size);x.castShadow=true;x.receiveShadow=true;parent.add(x);return x;}
-function clothes(T,group,items,scale){
- for(const x of [...items].sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0))){
-  const m=mat(T,x.color||'#647d69'),w=x.parameters?.width==='wide'?1.14:x.parameters?.width==='slim'?.9:1,l=x.parameters?.length==='long'?1.1:x.parameters?.length==='short'?.9:1;
-  if(['tops','outerwear','dresses'].includes(x.category)){ball(T,group,m,[0,148*scale,0],[x.category==='dresses'?33*scale:34*w*scale,41*l*scale,21*scale]);if(x.category!=='dresses'){ball(T,group,m,[-38*scale,148*scale,0],[11*scale,27*scale,12*scale]);ball(T,group,m,[38*scale,148*scale,0],[11*scale,27*scale,12*scale]);}}
-  if(x.category==='bottoms'){ball(T,group,m,[0,102*scale,0],[33*w*scale,24*scale,20*scale]);for(const side of [-1,1]){const leg=new T.Mesh(new T.CylinderGeometry(11*scale,9*scale,68*l*scale,10),m);leg.position.set(side*16*scale,54*scale,0);group.add(leg);}}
-  if(x.category==='skirts'||x.category==='dresses'){const skirt=new T.Mesh(new T.ConeGeometry(44*w*scale,76*l*scale,16),m);skirt.position.y=103*scale;skirt.scale.z=.56;group.add(skirt);}
-  if(x.category==='shoes'){ball(T,group,m,[-15*scale,9*scale,5],[15*scale,8*scale,24*scale]);ball(T,group,m,[15*scale,9*scale,5],[15*scale,8*scale,24*scale]);}
-  if(x.category==='hats'){const h=new T.Mesh(new T.ConeGeometry(28*scale,18*scale,16),m);h.position.y=208*scale;group.add(h);}
-  if(['bags','accessories'].includes(x.category)){const b=new T.Mesh(new T.BoxGeometry(24*scale,30*scale,12*scale),m);b.position.set(48*scale,112*scale,4);group.add(b);}
-  if(x.category==='scarves'){const b=new T.Mesh(new T.TorusGeometry(12*scale,3*scale,8,18),m);b.position.y=182*scale;b.rotation.x=Math.PI/2;group.add(b);}
-  if(x.category==='eyewear'){const b=new T.Mesh(new T.TorusGeometry(9*scale,1.8*scale,6,16),m);b.position.set(0,188*scale,18*scale);group.add(b);}
-  if(x.category==='jewelry'||x.category==='hair')ball(T,group,m,[0,x.category==='hair'?207*scale:172*scale,3],[10*scale,4*scale,8*scale]);
- }
+import {bodyRayExits, buildBodyMorphs, buildStudioGeometry, BODY_CLIP_LIMIT, MAX_PROCEDURAL_ITEMS, MAX_SCENE_TRIANGLES} from './wardrobe/studio3d/geometry.js';
+import {inspectGarmentGlb} from './wardrobe/studio3d/glb.js';
+import {createMaterialFactory} from './wardrobe/studio3d/materials.js';
+
+export const WARDROBE_LIGHTING={
+  golden:{label:'Giờ vàng',sky:'#ffd397',fill:'#89766d',key:'#ffab65',power:2.8,ambient:1.25,position:[-380,245,300]},
+  blue:{label:'Giờ xanh',sky:'#a2bfff',fill:'#4c507b',key:'#b9d9ff',power:1.45,ambient:1.15,position:[-280,320,350]},
+  overcast:{label:'Trời âm u',sky:'#eef3f6',fill:'#8faaa3',key:'#f4f7ff',power:1.6,ambient:2.15,position:[-240,520,330]},
+  indoor:{label:'Trong nhà',sky:'#ffe5c3',fill:'#807269',key:'#ffdbad',power:2.4,ambient:1.1,position:[-320,420,310]},
+  night:{label:'Đèn đường ban đêm',sky:'#7286ad',fill:'#303e55',key:'#ffc570',power:2.8,ambient:.65,position:[135,385,95]}
+};
+
+const hasColor=value=>/^#[0-9a-f]{6}$/i.test(value);
+const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+const deviceIsLimited=()=>Boolean(navigator.connection?.saveData||(navigator.deviceMemory??6)<=4||(navigator.hardwareConcurrency??6)<=4);
+
+export function supportsWebGL(){
+  try{
+    const context=document.createElement('canvas').getContext('webgl2');
+    context?.getExtension('WEBGL_lose_context')?.loseContext();
+    return Boolean(context);
+  }catch{return false;}
 }
-export async function mountWardrobe3D(host,{items=[],measurements={},mannequin=null,heightCm=170,flatLay=false,pose='standing',mannequinTone='#9ba5a2',distanceCm=450,cameraHeightCm=135}={}){
- if(!host||!supportsWebGL())throw new Error('WebGL unavailable');
- const dims=normalizeMannequin({...measurements,...(mannequin||{}),heightCm:mannequin?.heightCm??heightCm});heightCm=dims.heightCm;
- const T=await getThree();if(!supportsWebGL())throw new Error('WebGL unavailable');
- const width=Math.max(host.clientWidth||640,280),height=Math.max(host.clientHeight||480,340),scene=new T.Scene();scene.background=new T.Color('#edf3f0');
- const camera=new T.PerspectiveCamera(34,width/height,.1,10000);camera.position.set(0,135,450);
- const renderer=new T.WebGLRenderer({antialias:true,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(width,height);renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;host.replaceChildren(renderer.domElement);renderer.domElement.tabIndex=0;renderer.domElement.setAttribute('role','application');renderer.domElement.setAttribute('aria-label','Mô phỏng 3D tham khảo. Dùng phím mũi tên để xoay mannequin.');
- scene.add(new T.HemisphereLight('#ffffff','#71867e',2));
- const light=new T.DirectionalLight('#ffffff',2.2);light.position.set(-300,600,500);light.castShadow=true;scene.add(light);
- const floor=new T.Mesh(new T.PlaneGeometry(800,800),mat(T,'#dce7e2',1));floor.rotation.x=-Math.PI/2;floor.position.y=-3;floor.receiveShadow=true;scene.add(floor);
- const grid=new T.GridHelper(800,16,'#afc2bb','#ccd9d4');grid.position.y=-1.5;scene.add(grid);
- const person=new T.Group();if(pose==='lean')person.rotation.z=-.08;scene.add(person);
- if(!flatLay){
-  const grey=mat(T,mannequinTone,.95),scale=Math.max(.65,Math.min(1.4,(Number(heightCm)||170)/215));
-  const chest=dims.chest,waist=dims.waist,hips=dims.hips,shoulders=dims.shoulders;
-  ball(T,person,grey,[0,198*scale,0],[13*scale,17*scale,13*scale]);ball(T,person,grey,[0,148*scale,0],[Math.max(27,shoulders*.8)*scale,40*scale,19*scale]);ball(T,person,grey,[0,103*scale,0],[Math.max(25,waist*.52)*scale,25*scale,18*scale]);ball(T,person,grey,[0,90*scale,0],[Math.max(27,hips*.48)*scale,18*scale,18*scale]);
-  for(const side of [-1,1]){ball(T,person,grey,[side*36*scale,150*scale,0],[9*scale,29*scale,10*scale]);ball(T,person,grey,[side*39*scale,118*scale,1],[7.5*scale,28*scale,8*scale]);const thigh=new T.Mesh(new T.CylinderGeometry(10.5*scale,9.5*scale,44*scale,10),grey);thigh.position.set(side*16*scale,(pose==='sitting'?80:61)*scale,0);thigh.rotation.z=pose==='sitting'?side*.8:pose==='step'?side*.15:0;person.add(thigh);const calf=new T.Mesh(new T.CylinderGeometry(9*scale,7*scale,42*scale,10),grey);calf.position.set(side*16*scale,22*scale,0);calf.rotation.z=pose==='step'?-side*.14:0;person.add(calf);}
-  clothes(T,person,items,scale);
- }else items.slice(0,10).forEach((x,i)=>{const b=new T.Mesh(new T.BoxGeometry(44,62,4),mat(T,x.color||'#647d69'));b.position.set((i%5-2)*72,Math.floor(i/5)*82,0);person.add(b);});
- let yaw=0,pitch=10,radius=Math.max(280,Math.min(700,Number(distanceCm)||450)),drag=null,pointers=new Map(),pinch=0,raf=0;
- const update=()=>{camera.position.set(Math.sin(yaw)*radius,(Number(cameraHeightCm)||135)+pitch,radius*Math.cos(yaw));camera.lookAt(0,105,0);};update();
- const resize=()=>{const w=Math.max(host.clientWidth||width,280),h=Math.max(host.clientHeight||height,340);renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();};const observer=new ResizeObserver(resize);observer.observe(host);
- const down=e=>{pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size===1)drag={x:e.clientX,y:e.clientY,yaw,pitch};else if(pointers.size===2){const a=[...pointers.values()];pinch=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);}renderer.domElement.setPointerCapture?.(e.pointerId);};
- const move=e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size===1&&drag){yaw=drag.yaw+(e.clientX-drag.x)*.008;pitch=Math.max(-65,Math.min(60,drag.pitch-(e.clientY-drag.y)*.6));}else if(pointers.size===2){const a=[...pointers.values()],d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);radius=Math.max(280,Math.min(700,radius+(pinch-d)*.3));pinch=d;}update();};
- const up=e=>{pointers.delete(e.pointerId);if(pointers.size<2)pinch=0;drag=null;};
- const key=e=>{if(e.key==='ArrowLeft')yaw-=.12;else if(e.key==='ArrowRight')yaw+=.12;else if(e.key==='ArrowUp')pitch=Math.min(60,pitch+12);else if(e.key==='ArrowDown')pitch=Math.max(-65,pitch-12);else return;e.preventDefault();update();};
- const wheel=e=>{e.preventDefault();radius=Math.max(280,Math.min(700,radius+e.deltaY*.3));update();};
- for(const [n,fn] of [['pointerdown',down],['pointermove',move],['pointerup',up],['pointercancel',up],['keydown',key]])renderer.domElement.addEventListener(n,fn);renderer.domElement.addEventListener('wheel',wheel,{passive:false});
- const draw=()=>{raf=requestAnimationFrame(draw);renderer.render(scene,camera);};draw();
- return()=>{cancelAnimationFrame(raf);observer.disconnect();for(const [n,fn] of [['pointerdown',down],['pointermove',move],['pointerup',up],['pointercancel',up],['keydown',key]])renderer.domElement.removeEventListener(n,fn);renderer.domElement.removeEventListener('wheel',wheel);scene.traverse(x=>{x.geometry?.dispose?.();if(Array.isArray(x.material))x.material.forEach(m=>m.dispose?.());else x.material?.dispose?.();});renderer.dispose();renderer.domElement.remove();};
+
+export function lensVerticalFov(focalLengthMm,aspect){
+  const focal=clamp(Number(focalLengthMm)||50,16,135);
+  const filmHeightMm=aspect>=1?36/aspect:36;
+  return 2*Math.atan(filmHeightMm/(2*focal))*180/Math.PI;
+}
+
+function disposeNode(root,sharedMaterials=false){
+  const seen=new Set();
+  const once=value=>{if(value&&!seen.has(value)){seen.add(value);value.dispose?.();}};
+  root.traverse(object=>{
+    once(object.geometry);
+    if(!sharedMaterials){
+      for(const material of [object.material].flat().filter(Boolean)){
+        for(const value of Object.values(material))if(value?.isTexture){value.source?.data?.close?.();once(value);}
+        once(material);
+      }
+    }
+    if(object.isSkinnedMesh)once(object.skeleton);
+  });
+}
+
+function buildRig(T, root, layout){
+  const bones=new Map();
+  for(const descriptor of layout.bones){
+    const bone=new T.Bone(),parent=bones.get(descriptor.parent);
+    bone.name=descriptor.name;
+    bone.position.set(...descriptor.position.map((v,i)=>v-(parent?.descriptor.position[i]||0)));
+    (parent?.bone||root).add(bone);
+    bones.set(bone.name,{bone,descriptor});
+  }
+  root.updateMatrixWorld(true);
+  const skeleton=new T.Skeleton([...bones.values()].map(row=>row.bone));
+  return {bones,skeleton,pose(){
+    for(const {bone,descriptor} of bones.values())bone.rotation.set(descriptor.rx,0,descriptor.rz,'ZYX');
+    root.updateMatrixWorld(true);
+  }};
+}
+
+function skinnedPart(T,root,rig,part,material,targets=[]){
+  const geometry=new T.BufferGeometry();
+  geometry.setAttribute('position',new T.Float32BufferAttribute(part.points.flat(),3));
+  geometry.setAttribute('uv',new T.Float32BufferAttribute(part.uv,2));
+  geometry.setIndex(part.indices);
+  const joint=rig.skeleton.bones.findIndex(x=>x.name===part.bone);
+  const skinIndices=new Uint16Array(part.points.length*4), skinWeights=new Float32Array(part.points.length*4);
+  for(let i=0;i<part.points.length;i++){skinIndices[i*4]=joint;skinWeights[i*4]=1;}
+  geometry.setAttribute('skinIndex',new T.Uint16BufferAttribute(skinIndices,4));
+  geometry.setAttribute('skinWeight',new T.Float32BufferAttribute(skinWeights,4));
+  geometry.computeVertexNormals();
+  if(targets.length){
+    geometry.morphTargetsRelative=true;
+    geometry.morphAttributes.position=targets.map(({name,points})=>{
+      const attribute=new T.Float32BufferAttribute(points.flat(),3);
+      attribute.name=name;
+      return attribute;
+    });
+    const fitted=geometry.clone();
+    const positions=fitted.getAttribute('position');
+    for(let i=0;i<positions.count;i++)positions.setXYZ(i,...targets.reduce((p,target)=>p.map((v,a)=>v+target.points[i][a]),part.points[i]));
+    fitted.computeVertexNormals();
+    const restNormal=geometry.getAttribute('normal').array, fittedNormal=fitted.getAttribute('normal').array;
+    geometry.morphAttributes.normal=targets.map((target,index)=>{
+      const values=index===targets.length-1?Float32Array.from(restNormal,(v,i)=>fittedNormal[i]-v):new Float32Array(restNormal.length);
+      const attribute=new T.Float32BufferAttribute(values,3);attribute.name=target.name;return attribute;
+    });
+    fitted.dispose();
+  }
+  const mesh=new T.SkinnedMesh(geometry,material);
+  mesh.frustumCulled=false;
+  mesh.castShadow=mesh.receiveShadow=true;
+  if(targets.length)mesh.morphTargetInfluences.fill(1);
+  root.add(mesh);
+  mesh.bind(rig.skeleton,root.matrixWorld);
+  return mesh;
+}
+
+function arrangeFlatLay(T,root,garments,materials){
+  garments.forEach(({item,parts},i)=>{
+    const swatch=new T.Group();
+    for(const part of parts){
+      const geometry=new T.BufferGeometry();
+      geometry.setAttribute('position',new T.Float32BufferAttribute(part.points.flat(),3));
+      geometry.setAttribute('uv',new T.Float32BufferAttribute(part.uv,2));
+      geometry.setIndex(part.indices);
+      geometry.computeVertexNormals();
+      swatch.add(new T.Mesh(geometry,materials.material(item)));
+    }
+    const bounds=new T.Box3().setFromObject(swatch), center=new T.Vector3(), size=new T.Vector3();
+    if(bounds.isEmpty())return;
+    bounds.getCenter(center);bounds.getSize(size);
+    const scale=43/Math.max(size.x,size.y,1);
+    swatch.scale.setScalar(scale);
+    swatch.position.set((i%4-1.5)*56-center.x*scale,153-Math.floor(i/4)*54-center.y*scale,-center.z*scale);
+    root.add(swatch);
+  });
+}
+
+async function mountImportedLayers({T,renderer,rig,root,model,source,signal,onMessage,invalidate,addCleanup}){
+  const count=model.garments.filter(({item})=>item.vectorAssetId).length;
+  if(!count||!source)return;
+  const {createLocalGlbLoader}=await import('./wardrobe/studio3d/load-glb.js');
+  if(signal.aborted)return;
+  const parser=createLocalGlbLoader(renderer,signal);
+  let remaining=MAX_SCENE_TRIANGLES-model.triangles-2;
+  const failures=[];
+  for(const {item,meshes} of model.garments){
+    if(signal.aborted)break;
+    if(!item.vectorAssetId)continue;
+    let assetScene;
+    try{
+      const blob=await source(item.vectorAssetId);
+      if(!blob)throw new Error('Chưa tìm thấy tệp cục bộ.');
+      const bytes=await blob.arrayBuffer();
+      if(signal.aborted)break;
+      const inspected=inspectGarmentGlb(bytes,{triangleBudget:remaining});
+      const gltf=await parser.parse(bytes);
+      assetScene=gltf.scene;
+      if(signal.aborted){disposeNode(assetScene);return;}
+      const {binding,anchor}=inspected.contract;
+      // glTF uses metres. A rigid piece is authored around the named bone.
+      assetScene.scale.setScalar(100);
+      if(binding==='anchor')rig.bones.get(anchor).bone.add(assetScene);
+      else{
+        root.add(assetScene);
+        assetScene.traverse(node=>{
+          const descriptor=rig.bones.get(node.name)?.descriptor;
+          if(node.isBone&&descriptor)node.quaternion.premultiply(new T.Quaternion().setFromEuler(new T.Euler(descriptor.rx,0,descriptor.rz,'ZYX')));
+        });
+      }
+      root.updateMatrixWorld(true);
+      let tested=0,inside=0;
+      const point=new T.Vector3();
+      assetScene.traverse(mesh=>{
+        if(!mesh.isMesh)return;
+        if(mesh.isSkinnedMesh)mesh.skeleton.update();
+        mesh.castShadow=mesh.receiveShadow=true;
+        for(const material of [mesh.material].flat()){
+          if(material?.name!=='main'||!material.color)continue;
+          if(hasColor(item.color))material.color.set(item.color);
+          // Keep baked detail when an authored albedo or normal map is present.
+        }
+        const positions=mesh.geometry.getAttribute('position');
+        for(let i=0;i<positions.count;i++){
+          mesh.getVertexPosition(i,point).applyMatrix4(mesh.matrixWorld);
+          if(bodyRayExits(point.toArray(),model.colliders).length)inside++;
+          tested++;
+        }
+      });
+      if(!tested||inside/tested>BODY_CLIP_LIMIT)throw new Error('GLB xuyên thân quá 1% số đỉnh ở tư thế hiện tại.');
+      remaining-=inspected.triangles;
+      for(const mesh of meshes)mesh.visible=false;
+      addCleanup(()=>{assetScene.removeFromParent();disposeNode(assetScene);});
+    }catch(error){
+      assetScene?.removeFromParent();
+      if(assetScene)disposeNode(assetScene);
+      failures.push(item.name+': '+(error?.message||'Không tải được GLB.'));
+    }
+  }
+  if(!signal.aborted){
+    if(failures.length)onMessage(failures.join(' ')+' Studio hiển thị mẫu hình học thay thế.');
+    invalidate();
+  }
+}
+
+function startCloth({model,meshes,windKmh,signal,invalidate,lowPower}){
+  if(lowPower||typeof Worker==='undefined'||!meshes.length)return ()=>{};
+  const worker=new Worker(new URL('../workers/wardrobe-cloth.worker.js',import.meta.url),{type:'module'});
+  let lastFrames=null,frameHandle=0;
+  const stop=()=>{worker.terminate();cancelAnimationFrame(frameHandle);};
+  signal.addEventListener('abort',stop,{once:true});
+  worker.onerror=()=>stop();
+  function applyFrames(){
+    frameHandle=0;
+    if(signal.aborted||document.hidden)return;
+    for(const {key,positions} of lastFrames){
+      const {part,mesh}=meshes[key], transform=model.transforms.get(part.bone);
+      if(!mesh.visible)continue;
+      let safe=true;
+      for(let i=0;i<positions.length&&safe;i+=3){
+        if(bodyRayExits(transform.toWorld([positions[i],positions[i+1],positions[i+2]]),model.colliders).length)safe=false;
+      }
+      if(safe){
+        mesh.geometry.getAttribute('position').array.set(positions);
+        mesh.geometry.getAttribute('position').needsUpdate=true;
+        mesh.geometry.computeVertexNormals();
+      }
+    }
+    invalidate();
+  }
+  worker.onmessage=({data})=>{
+    lastFrames=data;
+    if(!frameHandle)frameHandle=requestAnimationFrame(applyFrames);
+  };
+  worker.postMessage({type:'start',windKmh,meshes:meshes.map(({part},key)=>({key,positions:part.points.flat(),rows:part.rows,stride:part.stride}))});
+  return stop;
+}
+
+export async function mountWardrobe3D(host,{
+  items=[],mannequin={},flatLay=false,pose='standing',mannequinTone='#9ba5a2',distanceCm=450,cameraHeightCm=135,
+  focalLengthMm=50,sceneLight='overcast',background='#edf3f0',turntable=false,cloth=true,windKmh=null,source=null,
+  onMessage=()=>{},onFallback=()=>{},externalSignal=null
+}={}){
+  if(!host||!supportsWebGL())throw new Error('WebGL2 không khả dụng.');
+  const T=await import('three');
+  if(externalSignal?.aborted||!host.isConnected)return ()=>{};
+  const controller=new AbortController(),{signal}=controller, cleanups=[];
+  const dispose=()=>{
+    if(signal.aborted)return;
+    controller.abort();
+    for(const clean of cleanups.reverse())clean();
+  };
+  externalSignal?.addEventListener('abort',dispose,{once:true,signal});
+  try{
+    const lowPower=deviceIsLimited(), model=buildStudioGeometry(mannequin,items,{pose,radial:lowPower?12:20});
+    if(items.length>MAX_PROCEDURAL_ITEMS)onMessage('Studio 3D đang dùng '+MAX_PROCEDURAL_ITEMS+' món đầu của bộ phối.');
+    const scene=new T.Scene();scene.background=new T.Color(hasColor(background)?background:'#edf3f0');
+    const camera=new T.PerspectiveCamera(35,1,.5,3000);
+    const renderer=new T.WebGLRenderer({antialias:!lowPower,powerPreference:lowPower?'low-power':'default',alpha:false});
+    renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio||1,lowPower?1:1.5));
+    renderer.shadowMap.enabled=!lowPower;
+    renderer.toneMapping=T.ACESFilmicToneMapping;
+    const canvas=renderer.domElement;
+    canvas.tabIndex=0;canvas.setAttribute('role','img');
+    canvas.setAttribute('aria-label','Ma-nơ-canh 3D. Phím mũi tên xoay, dấu cộng và dấu trừ chỉnh zoom.');
+    host.replaceChildren(canvas);
+    cleanups.push(()=>{renderer.dispose();renderer.forceContextLoss();canvas.remove();});
+    const materials=createMaterialFactory(T);
+    cleanups.push(()=>{disposeNode(scene,true);materials.dispose();});
+
+    const lighting=WARDROBE_LIGHTING[sceneLight]||WARDROBE_LIGHTING.overcast;
+    scene.add(new T.HemisphereLight(lighting.sky,lighting.fill,lighting.ambient));
+    const keyLight=new T.DirectionalLight(lighting.key,lighting.power);
+    keyLight.position.set(...lighting.position);keyLight.castShadow=!lowPower;
+    keyLight.shadow.mapSize.set(1024,1024);
+    keyLight.shadow.camera.left=-170;keyLight.shadow.camera.right=170;
+    keyLight.shadow.camera.top=185;keyLight.shadow.camera.bottom=-155;
+    keyLight.shadow.camera.far=1300;keyLight.shadow.normalBias=.36;
+    if(!flatLay){keyLight.target.position.y=55;scene.add(keyLight.target);}
+    scene.add(keyLight);
+    const floor=new T.Mesh(new T.PlaneGeometry(700,700),materials.material({color:'#dce7e2'},false));
+    floor.rotation.x=-Math.PI/2;floor.position.y=-2;floor.receiveShadow=true;scene.add(floor);
+
+    const root=new T.Group();scene.add(root);
+    const clothMeshes=[];
+    let rig=null;
+    if(flatLay)arrangeFlatLay(T,root,model.garments,materials);
+    else{
+      rig=buildRig(T,root,model.layout);
+      const morphs=buildBodyMorphs(mannequin,model.radial),bodyMaterial=materials.material({color:mannequinTone},false);
+      morphs.base.forEach((part,index)=>skinnedPart(T,root,rig,part,bodyMaterial,morphs.targets.map(target=>({name:target.name,points:target.parts[index]}))));
+      for(const garment of model.garments){
+        const material=materials.material(garment.item);
+        garment.meshes=garment.parts.map(part=>{
+          const mesh=skinnedPart(T,root,rig,part,material);
+          if(part.cloth)clothMeshes.push({part,mesh});
+          return mesh;
+        });
+      }
+      rig.pose();
+    }
+
+    let yaw=0,pitch=0,distance=clamp(Number(distanceCm)||450,140,1200), frame=0, previousTime=0, pinch=0;
+    const reduceMotion=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const pointers=new Map();
+    const aim=flatLay?Math.max(35,154-(Math.ceil(model.garments.length/4)-1)*24):model.layout.m.heightCm*(pose==='sitting'?.39:.5);
+    function draw(time){
+      frame=0;
+      if(signal.aborted||document.hidden)return;
+      if(turntable&&!reduceMotion&&!pointers.size&&previousTime)yaw+=Math.min(.032,(time-previousTime)*.00048);
+      previousTime=time;
+      const baseHeight=Number(cameraHeightCm)||135;
+      camera.position.set(Math.sin(yaw)*distance,baseHeight+pitch,Math.cos(yaw)*distance);
+      camera.lookAt(0,aim,0);
+      renderer.render(scene,camera);
+      if(turntable&&!reduceMotion)invalidate();
+    }
+    function invalidate(){if(!frame&&!signal.aborted)frame=requestAnimationFrame(draw);}
+    function resize(){
+      const width=Math.max(1,host.clientWidth),height=Math.max(1,host.clientHeight);
+      renderer.setSize(width,height,false);
+      camera.aspect=width/height;camera.fov=lensVerticalFov(focalLengthMm,camera.aspect);camera.updateProjectionMatrix();
+      invalidate();
+    }
+    const observer=new ResizeObserver(resize);observer.observe(host);
+    cleanups.push(()=>{cancelAnimationFrame(frame);observer.disconnect();});
+    const listen=(event,fn,opts)=>canvas.addEventListener(event,fn,{...opts,signal});
+    listen('pointerdown',event=>{
+      canvas.setPointerCapture?.(event.pointerId);
+      pointers.set(event.pointerId,[event.clientX,event.clientY]);pinch=0;
+    });
+    listen('pointermove',event=>{
+      const point=pointers.get(event.pointerId);
+      if(!point)return;
+      pointers.set(event.pointerId,[event.clientX,event.clientY]);
+      if(pointers.size===1){yaw+=(event.clientX-point[0])*.009;pitch=clamp(pitch-(event.clientY-point[1])*.65,-110,95);}
+      else if(pointers.size===2){
+        const [a,b]=pointers.values(),gap=Math.hypot(a[0]-b[0],a[1]-b[1]);
+        if(pinch)distance=clamp(distance-(gap-pinch)*1.35,140,1200);
+        pinch=gap;
+      }
+      invalidate();
+    });
+    for(const kind of ['pointerup','pointercancel','lostpointercapture'])listen(kind,event=>{pointers.delete(event.pointerId);pinch=0;});
+    listen('wheel',event=>{event.preventDefault();distance=clamp(distance+event.deltaY*.35,140,1200);invalidate();},{passive:false});
+    listen('keydown',event=>{
+      if(event.key==='ArrowLeft')yaw-=.14;
+      else if(event.key==='ArrowRight')yaw+=.14;
+      else if(event.key==='ArrowUp')pitch=clamp(pitch+12,-110,95);
+      else if(event.key==='ArrowDown')pitch=clamp(pitch-12,-110,95);
+      else if(['+','='].includes(event.key))distance=clamp(distance-20,140,1200);
+      else if(event.key==='-')distance=clamp(distance+20,140,1200);
+      else return;
+      event.preventDefault();invalidate();
+    });
+    listen('webglcontextlost',event=>{event.preventDefault();dispose();onFallback('Mất kết nối WebGL2. Đã chuyển sang Studio 2D.');});
+    document.addEventListener('visibilitychange',()=>{previousTime=0;invalidate();},{signal});
+    resize();
+    if(cloth&&rig&&clothMeshes.length){
+      if(lowPower||reduceMotion)onMessage('Mô phỏng vải đang tắt theo cấu hình thiết bị hoặc giảm chuyển động.');
+      else startCloth({model,meshes:clothMeshes,windKmh,signal,invalidate,lowPower});
+    }
+    if(rig)void mountImportedLayers({T,renderer,rig,root,model,source,signal,onMessage,invalidate,addCleanup:fn=>cleanups.push(fn)})
+      .catch(()=>{if(!signal.aborted)onMessage('Không tải được bộ đọc GLB. Studio hiển thị mẫu hình học thay thế.');});
+    return dispose;
+  }catch(error){
+    dispose();
+    throw error;
+  }
 }
