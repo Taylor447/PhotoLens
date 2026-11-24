@@ -2,7 +2,7 @@
 
 ## Repository snapshot
 
-This document describes the PhotoLens source at the start of the wardrobe work. The existing app is a Vite app made of JavaScript modules, with the shooting planner as its host.
+This document describes the current PhotoLens source for the GĐ0 baseline, following the initial catalog and studio implementation. The app is a Vite app made of JavaScript modules, with the shooting planner as its host.
 
 | Concern | Current implementation | Boundary to preserve |
 |---|---|---|
@@ -49,11 +49,13 @@ The 2D and 3D views must consume the same optional, user-entered measurement obj
 
 Unknown measurements are `null`; do not fill defaults into the user's measurement record. A neutral mannequin render may use a documented drawing proportion, but it must be labelled an illustration, not a measurement.
 
+The existing `core/wardrobe-engine.js` currently accepts the legacy keys `shoulders`, `chest`, `waist`, `hips`, `sleeve`, `inseam`, and `neck`. Migrate saved records at the repository boundary before using the canonical `*Cm` contract; do not silently reinterpret the legacy values.
+
 ### Fit and collision language
 
-Fit arithmetic is only a difference between matching garment and body dimensions in centimetres. A circumference can only be compared with its matching circumference; shoulder width and limb lengths are compared only with the same kind of length. Missing, mismatched, or unverified values produce “Chưa có dữ liệu”. The result is not a prediction of drape or comfort.
+Body measurements and garment measurements are separate records even when their dimensions can be compared. Garment `measurementsCm` fields describe the garment itself: `shoulderWidthCm`, chest/waist/hip and neck circumferences, `sleeveLengthCm`, `inseamLengthCm`, and `garmentLengthCm`. The body mannequin record uses the fields above. Compare only compatible landmarks and dimensions: shoulder width to shoulder width; each circumference to the same circumference; arm length to sleeve length only when both endpoints are documented; and leg length to inseam only when the chosen endpoints are documented. Height alone does not imply a garment length. Report a signed centimetre difference with its definitions; do not call it fit or ease when the landmarks differ. Missing, mismatched, or unverified values produce “Chưa có dữ liệu”. No arithmetic result predicts drape or comfort.
 
-A clipping percentage may be reported only after testing mesh intersections against the mannequin geometry, with the tested preset set, garment set, and threshold recorded. A shell margin, coverage radius, image-space overlap, or heuristic score is a proxy and must not be labelled “collision”, “clipping”, or a measured body dimension. The supplied screenshots contain collision/coverage-style labels; the current renderer has no triangle-intersection implementation, so those labels are not evidence of measured clipping.
+A clipping percentage may be reported only after testing mesh intersections against the mannequin geometry, with the tested preset set, garment set, and threshold recorded. A shell margin, coverage radius, image-space overlap, or heuristic score is a proxy and must not be labelled “collision”, “clipping”, or a measured body dimension. Collision/coverage-style labels are not evidence of measured clipping unless backed by a calibrated geometry test.
 
 ## Privacy boundary
 
