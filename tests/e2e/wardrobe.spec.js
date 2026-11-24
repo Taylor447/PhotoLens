@@ -4,6 +4,9 @@ const categoryLabels={tops:'Áo',bottoms:'Quần',skirts:'Váy',dresses:'Váy / 
 
 async function openStudio(page,section='studio2d'){
  await page.goto('./');
+ await expect(page.getByRole('heading',{name:'Chào mừng đến với PhotoLens'})).toBeVisible();
+ await page.getByRole('button',{name:'Bắt đầu'}).click();
+ await expect(page.locator('.modal-backdrop')).toHaveCount(0);
  await page.locator('#photoPlannerButton').click();
  await expect(page.getByRole('dialog')).toBeVisible();
  await page.locator('[data-tab="outfit"]').click();
