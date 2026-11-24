@@ -96,3 +96,10 @@ test('closet copies preserve generated thumbnail mapping from their source templ
  assert.deepEqual(normalizeGarment({id:'closet-tpl-tops-1',name:'Áo mẫu',category:'tops',assets:{thumbnail:ref}}).assets,{thumbnail:ref});
  assert.equal(normalizeGarment({id:'bad',name:'Món lỗi',category:'tops',assets:{thumbnail:{...ref,path:'../private.svg'}}}).assets,undefined);
 });
+
+test('text and large-text color pairs meet or fail WCAG AA at the explicit thresholds',()=>{
+ assert.ok(contrastRatio('#000000','#ffffff')>=4.5);
+ assert.ok(contrastRatio('#767676','#ffffff')>=4.5);
+ assert.ok(contrastRatio('#949494','#ffffff')>=3);
+ assert.ok(contrastRatio('#777777','#ffffff')<4.5);
+});

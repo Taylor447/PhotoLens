@@ -10,3 +10,5 @@ worker/.dev.vars
 worker/.wrangler/
 *.bak
 *.log
+playwright-report/
+test-results/
