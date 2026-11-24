@@ -1,4 +1,4 @@
-import {bodyRayExits, buildBodyMorphs, buildStudioGeometry, findLayerCrossings, BODY_CLIP_LIMIT, MAX_PROCEDURAL_ITEMS, MAX_SCENE_TRIANGLES} from './wardrobe/studio3d/geometry.js';
+import {bodyRayExits, buildBodyMorphs, buildStudioGeometry, findLayerCrossings, poseSurfacePoint, BODY_CLIP_LIMIT, MAX_PROCEDURAL_ITEMS, MAX_SCENE_TRIANGLES} from './wardrobe/studio3d/geometry.js';
 import {inspectGarmentGlb} from './wardrobe/studio3d/glb.js';
 import {createMaterialFactory} from './wardrobe/studio3d/materials.js';
 
@@ -202,26 +202,42 @@ function startCloth({model,meshes,windKmh,signal,invalidate,lowPower}){
   function applyFrames(){
     frameHandle=0;
     if(signal.aborted||document.hidden)return;
-    for(const {key,positions} of lastFrames){
-      const {part,mesh}=meshes[key], transform=model.transforms.get(part.bone);
-      if(!mesh.visible)continue;
-      let safe=true;
-      for(let i=0;i<positions.length&&safe;i+=3){
-        if(bodyRayExits(transform.toWorld([positions[i],positions[i+1],positions[i+2]]),model.colliders).length)safe=false;
-      }
-      if(safe){
-        mesh.geometry.getAttribute('position').array.set(positions);
-        mesh.geometry.getAttribute('position').needsUpdate=true;
-        mesh.geometry.computeVertexNormals();
-      }
+    let changed=false;
+    for(const {key,positions,revision} of lastFrames){
+      const layer=meshes[key],{mesh}=layer;
+      if(!mesh.visible||revision===(layer.revision??0))continue;
+      layer.revision=revision;
+      const attribute=mesh.geometry.getAttribute('position');
+      attribute.array.set(positions);
+      attribute.needsUpdate=true;
+      mesh.geometry.computeVertexNormals();
+      changed=true;
     }
-    invalidate();
+    if(changed)invalidate();
   }
   worker.onmessage=({data})=>{
     lastFrames=data;
     if(!frameHandle)frameHandle=requestAnimationFrame(applyFrames);
   };
-  worker.postMessage({type:'start',windKmh,meshes:meshes.map(({part},key)=>({key,positions:part.points.flat(),rows:part.rows,stride:part.stride}))});
+  const posed=part=>({
+    indices:part.indices,
+    points:part.points.map((_,index)=>poseSurfacePoint(part,index,model.transforms))
+  });
+  const moving=new Set(meshes.map(({part})=>part));
+  const owners=new Map();
+  const garments=model.garments.flatMap(({parts},garment)=>parts.flatMap(part=>{
+    if(!moving.has(part))return [{...posed(part),garment}];
+    owners.set(part,garment);
+    return [];
+  }));
+  worker.postMessage({
+    type:'start',windKmh,body:model.body.map(posed),garments,
+    meshes:meshes.map(({part},key)=>{
+      const {toWorld,axes}=model.transforms.get(part.bone);
+      return {key,garment:owners.get(part),positions:part.points.flat(),indices:part.indices,
+        rows:part.rows,stride:part.stride,transform:{origin:toWorld([0,0,0]),axes}};
+    })
+  });
   return stop;
 }
 

@@ -12,6 +12,8 @@ import {
 import {inspectGarmentGlb} from '../features/wardrobe/studio3d/glb.js';
 import {makeProceduralGarmentGlb,packGlb} from '../features/wardrobe/studio3d/export-glb.js';
 import {lensVerticalFov} from '../features/wardrobe3d.js';
+import {createClothCollisionGuard} from '../features/wardrobe/studio3d/cloth-collisions.js';
+import {countSurfaceCrossings,prepareSurface} from '../features/wardrobe/studio3d/surface-crossings.js';
 
 const {templates}=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url)));
 
@@ -232,14 +234,16 @@ test('the layer checker finds crossing faces with exterior vertices',()=>{
  assert.equal(findLayerCrossings(layers,transforms)[0]?.crossings,1);
 });
 
-test('eight layered outfits clear their seams across every mannequin preset, pose and LOD',t=>{
+test('layered outfits clear their seams across every mannequin preset, pose and LOD',t=>{
  const outfits=[
   ['tops-1','outerwear-1'],['tops-2','bottoms-1','outerwear-2'],
   ['tops-4','outerwear-4'],['tops-1','skirts-2'],
   ['tops-3','bottoms-4'],['bottoms-1','skirts-4'],
-  ['dresses-2','outerwear-1'],['tops-2','tops-1']
+  ['dresses-2','outerwear-1'],['tops-2','tops-1'],
+  ['tops-5','outerwear-3'],['tops-1','skirts-3','outerwear-3'],
+  ['dresses-4','outerwear-2'],['dresses-5','outerwear-5']
  ].map(ids=>ids.map(id=>templates.find(item=>item.id==='tpl-'+id)));
- let layeredCases=0,adjustedCases=0,maxTriangles=0,penetratingVertices=0,testedVertices=0;
+ let layeredCases=0,capeCases=0,adjustedCases=0,maxTriangles=0,penetratingVertices=0,testedVertices=0;
  for(const preset of MANNEQUIN_PRESETS)for(const pose of POSE_NAMES)for(const radial of [12,20]){
   const options={pose,radial};
   const armAngle=layout=>layout.bones.find(({name})=>name==='UpperArm_R').rz;
@@ -250,6 +254,12 @@ test('eight layered outfits clear their seams across every mannequin preset, pos
    assert.deepEqual(findLayerCrossings(garments,transforms,{firstPerPair:false}),[],context);
    const clip=measurePenetration(garments.flatMap(({parts})=>parts),transforms,colliders);
    assert.ok(clip.ratio<=BODY_CLIP_LIMIT,context);
+   const cape=garments.find(({item})=>item.id==='tpl-outerwear-3')?.parts[0];
+   if(cape){
+    const posed=part=>prepareSurface(part.points.map((_,index)=>poseSurfacePoint(part,index,transforms)),part.indices);
+    assert.equal(countSurfaceCrossings(posed(cape),posed(body[0]),1),0,context);
+    capeCases++;
+   }
    const adjustment=armAngle(layout)-reference;
    assert.ok(adjustment>=0&&adjustment<=.271,context);
    if(adjustment){
@@ -265,9 +275,30 @@ test('eight layered outfits clear their seams across every mannequin preset, pos
    layeredCases++;
   }
  }
- assert.equal(layeredCases,256);
+ assert.equal(layeredCases,384);
+ assert.equal(capeCases,64);
  assert.ok(adjustedCases>0&&adjustedCases<layeredCases);
- t.diagnostic(JSON.stringify({layeredCases,adjustedCases,maxTriangles,penetratingVertices,testedVertices}));
+ t.diagnostic(JSON.stringify({layeredCases,capeCases,adjustedCases,maxTriangles,penetratingVertices,testedVertices}));
+});
+
+test('cloth collision checks reject crossing surfaces against fixed and accepted moving layers',()=>{
+ const transform={origin:[0,0,0],axes:[[1,0,0],[0,1,0],[0,0,1]]};
+ const indices=[0,1,2];
+ const horizontal=[[-1,.5,-1],[1,.5,-1],[0,.5,1]];
+ const vertical=[[0,0,-.5],[0,1,-.5],[0,.5,.5]];
+ const move=(points,axis,by)=>points.map(point=>point.map((value,i)=>value+(axis===i?by:0)));
+ const draft=(garment,points)=>({garment,indices,positions:Float32Array.from(points.flat()),transform});
+ const first=draft(0,move(horizontal,1,2));
+ const second=draft(1,move(vertical,0,2));
+ const accepts=createClothCollisionGuard({body:[],garments:[],cloth:[first,second]});
+ assert.equal(accepts(0,Float32Array.from(horizontal.flat())),true);
+ assert.equal(accepts(1,Float32Array.from(vertical.flat())),false);
+ assert.equal(accepts(0,first.positions),true);
+ assert.equal(accepts(1,Float32Array.from(vertical.flat())),true);
+ const fixed=createClothCollisionGuard({
+  body:[],garments:[{garment:0,points:horizontal,indices}],cloth:[second]
+ });
+ assert.equal(fixed(0,Float32Array.from(vertical.flat())),false);
 });
 
 test('procedural GLB is a real skinned v2 asset in metres and preflight excludes external files and excessive triangles',async()=>{

@@ -1,6 +1,6 @@
 import {MANNEQUIN_DEFAULTS_CM, normalizeMannequin, createMannequinLandmarks} from '../../../core/wardrobe-engine.js';
 import {buildMannequinSurface} from './mannequin-surface.js';
-import {fitSkirtToPose, lowerBodyInPelvisSpace, pelvisTriangles} from './skirt-drape.js';
+import {drapeTriangles, fitDrapeToPose, lowerBodyInPelvisSpace, skirtRadiusAtHeight} from './skirt-drape.js';
 import {catalogVariant, garmentCut} from './garment-cuts.js';
 import {cutCoverage, tailoredMesh, tailoringSurface} from './tailored-mesh.js';
 import {accessoryShells, part, ring} from './accessory-shells.js';
@@ -91,19 +91,19 @@ function referenceShell(item, layout, layerOffset, cut) {
     default:return accessoryShells(item.category,layout,variant,layerOffset);
   }
 }
-function torsoCape({m,chest,shoulder,pelvis,hipRz,hipRx,neckRx,neckRz},ease,variant,long) {
+function torsoCape({m,shoulder,pelvis,hipRz,hipRx,neckRx,neckRz,neckTop},ease,variant,long) {
   const rows=[];
   for(let i=0;i<=8;i++){
     const t=i/8;
-    rows.push(ring(pelvis-(m.inseam*.35*long)+t*(shoulder+1-pelvis+m.inseam*.35*long),
+    rows.push(ring(pelvis-(m.inseam*.35*long)+t*((shoulder+neckTop)/2-pelvis+m.inseam*.35*long),
       (hipRx+14+variant)*(1-t)**.62+(neckRx+ease)*t+ease,
       (hipRz+8)*(1-t)**.7+(neckRz+ease)*t+ease,0,-2.7));
   }
-  return [part('Spine',rows,false,true)];
+  return [{...part('Spine',rows,false,true),cape:true}];
 }
 
 export function tessellate(descriptor, radial = 20){
-  const {rings,cap,bone,cloth,pleats,slits,shape=1}=descriptor, points=[],uv=[],indices=[];
+  const {rings,cap,bone,cloth,drape,pleats,slits,shape=1}=descriptor, points=[],uv=[],indices=[];
   const outline=value=>Math.sign(value)*Math.abs(value)**shape;
   for(let r=0;r<rings.length;r++){
     const {x,y,z,rx,rz}=rings[r];
@@ -128,7 +128,7 @@ export function tessellate(descriptor, radial = 20){
     points.push([x,y,z]); uv.push(.5,r?1:0);
     for(let i=0;i<radial;i++){const a=r*stride+i;indices.push(center,r?a+1:a,r?a:a+1);}
   }
-  return {bone,points,uv,indices,cloth,radial,rows:rings.length,stride};
+  return {bone,points,uv,indices,cloth,drape,slits,radial,rows:rings.length,stride};
 }
 
 const rotateX=(p,a)=>[p[0],p[1]*Math.cos(a)-p[2]*Math.sin(a),p[1]*Math.sin(a)+p[2]*Math.cos(a)];
@@ -263,10 +263,10 @@ function moveOutside(point, colliders){
   return current;
 }
 
-function fitSkinnedVertices(part,transforms,colliders){
+function deformSkinnedVertices(part,transforms,adjust){
   const points=part.points.map((point,index)=>{
     const posed=poseSurfacePoint(part,index,transforms);
-    const corrected=moveOutside(posed,colliders);
+    const corrected=adjust(posed,part.skin[index]);
     if(corrected===posed)return point;
     const axes=AXES.map(()=>[0,0,0]);
     for(const [bone,weight] of part.skin[index]){
@@ -281,6 +281,28 @@ function fitSkinnedVertices(part,transforms,colliders){
     return add(point,cofactors.map(axis=>dot(axis,delta)/det));
   });
   return {...part,points};
+}
+
+function fitCoatOverSkirts(part,skirts,transforms,colliders){
+  const pelvis=transforms.get('Pelvis');
+  return deformSkinnedVertices(part,transforms,(posed,skin)=>{
+    const arm=skin.reduce((sum,[joint,weight])=>sum+(/^(UpperArm|Forearm|Hand)_/.test(joint)?weight:0),0);
+    const trunk=clamp((.46-arm)/.32,0,1);
+    if(!trunk)return posed;
+    const [x,y,z]=pelvis.toRest(posed),radius=Math.hypot(x,z);
+    if(radius<1e-8)return posed;
+    const dx=x/radius,dz=z/radius;
+    let under=0;
+    for(const skirt of skirts){
+      const top=skirt.points.at(-1)[1],bottom=skirt.points[0][1];
+      if(y<bottom-3||y>top+4)continue;
+      under=Math.max(under,skirtRadiusAtHeight(skirt,clamp(y,bottom,top),dx,dz));
+    }
+    if(!under)return posed;
+    const target=radius+trunk*Math.max(0,under+1.4-radius);
+    if(target===radius)return posed;
+    return moveOutside(pelvis.toWorld([dx*target,y,dz*target]),colliders);
+  });
 }
 
 let lastMannequin;
@@ -326,20 +348,33 @@ function buildPosedOutfit(value,items,{pose,radial,flatLay,armClearance=0}){
     const parts=[];
     if(visible){
       const fitted=tailoredMesh(body[0],mannequin.tailoring,{...cut,width:ease},layout,{lower,values:visible});
-      if(fitted.indices.length)parts.push(fitSkinnedVertices(fitted,transforms,colliders));
+      if(fitted.indices.length)parts.push(deformSkinnedVertices(fitted,transforms,point=>moveOutside(point,colliders)));
     }
     return {item,parts};
   });
   const pelvis=transforms.get('Pelvis');
   const pantsInPelvis=flatLay?[]:garments.filter(({item})=>item.category==='bottoms')
-    .flatMap(({parts})=>parts.flatMap(part=>pelvisTriangles(
+    .flatMap(({parts})=>parts.flatMap(part=>drapeTriangles(
       part.points.map((_,i)=>pelvis.toRest(poseSurfacePoint(part,i,transforms))),part.indices
     )));
   for(const [i,{shells}] of plan.entries()){
+    if(!flatLay&&garments[i].item.category==='outerwear'&&garments[i].parts.length){
+      const skirts=garments.slice(0,i).flatMap(({parts})=>parts.filter(part=>part.drape&&!part.slits));
+      if(skirts.length)garments[i].parts=garments[i].parts.map(part=>fitCoatOverSkirts(part,skirts,transforms,colliders));
+    }
     for(const desc of shells){
-      if(desc.drape&&(pose==='sitting'||pantsInPelvis.length)){
+      if(desc.cape&&!flatLay){
+        const spine=transforms.get(desc.bone);
+        const layers=[...body,...garments.slice(0,i).filter(({item})=>garmentCut(item)).flatMap(({parts})=>parts)];
+        const obstacles=layers.flatMap(part=>drapeTriangles(
+          part.points.map((_,index)=>spine.toRest(poseSurfacePoint(part,index,transforms))),part.indices
+        ));
+        garments[i].parts.push(fitDrapeToPose(desc,obstacles,radial,tessellate));
+        continue;
+      }
+      if(desc.drape&&!flatLay){
         mannequin.lowerBody??=lowerBodyInPelvisSpace(body[0],i=>poseSurfacePoint(body[0],i,transforms),pelvis);
-        garments[i].parts.push(fitSkirtToPose(desc,[...mannequin.lowerBody,...pantsInPelvis],radial,tessellate));
+        garments[i].parts.push(fitDrapeToPose(desc,[...mannequin.lowerBody,...pantsInPelvis],radial,tessellate));
         continue;
       }
       const part=tessellate(desc,desc.pleats&&radial>=20?32:radial);
@@ -359,11 +394,25 @@ export function buildStudioGeometry(value, items=[], {pose='standing',radial=20,
   let result=buildPosedOutfit(value,items,options);
   if(flatLay)return result;
   const cuts=result.garments.map(({item})=>garmentCut(item)).filter(Boolean);
-  if(cuts.length<2||!cuts.some(({sleeve})=>sleeve&&sleeve!=='sleeveless'))return result;
+  const checkLayers=cuts.length>=2&&cuts.some(({sleeve})=>sleeve&&sleeve!=='sleeveless');
+  const hasSkirt=result.garments.some(({parts})=>parts.some(part=>part.drape));
+  if(!checkLayers&&!hasSkirt)return result;
 
   // Adjust the rig and both clothing layers together. Accept the first clear
   // pose, or the best improvement that leaves every already-clear pair clear.
-  const collisions=model=>findLayerCrossings(model.garments,model.transforms,{firstPerPair:false});
+  const bodyLayer={};
+  const collisions=model=>{
+    const pairs=checkLayers?findLayerCrossings(model.garments,model.transforms,{firstPerPair:false}):[];
+    if(!hasSkirt)return pairs;
+    const posed=part=>prepareSurface(part.points.map((_,i)=>poseSurfacePoint(part,i,model.transforms)),part.indices);
+    const body=posed(model.body[0]);
+    for(const {item,parts} of model.garments){
+      const crossings=parts.filter(part=>part.drape)
+        .reduce((sum,part)=>sum+countSurfaceCrossings(posed(part),body),0);
+      if(crossings)pairs.push({inner:bodyLayer,outer:item,crossings});
+    }
+    return pairs;
+  };
   const count=pairs=>pairs.reduce((total,pair)=>total+pair.crossings,0);
   let remaining=collisions(result);
   for(const armClearance of SLEEVE_CLEARANCE_ANGLES){

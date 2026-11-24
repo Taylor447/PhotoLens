@@ -187,6 +187,39 @@ test('a blazer, shirt and trousers render together without a layer intersection 
  expect(errors).toEqual([]);
 });
 
+test('layered cape and skirt stay visible while the cloth worker sends accepted frames',async({page},testInfo)=>{
+ const errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ await page.emulateMedia({reducedMotion:'no-preference'});
+ await page.addInitScript(()=>{
+  Object.defineProperty(navigator,'deviceMemory',{configurable:true,value:8});
+  Object.defineProperty(navigator,'hardwareConcurrency',{configurable:true,value:8});
+  const BrowserWorker=window.Worker;
+  window.Worker=class extends BrowserWorker{
+   constructor(url,options){
+    super(url,options);
+    if(!String(url).includes('wardrobe-cloth'))return;
+    window.clothRevisions=[];
+    this.addEventListener('message',({data})=>{
+     window.clothRevisions=data.map(frame=>frame.revision);
+    });
+   }
+  };
+ });
+ await openStudio(page,'catalog');
+ for(const id of ['tpl-tops-1','tpl-skirts-3','tpl-outerwear-3']){
+  await page.locator('[data-ws-wear="'+id+'"]').click();
+ }
+ await page.locator('[data-wardrobe-section="studio3d"]').click();
+ const canvas=page.locator('.ws-three-host canvas');
+ await expect(canvas).toBeVisible({timeout:15_000});
+ await page.locator('[data-ws-cloth]').check();
+ await expect.poll(()=>page.evaluate(()=>window.clothRevisions?.filter(value=>value>=2).length??0),{timeout:20_000}).toBe(2);
+ await expect(page.locator('[data-ws-message]')).not.toContainText('lớp giao nhau');
+ await testInfo.attach('cape-skirt-cloth.png',{body:await canvas.screenshot(),contentType:'image/png'});
+ expect(errors).toEqual([]);
+});
+
 test('offline AI compose falls back to the deterministic local rules engine',async({page})=>{
  await page.addInitScript(()=>{
   localStorage.setItem('photolens_ai_enabled','true');

@@ -1,4 +1,5 @@
 import {CLOTH_MAX_DISPLACEMENT_CM} from '../features/wardrobe/studio3d/cloth-motion.js';
+import {createClothCollisionGuard} from '../features/wardrobe/studio3d/cloth-collisions.js';
 
 const TICK_MS=50;
 let meshes=[], timer=null, time=0;
@@ -41,16 +42,29 @@ function setup({key,positions,rows,stride}){
     const i=row*stride+col;
     link(i,i+1);link(i,i+stride);
   }
-  return {key,rest,current:rest.slice(),previous:rest.slice(),rows,stride,links};
+  return {key,rest,current:rest.slice(),previous:rest.slice(),accepted:rest.slice(),revision:0,rows,stride,links};
 }
 self.onmessage=({data})=>{
   clearInterval(timer);
   if(data?.type!=='start')return;
+  time=0;
+  const accept=createClothCollisionGuard({body:data.body,garments:data.garments,cloth:data.meshes});
   meshes=data.meshes.map(setup);
   const wind=Math.min(1,Math.max(.18,Number(data.windKmh||0)/35));
   timer=setInterval(()=>{
     time+=TICK_MS/1000;
-    const frames=meshes.map(mesh=>({key:mesh.key,positions:integrate(mesh,wind)}));
+    const frames=meshes.map(mesh=>{
+      const proposed=integrate(mesh,wind);
+      if(accept(mesh.key,proposed)){
+        mesh.accepted=proposed;
+        mesh.revision++;
+      }else{
+        mesh.current.set(mesh.accepted);
+        mesh.previous.set(mesh.accepted);
+      }
+      // Send the full accepted batch so the renderer can drop late messages safely.
+      return {key:mesh.key,positions:mesh.accepted.slice(),revision:mesh.revision};
+    });
     self.postMessage(frames,frames.map(frame=>frame.positions.buffer));
   },TICK_MS);
 };

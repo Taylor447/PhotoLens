@@ -9,10 +9,10 @@ const MOTION_CM = CLOTH_MAX_DISPLACEMENT_CM;
 export function lowerBodyInPelvisSpace(body, posePoint, pelvis){
   const points = body.points.map((_, index) => pelvis.toRest(posePoint(index)));
   const torsoOrLeg = body.skin.map(weights => weights.some(([joint]) => /^(Pelvis|Spine|Thigh_|Shin_|Foot_)/.test(joint)));
-  return pelvisTriangles(points,body.indices,torsoOrLeg);
+  return drapeTriangles(points,body.indices,torsoOrLeg);
 }
 
-export function pelvisTriangles(points,indices,include){
+export function drapeTriangles(points,indices,include){
   const triangles = [];
   for (let i = 0; i < indices.length; i += 3) {
     const ids = indices.slice(i, i + 3);
@@ -44,7 +44,37 @@ function bandSamples(triangles, low, high){
   return points;
 }
 
-function skirtRows(rings){
+// Return the outermost intersection with the skirt at this height and angle.
+// Work from the actual triangles so pleats and the seated profile both count.
+export function skirtRadiusAtHeight(mesh, y, dx, dz){
+  const {points,rows,stride}=mesh;
+  let row=0;
+  while(row<rows-1&&points[(row+1)*stride][1]<y)row++;
+  if(y<points[0][1]||row===rows-1)return 0;
+  let radius=0;
+  for(let column=0;column<stride-1;column++){
+    const a=row*stride+column,b=a+stride;
+    for(const triangle of [[a,b,a+1],[a+1,b,b+1]]){
+      const section=[];
+      for(const [i,index] of triangle.entries()){
+        const [x,fromY,z]=points[index];
+        const [toX,toY,toZ]=points[triangle[(i+1)%3]];
+        if(fromY===toY||y<Math.min(fromY,toY)||y>Math.max(fromY,toY))continue;
+        const t=(y-fromY)/(toY-fromY);
+        section.push([x+(toX-x)*t,z+(toZ-z)*t]);
+      }
+      if(section.length!==2)continue;
+      const [[x,z],[toX,toZ]]=section;
+      const ex=toX-x,ez=toZ-z,denom=dx*ez-dz*ex;
+      if(Math.abs(denom)<1e-8)continue;
+      const u=(x*dz-z*dx)/denom;
+      if(u>=-1e-8&&u<=1+1e-8)radius=Math.max(radius,(x*ez-z*ex)/denom);
+    }
+  }
+  return radius;
+}
+
+function drapeRows(rings){
   const rows = [];
   for (let i = 1; i < rings.length; i++) {
     const start = rings[i - 1], end = rings[i];
@@ -52,6 +82,8 @@ function skirtRows(rings){
     for (let j = 0; j < steps; j++) {
       const t = j / steps;
       rows.push({
+        x: start.x + t * (end.x - start.x),
+        z: start.z + t * (end.z - start.z),
         y: start.y + t * (end.y - start.y),
         rx: start.rx + t * (end.rx - start.rx),
         rz: start.rz + t * (end.rz - start.rz)
@@ -62,8 +94,8 @@ function skirtRows(rings){
   return rows;
 }
 
-export function fitSkirtToPose(descriptor, lowerBody, radial, tessellate){
-  const rows = skirtRows(descriptor.rings);
+export function fitDrapeToPose(descriptor, obstacles, radial, tessellate){
+  const rows = drapeRows(descriptor.rings);
   const segments = radial >= 20 ? 32 : 16;
   // One outward direction per panel. Its support is a plane in X/Z.
   const normals = Array.from({length: segments}, (_, index) => {
@@ -71,7 +103,7 @@ export function fitSkirtToPose(descriptor, lowerBody, radial, tessellate){
     return [Math.cos(angle), Math.sin(angle)];
   });
   const bands = rows.slice(1).map((row, i) => {
-    const samples = bandSamples(lowerBody, rows[i].y - MOTION_CM, row.y + MOTION_CM);
+    const samples = bandSamples(obstacles, rows[i].y - MOTION_CM, row.y + MOTION_CM);
     return normals.map(([nx, nz]) => {
       let support = -Infinity;
       for (const [x, z] of samples) support = Math.max(support, x * nx + z * nz);
@@ -79,8 +111,8 @@ export function fitSkirtToPose(descriptor, lowerBody, radial, tessellate){
       return support + PAD_CM + MOTION_CM * (Math.abs(nx) + Math.abs(nz));
     });
   });
-  const supports = rows.map(({rx, rz}, row) => normals.map(([nx, nz], i) => Math.max(
-      Math.hypot(rx * nx, rz * nz)+(descriptor.pleats?(1+Math.cos((i+.5)*TAU/segments*descriptor.pleats))*(rows.at(-1).y-rows[row].y)*.013:0),
+  const supports = rows.map(({x, z, rx, rz}, row) => normals.map(([nx, nz], i) => Math.max(
+      x*nx + z*nz + Math.hypot(rx * nx, rz * nz)+(descriptor.pleats?(1+Math.cos((i+.5)*TAU/segments*descriptor.pleats))*(rows.at(-1).y-rows[row].y)*.013:0),
       bands[row - 1]?.[i] ?? -Infinity,
       bands[row]?.[i] ?? -Infinity
   )));

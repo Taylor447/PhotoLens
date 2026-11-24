@@ -99,3 +99,11 @@ Mốc đối chiếu là `baa95e8b8686710d5d7771330f33fc05928feee2`. Tái hiện
 | Áo choàng và đầm nhiều lớp | PARTIAL | Khảo sát ngoài bộ hồi quy còn thấy áo choàng cosplay cắt qua áo giáp/áo thun, và blazer cắt vào đầm cosplay. Studio vẫn hiển thị tên các cặp giao nhau. Kiểm thử mới đo hình học tĩnh sau khi áp tư thế. Giao cắt lớp trong từng khung của mô phỏng vải chưa được kiểm định. |
 
 Ảnh Edge ở kích thước mobile cho ba bộ ban đầu đều có canvas và không phát cảnh báo giao cắt sau sửa, với mô phỏng vải tắt. Đợt xác minh cục bộ bị gián đoạn, kết quả chính thức lấy từ CI trên commit của PR. Phần chồng lớp GĐ4 vẫn PARTIAL. Tiếp theo ưu tiên biên dạng áo choàng và đầm xoè trong các ca ngoài bộ hồi quy, rồi kiểm tra mô phỏng vải khi mặc nhiều lớp.
+
+### GĐ4 – Áo choàng, đầm nhiều lớp và mô phỏng vải
+
+- `geometry.js` và `skirt-drape.js` dựng áo choàng theo mặt cắt của thân, tay và các lớp bên trong ở tư thế đang dùng. Thân áo khoác được nới theo mặt cắt thực của váy. Khi tay chạm váy xòe, Studio có thể nới góc tay trong giới hạn 15,5° đã dùng ở checkpoint trước.
+- Worker kiểm tra đề xuất chuyển động với mặt tam giác đã tạo dáng của ma-nơ-canh và các lớp đồ sinh bằng mã. Nếu một đề xuất gây giao cắt hoặc đưa đỉnh vào trong thân, worker giữ khung gần nhất đã chấp nhận. Đường may giữa hai phần của cùng món được miễn kiểm tra va chạm giữa lớp.
+- Bài hồi quy mở rộng từ 8 lên 12 bộ, mỗi bộ qua 4 preset, 4 tư thế và 2 LOD. Bổ sung kiểm tra mặt áo choàng với thân, kiểm tra worker chặn giao cắt với lớp cố định và lớp đang chuyển động, và ca Playwright bật mô phỏng cho váy + áo choàng.
+- Đã chạy 8 tick worker trên mỗi bộ: áo giáp + áo choàng ở tư thế bước, áo thun + váy nhiều lớp + áo choàng ở tư thế đứng, và đầm cosplay + blazer ở tư thế ngồi. Tất cả phần vải gửi được 8 khung chuyển động. Các khung lấy mẫu không ghi nhận giao cắt giữa lớp hay đỉnh vải xuyên thân. [Kết quả CI và ảnh Playwright](https://github.com/Taylor447/PhotoLens/pull/14/checks).
+- Giới hạn còn lại: ca áo dài + quần chùng + áo khoác ngắn ở tư thế ngồi đã ghi nhận giao cắt quần/áo khoác ở LOD thấp trong khảo sát mở rộng. Kiểm tra chuyển động áp dụng cho đồ sinh bằng mã, chưa đo va chạm với GLB nhập. Chưa đo hiệu năng trên thiết bị di động thật.
