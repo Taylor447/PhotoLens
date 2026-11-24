@@ -429,7 +429,8 @@
           "if": {
             "properties": {
               "sizeTable": {
-                "minItems": 1
+                "minItems": 1,
+                "type": "array"
               }
             },
             "required": [
