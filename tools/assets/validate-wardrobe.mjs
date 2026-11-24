@@ -2,6 +2,7 @@ import {readFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
+import Ajv2020 from 'ajv/dist/2020.js';
 
 const CATEGORIES=['tops','bottoms','skirts','dresses','outerwear','shoes','hats','bags','eyewear','scarves','jewelry','hair'];
 const STYLE_TAGS=['minimal','vintage','streetwear','office','active','traditional','cosplay','classic','cinematic','casual'];
@@ -55,6 +56,8 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
  assert.ok(Array.isArray(g.templates)&&g.templates.length>=60,'Need at least 60 generated templates');
  assert.equal(schema.properties.schemaVersion.const,g.schemaVersion);
  assert.equal(schema.properties.realGarmentCount.const,g.realGarmentCount);
+ const schemaValidator=new Ajv2020({allErrors:true,strict:true}).compile(schema);
+ assert.ok(schemaValidator(g),'garments.json does not satisfy garment.schema.json: '+JSON.stringify(schemaValidator.errors));
  assert.deepEqual([...schema.$defs.garmentTemplate.required].sort(),[...REQUIRED_TEMPLATE_KEYS].sort(),'Schema required keys must match the checked catalog contract');
  const categoryCounts=Object.fromEntries(CATEGORIES.map(category=>[category,0]));
  const ids=g.templates.map(x=>x.id);
