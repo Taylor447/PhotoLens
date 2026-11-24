@@ -2,6 +2,7 @@ import {readFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import Ajv2020 from 'ajv/dist/2020.js';
 
 const CATEGORIES=['tops','bottoms','skirts','dresses','outerwear','shoes','hats','bags','eyewear','scarves','jewelry','hair'];
@@ -112,12 +113,22 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
   for(const key of ['templateId','format','generator'])assert.ok(hasText(asset[key]),'Asset '+asset.id+' needs '+key);
   validateGenerator(root,asset);
   validateProvenance(asset,'Asset '+asset.id);
+  if(asset.format==='thumbnail-svg'){
+   assert.ok(/^assets\/wardrobe\/previews\/[a-z0-9-]+\.svg$/.test(asset.path||''),'Thumbnail '+asset.id+' has an unsafe public path');
+   const bytes=readFileSync(path.join(root,'public',asset.path));
+   assert.equal(createHash('sha256').update(bytes).digest('hex'),asset.sha256,'Thumbnail '+asset.id+' checksum mismatch');
+   const svg=bytes.toString('utf8');
+   assert.ok(svg.includes('data-garment-id="'+asset.templateId+'"'),'Thumbnail '+asset.id+' maps to a different template');
+   const template=g.templates.find(x=>x.id===asset.templateId);
+   assert.ok(template&&svg.includes('data-garment-category="'+template.category+'"'),'Thumbnail '+asset.id+' category does not match its template');
+  }
  }
  const referencedIds=new Set();
  for(const x of g.templates){
   const refs=[
    [x.assets.svg,'svg'],
-   [x.assets.procedural3d,'three-procedural-geometry']
+   [x.assets.procedural3d,'three-procedural-geometry'],
+   [x.assets.thumbnail,'thumbnail-svg']
   ];
   if(x.assets.glb!==null)refs.push([x.assets.glb,'glb']);
   for(const [ref,format] of refs){
@@ -129,6 +140,7 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
    assert.ok(record,x.id+' references an asset absent from the manifest: '+ref.id);
    assert.equal(record.templateId,x.id,ref.id+' points to the wrong template');
    assert.equal(record.format,format,ref.id+' format mismatch');
+   if(format==='thumbnail-svg')assert.equal(record.path,ref.path,ref.id+' path differs from the manifest');
   }
  }
  assert.deepEqual([...referencedIds].sort(),[...manifestIds].sort(),'Every bundled asset must be referenced by exactly one catalog template');
@@ -158,6 +170,7 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
   materialCount:materialIds.size,
   patternCount:patternIds.size,
   manifestEntries:manifest.assets.length,
+  thumbnailCount:manifest.assets.filter(x=>x.format==='thumbnail-svg').length,
   modelCount:manifest.models.length,
   libraryCount:manifest.libraries.length,
   svgReferences:g.templates.filter(x=>x.assets.svg).length,

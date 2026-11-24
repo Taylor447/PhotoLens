@@ -4,6 +4,8 @@
 
 The catalog contains 60 procedural illustration templates across 12 categories (five per category), 20 material labels, and 40 repeatable pattern definitions. The real retail-garment count is 0. Each template references one project-generated SVG renderer and one project-generated procedural 3D renderer in `data/wardrobe/assets-manifest.json`. There are no bundled garment photos, brand assets, or GLB models.
 
+The build also emits one SVG thumbnail per template at `public/assets/wardrobe/previews/<template-id>.svg`. Each path is recorded as `assets.thumbnail` in `garments.json` and as a `thumbnail-svg` manifest record with SHA-256 and CC0 PhotoLens-code provenance. `npm run dev`, `npm test`, and `npm run build` regenerate missing or stale previews before use. The browser resolves the relative manifest path through Vite's `BASE_URL`, so GitHub Pages project paths are preserved. The 60 previews are procedural illustrations, not product photos; there are 0 retail photos and 0 bundled garment GLBs.
+
 The SVG and Three.js output are reference geometry. Three.js deforms the mannequin and generates shells using the selected centimetre dimensions. Real garment measurements and size tables must be supplied independently. All currently unknown measurements and physical properties remain unset. User-imported assets stay on the user's device and are not part of the shipped manifest.
 
 ## Provenance and license rules

@@ -5,7 +5,7 @@
   "templates": [
     {
       "id": "tpl-tops-1",
-      "name": "Áo thun cơ bản",
+      "name": "Ao thun co b?n",
       "category": "tops",
       "legacyCategory": "tops",
       "layer": "base",
@@ -38,7 +38,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-tops-1",
@@ -48,13 +48,18 @@
         "procedural3d": {
           "id": "three:tpl-tops-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-tops-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-tops-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-tops-2",
-      "name": "Sơ mi dáng thẳng",
+      "name": "So mi d�ng th?ng",
       "category": "tops",
       "legacyCategory": "tops",
       "layer": "base",
@@ -87,7 +92,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-tops-2",
@@ -97,13 +102,18 @@
         "procedural3d": {
           "id": "three:tpl-tops-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-tops-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-tops-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-tops-3",
-      "name": "Áo dài minh họa",
+      "name": "Ao d�i minh h?a",
       "category": "tops",
       "legacyCategory": "tops",
       "layer": "base",
@@ -136,7 +146,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-tops-3",
@@ -146,13 +156,18 @@
         "procedural3d": {
           "id": "three:tpl-tops-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-tops-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-tops-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-tops-4",
-      "name": "Áo bà ba minh họa",
+      "name": "Ao b� ba minh h?a",
       "category": "tops",
       "legacyCategory": "tops",
       "layer": "base",
@@ -185,7 +200,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-tops-4",
@@ -195,13 +210,18 @@
         "procedural3d": {
           "id": "three:tpl-tops-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-tops-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-tops-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-tops-5",
-      "name": "Áo giáp cosplay",
+      "name": "Ao gi�p cosplay",
       "category": "tops",
       "legacyCategory": "tops",
       "layer": "base",
@@ -234,7 +254,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-tops-5",
@@ -244,13 +264,18 @@
         "procedural3d": {
           "id": "three:tpl-tops-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-tops-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-tops-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-bottoms-1",
-      "name": "Quần ống đứng",
+      "name": "Qu?n ?ng d?ng",
       "category": "bottoms",
       "legacyCategory": "bottoms",
       "layer": "base",
@@ -283,7 +308,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-bottoms-1",
@@ -293,13 +318,18 @@
         "procedural3d": {
           "id": "three:tpl-bottoms-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bottoms-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bottoms-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-bottoms-2",
-      "name": "Quần jogger",
+      "name": "Qu?n jogger",
       "category": "bottoms",
       "legacyCategory": "bottoms",
       "layer": "base",
@@ -332,7 +362,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-bottoms-2",
@@ -342,13 +372,18 @@
         "procedural3d": {
           "id": "three:tpl-bottoms-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bottoms-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bottoms-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-bottoms-3",
-      "name": "Quần short",
+      "name": "Qu?n short",
       "category": "bottoms",
       "legacyCategory": "bottoms",
       "layer": "base",
@@ -381,7 +416,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-bottoms-3",
@@ -391,13 +426,18 @@
         "procedural3d": {
           "id": "three:tpl-bottoms-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bottoms-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bottoms-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-bottoms-4",
-      "name": "Quần chùng minh họa",
+      "name": "Qu?n ch�ng minh h?a",
       "category": "bottoms",
       "legacyCategory": "bottoms",
       "layer": "base",
@@ -430,7 +470,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-bottoms-4",
@@ -440,13 +480,18 @@
         "procedural3d": {
           "id": "three:tpl-bottoms-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bottoms-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bottoms-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-bottoms-5",
-      "name": "Quần giáp cosplay",
+      "name": "Qu?n gi�p cosplay",
       "category": "bottoms",
       "legacyCategory": "bottoms",
       "layer": "base",
@@ -479,7 +524,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-bottoms-5",
@@ -489,13 +534,18 @@
         "procedural3d": {
           "id": "three:tpl-bottoms-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bottoms-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bottoms-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-skirts-1",
-      "name": "Chân váy chữ A",
+      "name": "Ch�n v�y ch? A",
       "category": "skirts",
       "legacyCategory": "accessories",
       "layer": "base",
@@ -528,7 +578,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-skirts-1",
@@ -538,13 +588,18 @@
         "procedural3d": {
           "id": "three:tpl-skirts-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-skirts-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-skirts-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-skirts-2",
-      "name": "Chân váy xếp ly",
+      "name": "Ch�n v�y x?p ly",
       "category": "skirts",
       "legacyCategory": "accessories",
       "layer": "base",
@@ -577,7 +632,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-skirts-2",
@@ -587,13 +642,18 @@
         "procedural3d": {
           "id": "three:tpl-skirts-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-skirts-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-skirts-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-skirts-3",
-      "name": "Váy nhiều lớp cosplay",
+      "name": "V�y nhi?u l?p cosplay",
       "category": "skirts",
       "legacyCategory": "accessories",
       "layer": "base",
@@ -626,7 +686,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-skirts-3",
@@ -636,13 +696,18 @@
         "procedural3d": {
           "id": "three:tpl-skirts-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-skirts-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-skirts-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-skirts-4",
-      "name": "Váy dài",
+      "name": "V�y d�i",
       "category": "skirts",
       "legacyCategory": "accessories",
       "layer": "base",
@@ -675,7 +740,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-skirts-4",
@@ -685,13 +750,18 @@
         "procedural3d": {
           "id": "three:tpl-skirts-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-skirts-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-skirts-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-skirts-5",
-      "name": "Váy tối giản",
+      "name": "V�y t?i gi?n",
       "category": "skirts",
       "legacyCategory": "accessories",
       "layer": "base",
@@ -724,7 +794,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-skirts-5",
@@ -734,13 +804,18 @@
         "procedural3d": {
           "id": "three:tpl-skirts-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-skirts-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-skirts-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-dresses-1",
-      "name": "Đầm tối giản",
+      "name": "D?m t?i gi?n",
       "category": "dresses",
       "legacyCategory": "dresses",
       "layer": "base",
@@ -773,7 +848,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-dresses-1",
@@ -783,13 +858,18 @@
         "procedural3d": {
           "id": "three:tpl-dresses-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-dresses-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-dresses-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-dresses-2",
-      "name": "Đầm cổ vuông",
+      "name": "D?m c? vu�ng",
       "category": "dresses",
       "legacyCategory": "dresses",
       "layer": "base",
@@ -822,7 +902,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-dresses-2",
@@ -832,13 +912,18 @@
         "procedural3d": {
           "id": "three:tpl-dresses-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-dresses-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-dresses-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-dresses-3",
-      "name": "Áo tứ thân minh họa",
+      "name": "Ao t? th�n minh h?a",
       "category": "dresses",
       "legacyCategory": "dresses",
       "layer": "base",
@@ -871,7 +956,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-dresses-3",
@@ -881,13 +966,18 @@
         "procedural3d": {
           "id": "three:tpl-dresses-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-dresses-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-dresses-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-dresses-4",
-      "name": "Đầm cosplay",
+      "name": "D?m cosplay",
       "category": "dresses",
       "legacyCategory": "dresses",
       "layer": "base",
@@ -920,7 +1010,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-dresses-4",
@@ -930,13 +1020,18 @@
         "procedural3d": {
           "id": "three:tpl-dresses-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-dresses-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-dresses-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-dresses-5",
-      "name": "Đầm suông",
+      "name": "D?m su�ng",
       "category": "dresses",
       "legacyCategory": "dresses",
       "layer": "base",
@@ -969,7 +1064,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-dresses-5",
@@ -979,13 +1074,18 @@
         "procedural3d": {
           "id": "three:tpl-dresses-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-dresses-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-dresses-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-outerwear-1",
-      "name": "Áo khoác ngắn",
+      "name": "Ao kho�c ng?n",
       "category": "outerwear",
       "legacyCategory": "outerwear",
       "layer": "outer",
@@ -1018,7 +1118,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-outerwear-1",
@@ -1028,13 +1128,18 @@
         "procedural3d": {
           "id": "three:tpl-outerwear-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-outerwear-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-outerwear-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-outerwear-2",
-      "name": "Blazer thẳng",
+      "name": "Blazer th?ng",
       "category": "outerwear",
       "legacyCategory": "outerwear",
       "layer": "outer",
@@ -1067,7 +1172,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-outerwear-2",
@@ -1077,13 +1182,18 @@
         "procedural3d": {
           "id": "three:tpl-outerwear-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-outerwear-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-outerwear-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-outerwear-3",
-      "name": "Áo choàng cosplay",
+      "name": "Ao cho�ng cosplay",
       "category": "outerwear",
       "legacyCategory": "outerwear",
       "layer": "outer",
@@ -1116,7 +1226,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-outerwear-3",
@@ -1126,13 +1236,18 @@
         "procedural3d": {
           "id": "three:tpl-outerwear-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-outerwear-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-outerwear-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-outerwear-4",
-      "name": "Áo khoác thể thao",
+      "name": "Ao kho�c th? thao",
       "category": "outerwear",
       "legacyCategory": "outerwear",
       "layer": "outer",
@@ -1165,7 +1280,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-outerwear-4",
@@ -1175,13 +1290,18 @@
         "procedural3d": {
           "id": "three:tpl-outerwear-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-outerwear-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-outerwear-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-outerwear-5",
-      "name": "Áo khoác truyền thống minh họa",
+      "name": "Ao kho�c truy?n th?ng minh h?a",
       "category": "outerwear",
       "legacyCategory": "outerwear",
       "layer": "outer",
@@ -1214,7 +1334,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-outerwear-5",
@@ -1224,13 +1344,18 @@
         "procedural3d": {
           "id": "three:tpl-outerwear-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-outerwear-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-outerwear-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-shoes-1",
-      "name": "Giày bệt",
+      "name": "Gi�y b?t",
       "category": "shoes",
       "legacyCategory": "shoes",
       "layer": "accessory",
@@ -1273,13 +1398,18 @@
         "procedural3d": {
           "id": "three:tpl-shoes-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-shoes-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-shoes-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-shoes-2",
-      "name": "Giày thể thao",
+      "name": "Gi�y th? thao",
       "category": "shoes",
       "legacyCategory": "shoes",
       "layer": "accessory",
@@ -1322,13 +1452,18 @@
         "procedural3d": {
           "id": "three:tpl-shoes-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-shoes-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-shoes-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-shoes-3",
-      "name": "Bốt thấp",
+      "name": "B?t th?p",
       "category": "shoes",
       "legacyCategory": "shoes",
       "layer": "accessory",
@@ -1371,13 +1506,18 @@
         "procedural3d": {
           "id": "three:tpl-shoes-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-shoes-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-shoes-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-shoes-4",
-      "name": "Giày quai",
+      "name": "Gi�y quai",
       "category": "shoes",
       "legacyCategory": "shoes",
       "layer": "accessory",
@@ -1420,13 +1560,18 @@
         "procedural3d": {
           "id": "three:tpl-shoes-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-shoes-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-shoes-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-shoes-5",
-      "name": "Ủng cosplay",
+      "name": "?ng cosplay",
       "category": "shoes",
       "legacyCategory": "shoes",
       "layer": "accessory",
@@ -1469,13 +1614,18 @@
         "procedural3d": {
           "id": "three:tpl-shoes-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-shoes-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-shoes-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-hats-1",
-      "name": "Nón vành",
+      "name": "N�n v�nh",
       "category": "hats",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -1508,7 +1658,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-hats-1",
@@ -1518,13 +1668,18 @@
         "procedural3d": {
           "id": "three:tpl-hats-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hats-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hats-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-hats-2",
-      "name": "Mũ lưỡi trai",
+      "name": "Mu lu?i trai",
       "category": "hats",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -1557,7 +1712,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-hats-2",
@@ -1567,13 +1722,18 @@
         "procedural3d": {
           "id": "three:tpl-hats-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hats-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hats-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-hats-3",
-      "name": "Nón lá minh họa",
+      "name": "N�n l� minh h?a",
       "category": "hats",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -1606,7 +1766,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-hats-3",
@@ -1616,13 +1776,18 @@
         "procedural3d": {
           "id": "three:tpl-hats-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hats-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hats-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-hats-4",
-      "name": "Mũ len",
+      "name": "Mu len",
       "category": "hats",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -1655,7 +1820,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-hats-4",
@@ -1665,13 +1830,18 @@
         "procedural3d": {
           "id": "three:tpl-hats-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hats-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hats-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-hats-5",
-      "name": "Mũ giáp cosplay",
+      "name": "Mu gi�p cosplay",
       "category": "hats",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -1704,7 +1874,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-hats-5",
@@ -1714,13 +1884,18 @@
         "procedural3d": {
           "id": "three:tpl-hats-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hats-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hats-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-bags-1",
-      "name": "Túi vai",
+      "name": "T�i vai",
       "category": "bags",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -1763,13 +1938,18 @@
         "procedural3d": {
           "id": "three:tpl-bags-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bags-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bags-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-bags-2",
-      "name": "Túi tote",
+      "name": "T�i tote",
       "category": "bags",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -1812,13 +1992,18 @@
         "procedural3d": {
           "id": "three:tpl-bags-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bags-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bags-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-bags-3",
-      "name": "Túi chéo",
+      "name": "T�i ch�o",
       "category": "bags",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -1861,13 +2046,18 @@
         "procedural3d": {
           "id": "three:tpl-bags-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bags-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bags-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-bags-4",
-      "name": "Túi nhỏ",
+      "name": "T�i nh?",
       "category": "bags",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -1910,13 +2100,18 @@
         "procedural3d": {
           "id": "three:tpl-bags-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bags-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bags-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-bags-5",
-      "name": "Túi đạo cụ cosplay",
+      "name": "T�i d?o c? cosplay",
       "category": "bags",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -1959,13 +2154,18 @@
         "procedural3d": {
           "id": "three:tpl-bags-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bags-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bags-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-eyewear-1",
-      "name": "Kính tròn",
+      "name": "K�nh tr�n",
       "category": "eyewear",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2008,13 +2208,18 @@
         "procedural3d": {
           "id": "three:tpl-eyewear-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-eyewear-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-eyewear-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-eyewear-2",
-      "name": "Kính vuông",
+      "name": "K�nh vu�ng",
       "category": "eyewear",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2057,13 +2262,18 @@
         "procedural3d": {
           "id": "three:tpl-eyewear-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-eyewear-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-eyewear-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-eyewear-3",
-      "name": "Kính trang trí",
+      "name": "K�nh trang tr�",
       "category": "eyewear",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2106,13 +2316,18 @@
         "procedural3d": {
           "id": "three:tpl-eyewear-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-eyewear-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-eyewear-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-eyewear-4",
-      "name": "Kính thể thao",
+      "name": "K�nh th? thao",
       "category": "eyewear",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2155,13 +2370,18 @@
         "procedural3d": {
           "id": "three:tpl-eyewear-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-eyewear-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-eyewear-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-eyewear-5",
-      "name": "Kính cosplay",
+      "name": "K�nh cosplay",
       "category": "eyewear",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2204,13 +2424,18 @@
         "procedural3d": {
           "id": "three:tpl-eyewear-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-eyewear-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-eyewear-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-scarves-1",
-      "name": "Khăn quàng",
+      "name": "Khan qu�ng",
       "category": "scarves",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2243,7 +2468,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-scarves-1",
@@ -2253,13 +2478,18 @@
         "procedural3d": {
           "id": "three:tpl-scarves-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-scarves-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-scarves-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-scarves-2",
-      "name": "Khăn vuông",
+      "name": "Khan vu�ng",
       "category": "scarves",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2292,7 +2522,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-scarves-2",
@@ -2302,13 +2532,18 @@
         "procedural3d": {
           "id": "three:tpl-scarves-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-scarves-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-scarves-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-scarves-3",
-      "name": "Khăn choàng dài",
+      "name": "Khan cho�ng d�i",
       "category": "scarves",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2341,7 +2576,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-scarves-3",
@@ -2351,13 +2586,18 @@
         "procedural3d": {
           "id": "three:tpl-scarves-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-scarves-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-scarves-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-scarves-4",
-      "name": "Khăn ống",
+      "name": "Khan ?ng",
       "category": "scarves",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2390,7 +2630,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-scarves-4",
@@ -2400,13 +2640,18 @@
         "procedural3d": {
           "id": "three:tpl-scarves-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-scarves-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-scarves-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-scarves-5",
-      "name": "Khăn cách điệu",
+      "name": "Khan c�ch di?u",
       "category": "scarves",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2439,7 +2684,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-scarves-5",
@@ -2449,13 +2694,18 @@
         "procedural3d": {
           "id": "three:tpl-scarves-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-scarves-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-scarves-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-jewelry-1",
-      "name": "Vòng cổ hình học",
+      "name": "V�ng c? h�nh h?c",
       "category": "jewelry",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2488,7 +2738,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-jewelry-1",
@@ -2498,13 +2748,18 @@
         "procedural3d": {
           "id": "three:tpl-jewelry-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-jewelry-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-jewelry-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-jewelry-2",
-      "name": "Vòng tay",
+      "name": "V�ng tay",
       "category": "jewelry",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2537,7 +2792,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-jewelry-2",
@@ -2547,13 +2802,18 @@
         "procedural3d": {
           "id": "three:tpl-jewelry-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-jewelry-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-jewelry-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-jewelry-3",
-      "name": "Khuyên tai",
+      "name": "Khuy�n tai",
       "category": "jewelry",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2586,7 +2846,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-jewelry-3",
@@ -2596,13 +2856,18 @@
         "procedural3d": {
           "id": "three:tpl-jewelry-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-jewelry-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-jewelry-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-jewelry-4",
-      "name": "Trâm cài",
+      "name": "Tr�m c�i",
       "category": "jewelry",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2635,7 +2900,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-jewelry-4",
@@ -2645,13 +2910,18 @@
         "procedural3d": {
           "id": "three:tpl-jewelry-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-jewelry-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-jewelry-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-jewelry-5",
-      "name": "Trang sức cosplay",
+      "name": "Trang s?c cosplay",
       "category": "jewelry",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2684,7 +2954,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-jewelry-5",
@@ -2694,13 +2964,18 @@
         "procedural3d": {
           "id": "three:tpl-jewelry-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-jewelry-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-jewelry-5.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-hair-1",
-      "name": "Băng đô",
+      "name": "Bang d�",
       "category": "hair",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2733,7 +3008,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-hair-1",
@@ -2743,13 +3018,18 @@
         "procedural3d": {
           "id": "three:tpl-hair-1",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hair-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hair-1.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-hair-2",
-      "name": "Kẹp tóc",
+      "name": "K?p t�c",
       "category": "hair",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2782,7 +3062,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-hair-2",
@@ -2792,13 +3072,18 @@
         "procedural3d": {
           "id": "three:tpl-hair-2",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hair-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hair-2.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-hair-3",
-      "name": "Trâm tóc minh họa",
+      "name": "Tr�m t�c minh h?a",
       "category": "hair",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2831,7 +3116,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-hair-3",
@@ -2841,13 +3126,18 @@
         "procedural3d": {
           "id": "three:tpl-hair-3",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hair-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hair-3.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-hair-4",
-      "name": "Nơ vải",
+      "name": "No v?i",
       "category": "hair",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2880,7 +3170,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-hair-4",
@@ -2890,13 +3180,18 @@
         "procedural3d": {
           "id": "three:tpl-hair-4",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hair-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hair-4.svg"
         }
       },
       "sizeTableVersion": null
     },
     {
       "id": "tpl-hair-5",
-      "name": "Phụ kiện cosplay",
+      "name": "Ph? ki?n cosplay",
       "category": "hair",
       "legacyCategory": "accessories",
       "layer": "accessory",
@@ -2929,7 +3224,7 @@
         "wrinkle": null,
         "highlight": null
       },
-      "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
+      "culturalNote": "Minh h?a d? h?a, chua du?c x�c th?c nhu trang ph?c truy?n th?ng.",
       "assets": {
         "svg": {
           "id": "svg:tpl-hair-5",
@@ -2939,6 +3234,11 @@
         "procedural3d": {
           "id": "three:tpl-hair-5",
           "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hair-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hair-5.svg"
         }
       },
       "sizeTableVersion": null

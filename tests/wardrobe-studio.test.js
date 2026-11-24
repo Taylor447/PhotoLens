@@ -90,3 +90,9 @@ test('local binary import validates declared type/signature and refuses phantom 
  const repo=createWardrobeRepository(memoryStorage(),null);
  await assert.rejects(()=>repo.saveAsset(new Blob(['asset'],{type:'image/png'})),/IndexedDB/);
 });
+
+test('closet copies preserve generated thumbnail mapping from their source template',()=>{
+ const ref={id:'thumbnail:tpl-tops-1',path:'assets/wardrobe/previews/tpl-tops-1.svg',provenance:'generated-by-photolens'};
+ assert.deepEqual(normalizeGarment({id:'closet-tpl-tops-1',name:'Áo mẫu',category:'tops',assets:{thumbnail:ref}}).assets,{thumbnail:ref});
+ assert.equal(normalizeGarment({id:'bad',name:'Món lỗi',category:'tops',assets:{thumbnail:{...ref,path:'../private.svg'}}}).assets,undefined);
+});

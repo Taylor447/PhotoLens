@@ -7,7 +7,8 @@ The existing quick suggestions remain available beside a local catalog, Studio 2
 - 60 generated illustration templates across 12 categories (5 each).
 - 20 material labels and 40 repeatable pattern definitions.
 - 0 verified retail products and 0 sourced size tables.
-- 120 template asset references: one SVG renderer and one procedural 3D renderer per template. There are no sourced retail images or bundled GLB models. Three.js 0.187.0 and ONNX Runtime Web 1.23.2 load on demand under MIT licenses. The shipped decoder provenance is in the manifest.
+- 180 manifest entries: 120 renderer references (one SVG and one procedural 3D renderer per template) plus 60 distinct procedural SVG thumbnails, one for each template. Thumbnail paths and SHA-256 digests are validated during build. There are 0 sourced retail images and 0 bundled garment GLBs.
+- Imported photos and SVGs render from local IndexedDB blobs. User GLBs receive a local PNG thumbnail when WebGL is available; otherwise the UI shows a category-specific illustration. Three.js 0.187.0 and ONNX Runtime Web 1.23.2 load on demand under MIT licenses. The shipped decoder provenance is in the manifest.
 
 Templates are not real garments. Unknown measurements and material properties remain empty; see `DATA_TODO.md`.
 

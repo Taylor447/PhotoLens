@@ -329,7 +329,8 @@
           "required": [
             "svg",
             "procedural3d",
-            "glb"
+            "glb",
+            "thumbnail"
           ],
           "properties": {
             "svg": {
@@ -347,6 +348,9 @@
                   "$ref": "#/$defs/assetReference"
                 }
               ]
+            },
+            "thumbnail": {
+              "$ref": "#/$defs/thumbnailReference"
             }
           }
         },
@@ -479,6 +483,31 @@
         }
       },
       "description": "Verified garment dimensions in centimetres; distinct from the mannequin body measurement record."
+    },
+    "thumbnailReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "provenance",
+        "path"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance": {
+          "enum": [
+            "generated-by-photolens",
+            "licensed-third-party"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^assets/wardrobe/previews/[a-z0-9-]+\\.svg$"
+        }
+      }
     }
   }
 }
