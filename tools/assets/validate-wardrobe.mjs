@@ -53,6 +53,9 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
  assert.equal(m.schemaVersion,1,'Unsupported materials schema version');
  assert.equal(p.schemaVersion,1,'Unsupported patterns schema version');
  assert.equal(manifest.schemaVersion,1,'Unsupported asset manifest schema version');
+ validateProvenance(manifest.mannequin,'Mannequin');
+ assert.equal(manifest.mannequin.format,'procedural3d','Mannequin asset must be procedural');
+ validateGenerator(root,manifest.mannequin);
  assert.equal(g.realGarmentCount,0,'Procedural templates must not be counted as physical products');
  assert.ok(Array.isArray(g.templates)&&g.templates.length>=60,'Need at least 60 generated templates');
  assert.equal(schema.properties.schemaVersion.const,g.schemaVersion);

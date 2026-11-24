@@ -119,6 +119,33 @@ test('fixed outfit switches 2D and 3D, handles context loss, saves Lookbook and 
  expect(file.suggestedFilename()).toMatch(/\.png$/i);
 });
 
+test('continuous mannequin renders each pose and rotates in the Studio 3D canvas',async({page},testInfo)=>{
+ const errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ await openStudio(page,'studio3d');
+ await page.locator('[data-ws-preset]').selectOption('reference-d');
+ await expect(page.locator('[data-ws-height]')).toHaveValue('165');
+ const canvas=page.locator('.ws-three-host canvas');
+ const capture=async name=>{
+  await expect(canvas).toBeVisible({timeout:15_000});
+  await canvas.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  const screenshot=await canvas.screenshot();
+  await testInfo.attach(name+'.png',{body:screenshot,contentType:'image/png'});
+  return screenshot;
+ };
+ const front=await capture('mannequin-standing-front');
+ await expect.poll(()=>canvas.evaluate(node=>Boolean(node.getContext('webgl2')))).toBeTruthy();
+ for(let i=0;i<6;i++)await canvas.press('ArrowRight');
+ expect((await capture('mannequin-standing-oblique')).equals(front)).toBe(false);
+ const poses=new Set([front.toString('base64')]);
+ for(const pose of ['lean','step','sitting']){
+  await page.locator('[data-ws-pose="'+pose+'"]').click();
+  poses.add((await capture('mannequin-'+pose)).toString('base64'));
+ }
+ expect(poses.size).toBe(4);
+ expect(errors).toEqual([]);
+});
+
 test('offline AI compose falls back to the deterministic local rules engine',async({page})=>{
  await page.addInitScript(()=>{
   localStorage.setItem('photolens_ai_enabled','true');

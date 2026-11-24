@@ -51,3 +51,19 @@ Các hình là SVG vẽ bằng mã, không phải ảnh chụp sản phẩm. M�
 - Playwright tại https://github.com/Taylor447/PhotoLens/actions/runs/45400325018: 7/7 đạt, gồm kiểm tra URL 60 thumbnail, hình riêng và bố cục desktop/mobile, phục hồi ảnh 404, chuyển 2D/3D, Lookbook xuất PNG, offline fallback và mobile emulation.
 - Auto-review code scanning tại https://github.com/Taylor447/PhotoLens/actions/runs/45400331499 thành công. PR #14 vẫn mở, chưa merge; head đã xác minh là b6897e7.
 - GĐ0 được xác minh hoàn tất. Dừng tại đây theo yêu cầu. GĐ4 chưa tiếp tục trong checkpoint này; GĐ7 vẫn tạm dừng.
+
+## GĐ4 · Ma-nơ-canh và rigging
+
+Mốc trước sửa là PR #14 tại 8d13c568866040036445876229b43ac53bd42eff. Khi kiểm tra trong Edge, lưới cũ có khe ở cổ, eo, hông và chân do các bộ phận đóng riêng rồi gán cứng mỗi bộ phận vào một xương.
+
+| Hạng mục | Trạng thái | Bằng chứng |
+|---|---|---|
+| Bề mặt và rigging | PASS | Một lưới liên thông, kín và có hướng mặt nhất quán ở hai mức chi tiết. Giữ 17 tên xương và 8 morph. Vùng khớp trộn tối đa bốn trọng số xương đã chuẩn hóa. |
+| Đứng, nghiêng, bước, ngồi | PASS trong phạm vi kiểm thử | 48 tổ hợp gồm 4 preset, 2 tổ hợp số đo biên, 4 tư thế và 2 mức chi tiết. Không phát hiện cặp tam giác không chung đỉnh cắt nhau bằng phép thử cạnh–mặt. Diện tích mặt nhỏ nhất 0,0108 cm². Góc gập hông khi ngồi giảm theo tỉ lệ chiều dài thân và độ sâu hông với số đo biên. |
+| Xuyên thân | PASS cho phép đo đỉnh | 1.920 tổ hợp trên 60 mẫu, 4 preset, 4 tư thế và 2 mức chi tiết. 0/201.024 đỉnh nằm bên trong lưới thân. Cảnh thử nhiều món đạt 22.770 tam giác, gồm sàn. |
+| Hiển thị | PASS trên Edge | Chụp các góc trước, 45°, bên, sau, 4 tư thế, đổi preset và mặc áo/quần. Kiểm tra thấy WebGL2 hoạt động và không có lỗi JavaScript trên trang. Ảnh Playwright của CI được đính kèm trong artifact Wardrobe browser checks. |
+| Mesh trang phục, fit và hiệu năng thiết bị | PARTIAL | Các shell hiện có dùng collider mới. Kiểm thử đỉnh chưa đo giao nhau giữa các lớp. Chất lượng lưới theo mẫu, số liệu sản phẩm và FPS trên thiết bị Android thật còn chờ kiểm định. |
+
+Các tệp chính gồm `features/wardrobe/studio3d/mannequin-surface.js`, `features/wardrobe/studio3d/geometry.js`, `features/wardrobe3d.js` và `tests/wardrobe-3d.test.js`. Manifest ghi nguồn, tác giả và giấy phép cho lưới sinh bằng mã. Playwright có một ca mới để kiểm tra canvas khi xoay bằng bàn phím và chuyển các tư thế.
+
+Kiểm tra cục bộ gồm 47 unit test, Vite build và kiểm tra manifest/asset. Playwright CI chạy trên PR #14. Phần kế tiếp của GĐ4 là lưới trang phục theo từng kiểu dáng và skinning theo lớp.

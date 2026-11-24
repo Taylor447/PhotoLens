@@ -65,9 +65,15 @@ function skinnedPart(T,root,rig,part,material,targets=[]){
   geometry.setAttribute('position',new T.Float32BufferAttribute(part.points.flat(),3));
   geometry.setAttribute('uv',new T.Float32BufferAttribute(part.uv,2));
   geometry.setIndex(part.indices);
-  const joint=rig.skeleton.bones.findIndex(x=>x.name===part.bone);
+  const joints=new Map(rig.skeleton.bones.map((bone,index)=>[bone.name,index]));
   const skinIndices=new Uint16Array(part.points.length*4), skinWeights=new Float32Array(part.points.length*4);
-  for(let i=0;i<part.points.length;i++){skinIndices[i*4]=joint;skinWeights[i*4]=1;}
+  for(let i=0;i<part.points.length;i++){
+    const influences=part.skin?.[i]||[[part.bone,1]];
+    for(const [slot,[bone,weight]] of influences.entries()){
+      skinIndices[i*4+slot]=joints.get(bone);
+      skinWeights[i*4+slot]=weight;
+    }
+  }
   geometry.setAttribute('skinIndex',new T.Uint16BufferAttribute(skinIndices,4));
   geometry.setAttribute('skinWeight',new T.Float32BufferAttribute(skinWeights,4));
   geometry.computeVertexNormals();

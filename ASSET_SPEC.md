@@ -39,7 +39,9 @@ Bone names are case-sensitive. The rest skeleton and convention are:
         Thigh_L → Shin_L → Foot_L
         Thigh_R → Shin_R → Foot_R
 
-The procedural mannequin uses Three.js skinning and the following relative position morph targets. Each target records the incremental geometry change for its own centimetre input. The target sum is tested against the same generated body used in the collision check.
+The procedural mannequin uses one closed surface with shared vertices at the head, neck, torso, shoulders, hands, hips, knees and feet. Catmull–Clark subdivision smooths the surface at two levels of detail. Joint regions interpolate up to four normalized bone weights from the same control mesh. The posed renderer and collider use the same surface and weights. The asset manifest records the generator and provenance.
+
+Each relative position morph target records the incremental geometry change for its own centimetre input. The summed targets must match the reference body used for collision checks.
 
 | Morph | Reference cm | Control range cm |
 |---|---:|---:|
@@ -59,7 +61,7 @@ Place the following metadata at **asset.extras.photoLens** in the GLB JSON:
 - For binding **anchor**, author the static mesh around the named bone's local origin. Use **Root** for a full piece positioned in standing world coordinates. The studio moves the mesh with that bone. Geometry should already be sized for the intended reference.
 - For binding **rigged**, the skin joints must use the names above. Author the garment bones in a matching reference pose and parent hierarchy. The studio applies the preset rotation deltas to matching joints and validates the visible pose against the current body. Arbitrary rigs, user-authored morph targets and size-table rows do not imply geometric retargeting.
 - Use a GLB 2 file with embedded textures and buffers. No resource URI is accepted. Triangles are the only supported primitive mode. UVs must tile over seams. Name the recolorable base material **main** for generated assets.
-- A sampled vertex inside the mannequin counts as penetration. The studio measures this by ray parity against closed triangles of each posed body part. Procedural garment vertices are pushed outside intersecting body parts and rechecked. A user GLB exceeding 1% at the current pose falls back to the procedural preview. This criterion does not measure edge-to-edge crossings, garment-on-garment intersections, fabric pressure, or actual fit. Cloth frames are screened against the same body mesh before display.
+- A garment vertex inside the mannequin counts as penetration. The studio measures this by ray parity against the closed posed body surface. It indexes triangles in the plane transverse to the ray so that each query visits only the triangles close to the ray. Procedural garment vertices found inside move to a nearby exterior position. A user GLB exceeding 1% at the current pose falls back to the procedural preview. This criterion does not measure edge-to-edge crossings, garment-on-garment intersections, fabric pressure, or actual fit. Cloth frames are screened against the same body mesh before display.
 
 ## Size and performance contract
 
@@ -69,7 +71,7 @@ Place the following metadata at **asset.extras.photoLens** in the GLB JSON:
 
 ## Tools and validation
 
-- **npm run test:unit** validates catalog records and provenance, checks both procedural LODs for all catalog templates across preset bodies and poses, and tests GLB validation and fit arithmetic.
+- **npm run test:unit** validates catalog records and provenance, checks mannequin topology, skin weights and posed triangle crossings at both levels of detail, checks garment vertex penetration across presets and poses, and tests GLB validation and fit arithmetic.
 - **node tools/assets/wardrobe-asset.mjs generate tpl-tops-1 output** creates a standalone procedural GLB, SVG thumbnail and a SHA-256 manifest. Generated files are local outputs and are not bundled by default.
 - **node tools/assets/wardrobe-asset.mjs inspect FILE** validates a GLB or project SVG. **node tools/assets/wardrobe-asset.mjs manifest FILE OUTPUT_JSON SOURCE LICENSE AUTHOR** checks a file and records its provenance.
 - **node tools/assets/wardrobe-asset.mjs compress INPUT_GLB OUTPUT_GLB** requires a local native gltfpack build with Basis Universal. It produces meshopt and KTX2 as applicable, preserves the PhotoLens contract and validates the result. Draco files can be authored with a separate encoder and loaded directly.

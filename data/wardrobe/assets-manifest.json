@@ -1,5 +1,13 @@
 {
   "schemaVersion": 1,
+  "mannequin": {
+    "id": "three:mannequin",
+    "format": "procedural3d",
+    "generator": "features/wardrobe/studio3d/mannequin-surface.js#buildMannequinSurface",
+    "source": "PhotoLens procedural code",
+    "license": "CC0",
+    "author": "PhotoLens project"
+  },
   "assets": [
     {
       "id": "svg:tpl-bags-1",
