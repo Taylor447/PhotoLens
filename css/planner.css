@@ -280,3 +280,42 @@
 
 .ws-bg-palette{display:grid;gap:8px}.ws-bg-palette button span{display:inline-block;width:19px;height:19px;border:1px solid currentColor;border-radius:50%;vertical-align:middle;margin-right:6px}
 .ws-look-card button,.ws-bg-palette button{min-height:44px}
+
+/* Stage 6 wardrobe layout and accessible touch targets */
+.planner-wardrobe-tabs button{font-size:16px}
+.ws-app{font-size:16px}
+.ws-layout-studio{grid-template-columns:minmax(220px,.82fr) minmax(360px,1.55fr) minmax(280px,.95fr);align-items:start}
+.ws-layout-studio>.ws-closet-panel{grid-column:1;grid-row:1;position:sticky;top:8px;max-height:calc(100dvh - 210px);overflow:auto}
+.ws-layout-studio>.ws-main{grid-column:2;grid-row:1}
+.ws-layout-studio>.ws-properties{grid-column:3;grid-row:1}
+.ws-mobile-closet>summary{display:none}
+.ws-closet-content>.ws-toolbar{grid-template-columns:minmax(0,1fr)}
+.ws-closet-content .ws-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ws-closet-content .ws-item-card small{font-size:16px;line-height:1.35}
+.ws-layout-studio .ws-main,.ws-layout-studio .ws-side{min-width:0}
+.ws-layout-studio .ws-stage,.ws-layout-studio .ws-svg-host,.ws-layout-studio .ws-three-host{min-height:420px}
+.ws-layout-studio .ws-toolbar label,.ws-layout-studio .ws-side label{font-size:16px}
+.ws-layout-studio .ws-card-actions{align-items:stretch}
+.ws-layout-studio .ws-card-actions button{min-height:44px}
+@media(max-width:1080px){
+ .ws-layout-studio{grid-template-columns:minmax(190px,.72fr) minmax(320px,1.3fr)}
+ .ws-layout-studio>.ws-properties{grid-column:2;grid-row:2}
+ .ws-layout-studio>.ws-main{grid-column:2;grid-row:1}
+ .ws-layout-studio>.ws-closet-panel{grid-column:1;grid-row:1 / span 2}
+}
+@media(max-width:760px){
+ .ws-layout-studio{display:flex;flex-direction:column;gap:12px}
+ .ws-layout-studio>.ws-main{order:-2;width:100%}
+ .ws-layout-studio>.ws-closet-panel{order:-1;width:100%;position:sticky;bottom:0;top:auto;z-index:8;max-height:min(54dvh,480px);padding:8px;background:var(--surface,#fff);box-shadow:0 -8px 24px rgba(24,51,40,.12)}
+ .ws-layout-studio>.ws-properties{order:0;width:100%}
+ .ws-mobile-closet>summary{display:flex;align-items:center;min-height:48px;padding:0 12px;border-radius:12px;background:var(--surface-2,#f2f6f4);font-size:16px;font-weight:750;cursor:pointer}
+ .ws-closet-content{max-height:calc(min(54dvh,480px) - 70px);overflow:auto;padding:8px 4px 10px;overscroll-behavior:contain}
+ .ws-closet-content .ws-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ws-layout-studio .ws-stage,.ws-layout-studio .ws-svg-host,.ws-layout-studio .ws-three-host{min-height:56dvh;height:56dvh;max-height:680px}
+ .ws-layout-studio .ws-main{padding:12px}
+ .ws-layout-studio .ws-item-card{padding:8px}
+}
+@media(max-width:420px){.ws-layout-studio .ws-stage,.ws-layout-studio .ws-svg-host,.ws-layout-studio .ws-three-host{min-height:52dvh;height:52dvh}}
+@media(prefers-reduced-motion:reduce){.ws-layout-studio *{scroll-behavior:auto!important;transition:none!important}}
+
+.ws-layout-studio .planner-muted,.ws-layout-studio .ws-disclaimer,.ws-layout-studio .ws-privacy,.ws-layout-studio .ws-four-note{font-size:16px;line-height:1.5}
