@@ -45,4 +45,9 @@ Các hình là SVG vẽ bằng mã, không phải ảnh chụp sản phẩm. M�
 
 ## Việc còn lại
 
-Auto-review và CI cho thay đổi mới chưa được xác nhận. Chưa sửa hình học 3D trong phiên khôi phục này. Bước tiếp là ma-nơ-canh/skinning, rồi hình học trang phục, mỗi nhóm có kiểm thử. GĐ7 vẫn tạm dừng. Không merge hoặc deploy production khi chưa được xác nhận.
+Đồng bộ GitHub hoàn tất. Commit b6897e7b17d63d215ea167d08daa28297b3208e6 trên đúng nhánh PR #14 chứa nội dung checkpoint cục bộ 126dc0a.
+
+- CI tại https://github.com/Taylor447/PhotoLens/actions/runs/45400325243: core tests và build site thành công, Pages artifact được tạo. Job deploy bị bỏ qua theo điều kiện PR, production không đổi.
+- Playwright tại https://github.com/Taylor447/PhotoLens/actions/runs/45400325018: 7/7 đạt, gồm kiểm tra URL 60 thumbnail, hình riêng và bố cục desktop/mobile, phục hồi ảnh 404, chuyển 2D/3D, Lookbook xuất PNG, offline fallback và mobile emulation.
+- Auto-review code scanning tại https://github.com/Taylor447/PhotoLens/actions/runs/45400331499 thành công. PR #14 vẫn mở, chưa merge; head đã xác minh là b6897e7.
+- GĐ0 được xác minh hoàn tất. Dừng tại đây theo yêu cầu. GĐ4 chưa tiếp tục trong checkpoint này; GĐ7 vẫn tạm dừng.
