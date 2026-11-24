@@ -33,9 +33,32 @@ export function createWardrobeRepository(storage=globalThis.localStorage,indexed
  saveLook(v){const name=text(v?.name,100);if(!name)return null;const itemIds=[...new Set((v.itemIds||[]).map(String))].filter(x=>state.items.some(y=>y.id===x));if(!itemIds.length)return null;const old=state.looks.find(x=>x.id===v.id),look={id:old?.id||text(v.id,120)||id(),name,itemIds,tags:Array.isArray(v.tags)?v.tags.map(x=>text(x,40)).filter(Boolean):old?.tags||[],createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};state.looks=old?state.looks.map(x=>x.id===old.id?look:x):[look,...state.looks];persist();return look;},
  duplicateLook(itemId){const old=state.looks.find(x=>x.id===itemId);return old?this.saveLook({name:old.name+' · bản sao',itemIds:old.itemIds,tags:old.tags}):null;},
  removeLook(itemId){state.looks=state.looks.filter(x=>x.id!==itemId);persist();return true;},
- async saveAsset(blob,meta={}){if(!db)await ready;const asset={id:id(),blob,type:blob?.type||'',name:text(meta.name||'Tệp cá nhân',100),createdAt:new Date().toISOString()};if(db)await request(db.transaction('assets','readwrite').objectStore('assets').put(asset));state.assets.push({id:asset.id,type:asset.type,name:asset.name});persist();return asset.id;},
+ async saveAsset(blob,meta={}){if(!db)await ready;if(!db)throw new Error('IndexedDB không khả dụng; không thể lưu tệp cục bộ.');if(!blob||typeof blob.arrayBuffer!=='function')throw new TypeError('Tài sản phải là Blob hoặc File.');const asset={id:id(),blob,type:blob.type||'',name:text(meta.name||'Tệp cá nhân',100),createdAt:new Date().toISOString()};await request(db.transaction('assets','readwrite').objectStore('assets').put(asset));state.assets.push({id:asset.id,type:asset.type,name:asset.name});persist();return asset.id;},
  async getAsset(assetId){if(!db)await ready;return db?request(db.transaction('assets','readonly').objectStore('assets').get(assetId)):null;}
  };
+}
+export function classifyWardrobeAsset(name='',type='',size=0){
+ if(!Number.isFinite(size)||size<=0||size>12*1024*1024)return null;
+ const ext=String(name).toLowerCase().split('.').pop(),mime=String(type).toLowerCase().split(';')[0].trim();
+ const matches=(allowed)=>!mime||allowed.includes(mime);
+ if(ext==='png'&&matches(['image/png']))return'image';
+ if((ext==='jpg'||ext==='jpeg')&&matches(['image/jpeg']))return'image';
+ if(ext==='webp'&&matches(['image/webp']))return'image';
+ if(ext==='svg'&&matches(['image/svg+xml','text/xml','application/xml','text/plain']))return'svg';
+ if(ext==='glb'&&matches(['model/gltf-binary','application/octet-stream']))return'glb';
+ return null;
+}
+export function hasSupportedImageHeader(bytes){
+ const b=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes||[]);
+ return (b.length>=8&&[137,80,78,71,13,10,26,10].every((v,i)=>b[i]===v))
+  ||(b.length>=3&&b[0]===255&&b[1]===216&&b[2]===255)
+  ||(b.length>=12&&b[0]===82&&b[1]===73&&b[2]===70&&b[3]===70&&b[8]===87&&b[9]===69&&b[10]===66&&b[11]===80);
+}
+export function validGlbHeader(bytes,totalLength=bytes?.byteLength){
+ const b=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes||[]);
+ if(b.length<12||totalLength<20)return false;
+ const view=new DataView(b.buffer,b.byteOffset,b.byteLength);
+ return view.getUint32(0,true)===0x46546c67&&view.getUint32(4,true)===2&&view.getUint32(8,true)===totalLength&&totalLength%4===0;
 }
 export function filterGarments(items=[],filters={},weather={}){
  const q=text(filters.query,100).toLocaleLowerCase('vi');
@@ -46,9 +69,11 @@ export function filterGarments(items=[],filters={},weather={}){
   if(filters.pattern&&filters.pattern!=='all'&&x.patternId!==filters.pattern)return false;
   if(filters.color&&filters.color!=='all'&&x.colorFamily!==filters.color)return false;
   if(filters.season&&filters.season!=='all'&&x.season!=='all'&&x.season!==filters.season)return false;
+  if(filters.favorite==='favorites'&&!x.favorite)return false;
+  if(filters.collection&&filters.collection!=='all'&&!(x.collections||[]).includes(filters.collection))return false;
   const temp=Number(weather.temp);if(filters.weather==='current'&&Number.isFinite(temp)&&x.temperatureC?.min!=null&&temp<x.temperatureC.min)return false;if(filters.weather==='current'&&Number.isFinite(temp)&&x.temperatureC?.max!=null&&temp>x.temperatureC.max)return false;
   if(filters.weather==='rainy'&&(x.weather?.rain===false||(!x.weather?.rain&&x.weatherTags?.length&&!x.weatherTags.includes('rainy')&&!x.weatherTags.includes('all'))))return false;if(filters.weather==='windy'&&(x.weather?.wind===false||(!x.weather?.wind&&x.weatherTags?.length&&!x.weatherTags.includes('windy')&&!x.weatherTags.includes('all'))))return false;
-  return !q||[x.name,x.category,x.materialId,x.patternId,...(x.styleTags||[]),...(x.weatherTags||[]),x.notes].join(' ').toLocaleLowerCase('vi').includes(q);
+  return !q||[x.name,x.category,x.materialId,x.patternId,...(x.styleTags||[]),...(x.weatherTags||[]),...(x.collections||[]),x.notes].join(' ').toLocaleLowerCase('vi').includes(q);
  });
 }
 export function calculateFit(body={},garment={}){
@@ -126,4 +151,12 @@ export function buildSvgLook(items=[],options={}){
  const flatHint=options.flatLay?'<text x="205" y="425" text-anchor="middle" fill="#52625e" font-size="14">Bày phẳng · bố cục minh họa</text>':'<text x="205" y="425" text-anchor="middle" fill="#52625e" font-size="14">Mô phỏng 2D · tham khảo, không phải rập may</text>';
  return'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 410 450" role="img" aria-label="'+(options.flatLay?'Bố cục trang phục flat-lay':'Mannequin và trang phục minh họa')+'" style="width:100%;height:100%">'+defs+'<rect width="410" height="450" rx="24" fill="'+bg+'"/>'+(!options.flatLay?'<g transform="'+pose+'">'+human+'</g>':'')+'<g transform="'+pose+'">'+shapes+'</g>'+flatHint+'</svg>';
 }
-export function safeSvgText(s){if(typeof s!=='string'||s.length>2_000_000)return null;const v=s.replace(/<script[\s\S]*?<\/script\s*>/gi,'').replace(/<foreignObject[\s\S]*?<\/foreignObject\s*>/gi,'').replace(/\son\w+\s*=\s*(['"]).*?\1/gi,'').replace(/(?:href|src)\s*=\s*(['"])\s*(?:https?:|javascript:|data:text\/html)[\s\S]*?\1/gi,'');return/<svg[\s>]/i.test(v)?v:null;}
+export function safeSvgText(s){
+ if(typeof s!=='string'||s.length>2_000_000)return null;
+ let v=s.replace(/<!--[\s\S]*?-->/g,'').replace(/<\?xml[^>]*>/gi,'').replace(/<!DOCTYPE[\s\S]*?>/gi,'');
+ v=v.replace(/<(script|foreignObject|iframe|object|embed|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi,'').replace(/<(script|foreignObject|iframe|object|embed|style)\b[^>]*\/?\s*>/gi,'');
+ v=v.replace(/\s+on[a-z][\w:-]*\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi,'').replace(/\s+style\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi,'').replace(/\s+srcset\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi,'');
+ v=v.replace(/\s+(?:href|xlink:href)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gi,(attr,a,b,c)=>{const value=a??b??c??'';return /^#[A-Za-z_][\w:.-]*$/.test(value)?' href="'+value+'"':'';});
+ v=v.replace(/\s+(?:filter|mask|clip-path|fill|stroke)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gi,(attr,a,b,c)=>{const value=a??b??c??'';return /url\(/i.test(value)&&!/^url\(\s*['"]?#[A-Za-z_][\w:.-]*['"]?\s*\)$/i.test(value)?attr.replace(value,'none'):attr;});
+ return /<svg[\s>]/i.test(v)&&!/<\s*svg\b[^>]*\b(?:onload|onerror)\s*=/i.test(v)?v:null;
+}

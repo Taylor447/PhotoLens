@@ -1090,6 +1090,31 @@
       "license": "MIT",
       "author": "Three.js contributors",
       "loading": "on-demand; 2D fallback if unavailable"
+    },
+    {
+      "name": "ONNX Runtime Web",
+      "version": "1.23.2",
+      "source": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.2/dist/ort.min.js",
+      "license": "MIT",
+      "author": "ONNX Runtime contributors",
+      "loading": "Loaded on demand inside a browser worker, WASM CPU execution with one thread."
+    }
+  ],
+  "models": [
+    {
+      "id": "u2netp-saliency-cutout",
+      "name": "U²-NetP salient-object background cutout",
+      "version": "25dee37ab19c5b6ad64ba6578eba63f1ae07720c",
+      "source": "https://huggingface.co/edgetools/u2netp/resolve/25dee37ab19c5b6ad64ba6578eba63f1ae07720c/u2netp.onnx",
+      "modelCard": "https://huggingface.co/edgetools/u2netp/blob/25dee37ab19c5b6ad64ba6578eba63f1ae07720c/README.md",
+      "license": "Apache-2.0",
+      "author": "Xuebin Qin et al.; mirror maintained by Edge Tools (isword14)",
+      "sizeBytes": 4574861,
+      "sha256": "309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8",
+      "input": "float32 RGB NCHW [1,3,320,320]",
+      "output": "saliency map [1,1,320,320]",
+      "limitation": "Generic salient-object detection; not garment-specific, verify the cutout before saving.",
+      "loading": "Fetched and SHA-256 verified only after the user explicitly clicks on-device cutout; cached locally."
     }
   ]
 }

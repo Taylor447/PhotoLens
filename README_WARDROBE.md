@@ -7,15 +7,18 @@ The existing quick suggestions remain available beside a local catalog, Studio 2
 - 60 generated illustration templates across 12 categories (5 each).
 - 20 material labels and 40 repeatable pattern definitions.
 - 0 verified retail products and 0 sourced size tables.
-- 120 manifest references: one SVG renderer and one procedural 3D renderer reference per template. There are no external images or bundled GLB models. Three.js 0.187.0 is fetched on demand under its MIT license, then disposed when leaving the studio.
+- 120 template asset references: one SVG renderer and one procedural 3D renderer per template. There are no sourced retail images or bundled GLB models. Three.js 0.187.0 and ONNX Runtime Web 1.23.2 load on demand under MIT licenses.
 
 Templates are not real garments. Unknown measurements and material properties remain empty; see `DATA_TODO.md`.
 
 ## Local data and privacy
 
-The repository migrates saved items and looks from `photolens_wardrobe_v1` and `photolens_outfits_v1`, retaining IDs, names, colors, notes, and old pattern aliases. Items and looks use IndexedDB with localStorage fallback; binary imports require IndexedDB. No photo or body measurement is uploaded. Measurements stay in memory unless the user checks the local-save consent box. Optional AI compose sends only filtered candidate IDs and non-body attributes (category, color, style, pattern, material, season), background, genre, and weather to a configured Worker. If unavailable, local rules choose a look.
+The repository migrates saved items and looks from `photolens_wardrobe_v1` and `photolens_outfits_v1`, retaining IDs, names, colors, notes, and old pattern aliases. Items and looks use IndexedDB with localStorage fallback; uploaded binary files require IndexedDB and fail clearly if it is unavailable. Image, SVG, and GLB inputs are checked for supported signatures/headers and SVG active/external content is removed. Local image previews are read back from IndexedDB. Photos and measurements never go to AI; measurements stay in memory unless local save is selected. Optional AI compose sends only filtered candidate IDs and non-body attributes (category, color, style, pattern, material, season), background, genre, and weather to a configured Worker. If unavailable, local rules choose a look.
 
-## Studio and limits
+## On-device image cutout
+
+The optional cutout starts only after the user presses its button. The browser worker downloads pinned ONNX Runtime Web 1.23.2 and the U²-NetP model on demand. The Apache-2.0 weights are 4,574,861 bytes and are SHA-256 checked before inference, then cached locally. The model card and authors are recorded in `data/wardrobe/assets-manifest.json`. The user photo is decoded and processed in the browser and is never sent to the model host or Worker AI. Runtime/model downloads need a network connection the first time. U²-NetP detects generic salient objects; it is not a garment-specific segmenter, so its transparent PNG preview must be checked before saving. If inference is unavailable, the original image remains available.
+
 
 Studio 2D renders SVG layers with color, motif, pose, and flat-lay controls. Studio 3D uses low-poly procedural geometry with pointer/touch rotation, pinch/scroll zoom, arrow-key rotation, and camera height/distance sliders. If WebGL or the pinned Three.js module cannot load, the interface returns to 2D. Three.js loads on demand from the pinned CDN version recorded in the asset manifest.
 

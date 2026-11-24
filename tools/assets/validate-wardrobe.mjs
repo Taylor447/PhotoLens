@@ -138,7 +138,18 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
   assert.ok(hasText(library.name)&&hasText(library.version),'Library name and version are required');
   validateProvenance(library,'Library '+library.name);
  }
+ assert.ok(Array.isArray(manifest.models)&&manifest.models.length>0,'At least one licensed on-device model record is required');
+ const modelIds=new Set();
+ for(const model of manifest.models){
+  assert.ok(hasText(model.id)&&!modelIds.has(model.id),'Model manifest ID missing or duplicated: '+model.id);modelIds.add(model.id);
+  for(const key of ['name','version','sha256','source','modelCard','sizeBytes','input','output','limitation','loading'])assert.ok(hasText(String(model[key]??'')),'Model '+model.id+' needs '+key);
+  assert.ok(/^https:\/\//.test(model.source)&&/^https:\/\//.test(model.modelCard),'Model '+model.id+' needs HTTPS provenance');
+  assert.ok(/^[a-f0-9]{64}$/i.test(model.sha256),'Model '+model.id+' needs a pinned SHA-256');
+  assert.ok(Number.isSafeInteger(model.sizeBytes)&&model.sizeBytes>0,'Model '+model.id+' needs a positive byte size');
+  validateProvenance(model,'Model '+model.id);
+ }
  assert.ok(manifest.libraries.some(x=>x.name==='Three.js'&&x.version==='0.187.0'&&x.license==='MIT'),'Pinned 3D library provenance missing');
+ assert.ok(manifest.libraries.some(x=>x.name==='ONNX Runtime Web'&&x.version==='1.23.2'&&x.license==='MIT'),'Pinned on-device runtime provenance missing');
 
  return{
   templateCount:ids.length,
@@ -147,6 +158,8 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
   materialCount:materialIds.size,
   patternCount:patternIds.size,
   manifestEntries:manifest.assets.length,
+  modelCount:manifest.models.length,
+  libraryCount:manifest.libraries.length,
   svgReferences:g.templates.filter(x=>x.assets.svg).length,
   procedural3dReferences:g.templates.filter(x=>x.assets.procedural3d).length,
   glbCount:g.templates.filter(x=>x.assets.glb!==null).length,

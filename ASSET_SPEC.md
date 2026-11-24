@@ -50,3 +50,10 @@ hip.R, knee.R, ankle.R
 ## Current validator coverage
 
 `npm run test:unit` runs `tools/assets/validate-wardrobe.mjs` to check schema shape, category coverage, unique IDs, catalog-to-manifest references, provenance, and actual catalog counts. There are currently no GLBs, so rig, morph, UV, triangle-budget, texture, compression, LOD, and clipping checks are not applicable yet. The current `inspectTemplateBounds` helper is explicitly a shell-margin proxy; it does not test mesh intersections. Do not label its output as a collision or clipping measurement.
+
+## User imports and browser models
+
+- User-provided photos, SVG, and GLB files are local user assets, separate from generated templates. Store their blobs in IndexedDB and keep only metadata/references in the state record. If IndexedDB cannot persist a binary, fail visibly and do not create a phantom asset reference.
+- Imported SVG is sanitized before saving: remove scripts, foreign objects, style blocks/attributes, event handlers, external URLs, and remote references. Preview user SVG as an image resource, never inject its markup into the app DOM.
+- A browser model record belongs in `assets-manifest.json` with a pinned revision, HTTPS source, SPDX license, author, byte size, SHA-256, input/output contract, loading behavior, and documented limitation. Verify its hash before inference.
+- Model weights and runtime are fetched only after a user action, run locally in a browser worker, and are cached locally. The user’s image must never be included in fetch requests or Worker AI payloads. A generic saliency model must be described as approximate and its result reviewed by the user.
