@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createWardrobeRepository,LEGACY_ITEMS,LEGACY_LOOKS,filterGarments,normalizeGarment,calculateFit,chooseSize,contrastRatio,colorHarmony,scoreLook,resolveStudioMode,reconcileLook,inspectTemplateBounds,buildSvgLook,safeSvgText,MANNEQUIN_DEFAULTS_CM,MANNEQUIN_PRESETS,normalizeMannequin,createMannequinAnchors,garmentSvgGeometry,inspectSvgGarmentClipping,classifyWardrobeAsset,hasSupportedImageHeader,validGlbHeader} from '../core/wardrobe-engine.js';
+import {createWardrobeRepository,LEGACY_ITEMS,LEGACY_LOOKS,filterGarments,normalizeGarment,calculateFit,chooseSize,contrastRatio,colorHarmony,scoreLook,composeRuleOutfit,buildCapsule,resolveStudioMode,reconcileLook,inspectTemplateBounds,buildSvgLook,safeSvgText,MANNEQUIN_DEFAULTS_CM,MANNEQUIN_PRESETS,normalizeMannequin,createMannequinAnchors,garmentSvgGeometry,inspectSvgGarmentClipping,classifyWardrobeAsset,hasSupportedImageHeader,validGlbHeader} from '../core/wardrobe-engine.js';
 import {readFileSync} from 'node:fs';
 function memoryStorage(){const map=new Map();return{getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,String(v)),removeItem:k=>map.delete(k)};}
 const template={id:'test-top',name:'Áo test',category:'tops',color:'#336699',styleTags:['casual'],materialId:'cotton',patternId:'solid',measurementsCm:{chest:100,waist:82},layerOrder:20};
@@ -37,6 +37,30 @@ test('2D generation, 3D fallback, shared ordering, fit and size limits are expli
 test('generated data has unique template IDs and no invented commercial products',()=>{
  const g=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url))),m=JSON.parse(readFileSync(new URL('../data/wardrobe/materials.json',import.meta.url))),p=JSON.parse(readFileSync(new URL('../data/wardrobe/patterns.json',import.meta.url)));
  assert.equal(g.schemaVersion,1);assert.equal(g.templates.length,60);assert.equal(g.realGarmentCount,0);assert.equal(new Set(g.templates.map(x=>x.id)).size,g.templates.length);assert.ok(m.materials.length>=20);assert.ok(p.patterns.length>=40);
+});
+
+test('outfit rules explain layering, pattern scale, proportion, dress code and manual weather',()=>{
+ const wideTop={...template,id:'wide-top',category:'tops',fit:'oversize',layer:'base',layerOrder:40,patternId:'wide-stripe',styleTags:['streetwear']};
+ const wideBottom={...template,id:'wide-bottom',category:'bottoms',fit:'oversize',layer:'base',layerOrder:50,patternId:'polka-large',styleTags:['streetwear']};
+ const outer={...template,id:'outer',category:'outerwear',fit:'regular',layer:'outer',layerOrder:10,patternId:'solid',styleTags:['streetwear']};
+ const result=scoreLook([wideTop,wideBottom,outer],{background:'#ffffff',temperatureC:10,precipitationMm:2,windKmh:40,dressCode:'formal',genre:'cosplay'});
+ assert.ok(result.score>=0&&result.score<=100);
+ assert.ok(result.warnings.some(x=>x.includes('hai họa tiết lớn')));
+ assert.ok(result.warnings.some(x=>x.includes('lớp ngoài nằm dưới')));
+ assert.ok(result.warnings.some(x=>x.includes('oversize')));
+ assert.ok(result.warnings.some(x=>x.includes('dress code')));
+ assert.ok(result.warnings.some(x=>x.includes('cosplay')));
+ assert.ok(result.warnings.some(x=>x.includes('mưa')));
+ assert.ok(result.warnings.some(x=>x.includes('Gió mạnh')));
+ const cold=scoreLook([wideTop],{temperatureC:10});assert.ok(cold.warnings.some(x=>x.includes('Trời lạnh')));
+});
+test('rule composer is seeded, uses an anchor, reacts to cold weather, and builds a compact capsule',()=>{
+ const g=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url))),pool=g.templates;
+ const one=composeRuleOutfit(pool,{seed:123,weather:{temp:5}}),two=composeRuleOutfit(pool,{seed:123,weather:{temp:5}});
+ assert.deepEqual(one.map(x=>x.id),two.map(x=>x.id));assert.ok(one.some(x=>x.layer==='outer'));assert.ok(one.some(x=>x.category==='shoes'));
+ const anchor=pool.find(x=>x.category==='tops'),anchored=composeRuleOutfit(pool,{anchor,seed:2});
+ assert.ok(anchored.some(x=>x.id===anchor.id));
+ const capsule=buildCapsule(pool,8);assert.ok(capsule.length<=8);assert.ok(capsule.some(x=>x.category==='tops'));assert.ok(capsule.some(x=>x.category==='bottoms'));assert.ok(capsule.some(x=>x.category==='shoes'));
 });
 
 test('shared mannequin dimensions clamp in cm and scale all 2D anchors within the stage',()=>{

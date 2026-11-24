@@ -94,27 +94,64 @@ export function colorHarmony(items=[]){
  return{scheme:mean>100?'Tương phản pha trộn':'Phối màu tự do',confidence:'low'};
 }
 export function scoreLook(items=[],context={}){
- if(!items.length)return{score:0,reasons:['Chọn ít nhất một món.'],warnings:[]};
- let score=60,reasons=[],warnings=[];
- const patterns=items.filter(x=>x.patternId&&x.patternId!=='solid'),cats=items.map(x=>x.category),harmony=colorHarmony(items);
- if(items.length>=2){score+=5;reasons.push('Có nhiều lớp hoặc món phối cùng nhau.');}
- if(new Set(cats).size<cats.length){score-=4;warnings.push('Có nhiều món cùng danh mục; kiểm tra thứ tự lớp.');}
- if(items.some(x=>x.fit==='oversize')&&items.some(x=>x.fit==='slim')){score+=6;reasons.push('Tỉ lệ rộng/ôm được cân bằng theo nhãn bạn chọn.');}
- reasons.push('Hòa sắc tham khảo: '+harmony.scheme+'; đây là quy tắc màu cơ bản, không phải đánh giá thẩm mỹ.');
+ if(!items.length)return{score:0,reasons:['Chọn ít nhất một món.'],warnings:[],harmony:colorHarmony([])};
+ let score=60,reasons=['Điểm quy tắc tham khảo 0–100 dựa trên dữ liệu hiện có; không đánh giá cơ thể hoặc bảo đảm kết quả ảnh.'],warnings=[],cats=items.map(x=>x.category),harmony=colorHarmony(items);
+ if(items.length>=2){score+=5;reasons.push('Có nhiều món phối cùng nhau.');}
+ if(new Set(cats).size<cats.length){score-=4;warnings.push('Có nhiều món cùng danh mục; kiểm tra cách xếp lớp.');}
+ const upper=items.filter(x=>['tops','outerwear'].includes(x.category)),lower=items.filter(x=>['bottoms','skirts'].includes(x.category));
+ const upperWide=upper.some(x=>x.fit==='oversize'),lowerWide=lower.some(x=>x.fit==='oversize'),lowerFitted=lower.some(x=>['slim','regular'].includes(x.fit));
+ if(upperWide&&lowerFitted){score+=6;reasons.push('Tỉ lệ áo rộng và phần dưới gọn dựa trên nhãn fit đã có.');}
+ else if(upperWide&&lowerWide){score-=5;warnings.push('Cả phần trên và phần dưới đều được gắn nhãn oversize; thử cân bằng độ rộng.');}
+ else reasons.push('Chưa có đủ nhãn fit để đánh giá tỉ lệ; có thể chỉnh thủ công.');
+ reasons.push('Hòa sắc tham khảo: '+harmony.scheme+'; quy tắc màu trung tính, không phải đánh giá thẩm mỹ.');
  const ratio=items.map(x=>contrastRatio(x.color,context.background||'#56736f')).filter(Number.isFinite);
- if(ratio.some(x=>x>=3)){score+=8;reasons.push('Ít nhất một màu có tương phản nền từ 3:1 trở lên.');}else reasons.push('Tương phản nền dưới 3:1 hoặc chưa đủ dữ liệu; kiểm tra ảnh thật.');
- if(patterns.length>1){score-=8;warnings.push('Có nhiều họa tiết cùng lúc; cân nhắc giữ một họa tiết nổi bật.');}else reasons.push('Số họa tiết được giữ gọn.');
+ if(ratio.some(x=>x>=3)){score+=8;reasons.push('Ít nhất một màu có tương phản nền từ 3:1 trở lên.');}
+ else reasons.push('Tương phản màu với nền dưới 3:1 hoặc chưa đủ dữ liệu; hãy xem ảnh thật.');
+ const largePatterns=items.filter(x=>{const id=String(x.patternId||'').toLowerCase();return x.parameters?.patternScale==='large'||['wide-stripe','polka-large','floral-large','large-check'].includes(id)||id.includes('large');});
+ const patternCount=items.filter(x=>x.patternId&&x.patternId!=='solid').length;
+ if(largePatterns.length>=2){score-=9;warnings.push('Có từ hai họa tiết lớn được ghi nhận; cân nhắc giữ một họa tiết lớn.');}
+ else if(patternCount>1){score-=4;warnings.push('Có nhiều họa tiết cùng lúc; xem trước để tránh cạnh tranh thị giác.');}
+ else reasons.push('Số họa tiết được giữ gọn.');
  if(items.some(x=>x.shootingNotes?.moireRisk)){score-=5;warnings.push('Họa tiết nhỏ có thể tạo moiré.');}
  if(items.some(x=>x.shootingNotes?.reflective===true))warnings.push('Có món phản quang theo ghi chú dữ liệu.');
+ if(items.some(x=>x.shootingNotes?.wrinkle===true))warnings.push('Có món dễ nhăn theo ghi chú dữ liệu.');
  if(items.some(x=>x.shootingNotes?.highlight===true||x.shootingNotes?.highlight==='high'))warnings.push('Có thể cháy sáng theo ghi chú dữ liệu.');
- const temp=Number(context.temperatureC);
+ const layerRank={base:0,mid:1,outer:2};let layerError=false;
+ for(const a of items)for(const b of items)if(layerRank[a.layer]!=null&&layerRank[b.layer]!=null&&layerRank[a.layer]<layerRank[b.layer]&&Number(a.layerOrder)>Number(b.layerOrder))layerError=true;
+ if(layerError){warnings.push('Thứ tự lớp đang đảo: lớp ngoài nằm dưới lớp trong.');score-=5;}
+ const dressCode=String(context.dressCode||'').toLowerCase(),dressStyles={formal:['office','classic','minimal'],office:['office','classic','minimal'],casual:['casual','streetwear','classic'],sport:['active'],traditional:['traditional'],cosplay:['cosplay']};
+ if(dressStyles[dressCode]){const known=items.flatMap(x=>x.styleTags||[]);if(known.length&&!known.some(x=>dressStyles[dressCode].includes(x)))warnings.push('Phong cách được ghi nhận chưa khớp dress code '+dressCode+'.');else if(!known.length)warnings.push('Chưa có thẻ phong cách để kiểm tra dress code.');}
+ const genre=String(context.genre||'').toLowerCase(),styles=items.flatMap(x=>x.styleTags||[]);
+ if(genre==='cosplay'&&styles.length&&!styles.includes('cosplay'))warnings.push('Chưa có thẻ cosplay trên món đang chọn.');
+ if(['portrait','night','moon'].includes(genre)&&items.some(x=>x.shootingNotes?.reflective===true))warnings.push('Phản quang có thể bắt sáng mạnh trong bối cảnh chân dung/đêm.');
+ const temp=context.temperatureC===null||context.temperatureC===undefined||context.temperatureC===''?null:Number(context.temperatureC);
  if(Number.isFinite(temp)){
-  if(temp<15&&!items.some(x=>x.layer==='outer'||x.season==='winter')){score-=6;warnings.push('Trời lạnh nhưng chưa có lớp ngoài được ghi nhận.');}
+  if(temp<15&&!items.some(x=>x.layer==='outer'||x.temperatureC?.min!=null&&x.temperatureC.min<=temp)){score-=6;warnings.push('Trời lạnh nhưng chưa có lớp ngoài hoặc khoảng nhiệt độ phù hợp được xác nhận.');}
+  if(temp>=28&&items.some(x=>['wool','wool-blend','heavy-knit'].includes(x.materialId))){score-=3;warnings.push('Chất liệu dày được ghi nhận có thể không phù hợp trời nóng.');}
   if(items.some(x=>(x.temperatureC?.min!=null&&temp<x.temperatureC.min)||(x.temperatureC?.max!=null&&temp>x.temperatureC.max)))warnings.push('Một số món nằm ngoài khoảng nhiệt độ được ghi nhận.');
  }
  if(Number(context.precipitationMm)>0&&!items.some(x=>x.weather?.rain===true))warnings.push('Có mưa nhưng chưa có dữ liệu xác nhận khả năng chịu mưa của bộ đồ.');
  if(Number(context.windKmh)>30&&!items.some(x=>x.weather?.wind===true))warnings.push('Gió mạnh nhưng chưa có dữ liệu xác nhận khả năng cản gió.');
- return{score:Math.max(0,Math.min(100,Math.round(score))),reasons,warnings,harmony};
+ return{score:Math.max(0,Math.min(100,Math.round(score))),reasons,warnings:[...new Set(warnings)],harmony};
+}
+export function composeRuleOutfit(pool=[],options={}){
+ let state=(Number(options.seed)||1)>>>0;const random=()=>((state=(state*1664525+1013904223)>>>0)/4294967296),pick=list=>list.length?list[Math.floor(random()*list.length)]:null,available=pool.filter(x=>x&&x.id);
+ if(options.mode==='capsule')return buildCapsule(available,options.limit||8);
+ const anchor=options.anchor||null,current=options.current||[],byCategory=new Map();for(const x of available){if(!byCategory.has(x.category))byCategory.set(x.category,[]);byCategory.get(x.category).push(x);}
+ if(options.mode==='variation'&&current.length){const out=current.slice(),i=Math.floor(random()*out.length),old=out[i],alt=pick((byCategory.get(old.category)||[]).filter(x=>x.id!==old.id));if(alt)out[i]=alt;return out.sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));}
+ const choose=(cat)=>{const rows=byCategory.get(cat)||[];return anchor?.category===cat?anchor:pick(rows);},weather=options.weather||{},temp=weather.temp===null||weather.temp===undefined||weather.temp===''?null:Number(weather.temp),mustOuter=Boolean(options.includeOuter)||Number.isFinite(temp)&&temp<15;
+ let out=[];const anchorCategory=anchor?.category;
+ if(anchorCategory==='dresses')out=[anchor];else if(['tops','bottoms','skirts','outerwear'].includes(anchorCategory)){if(anchorCategory==='tops')out.push(anchor,choose(pick(['bottoms','skirts'])));else if(anchorCategory==='bottoms'||anchorCategory==='skirts')out.push(choose('tops'),anchor);else out.push(anchor,choose(pick(['tops','bottoms','skirts'])));}
+ else{const dress=pick(byCategory.get('dresses')||[]);if(dress&&random()<.35)out=[dress];else out=[choose('tops'),choose(pick(['bottoms','skirts']))];}
+ if(mustOuter&&!out.some(x=>x?.layer==='outer'))out.push(choose('outerwear'));
+ if(!out.some(x=>x?.category==='shoes'))out.push(choose('shoes'));
+ const accessory=pick((available.filter(x=>x.layer==='accessory'&&!['shoes'].includes(x.category))));if(accessory)out.push(accessory);
+ return [...new Map(out.filter(Boolean).map(x=>[x.id,x])).values()].sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));
+}
+export function buildCapsule(items=[],limit=8){
+ const priority=['tops','bottoms','skirts','outerwear','shoes','dresses','bags','hats','scarves','accessories','eyewear','jewelry','hair'],picked=[],seen=new Set();
+ for(const cat of priority){const rows=items.filter(x=>x.category===cat).slice().sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));if(!rows.length)continue;const candidate=rows.find(x=>!seen.has(x.materialId+':'+x.patternId))||rows[0];picked.push(candidate);seen.add(candidate.materialId+':'+candidate.patternId);if(picked.length>=Math.max(1,Math.min(16,Number(limit)||8)))break;}
+ return picked;
 }
 export function resolveStudioMode(mode,webgl=true){return mode==='3d'&&webgl?'3d':'2d';}
 export function reconcileLook(items=[],ids=[]){const map=new Map(items.map(x=>[x.id,x]));return [...new Set(ids)].map(x=>map.get(x)).filter(Boolean).sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));}

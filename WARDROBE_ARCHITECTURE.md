@@ -68,11 +68,11 @@ Body measurements, clothing photos, and imported SVG/GLB files stay on device. A
 | GĐ0 | Architecture, asset contract, and strict catalog schema | Schema/data/provenance checks and repository build/unit CI. |
 | GĐ1 | Searchable catalog, local closet, imports | Accurate counts separated into templates, verified real garments, and user imports; privacy and migration tests. |
 | GĐ2 | Shared mannequin data and measurement-driven 2D anchor geometry | Unit tests cover centimetre clamping, the single anchor transform, existing layer order, and all 60 template SVG bounds across four references (240 path-bound checks). This is not a 3D intersection test. |
-| GĐ3 | Deterministic rules, explanations, lookbook, weather/background context | Unit tests for fit arithmetic, color/contrast, rule constraints, scores, and local fallback. |
+| GĐ3 | Deterministic rules, explanations, lookbook, weather/background context | Unit tests cover fit arithmetic, contrast, layer order, known large-pattern collisions, weather warnings, seed stability, anchor selection, and capsule categories. Rules cannot infer missing material or size data. |
 | GĐ4 | 3D renderer and numeric fit | Calibrated asset checks and actual intersection tests across each declared preset/template combination; no proxy reported as clipping. |
 | GĐ5 | 2D/3D synchronization, Worker compose, planner linkage | Contract tests prove AI IDs are a subset of the filtered candidate IDs and no body data leaves the device. |
 | GĐ6 | Parameterized garment builder | Generated assets pass the same schema, bounds, provenance, and export checks. |
 | GĐ7 | Optional ML / photo try-on | Disabled by default; model and dataset license, execution location, and independent evaluation reported before enabling. |
 | GĐ8 | Performance and release documentation | CI, accessibility, offline/WebGL fallback, performance measurements, and final inventory report. |
 
-GĐ0 and GĐ1 provide the catalog contract; GĐ2 adds a shared centimetre mannequin input and 2D anchor geometry. Later-stage capabilities must not be described as delivered until their evidence exists.
+GĐ0–GĐ2 provide the architecture, catalog, and measured 2D anchor geometry; GĐ3 adds deterministic outfit constraints, a seeded local composer, manual weather, and explainable scoring. Current coverage does not imply calibrated garment measurements or physical fit. Later-stage capabilities must not be described as delivered until their evidence exists.
