@@ -16,6 +16,21 @@ async function openStudio(page,section='studio2d'){
  await expect(page.locator('[data-ws-section="'+section+'"]')).toBeVisible();
 }
 
+async function stableScreenshot(locator){
+ await locator.evaluate(async()=>{
+  await document.fonts.ready;
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+ });
+ let previous;
+ await expect.poll(async()=>{
+  const screenshot=await locator.screenshot({animations:'disabled'});
+  const stable=Boolean(previous?.equals(screenshot));
+  previous=screenshot;
+  return stable;
+ },{timeout:8_000}).toBe(true);
+ return previous;
+}
+
 test('all catalog cards load their matching category thumbnail under the GitHub Pages base',async({page})=>{
  const responses=[];
  page.on('response',response=>{if(response.url().includes('/assets/wardrobe/previews/'))responses.push({url:response.url(),status:response.status()});});
@@ -89,17 +104,15 @@ test('fixed outfit switches 2D and 3D, handles context loss, saves Lookbook and 
  await expect(page.locator('.ws-stage svg [data-garment="closet-tpl-tops-1"]')).toBeVisible();
 
  const stage2d=page.locator('.ws-stage');
- const image2d=await stage2d.screenshot();
+ const image2d=await stableScreenshot(stage2d);
  await testInfo.attach('wardrobe-studio-2d.png',{body:image2d,contentType:'image/png'});
- expect((await stage2d.screenshot()).equals(image2d)).toBeTruthy();
 
  await page.locator('[data-wardrobe-section="studio3d"]').click();
  const canvas=page.locator('.ws-three-host canvas');
  await expect(canvas).toBeVisible({timeout:30_000});
  await expect.poll(()=>canvas.evaluate(node=>Boolean(node.getContext('webgl2')))).toBeTruthy();
- const image3d=await page.locator('.ws-stage').screenshot();
+ const image3d=await stableScreenshot(page.locator('.ws-stage'));
  await testInfo.attach('wardrobe-studio-3d.png',{body:image3d,contentType:'image/png'});
- expect((await page.locator('.ws-stage').screenshot()).equals(image3d)).toBeTruthy();
 
  await canvas.evaluate(node=>node.dispatchEvent(new Event('webglcontextlost',{cancelable:true})));
  await expect(page.locator('[data-wardrobe-section="studio2d"]')).toHaveAttribute('aria-selected','true');
@@ -128,8 +141,7 @@ test('continuous mannequin renders each pose and rotates in the Studio 3D canvas
  const canvas=page.locator('.ws-three-host canvas');
  const capture=async name=>{
   await expect(canvas).toBeVisible({timeout:15_000});
-  await canvas.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-  const screenshot=await canvas.screenshot();
+  const screenshot=await stableScreenshot(canvas);
   await testInfo.attach(name+'.png',{body:screenshot,contentType:'image/png'});
   return screenshot;
  };
