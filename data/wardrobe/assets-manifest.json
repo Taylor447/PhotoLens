@@ -1085,661 +1085,661 @@
       "id": "thumbnail:tpl-bags-1",
       "templateId": "tpl-bags-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-bags-1.svg",
-      "sha256": "7157fd0a9e76b3cc46a3c57fb8f8109392f30b2df7c38d8d072e6f650eef0a2e"
+      "sha256": "35d916fc35b66ca99138155e65d42b1cf4396b5097a11dc75f094f536714d973"
     },
     {
       "id": "thumbnail:tpl-bags-2",
       "templateId": "tpl-bags-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-bags-2.svg",
-      "sha256": "b2090253f37d8209fdf2d149eeb85b44088a955cc39e3009b13da2b53536c882"
+      "sha256": "701929ea96cf32e1b4cee7f24049c2b2b45381027a35037c7360c831e8a2bfc5"
     },
     {
       "id": "thumbnail:tpl-bags-3",
       "templateId": "tpl-bags-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-bags-3.svg",
-      "sha256": "a3f19e8545d8a2c034b19a1a23d9fb1b91a556b03761321e07a080416de80060"
+      "sha256": "5a5561d9d918eff49a75bf58f5004fae4f5153d6114d1207511b38b57d44dde6"
     },
     {
       "id": "thumbnail:tpl-bags-4",
       "templateId": "tpl-bags-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-bags-4.svg",
-      "sha256": "ecdbd8216307dd8e70c2e40916b64adcf57ed8f44eefac193dd479a14872e3f7"
+      "sha256": "c546efd84994dd13858388a40e884e6cba4453d4b98e4e642f9282ce0546937d"
     },
     {
       "id": "thumbnail:tpl-bags-5",
       "templateId": "tpl-bags-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-bags-5.svg",
-      "sha256": "b87da41cf96ae660cb57b0d5d9ce91325dd0edcb25af905e9eb2277442f4d90b"
+      "sha256": "c13ad1260909893a2d5f193462256ed6afa329e0b4ec7d8d447bb53f49ba45b7"
     },
     {
       "id": "thumbnail:tpl-bottoms-1",
       "templateId": "tpl-bottoms-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-bottoms-1.svg",
-      "sha256": "d280aa40ab2bbb1a10eabea1b1650c1544747c3b7afde115e16e2ad378648138"
+      "sha256": "58d0cc7127bec0cacc1b9baae9934c35d283458a85d7655f2146f40896f6f73b"
     },
     {
       "id": "thumbnail:tpl-bottoms-2",
       "templateId": "tpl-bottoms-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-bottoms-2.svg",
-      "sha256": "293b0ac76c7922c92bf1d8b05cb09b8330bd22155e9b63dd2ff580ee1252dbe6"
+      "sha256": "ee6ac1b788378e1a148cd66fd8e1ee3207c65790b50dbc20f8cf54589317e4e4"
     },
     {
       "id": "thumbnail:tpl-bottoms-3",
       "templateId": "tpl-bottoms-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-bottoms-3.svg",
-      "sha256": "9b49b314c451733364c13a7f31a51139d91fe17dcfb3dfa907a3dd7919db0290"
+      "sha256": "b3ee5d5f95073ae8e7f067d516486f47af39097153eaaa6553c77b164934610a"
     },
     {
       "id": "thumbnail:tpl-bottoms-4",
       "templateId": "tpl-bottoms-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-bottoms-4.svg",
-      "sha256": "179a45bf99358c38a6da24bf41e50c38b0d89936935290ddffa1a9059b7a6b01"
+      "sha256": "0b09ed1ee7fa136e25db29e96a39fb93d86a3c7f8fdd67f0ef12d1c2703e7838"
     },
     {
       "id": "thumbnail:tpl-bottoms-5",
       "templateId": "tpl-bottoms-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-bottoms-5.svg",
-      "sha256": "81497fb03605c2ee839ebfdf749d47bc7e4689de8cdd10e0895e2c75e1b98320"
+      "sha256": "311c3194f1bc62b9a81267934744fda12679c8ad83e8b4b24df90c26a9a38a18"
     },
     {
       "id": "thumbnail:tpl-dresses-1",
       "templateId": "tpl-dresses-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-dresses-1.svg",
-      "sha256": "6a509b8e7e97c2c522acaddfae0d53c650e314619d60998006c46b6159072324"
+      "sha256": "eee7c38cc52317c7e4005910d730e888ce99421e33112b1bf33eac65a489ac7b"
     },
     {
       "id": "thumbnail:tpl-dresses-2",
       "templateId": "tpl-dresses-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-dresses-2.svg",
-      "sha256": "008e648832f7c82faaf06af684eb76e4db5d72e39e8043110d17a32478e1a57d"
+      "sha256": "75ae881a38a9c186d6f893ade9c5b181aa44a2df6df845e7bcfc87465209dd9c"
     },
     {
       "id": "thumbnail:tpl-dresses-3",
       "templateId": "tpl-dresses-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-dresses-3.svg",
-      "sha256": "aaff538ac96af3b2fedd0ba3791ac702d28dc20bc16770f26b73b4fc5f194d51"
+      "sha256": "c86ebae4e6adde52c91794b99dd87a7d408c8ba520a1818b702018174088000e"
     },
     {
       "id": "thumbnail:tpl-dresses-4",
       "templateId": "tpl-dresses-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-dresses-4.svg",
-      "sha256": "0c92723cf2f4c83e30464b3403c6cdad459c45c2936b776cbd3d2dccb2c7505c"
+      "sha256": "627867eb3f98b0409fcb0072ccf2b401136c1663b21b320bc6dfe78d4635107c"
     },
     {
       "id": "thumbnail:tpl-dresses-5",
       "templateId": "tpl-dresses-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-dresses-5.svg",
-      "sha256": "3c20fbb39b834863f2b4a8be285ee2959fe956b2f8c365a1482487503d42177b"
+      "sha256": "7750e8100adc42a38aba429f1004a608683e6165d06a22475f94ef7c7c387456"
     },
     {
       "id": "thumbnail:tpl-eyewear-1",
       "templateId": "tpl-eyewear-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-eyewear-1.svg",
-      "sha256": "ec1371dcaf23fbf9aa6b5425f7609427a0f42be4aebe14bfff25e0712b165002"
+      "sha256": "f015d92a11839ce92c8993ae65dda0374d71bf4acee5f168362aa4ef45fd25aa"
     },
     {
       "id": "thumbnail:tpl-eyewear-2",
       "templateId": "tpl-eyewear-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-eyewear-2.svg",
-      "sha256": "995e869168d60862adf60e216d92b059f196289b6e2e54a1292fcaa2cadfa3ff"
+      "sha256": "a2494846b315033de92bf8f186a09c886c34ddca36230200d551d3279984ad6f"
     },
     {
       "id": "thumbnail:tpl-eyewear-3",
       "templateId": "tpl-eyewear-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-eyewear-3.svg",
-      "sha256": "fa6c4c751fed5384932a800142443bd9b7d344677a6817e5ba9816d1626cc47b"
+      "sha256": "b9e35c1f590262041077646e03ad3425c8795c24e16646cd8e547b64849cf63f"
     },
     {
       "id": "thumbnail:tpl-eyewear-4",
       "templateId": "tpl-eyewear-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-eyewear-4.svg",
-      "sha256": "216470515d524cf6747bd1e819e3037e69a50e417b026030424e96c102dd5a88"
+      "sha256": "dbdbd08c768d736ff259e4ef8f823353291370aada58b3886bbec3adc6630eec"
     },
     {
       "id": "thumbnail:tpl-eyewear-5",
       "templateId": "tpl-eyewear-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-eyewear-5.svg",
-      "sha256": "5913eb2e7102c28a6a448c8b71f1efed197f93fa477aa0713c32f6da2f51ae08"
+      "sha256": "ecbc50ac44d09f8348d8baefd6d2432164f86821934c793082248edfad5476af"
     },
     {
       "id": "thumbnail:tpl-hair-1",
       "templateId": "tpl-hair-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-hair-1.svg",
-      "sha256": "525ed2aeba9f227fbbee5261f8d5103b86467e0564791a29e3d525a43cfe6a2a"
+      "sha256": "57616cc13bd1452f503062145fea06889f9ede968c9505caa092f826f7bfbfd8"
     },
     {
       "id": "thumbnail:tpl-hair-2",
       "templateId": "tpl-hair-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-hair-2.svg",
-      "sha256": "4dda14e031bf91981b0123adbc94194ed6db5c15316ebe7648aa969051872d32"
+      "sha256": "b494e74ade2801093ec1900106b491702d672c250e0ae5c9c73774df70ceeecd"
     },
     {
       "id": "thumbnail:tpl-hair-3",
       "templateId": "tpl-hair-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-hair-3.svg",
-      "sha256": "2691b94103299da71d1d5bdade538f8bae55e1aa97c39fbbc8039440b0601c17"
+      "sha256": "771e63636e06456f20d92672f6370849e1605476e6c1cec36d74ed4c71395dd7"
     },
     {
       "id": "thumbnail:tpl-hair-4",
       "templateId": "tpl-hair-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-hair-4.svg",
-      "sha256": "2a8f8893d8a7c2ba4e4831be0b8b320559e830ea050c71626f8a40d7837ef8fe"
+      "sha256": "cf8bd1da7a2e63915770f17b50317fa67dc8870369695b94d300249ac143df06"
     },
     {
       "id": "thumbnail:tpl-hair-5",
       "templateId": "tpl-hair-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-hair-5.svg",
-      "sha256": "cc007c9429bdee1c8895641c660f395c35a2aa4bfd6f24f9cf656d5efbce4a33"
+      "sha256": "4a3a9157b356da4d4a3aefeb65a15c7acc39969530834668f879c27530458fff"
     },
     {
       "id": "thumbnail:tpl-hats-1",
       "templateId": "tpl-hats-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-hats-1.svg",
-      "sha256": "1b26f9e8c3a172a2d0b60cb4b19308e2981d76b6e9c3c8a9515e430970d1825c"
+      "sha256": "aec6a835b12ea7aa76b0bee20fa621c2d812b822703183a60010dc669ff2d634"
     },
     {
       "id": "thumbnail:tpl-hats-2",
       "templateId": "tpl-hats-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-hats-2.svg",
-      "sha256": "2ff310d807db04470046ca7c73c24d231480c9a2a4c06e80a289ff0a1ec10050"
+      "sha256": "5e25ca8196efd64b1c0aacac96dfc78c1959c16090741e0a1ee8df4d4a669f54"
     },
     {
       "id": "thumbnail:tpl-hats-3",
       "templateId": "tpl-hats-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-hats-3.svg",
-      "sha256": "adf92d5fa83b496765fa563bfdc55e75fbbca7d815ac9659d83185f6ff9cd2a7"
+      "sha256": "478b210698baed943d6c7986ae8010f976908979a8af87b61d9687de3fffef29"
     },
     {
       "id": "thumbnail:tpl-hats-4",
       "templateId": "tpl-hats-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-hats-4.svg",
-      "sha256": "1ac3a821285981e460eec29a61f7ca3f4f10d7155edb08cf2168564623ace81b"
+      "sha256": "ce9bc02595c78a37be1f9cb18fb202ee52c117924fc6a509b144681c83c03a9f"
     },
     {
       "id": "thumbnail:tpl-hats-5",
       "templateId": "tpl-hats-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-hats-5.svg",
-      "sha256": "74813b824067ad2cf798bd7ca2a05acdf6a3b3893063f814dccb69572e6bff85"
+      "sha256": "eb55edf9d8ec44e081cf81abb914ef760b9c96fe315ed4cbee849e3a68443b12"
     },
     {
       "id": "thumbnail:tpl-jewelry-1",
       "templateId": "tpl-jewelry-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-jewelry-1.svg",
-      "sha256": "da6ba2327316e281daef8ac2305d02618ba72f46714f95056f6d6b456321c0a1"
+      "sha256": "ae797ce336da8b1bb8f549d714b864a9201c4ad3166869de335545ddcda44e15"
     },
     {
       "id": "thumbnail:tpl-jewelry-2",
       "templateId": "tpl-jewelry-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-jewelry-2.svg",
-      "sha256": "f9f62a067f01dddf5467c6f54b893641042453f87b11e6277776caa5077ce336"
+      "sha256": "4a9626cd8ab9074eb7629251af6679f8b3f8c546a81564f7930ba713bde05a16"
     },
     {
       "id": "thumbnail:tpl-jewelry-3",
       "templateId": "tpl-jewelry-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-jewelry-3.svg",
-      "sha256": "17f1103c10c2f896198238751e0707a4638b4d0a7989981b62ce57c616dbf482"
+      "sha256": "e869e017ee967e67c21a821690f15e19f48417647b766a4edb070acb1f6b98ed"
     },
     {
       "id": "thumbnail:tpl-jewelry-4",
       "templateId": "tpl-jewelry-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-jewelry-4.svg",
-      "sha256": "99c7a085a63b347b890bf8ffddc0253107e2c1671d6af6bd7184d7e9426ad9c6"
+      "sha256": "7d4429d46777e1e9e19a10e2c27dfbd7a4e5b806ae1f8d3616a90d7b465ae3af"
     },
     {
       "id": "thumbnail:tpl-jewelry-5",
       "templateId": "tpl-jewelry-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-jewelry-5.svg",
-      "sha256": "31b165497c68f44718f07ad95ce7a9534ea925a456c36f28ed9995abe53ade2e"
+      "sha256": "c092250c53abeda14d92a99e6d46ecea3f50394f9cd40da6c8a39253fda5d49d"
     },
     {
       "id": "thumbnail:tpl-outerwear-1",
       "templateId": "tpl-outerwear-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-outerwear-1.svg",
-      "sha256": "b2c142a9700e5c8688c4af67329ddbbe75b83d5632c67da804ebad9f6b1cbf60"
+      "sha256": "8a0bb0a3162086647d20355e47e224e9313dceec580d7f69c71f41ddb698c2c6"
     },
     {
       "id": "thumbnail:tpl-outerwear-2",
       "templateId": "tpl-outerwear-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-outerwear-2.svg",
-      "sha256": "749f573721a3ae58ba1b0988050dbe168522f98bc57f43bd238488a7eb93865b"
+      "sha256": "6e867d75f70a4819c03fc8e883fec2668dbb95372d73784f142c89f3d4f6655d"
     },
     {
       "id": "thumbnail:tpl-outerwear-3",
       "templateId": "tpl-outerwear-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-outerwear-3.svg",
-      "sha256": "7ead74cd3ac26482a1cfc90f19496131da7766a224310dda35aa774378070ab5"
+      "sha256": "f60730110e1ddaa029b91af16a27d0ad5c6402ff2205f099e55211c9e646ec5e"
     },
     {
       "id": "thumbnail:tpl-outerwear-4",
       "templateId": "tpl-outerwear-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-outerwear-4.svg",
-      "sha256": "1e8b6ee41af6126e69c9d2a173f8ed5aeaf9bff5b15b96f6dd9d64628a6c8395"
+      "sha256": "f68c421fab2bd40409323b3b866c523580601dd24562387f63ae3d17a8b8162b"
     },
     {
       "id": "thumbnail:tpl-outerwear-5",
       "templateId": "tpl-outerwear-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-outerwear-5.svg",
-      "sha256": "3665b702b4cd9d5f584062de8056bc1cc46886342b55cce9d7cfae37a754c727"
+      "sha256": "0d8494300b08189c0d0da363704744ba239e306795c47b6377bde73e8e60d0b9"
     },
     {
       "id": "thumbnail:tpl-scarves-1",
       "templateId": "tpl-scarves-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-scarves-1.svg",
-      "sha256": "adea6c2864673d7e3ff3f24b6e27ce5f294407a3f6883415adbde66595372513"
+      "sha256": "3c291f75e44aade0cf032417987a4031b1f4e8e689318e6419a0d18d8983b696"
     },
     {
       "id": "thumbnail:tpl-scarves-2",
       "templateId": "tpl-scarves-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-scarves-2.svg",
-      "sha256": "94be8d2ae91eb967a8c2d2962204dff294363938e4edcf37927610e4a20c6085"
+      "sha256": "a48028c49586007ce5209001a954b6016fd900c4edf69adf8ef3b323aab8ab20"
     },
     {
       "id": "thumbnail:tpl-scarves-3",
       "templateId": "tpl-scarves-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-scarves-3.svg",
-      "sha256": "47a3ce1bd8263d445ee7a2341590d8f4d3baf6df5773d2a3f7ba58a12f020265"
+      "sha256": "0b52fb57f303582e34839e69b2fab252ef1ced52d952a085838310258c3223ec"
     },
     {
       "id": "thumbnail:tpl-scarves-4",
       "templateId": "tpl-scarves-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-scarves-4.svg",
-      "sha256": "c6f3565806fae0bab5e4f67052dcfa6623ccb912cb57f07177a50fe26bbd6408"
+      "sha256": "5c8d550f02f2e8de23b3090caf9f3b86abf3f17610f5827eaba67490061c8e7c"
     },
     {
       "id": "thumbnail:tpl-scarves-5",
       "templateId": "tpl-scarves-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-scarves-5.svg",
-      "sha256": "168ad331df786f93cd947c3839f51311532bdf822a7ad23e87606d74126702d1"
+      "sha256": "8776f441421ca7a0087dbe649ca92a70c0781270bee42cd0a28460ee4b3e457d"
     },
     {
       "id": "thumbnail:tpl-shoes-1",
       "templateId": "tpl-shoes-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-shoes-1.svg",
-      "sha256": "d7ce710d20550d49cad45aa1a3a6ff3c0a628c91b003196f448e166228fd2bb4"
+      "sha256": "226d8bb2e4faa6d5c1c98910c7056e0655faef635d56c5aec278fbe683eb286a"
     },
     {
       "id": "thumbnail:tpl-shoes-2",
       "templateId": "tpl-shoes-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-shoes-2.svg",
-      "sha256": "d9555014e3463a8fe520a61c5a7bccf260a9f2c4756aa799080529b9ee3d9981"
+      "sha256": "01ec459dbe6c66fdecdc6bc72fc0d8dd9cf6fd6ff55d905439cd623cc5ff8e82"
     },
     {
       "id": "thumbnail:tpl-shoes-3",
       "templateId": "tpl-shoes-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-shoes-3.svg",
-      "sha256": "7c856ed3d96cbaa343ac83f75366a536046d69cf2dad5b1bea1ddae73cb52468"
+      "sha256": "4fadf118b126ca78ab3dd848f0e10e598c6a378c1c87eb3fe0a9256d6cc0a980"
     },
     {
       "id": "thumbnail:tpl-shoes-4",
       "templateId": "tpl-shoes-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-shoes-4.svg",
-      "sha256": "e6f220018e746bcd0a5b630718ecd9fac189274c2371754c367242e3f0542054"
+      "sha256": "93b1883490febe2a01c73021352974773a01159d5e3295b850d59e9634aaa992"
     },
     {
       "id": "thumbnail:tpl-shoes-5",
       "templateId": "tpl-shoes-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-shoes-5.svg",
-      "sha256": "3288d26b056563674531ba03f1ab0c209723521037f488fbf064f2dfe21dda65"
+      "sha256": "7ca939ca041df0ef27ad620c784bc52918b00f952e507df69ac095e537670e1f"
     },
     {
       "id": "thumbnail:tpl-skirts-1",
       "templateId": "tpl-skirts-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-skirts-1.svg",
-      "sha256": "20226445ce879e640a216f946b871b3748b41b68fdf22cd19ede856422ff79a5"
+      "sha256": "a74d903004341c89b8eff2186655494b6407eb66b16b69654062171a7084558c"
     },
     {
       "id": "thumbnail:tpl-skirts-2",
       "templateId": "tpl-skirts-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-skirts-2.svg",
-      "sha256": "cf87647f4d0e855a1e0ddd10584c77cb5ac88daaf7eb15d43514eda9105bc06d"
+      "sha256": "12f9b6a00dc7335b1a5d4b69f6b3c619a626b8a954f125399158dca8aaa7e5c2"
     },
     {
       "id": "thumbnail:tpl-skirts-3",
       "templateId": "tpl-skirts-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-skirts-3.svg",
-      "sha256": "773c076a6b891385ad46b1b437e02c125f62b86b7bdeab0fc0d953cf4277dd03"
+      "sha256": "1da0232f084ed4c7d23260723213d0f271990a7330f0a71b717e299dcd390b5d"
     },
     {
       "id": "thumbnail:tpl-skirts-4",
       "templateId": "tpl-skirts-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-skirts-4.svg",
-      "sha256": "1ac847ef1313c0960f8b5afc66dcf7226458b88e336979016547a7426d9f69ce"
+      "sha256": "467487d7077cb9aeb186fe0f4f22688213dd222956783104fe6c9b4f5a33a21b"
     },
     {
       "id": "thumbnail:tpl-skirts-5",
       "templateId": "tpl-skirts-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-skirts-5.svg",
-      "sha256": "2fe7506e0d6b04d78e25323a5420c6765612b04fec2b375c49e347ae9a3a4bbf"
+      "sha256": "e2ad38c90c3118adb6f6cdf99e9434fd3839cbc3df08a49239f25a3b96049a72"
     },
     {
       "id": "thumbnail:tpl-tops-1",
       "templateId": "tpl-tops-1",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-tops-1.svg",
-      "sha256": "cc45317b24d07a6909ddcf69496cf49fc5515b1b9ecf88b2765b011ee555c5fb"
+      "sha256": "3c6f1ac0c45e907af28680232b7b168d1368344800658a4a2fa6cf8e91c3ce48"
     },
     {
       "id": "thumbnail:tpl-tops-2",
       "templateId": "tpl-tops-2",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-tops-2.svg",
-      "sha256": "619eb4f99668b7984d8095132f4444f66bd33d806ed43e74f0d6bf817919f901"
+      "sha256": "f46abedb0e9473e39d01a3bb37ad8b543c18df3e1b5efc8f68de5853211a7b91"
     },
     {
       "id": "thumbnail:tpl-tops-3",
       "templateId": "tpl-tops-3",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-tops-3.svg",
-      "sha256": "4509bf698df0d18e3dff4f5a13a26c4fcdde442fe22a10ac4760728ee5b2312a"
+      "sha256": "39d5ed50eba0629467d52e51169480c02b5b8204282d67df889dd6e70b4469a3"
     },
     {
       "id": "thumbnail:tpl-tops-4",
       "templateId": "tpl-tops-4",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-tops-4.svg",
-      "sha256": "767100ae4f40fefbb2079eda2b1e740fb77bfce34b303e318545a110d7c97512"
+      "sha256": "50eb894aaecbe1980df51b34aa5b94f0c5e6826f4603bca43c8881b5e023fcaa"
     },
     {
       "id": "thumbnail:tpl-tops-5",
       "templateId": "tpl-tops-5",
       "format": "thumbnail-svg",
-      "generator": "core/wardrobe-engine.js#buildSvgLook",
+      "generator": "core/wardrobe/illustrations.js#garmentPortrait",
       "source": "PhotoLens procedural code",
       "license": "CC0",
       "author": "PhotoLens project",
       "path": "assets/wardrobe/previews/tpl-tops-5.svg",
-      "sha256": "0d8e215534e89a669ee36372e9022c56e934715e2fbdfb1d768beebabd14f14a"
+      "sha256": "32e5d9e17192e58171a72b27c7f8709f6b839626d70766c5de1926940fd3ba63"
     }
   ],
   "libraries": [

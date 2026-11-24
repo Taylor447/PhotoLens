@@ -1,3 +1,4 @@
+import {garmentPortrait} from '../../core/wardrobe/illustrations.js';
 const SHAPES={
  tops:'<path d="M29 24 40 17h20l11 7 17 24-13 6-8-11v39H33V43l-8 11-13-6z"/>',
  bottoms:'<path d="M30 18h40l-3 28-4 35H48l-4-32-4 32H24l4-35z"/>',
@@ -28,7 +29,8 @@ const CATEGORY_LABELS={tops:'Áo',bottoms:'Quần',skirts:'Váy',dresses:'Đầm
 const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 export function renderGarmentThumbnail(item,{base='/',categoryLabel=CATEGORY_LABELS[item?.category]||'Trang phục'}={}){
  const id=typeof item?.imageAssetId==='string'?item.imageAssetId:'';
- const src=id?null:thumbnailAssetUrl(item?.assets?.thumbnail?.path,base);
+ const portrait = !id && item?.assets?.thumbnail && item.assets.thumbnail.id !== 'thumbnail:'+item.id ? garmentPortrait(item) : '';
+ const src = portrait ? 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(portrait) : id ? null : thumbnailAssetUrl(item?.assets?.thumbnail?.path,base);
  const name=escapeHtml(item?.name||'Món đồ'),label=escapeHtml(categoryLabel);
  const image=src?'<img src="'+escapeHtml(src)+'" alt="Xem trước '+label+': '+name+'" loading="lazy" decoding="async" width="410" height="450">':categoryPlaceholderSvg(item?.category);
  const local=id?'data-ws-asset-id="'+escapeHtml(id)+'" data-ws-preview-alt="Xem trước '+label+': '+name+'" ':'';

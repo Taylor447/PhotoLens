@@ -1,3 +1,4 @@
+import {garmentPortrait} from '../core/wardrobe/illustrations.js';
 import legacyNames from '../data/wardrobe/legacy-preview-names.json';
 import {createOutfitState,resolveOutfit,outfitViewSettings} from '../core/wardrobe/outfit-state.js';
 import {buildComposeRequest,resolveComposeChoice,COMPOSE_PATH} from '../core/wardrobe/compose-contract.js';
@@ -37,11 +38,19 @@ const effectiveMannequin=()=>normalizeMannequin({...MANNEQUIN_DEFAULTS_CM,...mea
 const family=color=>{const s=String(color||'').replace('#','');if(!/^[0-9a-f]{6}$/i.test(s))return'custom';const r=parseInt(s.slice(0,2),16),g=parseInt(s.slice(2,4),16),b=parseInt(s.slice(4,6),16),mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(mx-mn<26)return'neutral';if(r>g*1.2&&r>b*1.2)return'warm';if(b>r*1.13&&b>g*1.07)return'blue';if(g>r*1.1&&g>b*1.03)return'green';if(r>g*1.16&&b>g*1.06)return'purple';if(r>g*1.2)return'red';return'custom';};
 const opts=(data,current)=>Object.entries(data).map(([k,v])=>'<option value="'+k+'" '+(current===k?'selected':'')+'>'+esc(v)+'</option>').join('');
 const colorOpts='<option value="all">Mọi màu</option>'+[['neutral','Trung tính'],['blue','Xanh dương'],['green','Xanh lá'],['warm','Tông ấm'],['red','Đỏ'],['purple','Tím'],['custom','Khác']].map(([a,b])=>'<option value="'+a+'">'+b+'</option>').join('');
-function thumb(item){return renderGarmentThumbnail(item,{base:import.meta.env?.BASE_URL||'/',categoryLabel:CATEGORIES[item.category]||'trang phục'});}
-function card(x){const picked=outfit.value.itemIds.includes(x.isTemplate&&!x.id.startsWith('closet-')?'closet-'+x.id:x.id);return '<article class="ws-item-card" draggable="true" data-ws-draggable="'+esc(x.id)+'">'+thumb(x)+'<b>'+esc(x.name)+'</b><small>'+esc(CATEGORIES[x.category]||x.category)+' · '+(x.isTemplate?'Mẫu tham số':'Tủ đồ cá nhân')+(x.vectorAssetId?' · Có tệp GLB cục bộ':'')+'</small><div class="ws-card-actions"><button class="planner-btn" data-ws-wear="'+esc(x.id)+'">'+(picked?'Đang mặc':'Mặc thử')+'</button><button class="planner-btn" data-ws-fav="'+esc(x.id)+'" aria-pressed="'+Boolean(x.favorite)+'">'+(x.favorite?'★':'☆')+' Yêu thích</button>'+(x.isTemplate?'':'<button class="planner-link" data-ws-edit="'+esc(x.id)+'">Sửa</button><button class="planner-link danger" data-ws-delete="'+esc(x.id)+'">Xóa</button>')+'</div></article>';}
+function thumb(item){const view={...item,...outfit.value.edits[item.id]};return renderGarmentThumbnail(view,{base:import.meta.env?.BASE_URL||'/',categoryLabel:CATEGORIES[item.category]||'trang phục'});}
+function card(x){const picked=outfit.value.itemIds.includes(x.isTemplate&&!x.id.startsWith('closet-')?'closet-'+x.id:x.id);return '<article class="ws-item-card" draggable="true" data-ws-draggable="'+esc(x.id)+'">'+thumb(x)+'<b>'+esc(x.name)+'</b><small>'+esc(CATEGORIES[x.category]||x.category)+' · '+(x.isTemplate?'Mẫu tham số':'Tủ đồ cá nhân')+(x.vectorAssetId?' · Có tệp GLB cục bộ':'')+'</small><div class="ws-card-actions"><button class="planner-btn" data-ws-wear="'+esc(x.id)+'">'+(picked?'Đang mặc':'Mặc thử')+'</button><button class="planner-btn" data-ws-fav="'+esc(x.id)+'" aria-label="Yêu thích · '+esc(x.name)+'" title="Yêu thích" aria-pressed="'+Boolean(x.favorite)+'">'+(x.favorite?'★':'☆')+'</button>'+(x.isTemplate?'':'<button class="planner-link" data-ws-edit="'+esc(x.id)+'">Sửa</button><button class="planner-link danger" data-ws-delete="'+esc(x.id)+'">Xóa</button>')+'</div></article>';}
 function trackPreview(blob){const url=URL.createObjectURL(blob);previewUrls.add(url);return url;}
 function clearPreviews(){for(const url of previewUrls)URL.revokeObjectURL(url);previewUrls.clear();}
 async function hydrateLocalPreviews(container){
+ for(const node of container.querySelectorAll('.ws-thumb img[src]')){
+  const replaceMissing=()=>{
+   const item=available().find(row=>row.id===node.closest('[data-ws-draggable]')?.dataset.wsDraggable);
+   if(item && node.isConnected){const illustration=garmentPortrait({...item,...outfit.value.edits[item.id]});if(illustration){node.parentNode.innerHTML=illustration;}}
+  };
+  node.addEventListener('error',replaceMissing,{once:true});
+  if(node.complete && !node.naturalWidth)replaceMissing();
+ }
  const nodes=[...container.querySelectorAll('[data-ws-asset-id]')];
  await Promise.all(nodes.map(async node=>{try{const asset=await repo.getAsset(node.dataset.wsAssetId);if(!asset?.blob||!node.isConnected)return;const url=trackPreview(asset.blob);if(node instanceof HTMLImageElement){node.src=url;node.hidden=false;}else{const img=document.createElement('img');img.src=url;img.alt=node.dataset.wsPreviewAlt||'Ảnh xem trước món đồ';img.loading='lazy';img.decoding='async';node.replaceChildren(img);}}catch{}}));
 }

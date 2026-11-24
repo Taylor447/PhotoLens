@@ -40,6 +40,47 @@ test('all catalog cards load their matching category thumbnail under the GitHub 
  expect(responses.every(response=>response.status===200)).toBeTruthy();
 });
 
+for(const [device,width,height] of [['desktop',1440,980],['mobile',412,915]]){
+ test('all card images render distinct pixels and clear their labels on '+device,async({page},testInfo)=>{
+  await page.setViewportSize({width,height});
+  await openStudio(page,'catalog');
+  const cards=page.locator('.ws-item-card');
+  await expect(cards).toHaveCount(60);
+  const measured=await cards.evaluateAll(async cards=>{
+   const images=cards.map(card=>card.querySelector('img'));
+   images.forEach(img=>{img.loading='eager';});
+   await Promise.all(images.map(img=>img.decode()));
+   const canvas=document.createElement('canvas');
+   canvas.width=120;canvas.height=112;
+   const ctx=canvas.getContext('2d',{willReadFrequently:true});
+   return cards.map((card,i)=>{
+    const img=images[i],name=card.querySelector('b');
+    ctx.clearRect(0,0,120,112);ctx.drawImage(img,0,0,120,112);
+    return {id:card.dataset.wsDraggable,name:name.textContent,
+     gap:name.getBoundingClientRect().top-img.getBoundingClientRect().bottom,
+     height:card.getBoundingClientRect().height,pixels:canvas.toDataURL()};
+   });
+  });
+  expect(new Set(measured.map(x=>x.pixels)).size).toBe(60);
+  expect(new Set(measured.map(x=>x.height)).size).toBe(1);
+  for(const item of measured){
+   expect(item.gap,item.id).toBeGreaterThanOrEqual(4);
+   expect(item.name,item.id).not.toMatch(/[?\uFFFD]/u);
+  }
+  await cards.first().scrollIntoViewIfNeeded();
+  await testInfo.attach('catalog-'+device+'.png',{body:await page.screenshot(),contentType:'image/png'});
+ });
+}
+
+test('a missing static thumbnail recovers the same garment outline',async({page})=>{
+ await page.route('**/assets/wardrobe/previews/tpl-bottoms-1.svg',route=>route.fulfill({status:404,body:''}));
+ await openStudio(page,'catalog');
+ const card=page.locator('[data-ws-draggable="tpl-bottoms-1"]');
+ await card.scrollIntoViewIfNeeded();
+ await expect(card.locator('svg[data-garment-id="tpl-bottoms-1"] [data-region="main"]')).toBeVisible();
+ await expect(card.locator('[data-placeholder-category]')).toHaveCount(0);
+});
+
 test('fixed outfit switches 2D and 3D, handles context loss, saves Lookbook and exports PNG',async({page},testInfo)=>{
  await openStudio(page);
  const card=page.locator('[data-ws-draggable="tpl-tops-1"]');

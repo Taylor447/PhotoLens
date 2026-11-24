@@ -2,11 +2,46 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {cutFor,garmentPortrait} from '../core/wardrobe/illustrations.js';
+import {patternTile,fabricFinish} from '../core/wardrobe/fabric-swatches.js';
 import {GARMENT_CATEGORIES,categoryPlaceholderSvg,renderGarmentThumbnail,thumbnailAssetUrl} from '../features/wardrobe/thumbnail.js';
 
 const catalog=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url),'utf8'));
 const manifest=JSON.parse(readFileSync(new URL('../data/wardrobe/assets-manifest.json',import.meta.url),'utf8'));
 const byId=new Map(manifest.assets.map(asset=>[asset.id,asset]));
+
+test('the bundled UTF-8 text preserves the recovered Vietnamese names and notes',()=>{
+ const decoder=new TextDecoder('utf-8',{fatal:true});
+ for(const filename of ['garments','assets-manifest','patterns','materials']){
+  const text=decoder.decode(readFileSync(new URL('../data/wardrobe/'+filename+'.json',import.meta.url)));
+  assert.ok(!text.includes('\uFFFD'),filename);
+ }
+ for(const {id,name,culturalNote} of catalog.templates)assert.doesNotMatch(name+(culturalNote||''),/[?\uFFFD]/u,id);
+ assert.deepEqual(catalog.templates.slice(0,4).map(item=>item.name),['Áo thun cơ bản','Sơ mi dáng thẳng','Áo dài minh họa','Áo bà ba minh họa']);
+});
+
+test('all template cuts are unique independently of text, colour, material and pattern',()=>{
+ const outlines=catalog.templates.map(item=>cutFor(item).drawing[0]);
+ assert.equal(new Set(outlines).size,catalog.templates.length);
+ assert.equal(cutFor({id:'tpl-unknown-1',category:'unknown'}),null);
+ for(const item of catalog.templates){
+  const recorded=byId.get(item.assets.thumbnail.id);
+  assert.equal(garmentPortrait(item),readFileSync(new URL('../public/'+recorded.path,import.meta.url),'utf8'));
+ }
+});
+
+test('personal variants use the original cut with current fabric, colour, width and length',()=>{
+ const item={...catalog.templates[1],id:'personal-123',color:'#781f26',parameters:{width:'wide',length:'long'}};
+ const html=renderGarmentThumbnail(item);
+ const portrait=garmentPortrait(item);
+ assert.ok(html.includes(encodeURIComponent(portrait)));
+ assert.ok(portrait.includes(cutFor(item).drawing[0]));
+ assert.match(portrait,/#781f26/);
+ assert.match(portrait,/scale\(1.1 1.08\)/);
+ const json=key=>JSON.parse(readFileSync(new URL('../data/wardrobe/'+key+'.json',import.meta.url),'utf8'))[key];
+ assert.equal(new Set(json('patterns').map(({id})=>patternTile(id))).size,40);
+ assert.equal(new Set(json('materials').map(({id})=>JSON.stringify(fabricFinish(id)))).size,20);
+});
 const labels={tops:'Áo',bottoms:'Quần',skirts:'Váy',dresses:'Váy / đầm',outerwear:'Áo khoác',shoes:'Giày dép',hats:'Mũ',bags:'Túi',eyewear:'Kính',scarves:'Khăn',jewelry:'Trang sức',hair:'Phụ kiện tóc'};
 
 test('each bundled garment card maps to its own generated preview, manifest path and matching category',()=>{

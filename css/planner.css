@@ -325,8 +325,10 @@
 .ws-item-card>b,.ws-item-card>small {line-height:1.28;font-size:16px;min-width:0}
 .ws-item-card .ws-thumb {position:relative;height:100%;min-height:0;overflow:hidden;contain:paint}
 .ws-item-card .ws-thumb>img,.ws-item-card .ws-thumb>svg {position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.ws-item-card .ws-card-actions {align-self:end;display:grid;grid-template-columns:1fr}
+.ws-item-card .ws-card-actions {align-self:end;display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:4px}
 .ws-item-card .ws-card-actions button {min-height:44px;margin:0;line-height:1.25;padding:6px}
+.ws-item-card [data-ws-fav] {min-width:44px;font-size:20px}
+.ws-item-card [data-ws-edit],.ws-item-card [data-ws-delete] {grid-column:1/-1}
 .ws-card-grid {grid-auto-rows:1fr}
 .ws-layout-studio .ws-stage,.ws-layout-studio .ws-svg-host,.ws-layout-studio .ws-three-host {min-width:0}
 @media(min-width:1081px){.planner-dialog:has(.ws-layout-studio){width:min(1480px,97vw)}}
