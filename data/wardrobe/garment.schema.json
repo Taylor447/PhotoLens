@@ -37,38 +37,14 @@
       "description": "A user-entered or sourced linear measurement in centimetres. The property name identifies its landmark and dimension."
     },
     "measurementsCm": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "minProperties": 1,
-      "additionalProperties": false,
-      "properties": {
-        "heightCm": {
-          "$ref": "#/$defs/measurementCm"
+      "oneOf": [
+        {
+          "$ref": "#/$defs/garmentMeasurementsCm"
         },
-        "shoulderWidthCm": {
-          "$ref": "#/$defs/measurementCm"
-        },
-        "chestCircumferenceCm": {
-          "$ref": "#/$defs/measurementCm"
-        },
-        "waistCircumferenceCm": {
-          "$ref": "#/$defs/measurementCm"
-        },
-        "hipCircumferenceCm": {
-          "$ref": "#/$defs/measurementCm"
-        },
-        "armLengthCm": {
-          "$ref": "#/$defs/measurementCm"
-        },
-        "legLengthCm": {
-          "$ref": "#/$defs/measurementCm"
-        },
-        "neckCircumferenceCm": {
-          "$ref": "#/$defs/measurementCm"
+        {
+          "type": "null"
         }
-      }
+      ]
     },
     "assetReference": {
       "type": "object",
@@ -83,7 +59,10 @@
           "minLength": 1
         },
         "provenance": {
-          "const": "generated-by-photolens"
+          "enum": [
+            "generated-by-photolens",
+            "licensed-third-party"
+          ]
         }
       }
     },
@@ -101,7 +80,7 @@
           "minLength": 1
         },
         "measurementsCm": {
-          "$ref": "#/$defs/measurementsCm"
+          "$ref": "#/$defs/garmentMeasurementsCm"
         },
         "measurementSource": {
           "type": "string",
@@ -424,7 +403,81 @@
           "type": "string",
           "pattern": "^#[0-9a-fA-F]{6}$"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "measurementsCm": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "measurementsCm"
+            ]
+          },
+          "then": {
+            "properties": {
+              "measurementSource": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sizeTable": {
+                "minItems": 1
+              }
+            },
+            "required": [
+              "sizeTable"
+            ]
+          },
+          "then": {
+            "properties": {
+              "sizeTableVersion": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "garmentMeasurementsCm": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "shoulderWidthCm": {
+          "$ref": "#/$defs/measurementCm"
+        },
+        "chestCircumferenceCm": {
+          "$ref": "#/$defs/measurementCm"
+        },
+        "waistCircumferenceCm": {
+          "$ref": "#/$defs/measurementCm"
+        },
+        "hipCircumferenceCm": {
+          "$ref": "#/$defs/measurementCm"
+        },
+        "sleeveLengthCm": {
+          "$ref": "#/$defs/measurementCm"
+        },
+        "inseamLengthCm": {
+          "$ref": "#/$defs/measurementCm"
+        },
+        "neckCircumferenceCm": {
+          "$ref": "#/$defs/measurementCm"
+        },
+        "garmentLengthCm": {
+          "$ref": "#/$defs/measurementCm"
+        }
+      },
+      "description": "Verified garment dimensions in centimetres; distinct from the mannequin body measurement record."
     }
   }
 }
