@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 
 const CATEGORIES=['tops','bottoms','skirts','dresses','outerwear','shoes','hats','bags','eyewear','scarves','jewelry','hair'];
 const STYLE_TAGS=['minimal','vintage','streetwear','office','active','traditional','cosplay','classic','cinematic','casual'];
-const MEASUREMENT_KEYS=['heightCm','shoulderWidthCm','chestCircumferenceCm','waistCircumferenceCm','hipCircumferenceCm','armLengthCm','legLengthCm','neckCircumferenceCm'];
+const MEASUREMENT_KEYS=['shoulderWidthCm','chestCircumferenceCm','waistCircumferenceCm','hipCircumferenceCm','sleeveLengthCm','inseamLengthCm','neckCircumferenceCm','garmentLengthCm'];
 const REQUIRED_TEMPLATE_KEYS=['id','name','category','legacyCategory','layer','layerOrder','styleTags','season','temperatureC','weather','materialId','patternId','fit','recolorableRegions','sizeTable','sizeTableVersion','measurementsCm','measurementSource','shootingNotes','culturalNote','assets'];
 const isRecord=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const hasText=x=>typeof x==='string'&&x.trim().length>0;
@@ -24,7 +24,20 @@ function validateMeasurements(value,label){
 }
 function validateProvenance(value,label){
  assert.ok(isRecord(value),label+' provenance is missing');
- for(const key of ['source','license','author'])assert.ok(hasText(value[key]),label+' needs '+key);
+ for(const key of ['source','license','author']){
+  assert.ok(hasText(value[key]),label+' needs '+key);
+  assert.ok(!/^(?:unknown|unspecified|n\/a|none|no license|unlicensed|chưa có dữ liệu)$/i.test(value[key].trim()),label+' has placeholder '+key);
+ }
+ assert.ok(!/(?:cc[\s-]*by[\s-]*nc|non[\s-]?commercial|noncommercial|personal use only)/i.test(value.license),label+' uses a non-commercial-only license');
+}
+function validateGenerator(root,asset){
+ const [file,symbol,...extra]=String(asset.generator).split('#');
+ assert.equal(extra.length,0,'Asset '+asset.id+' needs one generator symbol');
+ assert.ok(/^[\w./-]+\.js$/.test(file)&&!file.split('/').includes('..'),'Asset '+asset.id+' has an invalid generator path');
+ assert.ok(/^[A-Za-z_$][\w$]*$/.test(symbol),'Asset '+asset.id+' has an invalid generator symbol');
+ const source=readFileSync(path.join(root,file),'utf8');
+ const declaration=new RegExp('(?:^|\\n)\\s*(?:export\\s+)?function\\s+'+symbol+'\\s*\\(|(?:^|\\n)\\s*(?:export\\s+)?(?:const|let|var)\\s+'+symbol+'\\s*=');
+ assert.ok(declaration.test(source),'Asset '+asset.id+' references missing generator '+file+'#'+symbol);
 }
 export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..')){
  const g=readJson(root,'data/wardrobe/garments.json');
@@ -76,10 +89,11 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
   const dimensionCount=validateMeasurements(x.measurementsCm,x.id+' measurementsCm');
   for(const size of x.sizeTable){
    assert.ok(hasText(size.size),x.id+' has an unnamed size');
-   validateMeasurements(size.measurementsCm,x.id+' size '+size.size);
+   assert.ok(validateMeasurements(size.measurementsCm,x.id+' size '+size.size)>0,x.id+' size '+size.size+' has no measured dimensions');
    assert.ok(hasText(size.measurementSource),x.id+' size '+size.size+' needs a measurement source');
   }
   if(dimensionCount>0)assert.ok(hasText(x.measurementSource),x.id+' measurements need a source');
+  if(x.sizeTable.length>0)assert.ok(hasText(x.sizeTableVersion),x.id+' size table needs a version');
   assert.ok(isRecord(x.shootingNotes),x.id+' needs shooting notes');
   assert.equal(typeof x.shootingNotes.moireRisk,'boolean',x.id+' needs an explicit moireRisk flag');
   assert.ok(isRecord(x.assets),x.id+' needs asset references');
@@ -93,6 +107,7 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
   manifestIds.add(asset.id);
   manifestById.set(asset.id,asset);
   for(const key of ['templateId','format','generator'])assert.ok(hasText(asset[key]),'Asset '+asset.id+' needs '+key);
+  validateGenerator(root,asset);
   validateProvenance(asset,'Asset '+asset.id);
  }
  const referencedIds=new Set();
@@ -117,7 +132,8 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
  for(const entry of m.materials)validateProvenance(entry.provenance,'Material '+entry.id);
  for(const entry of p.patterns){assert.equal(entry.repeatable,true,'Pattern '+entry.id+' must repeat');validateProvenance(entry.provenance,'Pattern '+entry.id);}
  for(const library of manifest.libraries){
-  for(const key of ['name','version','source','license','author'])assert.ok(hasText(library[key]),'Library provenance needs '+key);
+  assert.ok(hasText(library.name)&&hasText(library.version),'Library name and version are required');
+  validateProvenance(library,'Library '+library.name);
  }
  assert.ok(manifest.libraries.some(x=>x.name==='Three.js'&&x.version==='0.187.0'&&x.license==='MIT'),'Pinned 3D library provenance missing');
 
