@@ -73,7 +73,7 @@ test('fixed outfit switches 2D and 3D, handles context loss, saves Lookbook and 
  const saved=page.locator('.ws-look-card').filter({hasText:'E2E · Áo cơ bản'});
  await expect(saved).toBeVisible();
  const download=page.waitForEvent('download');
- await saved.getByRole('button',{name:'PNG'}).click();
+ await saved.getByRole('button',{name:'PNG',exact:true}).click();
  const file=await download;
  expect(file.suggestedFilename()).toMatch(/\.png$/i);
 });
@@ -103,13 +103,16 @@ test('mid-range Android emulation keeps the canvas first and the closet in a rea
  await expect(page.locator('.ws-stage svg')).toBeVisible();
  const renderMs=Date.now()-started;
  const geometry=await page.evaluate(()=>{
-  const canvas=document.querySelector('.ws-main').getBoundingClientRect();
-  const closet=document.querySelector('.ws-closet-panel').getBoundingClientRect();
-  return {viewport:innerWidth,document:document.documentElement.scrollWidth,canvasTop:canvas.top,closetTop:closet.top,stageHeight:document.querySelector('.ws-stage').getBoundingClientRect().height};
+  const main=document.querySelector('.ws-layout-studio>.ws-main');
+  const closet=document.querySelector('.ws-layout-studio>.ws-closet-panel');
+  return {viewport:innerWidth,viewportHeight:innerHeight,document:document.documentElement.scrollWidth,canvasOrder:Number(getComputedStyle(main).order),closetOrder:Number(getComputedStyle(closet).order),closetPosition:getComputedStyle(closet).position,closetMaxHeight:getComputedStyle(closet).maxHeight,stageHeight:document.querySelector('.ws-stage').getBoundingClientRect().height};
  });
  expect(renderMs).toBeLessThan(10_000);
  expect(geometry.document).toBeLessThanOrEqual(geometry.viewport);
- expect(geometry.canvasTop).toBeLessThan(geometry.closetTop);
+ expect(geometry.canvasOrder).toBeLessThan(geometry.closetOrder);
+ expect(geometry.closetPosition).toBe('sticky');
+ expect(parseFloat(geometry.closetMaxHeight)).toBeGreaterThan(0);
  expect(geometry.stageHeight).toBeGreaterThanOrEqual(915*.5);
+ await testInfo.attach('android-emulation.png',{body:await page.screenshot(),contentType:'image/png'});
  await testInfo.attach('android-emulation-metrics.json',{body:Buffer.from(JSON.stringify({viewport:'412x915',cpuThrottle:4,deviceMemoryGb:4,studioRenderMs:renderMs,...geometry},null,2)),contentType:'application/json'});
 });
