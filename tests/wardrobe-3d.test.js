@@ -73,7 +73,7 @@ function assertClosedBody(part) {
  assert.equal(seen.size,part.points.length,'one connected body mesh');
 }
 
-function intersectionCount(indices,points){
+function intersectionCount(indices,points,split){
  const faces=[];
  for(let i=0;i<indices.length;i+=3){
   const ids=indices.slice(i,i+3), triangle=ids.map(id=>points[id]);
@@ -98,6 +98,7 @@ function intersectionCount(indices,points){
  let count=0;
  for(const [i,a] of faces.entries())for(let j=i+1;j<faces.length&&faces[j].min[1]<=a.max[1];j++){
   const b=faces[j];
+  if(split!==undefined&&(a.ids[0]<split)===(b.ids[0]<split))continue;
   if([0,2].some(axis=>a.max[axis]<b.min[axis]||b.max[axis]<a.min[axis]))continue;
   if(a.ids.some(id=>b.ids.includes(id)))continue;
   if(crosses(a.triangle,b.triangle)||crosses(b.triangle,a.triangle))count++;
@@ -151,6 +152,29 @@ test('mesh containment detects an intentionally buried vertex',()=>{
  const {transforms,colliders,layout}=buildStudioGeometry(MANNEQUIN_PRESETS[1]);
  const result=measurePenetration([{bone:'Spine',points:[[0,layout.chest,0],[400,0,0]]}],transforms,colliders);
  assert.deepEqual(result,{ratio:.5,testedVertices:2,penetratingVertices:1});
+});
+
+test('seated skirts and dress hems do not cut through the body between mesh vertices',t=>{
+ const skirts=templates.filter(item=>['skirts','dresses'].includes(item.category));
+ let cases=0;
+ for(const preset of MANNEQUIN_PRESETS)for(const radial of [12,20]){
+  const options={pose:'sitting',radial};
+  const {body:[body],transforms}=buildStudioGeometry(preset,[],options);
+  const posed=part=>part.points.map((_,i)=>new Vector3(...poseSurfacePoint(part,i,transforms)));
+  const bodyPoints=posed(body);
+  const split=bodyPoints.length;
+  for(const item of skirts){
+   const {garments:[{parts}]}=buildStudioGeometry(preset,[item],options);
+   const skirt=parts.at(-1);
+   const posedSkirt=posed(skirt);
+   const crossings=intersectionCount(
+    [...body.indices,...skirt.indices.map(index=>index+split)],
+    [...bodyPoints,...posedSkirt],split);
+   assert.equal(crossings,0,preset.id+'/'+item.id+'/'+radial);
+   cases++;
+  }
+ }
+ t.diagnostic(JSON.stringify({seatedSkirtAndDressCases:cases}));
 });
 
 test('all 60 procedural garments stay below 1% vertex penetration for 4 presets, 4 poses and both render LODs',t=>{

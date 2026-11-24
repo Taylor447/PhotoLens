@@ -1,3 +1,5 @@
+import {CLOTH_MAX_DISPLACEMENT_CM} from '../features/wardrobe/studio3d/cloth-motion.js';
+
 const TICK_MS=50;
 let meshes=[], timer=null, time=0;
 
@@ -25,7 +27,9 @@ function integrate(mesh, wind) {
     const first=row*stride*3, end=first+(stride-1)*3;
     for(let axis=0;axis<3;axis++)current[end+axis]=current[first+axis];
   }
-  return Float32Array.from(current,(value,i)=>rest[i]+Math.max(-1.1,Math.min(1.1,value-rest[i])));
+  return Float32Array.from(current,(value,i)=>rest[i]+Math.max(
+    -CLOTH_MAX_DISPLACEMENT_CM,Math.min(CLOTH_MAX_DISPLACEMENT_CM,value-rest[i])
+  ));
 }
 
 function setup({key,positions,rows,stride}){

@@ -1,5 +1,6 @@
 import {MANNEQUIN_DEFAULTS_CM, normalizeMannequin, createMannequinLandmarks} from '../../../core/wardrobe-engine.js';
 import {buildMannequinSurface} from './mannequin-surface.js';
+import {fitSkirtToPose, lowerBodyInPelvisSpace} from './skirt-drape.js';
 
 export const MAX_SCENE_TRIANGLES = 150_000;
 export const MAX_PROCEDURAL_ITEMS = 18;
@@ -89,11 +90,11 @@ function referenceShell(item, layout, sections, layerOffset) {
   const long=p.length==='long'?1.18:p.length==='short'?.78:1;
   const bodiceLength = shoulder-waist;
   const torso=(hem) => part('Spine',[ring(hem,Math.max(waistRx,hem<waist?hipRx:0)+ease,Math.max(waistRz,hem<waist?hipRz:0)+ease),ring(waist,waistRx+ease,waistRz+ease),ring(chest,chestRx+ease,chestRz+ease),ring(shoulder-1,m.shoulders*.5+ease,chestRz*.83+ease),ring(shoulder+3.1+(p.neck==='high'?1:0),neckRx+ease,neckRz+ease)]);
-  const skirt=(longer)=>part('Pelvis',[
+  const skirt=(longer)=>({...part('Pelvis',[
     ring(Math.max(ankle+4,pelvis-m.inseam*(longer?.69:.48)*long),hipRx+ease+10+variant,hipRz+ease+5+variant*.7),
     ring(Math.max(ankle+8,pelvis-m.inseam*.23*long),hipRx+ease+5,hipRz+ease+3),
     ring(pelvis+1,hipRx+ease,hipRz+ease),ring(waist,waistRx+ease,waistRz+ease)
-  ],false,true);
+  ],false,true),drape:true});
   const limb=name=>sections.filter(row=>row.bone.startsWith(name)).map(row=>expand(row,ease));
   switch(item.category){
     case 'tops':
@@ -283,12 +284,18 @@ function posedMannequin(value,pose,radial){
 }
 
 export function buildStudioGeometry(value, items=[], {pose='standing',radial=20}={}){
-  const {layout,body,transforms,colliders}=posedMannequin(value,pose,radial);
+  const mannequin=posedMannequin(value,pose,radial);
+  const {layout,body,transforms,colliders}=mannequin;
   const shape=garmentReferenceSections(layout);
   const sorted=items.slice(0,MAX_PROCEDURAL_ITEMS).sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));
   const garments=sorted.map((item,i)=>{
-    const shells=referenceShell(item,layout,shape,(item.layer==='outer'?1.6:0)+i*.48).map(desc=>tessellate(desc,radial));
-    const parts=shells.map(part=>{
+    const shells=referenceShell(item,layout,shape,(item.layer==='outer'?1.6:0)+i*.48);
+    const parts=shells.map(desc=>{
+      if(desc.drape&&pose==='sitting'){
+        mannequin.lowerBody??=lowerBodyInPelvisSpace(body[0],i=>poseSurfacePoint(body[0],i,transforms),transforms.get('Pelvis'));
+        return fitSkirtToPose(desc,mannequin.lowerBody,radial,tessellate);
+      }
+      const part=tessellate(desc,radial);
       const {toWorld,toRest}=transforms.get(part.bone);
       return {...part,points:part.points.map(point=>{
         const posed=toWorld(point), corrected=moveOutside(posed,colliders);

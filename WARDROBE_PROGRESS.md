@@ -67,3 +67,10 @@ Mốc trước sửa là PR #14 tại 8d13c568866040036445876229b43ac53bd42eff. 
 Các tệp chính gồm `features/wardrobe/studio3d/mannequin-surface.js`, `features/wardrobe/studio3d/geometry.js`, `features/wardrobe3d.js` và `tests/wardrobe-3d.test.js`. Manifest ghi nguồn, tác giả và giấy phép cho lưới sinh bằng mã. Playwright có một ca mới để kiểm tra canvas khi xoay bằng bàn phím và chuyển các tư thế.
 
 Kiểm tra cục bộ gồm 47 unit test, Vite build và kiểm tra manifest/asset. Playwright CI chạy trên PR #14. Phần kế tiếp của GĐ4 là lưới trang phục theo từng kiểu dáng và skinning theo lớp.
+
+## GĐ4 · Váy xuyên đùi khi ngồi
+
+- Tái hiện lỗi với áo thun và chân váy xếp ly trong Studio 3D. Bản cũ có thể để mặt tam giác của váy cắt qua đùi dù các đỉnh nằm ngoài thân.
+- Bản sửa dựng lại các vòng ngang bao quanh phần thân dưới đã tạo dáng ngồi, dự trù khoảng dịch chuyển của mô phỏng vải. Cùng quy tắc áp dụng cho phần chân váy của đầm. Flat-lay dùng dáng tham chiếu đứng.
+- 80 ca kiểm tra giao giữa mặt váy và thân ở tư thế ngồi đạt, gồm 10 mẫu váy/đầm × 4 preset × 2 mức chi tiết. Bộ kiểm tra xuyên đỉnh trên 60 mẫu đo 0/238.384 đỉnh, qua 1.920 tổ hợp. Cảnh thử nhiều món có 28.890 tam giác, gồm sàn.
+- Kiểm thử hồi quy dựng chân váy xếp ly trên canvas sau khi chọn tư thế ngồi. Ảnh đối chiếu sử dụng Vite preview trong Edge. Kết quả này đo va chạm thân với phần lai váy, chưa đo giao nhau giữa các lớp vải.

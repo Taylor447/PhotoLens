@@ -241,7 +241,7 @@ export async function mountWardrobe3D(host,{
   };
   externalSignal?.addEventListener('abort',dispose,{once:true,signal});
   try{
-    const lowPower=deviceIsLimited(), model=buildStudioGeometry(mannequin,items,{pose,radial:lowPower?12:20});
+    const lowPower=deviceIsLimited(), model=buildStudioGeometry(mannequin,items,{pose:flatLay?'standing':pose,radial:lowPower?12:20});
     if(items.length>MAX_PROCEDURAL_ITEMS)onMessage('Studio 3D đang dùng '+MAX_PROCEDURAL_ITEMS+' món đầu của bộ phối.');
     const scene=new T.Scene();scene.background=new T.Color(hasColor(background)?background:'#edf3f0');
     const camera=new T.PerspectiveCamera(35,1,.5,3000);
