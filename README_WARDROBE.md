@@ -27,6 +27,14 @@ Studio 2D uses a shared centimetre mannequin record, four deliberately illustrat
 Size recommendations and signed differences in centimetres require comparable measurements. The catalog contains no measured physical garments or sourced size tables. The user can supply those dimensions in the local closet. The 3D vertex penetration gate for generated assets is 1% or less against posed body geometry. Garment-to-garment contact, true cloth drape and real-world fit are outside this result. Browser FPS targets need device measurements.
 
 
+## Mix & Match and Lookbook
+
+Studio 2D and Studio 3D read the same ordered outfit state. Colour, pattern and layer edits belong to the outfit. The same undo/redo history also tracks locks. A Lookbook save stores outfit edits, tags, background and pose. It does not store a copy of local body measurements. Attach a saved look from either Lookbook or the shooting plan editor. A plan retains the name saved with its reference if the original look is later deleted.
+
+Quick suggestions and the Studio use the same weather inputs and background colour. With an analysis report open, the picker can reuse the on-device K-means swatches from image A or B. Manual weather values take precedence for the current session. Lookbook can export PNG/PDF, or send a PNG through the Android share sheet when running through Capacitor. Browsers without file sharing download the PNG.
+
+The browser and Worker share the outfit request/response contract. The request includes the current genre, selected background colour, weather and up to 60 filtered candidate records. Free-text notes, names, photos, size data and avatar settings are excluded. The Worker accepts only unique IDs from the candidate pool and can retry malformed model output twice after its first attempt. The browser uses deterministic local rules if AI is disabled, unavailable or returns invalid data.
+
 ## Development
 
 Run `npm run test:unit` for core, migration, Worker schema, and manifest checks. Run `npm run build` for the Vite build. `npm run worker:deploy` deploys the optional Worker route when a Cloudflare account is configured; GitHub Pages does not deploy the Worker.

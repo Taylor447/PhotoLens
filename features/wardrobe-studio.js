@@ -1,27 +1,35 @@
+import {createOutfitState,resolveOutfit,outfitViewSettings} from '../core/wardrobe/outfit-state.js';
+import {buildComposeRequest,resolveComposeChoice,COMPOSE_PATH} from '../core/wardrobe/compose-contract.js';
+import {downloadFile,shareFile} from '../core/share-file.js';
 import templatesData from '../data/wardrobe/garments.json';
 import materialData from '../data/wardrobe/materials.json';
 import patternData from '../data/wardrobe/patterns.json';
 import {Capacitor} from '@capacitor/core';
 import {Preferences} from '@capacitor/preferences';
-import {createWardrobeRepository,filterGarments,calculateFit,scoreLook,buildSvgLook,safeSvgText,classifyWardrobeAsset,hasSupportedImageHeader,CATEGORIES,STYLES,MEASURE_KEYS,composeRuleOutfit,buildCapsule,MANNEQUIN_DEFAULTS_CM,MANNEQUIN_PRESETS,normalizeMannequin,inspectSvgGarmentClipping} from '../core/wardrobe-engine.js';
+import {createWardrobeRepository,filterGarments,calculateFit,scoreLook,buildSvgLook,safeSvgText,classifyWardrobeAsset,hasSupportedImageHeader,CATEGORIES,STYLES,MEASURE_KEYS,composeRuleOutfit,buildCapsuleLooks,MANNEQUIN_DEFAULTS_CM,MANNEQUIN_PRESETS,normalizeMannequin} from '../core/wardrobe-engine.js';
 import {chooseSize,parseSizeRows} from '../core/fit/measurements.js';
 import {inspectGarmentGlb} from './wardrobe/studio3d/glb.js';
 import {mountWardrobe3D,WARDROBE_LIGHTING} from './wardrobe3d.js';
 
 const templates=templatesData.templates||[],materials=materialData.materials||[],patterns=patternData.patterns||[],repo=createWardrobeRepository();
-let selected=[],history=[[]],historyAt=0,locked=new Set(),compareIds=[],section='catalog',cameraDistance=450,cameraHeight=135,focalLength=50,useAngleCamera=false,sceneLight='overcast',turntable=false,cloth=true,sceneController=null,filters={query:'',category:'all',style:'all',color:'all',material:'all',pattern:'all',season:'all',weather:'all',favorite:'all',collection:'all'},editing='',message='',flatLay=false,pose='standing',height=170,tint='#9ba5a2',bg='#f2f6f4',measures={},saveMeasures=false,manual={temp:null,rain:null,wind:null},includeOuter=false,queryTimer,cleanScene=null,collectionName='',seed=21;
+const outfit=createOutfitState();
+let compareIds=[],section='catalog',cameraDistance=450,cameraHeight=135,focalLength=50,useAngleCamera=true,sceneLight='overcast',turntable=false,cloth=true,sceneController=null,filters={query:'',category:'all',style:'all',color:'all',material:'all',pattern:'all',season:'all',weather:'all',favorite:'all',collection:'all'},editing='',message='',flatLay=false,pose='standing',height=170,tint='#9ba5a2',bg='#f2f6f4',measures={},saveMeasures=false,includeOuter=false,queryTimer,cleanScene=null,collectionName='',lookTags='',editingLookId='',dressCode='',anchorId='',capsuleLooks=[],composeController=null,seed=21;
 const previewUrls=new Set(),cutoutResults=new WeakMap();
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const items=()=>repo.listItems();
-const available=()=>[...templates.map(x=>({...x,isTemplate:true,color:'#647d69'})),...items()];
-const chosen=()=>{const map=new Map(available().map(x=>[x.id,x]));return selected.map(x=>map.get(x)).filter(Boolean).sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));};
+const available=()=>{
+ const closet=items(),ids=new Set(closet.map(item=>item.id));
+ return [...closet,...templates.filter(x=>!ids.has('closet-'+x.id)).map(x=>({...x,isTemplate:true,color:'#647d69',colorFamily:'green'}))];
+};
+const chosen=()=>resolveOutfit(items(),outfit.value);
+const isLocked=id=>outfit.value.lockedIds.includes(id);
+const viewSettings=()=>outfitViewSettings({background:bg,mannequinTone:tint,pose,flatLay});
 const effectiveMannequin=()=>normalizeMannequin({...MANNEQUIN_DEFAULTS_CM,...measures,heightCm:height});
-const push=()=>{history=history.slice(0,historyAt+1);history.push(selected.slice());if(history.length>30)history.shift();historyAt=history.length-1;};
 const family=color=>{const s=String(color||'').replace('#','');if(!/^[0-9a-f]{6}$/i.test(s))return'custom';const r=parseInt(s.slice(0,2),16),g=parseInt(s.slice(2,4),16),b=parseInt(s.slice(4,6),16),mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(mx-mn<26)return'neutral';if(r>g*1.2&&r>b*1.2)return'warm';if(b>r*1.13&&b>g*1.07)return'blue';if(g>r*1.1&&g>b*1.03)return'green';if(r>g*1.16&&b>g*1.06)return'purple';if(r>g*1.2)return'red';return'custom';};
 const opts=(data,current)=>Object.entries(data).map(([k,v])=>'<option value="'+k+'" '+(current===k?'selected':'')+'>'+esc(v)+'</option>').join('');
 const colorOpts='<option value="all">Mọi màu</option>'+[['neutral','Trung tính'],['blue','Xanh dương'],['green','Xanh lá'],['warm','Tông ấm'],['red','Đỏ'],['purple','Tím'],['custom','Khác']].map(([a,b])=>'<option value="'+a+'">'+b+'</option>').join('');
 function thumb(item){return '<div class="ws-thumb" '+(item.imageAssetId?'data-ws-asset-id="'+esc(item.imageAssetId)+'" ':'')+'style="--item:'+esc(item.color||'#647d69')+'"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M30 22 42 16h16l12 6 12 24-12 4-5-10v42H35V40l-5 10-12-4z" fill="currentColor" stroke="#41544f" stroke-width="2"/></svg></div>'; }
-function card(x){const picked=selected.includes(x.id);return '<article class="ws-item-card" draggable="true" data-ws-draggable="'+esc(x.id)+'">'+thumb(x)+'<b>'+esc(x.name)+'</b><small>'+esc(CATEGORIES[x.category]||x.category)+' · '+(x.isTemplate?'Mẫu tham số':'Tủ đồ cá nhân')+(x.vectorAssetId?' · Có tệp GLB cục bộ':'')+'</small><div class="ws-card-actions"><button class="planner-btn" data-ws-wear="'+esc(x.id)+'">'+(picked?'Đang mặc':'Mặc thử')+'</button><button class="planner-btn" data-ws-fav="'+esc(x.id)+'" aria-pressed="'+Boolean(x.favorite)+'">'+(x.favorite?'★':'☆')+' Yêu thích</button>'+(x.isTemplate?'':'<button class="planner-link" data-ws-edit="'+esc(x.id)+'">Sửa</button><button class="planner-link danger" data-ws-delete="'+esc(x.id)+'">Xóa</button>')+'</div></article>';}
+function card(x){const picked=outfit.value.itemIds.includes(x.isTemplate&&!x.id.startsWith('closet-')?'closet-'+x.id:x.id);return '<article class="ws-item-card" draggable="true" data-ws-draggable="'+esc(x.id)+'">'+thumb(x)+'<b>'+esc(x.name)+'</b><small>'+esc(CATEGORIES[x.category]||x.category)+' · '+(x.isTemplate?'Mẫu tham số':'Tủ đồ cá nhân')+(x.vectorAssetId?' · Có tệp GLB cục bộ':'')+'</small><div class="ws-card-actions"><button class="planner-btn" data-ws-wear="'+esc(x.id)+'">'+(picked?'Đang mặc':'Mặc thử')+'</button><button class="planner-btn" data-ws-fav="'+esc(x.id)+'" aria-pressed="'+Boolean(x.favorite)+'">'+(x.favorite?'★':'☆')+' Yêu thích</button>'+(x.isTemplate?'':'<button class="planner-link" data-ws-edit="'+esc(x.id)+'">Sửa</button><button class="planner-link danger" data-ws-delete="'+esc(x.id)+'">Xóa</button>')+'</div></article>';}
 function trackPreview(blob){const url=URL.createObjectURL(blob);previewUrls.add(url);return url;}
 function clearPreviews(){for(const url of previewUrls)URL.revokeObjectURL(url);previewUrls.clear();}
 async function hydrateLocalPreviews(container){
@@ -58,7 +66,10 @@ async function buildCutoutFile(file,onProgress){
  const blob=await new Promise((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(new Error('Không xuất được PNG.')),'image/png'));
  const cleanName=file.name.replace(/\.[^.]+$/,'')+'-tach-nen.png';return new File([blob],cleanName,{type:'image/png'});
 }
-function currentWeather(){return{temp:manual.temp??window.__photolensWardrobeWeather?.temp??null,rain:manual.rain??window.__photolensWardrobeWeather?.rain??null,wind:manual.wind??window.__photolensWardrobeWeather?.wind??null};}
+function currentWeather(){return studioContext.weather||{};}
+let studioContext={};
+const ruleContext=()=>({background:bg,temperatureC:currentWeather().temp,precipitationMm:currentWeather().rain,windKmh:currentWeather().wind,genre:studioContext.genre,dressCode,season:filters.season});
+const composerOptions=()=>({seed:seed++,weather:currentWeather(),context:ruleContext(),includeOuter,current:chosen(),lockedIds:outfit.value.lockedIds});
 function catalogView(){
  const list=filterGarments(available(),filters,currentWeather()),form=items().find(x=>x.id===editing)||{},collections=[...new Set(items().flatMap(x=>x.collections||[]))].sort((a,b)=>a.localeCompare(b,'vi'));
  const collectionOptions=collections.map(x=>'<option value="'+esc(x)+'" '+(filters.collection===x?'selected':'')+'>'+esc(x)+'</option>').join('');
@@ -77,11 +88,11 @@ function fitReadout(item){
   return '<div class="ws-fit-item"><b>'+esc(item.name)+'</b>'+label+'<div>'+values+'</div></div>';
 }
 function cameraSettings(){
-  const angle=window.__photolensWardrobeContext?.camera;
+  const angle=studioContext.camera;
   return useAngleCamera&&angle?angle:{distanceCm:cameraDistance,cameraHeightCm:cameraHeight,focalLengthMm:focalLength};
 }
 function cameraControls(){
-  const angle=window.__photolensWardrobeContext?.camera, active=cameraSettings(), fixed=useAngleCamera&&Boolean(angle);
+  const angle=studioContext.camera, active=cameraSettings(), fixed=useAngleCamera&&Boolean(angle);
   return '<label class="ws-inline-check"><input type="checkbox" data-ws-angle-camera '+(fixed?'checked':'')+(!angle?' disabled':'')+'> Dùng thông số từ Góc chụp</label>'
   +'<label>Tiêu cự tương đương 35 mm<select data-ws-focal '+(fixed?'disabled':'')+'>'+[24,35,50,70,85].map(mm=>'<option value="'+mm+'" '+(active.focalLengthMm===mm?'selected':'')+'>'+mm+' mm</option>').join('')+'</select></label>'
   +'<label>Khoảng cách máy ảnh: <output>'+active.distanceCm+' cm</output><input data-ws-distance type="range" min="140" max="1200" step="10" value="'+active.distanceCm+'" '+(fixed?'disabled':'')+'></label>'
@@ -90,19 +101,31 @@ function cameraControls(){
   +'<label class="ws-inline-check"><input type="checkbox" data-ws-cloth '+(cloth?'checked':'')+'> Chuyển động vải nhẹ</label>';
 }
 function studioView(is3d){
- const look=chosen(),mannequin=effectiveMannequin(),rules=scoreLook(look,{background:bg,temperatureC:currentWeather().temp,precipitationMm:currentWeather().rain,windKmh:currentWeather().wind,genre:window.__photolensWardrobeContext?.genre||'portrait'}),fit=look.map(fitReadout).join('');
- const selectedHtml=look.map(x=>'<div class="ws-selected-row">'+thumb(x)+'<b>'+esc(x.name)+'</b><input aria-label="Đổi màu '+esc(x.name)+'" type="color" data-ws-color="'+esc(x.id)+'" value="'+esc(x.color||'#647d69')+'"><select aria-label="Họa tiết '+esc(x.name)+'" data-ws-pattern="'+esc(x.id)+'">'+patterns.map(p=>'<option value="'+p.id+'" '+((x.patternId||'solid')===p.id?'selected':'')+'>'+esc(p.name)+'</option>').join('')+'</select><button class="planner-btn" data-ws-lock="'+esc(x.id)+'">'+(locked.has(x.id)?'Đã khóa':'Khóa')+'</button><button class="planner-btn" data-ws-layer="up" data-id="'+esc(x.id)+'" aria-label="Đưa '+esc(x.name)+' lên lớp trên">↑ Lớp</button><button class="planner-btn" data-ws-layer="down" data-id="'+esc(x.id)+'" aria-label="Đưa '+esc(x.name)+' xuống lớp dưới">↓ Lớp</button><button class="planner-btn" data-ws-remove="'+esc(x.id)+'">Bỏ</button></div>').join('');
+ const look=chosen(),mannequin=effectiveMannequin(),rules=scoreLook(look,ruleContext()),fit=look.map(fitReadout).join('');
+ const selectedHtml=look.map(x=>'<div class="ws-selected-row">'+thumb(x)+'<b>'+esc(x.name)+'</b><input aria-label="Đổi màu '+esc(x.name)+'" '+(isLocked(x.id)?'disabled ':'')+'type="color" data-ws-color="'+esc(x.id)+'" value="'+esc(x.color||'#647d69')+'"><select aria-label="Họa tiết '+esc(x.name)+'" '+(isLocked(x.id)?'disabled ':'')+'data-ws-pattern="'+esc(x.id)+'">'+patterns.map(p=>'<option value="'+p.id+'" '+((x.patternId||'solid')===p.id?'selected':'')+'>'+esc(p.name)+'</option>').join('')+'</select><button class="planner-btn" data-ws-lock="'+esc(x.id)+'" aria-pressed="'+isLocked(x.id)+'">'+(isLocked(x.id)?'Đã khóa':'Khóa')+'</button><button class="planner-btn" data-ws-layer="up" data-id="'+esc(x.id)+'" aria-label="Đưa '+esc(x.name)+' lên lớp trên">↑ Lớp</button><button class="planner-btn" data-ws-layer="down" data-id="'+esc(x.id)+'" aria-label="Đưa '+esc(x.name)+' xuống lớp dưới">↓ Lớp</button><button class="planner-btn" data-ws-remove="'+esc(x.id)+'">Bỏ</button></div>').join('');
  const stage=is3d?'<div class="ws-three-host" data-ws-three><span>Đang tải Studio 3D…</span></div>':'<div class="ws-svg-host">'+buildSvgLook(look,{background:bg,flatLay,pose,mannequinTone:tint,mannequin})+'</div>';
- return '<div class="ws-layout"><section class="ws-main"><div class="ws-stage-toolbar"><p>Chỉnh một bộ đồ, trạng thái dùng chung giữa 2D và 3D.</p><button class="planner-btn" data-ws-flat>'+ (flatLay?'Bật mannequin':'Flat-lay')+'</button><button class="planner-btn" data-ws-pose="standing">Đứng</button><button class="planner-btn" data-ws-pose="lean">Nghiêng</button><button class="planner-btn" data-ws-pose="step">Bước</button><button class="planner-btn" data-ws-pose="sitting">Ngồi</button>'+(is3d?'<button class="planner-btn" data-ws-turntable aria-pressed="'+turntable+'">'+(turntable?'Dừng xoay':'Xoay tự động')+'</button>':'')+'<button class="planner-btn" data-ws-undo '+(historyAt===0?'disabled':'')+'>Hoàn tác</button><button class="planner-btn" data-ws-redo '+(historyAt>=history.length-1?'disabled':'')+'>Làm lại</button></div><div class="ws-stage" data-ws-drop>'+stage+'</div><h3>Bộ đang phối</h3><div class="ws-selection">'+(selectedHtml||'<p>Chưa chọn món. Mở Kho để thêm.</p>')+'</div><div class="ws-toolbar"><label>Tìm món<input type="search" data-ws-query value="'+esc(filters.query)+'"></label><label>Danh mục<select data-ws-filter="category"><option value="all">Mọi danh mục</option>'+opts(CATEGORIES,filters.category)+'</select></label><label>Phong cách<select data-ws-filter="style"><option value="all">Mọi phong cách</option>'+opts(STYLES,filters.style)+'</select></label></div><div class="ws-card-grid">'+filterGarments(available(),filters,currentWeather()).slice(0,18).map(card).join('')+'</div></section><aside class="ws-side"><h3>Thuộc tính mannequin</h3><label>Màu nền<input type="color" data-ws-bg value="'+esc(bg)+'"></label><label>Tông mannequin tự chọn<input type="color" data-ws-tone value="'+esc(tint)+'"></label><label>Chiều cao mannequin: <output>'+height+' cm</output><input data-ws-height type="range" min="140" max="210" value="'+height+'"></label>'+(is3d?cameraControls():'')+'<label>Preset tham chiếu<select data-ws-preset><option value="custom">Tùy chỉnh</option>'+MANNEQUIN_PRESETS.map(x=>'<option value="'+x.id+'">'+esc(x.label)+' · cm</option>').join('')+'</select></label><p class="planner-muted">Các giá trị tham chiếu chỉ dựng hình mặc định. Chỉ số đo bạn tự nhập hoặc preset bạn chủ động chọn mới dùng cho fit; không gửi lên AI.</p><div class="ws-measures">'+MEASURE_KEYS.map(k=>{const label=({shoulders:'Vai',chest:'Ngực',waist:'Eo',hips:'Hông',sleeve:'Dài tay',inseam:'Ống trong',neck:'Vòng cổ'}[k]),m=effectiveMannequin(),limits={shoulders:[30,60],chest:[60,150],waist:[45,140],hips:[60,160],sleeve:[40,90],inseam:[55,110],neck:[25,55]}[k];return '<div class="ws-measure-control"><label>'+label+' (cm)<input type="number" data-ws-measure="'+k+'" min="'+limits[0]+'" max="'+limits[1]+'" step=".1" value="'+esc(measures[k]??'')+'" placeholder="Chưa có dữ liệu"></label><label class="ws-measure-range">Hình học mannequin · <output data-ws-output="'+k+'">'+m[k]+' cm</output><input type="range" data-ws-body-range="'+k+'" min="'+limits[0]+'" max="'+limits[1]+'" step=".5" value="'+m[k]+'"></label></div>';}).join('')+'</div><label><input type="checkbox" data-ws-consent '+(saveMeasures?'checked':'')+'> Đồng ý lưu số đo trên thiết bị</label><p class="planner-muted">Ma-nơ-canh trừu tượng màu xám. Số đo lưu cục bộ khi bạn đồng ý; không suy đoán từ ảnh.</p><h4>Fit theo số đo</h4>'+(fit||'<p>Chưa có số đo sản phẩm và cơ thể tương ứng.</p>')+'<details><summary>Thời tiết thủ công khi thiếu dự báo</summary><label>Nhiệt độ °C<input type="number" data-ws-temp value="'+esc(manual.temp??'')+'" placeholder="Chưa có dữ liệu"></label><label><input type="checkbox" data-ws-rain '+(manual.rain?'checked':'')+'> Có mưa</label><label>Gió km/h<input type="number" min="0" max="200" data-ws-wind value="'+esc(manual.wind??'')+'" placeholder="Chưa có dữ liệu"></label></details><h4>Điểm ăn ảnh tham khảo (quy tắc) '+rules.score+'/100</h4><ul>'+rules.reasons.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'+(rules.warnings.map(x=>'<p class="ws-warning">'+esc(x)+'</p>').join(''))+'<label><input type="checkbox" data-ws-include-outer '+(includeOuter?'checked':'')+'> Yêu cầu lớp ngoài khi xáo trộn</label><button class="planner-btn" data-ws-random>Ngẫu nhiên có chủ đích</button><button class="planner-btn" data-ws-variation>Biến tấu</button><button class="planner-btn" data-ws-anchor>Tạo bộ từ món chủ đạo</button><button class="planner-btn" data-ws-capsule>Tủ đồ capsule</button><button class="planner-btn" data-ws-ai>AI chọn trong kho</button><label>Tên look<input data-ws-look-name value="'+esc(collectionName)+'" placeholder="Ví dụ: Phố chiều"></label><label>Thẻ look<input data-ws-look-tags placeholder="casual, phố"></label><button class="planner-btn" data-ws-save-look>Lưu lookbook</button><div class="ws-export"><button class="planner-btn" data-ws-export="svg">SVG</button><button class="planner-btn" data-ws-export="png">PNG</button><button class="planner-btn" data-ws-export="pdf">PDF</button></div><p class="ws-disclaimer">Mô phỏng tham khảo, không thay thử đồ thật. Fit cần số đo, rập, chất liệu và thông số trang phục.</p></aside></div>';
+ return '<div class="ws-layout"><section class="ws-main"><div class="ws-stage-toolbar"><p>Chỉnh một bộ đồ, trạng thái dùng chung giữa 2D và 3D.</p><button class="planner-btn" data-ws-flat>'+ (flatLay?'Bật mannequin':'Flat-lay')+'</button><button class="planner-btn" data-ws-pose="standing">Đứng</button><button class="planner-btn" data-ws-pose="lean">Nghiêng</button><button class="planner-btn" data-ws-pose="step">Bước</button><button class="planner-btn" data-ws-pose="sitting">Ngồi</button>'+(is3d?'<button class="planner-btn" data-ws-turntable aria-pressed="'+turntable+'">'+(turntable?'Dừng xoay':'Xoay tự động')+'</button>':'')+'<button class="planner-btn" data-ws-undo '+(!outfit.canUndo?'disabled':'')+'>Hoàn tác</button><button class="planner-btn" data-ws-redo '+(!outfit.canRedo?'disabled':'')+'>Làm lại</button></div><div class="ws-stage" data-ws-drop>'+stage+'</div><h3>Bộ đang phối</h3><div class="ws-selection">'+(selectedHtml||'<p>Chưa chọn món. Mở Kho để thêm.</p>')+'</div><div class="ws-toolbar"><label>Tìm món<input type="search" data-ws-query value="'+esc(filters.query)+'"></label><label>Danh mục<select data-ws-filter="category"><option value="all">Mọi danh mục</option>'+opts(CATEGORIES,filters.category)+'</select></label><label>Phong cách<select data-ws-filter="style"><option value="all">Mọi phong cách</option>'+opts(STYLES,filters.style)+'</select></label></div><div class="ws-card-grid">'+filterGarments(available(),filters,currentWeather()).slice(0,18).map(card).join('')+'</div></section><aside class="ws-side"><h3>Thuộc tính mannequin</h3><label>Màu nền<input type="color" data-ws-bg value="'+esc(bg)+'"></label><label>Tông mannequin tự chọn<input type="color" data-ws-tone value="'+esc(tint)+'"></label><label>Chiều cao mannequin: <output>'+height+' cm</output><input data-ws-height type="range" min="140" max="210" value="'+height+'"></label>'+(is3d?cameraControls():'')+'<label>Preset tham chiếu<select data-ws-preset><option value="custom">Tùy chỉnh</option>'+MANNEQUIN_PRESETS.map(x=>'<option value="'+x.id+'">'+esc(x.label)+' · cm</option>').join('')+'</select></label><p class="planner-muted">Các giá trị tham chiếu chỉ dựng hình mặc định. Chỉ số đo bạn tự nhập hoặc preset bạn chủ động chọn mới dùng cho fit; không gửi lên AI.</p><div class="ws-measures">'+MEASURE_KEYS.map(k=>{const label=({shoulders:'Vai',chest:'Ngực',waist:'Eo',hips:'Hông',sleeve:'Dài tay',inseam:'Ống trong',neck:'Vòng cổ'}[k]),m=effectiveMannequin(),limits={shoulders:[30,60],chest:[60,150],waist:[45,140],hips:[60,160],sleeve:[40,90],inseam:[55,110],neck:[25,55]}[k];return '<div class="ws-measure-control"><label>'+label+' (cm)<input type="number" data-ws-measure="'+k+'" min="'+limits[0]+'" max="'+limits[1]+'" step=".1" value="'+esc(measures[k]??'')+'" placeholder="Chưa có dữ liệu"></label><label class="ws-measure-range">Hình học mannequin · <output data-ws-output="'+k+'">'+m[k]+' cm</output><input type="range" data-ws-body-range="'+k+'" min="'+limits[0]+'" max="'+limits[1]+'" step=".5" value="'+m[k]+'"></label></div>';}).join('')+'</div><label><input type="checkbox" data-ws-consent '+(saveMeasures?'checked':'')+'> Đồng ý lưu số đo trên thiết bị</label><p class="planner-muted">Ma-nơ-canh trừu tượng màu xám. Số đo lưu cục bộ khi bạn đồng ý; không suy đoán từ ảnh.</p><h4>Fit theo số đo</h4>'+(fit||'<p>Chưa có số đo sản phẩm và cơ thể tương ứng.</p>')+'<label>Dress code<select data-ws-dress-code>'+opts({'':'Tự do',formal:'Trang trọng',office:'Công sở',casual:'Thường ngày',sport:'Thể thao',traditional:'Truyền thống',cosplay:'Cosplay'},dressCode)+'</select></label><details><summary>Điểm ăn ảnh '+rules.score+'/100 · Vì sao điểm này?</summary><ul>'+rules.reasons.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'+(rules.warnings.map(x=>'<p class="ws-warning">'+esc(x)+'</p>').join(''))+'</details><label><input type="checkbox" data-ws-include-outer '+(includeOuter?'checked':'')+'> Yêu cầu lớp ngoài khi xáo trộn</label><button class="planner-btn" data-ws-random>Ngẫu nhiên có chủ đích</button><button class="planner-btn" data-ws-variation>Biến tấu</button><label>Món chủ đạo<select data-ws-anchor-id><option value="">Chọn món trong bộ đang phối</option>'+look.map(x=>'<option value="'+esc(x.id)+'" '+(x.id===anchorId?'selected':'')+'>'+esc(x.name)+'</option>').join('')+'</select></label><button class="planner-btn" data-ws-anchor>Tạo bộ từ món chủ đạo</button><button class="planner-btn" data-ws-capsule>Tủ đồ capsule</button>'+(capsuleLooks.length?'<div class="ws-export">'+capsuleLooks.map((row,i)=>'<button type="button" class="planner-btn" data-ws-capsule-pick="'+i+'" title="'+esc(row.map(x=>x.name).join(', '))+'">Bộ '+(i+1)+' · '+row.length+' món</button>').join('')+'</div>':'')+'<button class="planner-btn" data-ws-ai>AI chọn trong kho</button><label>Tên look<input data-ws-look-name value="'+esc(collectionName)+'" placeholder="Ví dụ: Phố chiều"></label><label>Thẻ look<input data-ws-look-tags value="'+esc(lookTags)+'" placeholder="casual, phố"></label><button class="planner-btn" data-ws-save-look>'+(editingLookId?'Cập nhật Lookbook':'Lưu Lookbook')+'</button>'+(editingLookId?'<button type="button" class="planner-btn" data-ws-new-look>Lưu thành bộ mới</button>':'')+'<div class="ws-export"><button class="planner-btn" data-ws-export="svg">SVG</button><button class="planner-btn" data-ws-export="png">PNG</button><button class="planner-btn" data-ws-export="pdf">PDF</button></div><p class="ws-disclaimer">Mô phỏng tham khảo, không thay thử đồ thật. Fit cần số đo, rập, chất liệu và thông số trang phục.</p></aside></div>';
 }
+const lookItems=look=>resolveOutfit(items(),look);
+const drawingOptions=look=>look?.view||viewSettings();
+const lookPreview=look=>buildSvgLook(lookItems(look),drawingOptions(look));
+export const listWardrobeLooks=()=>repo.listLooks();
+export const wardrobeLooksReady=repo.ready;
+
 function lookbookView(){
- const looks=repo.listLooks(),rows=items(),pair=compareIds.map(x=>looks.find(y=>y.id===x)).filter(Boolean);
- return '<div class="ws-layout"><section class="ws-main"><h3>Lookbook</h3>'+(pair.length===2?'<div class="ws-compare"><article>'+buildSvgLook(pair[0].itemIds.map(id=>rows.find(x=>x.id===id)).filter(Boolean),{background:bg,mannequin:effectiveMannequin()})+'<h4>A · '+esc(pair[0].name)+'</h4></article><article>'+buildSvgLook(pair[1].itemIds.map(id=>rows.find(x=>x.id===id)).filter(Boolean),{background:bg,mannequin:effectiveMannequin()})+'<h4>B · '+esc(pair[1].name)+'</h4></article></div>':'')+'<div class="ws-look-grid">'+(looks.length?looks.map(x=>'<article class="ws-look-card">'+buildSvgLook(x.itemIds.map(id=>rows.find(y=>y.id===id)).filter(Boolean),{background:bg,mannequin:effectiveMannequin()})+'<h4>'+esc(x.name)+'</h4><p>'+x.itemIds.length+' món · '+esc((x.tags||[]).join(', '))+'</p><button class="planner-btn" data-ws-load="'+esc(x.id)+'">Mở</button><button class="planner-btn" data-ws-duplicate="'+esc(x.id)+'">Nhân bản</button><button class="planner-btn" data-ws-rename="'+esc(x.id)+'">Đổi tên</button><button class="planner-btn" data-ws-compare="'+esc(x.id)+'">So sánh</button><button class="planner-link danger" data-ws-delete-look="'+esc(x.id)+'">Xóa</button><button class="planner-btn" data-ws-share="'+esc(x.id)+'">Chia sẻ</button></article>').join(''):'<p class="planner-empty">Chưa có lookbook.</p>')+'</div></section><aside class="ws-side"><h3>Riêng tư và giới hạn</h3><p>Ảnh/tệp không gửi tới AI; số đo chỉ lưu khi bạn đồng ý. AI nếu bật chỉ nhận ID món, màu, loại, phong cách, họa tiết, mùa, nền và thời tiết.</p><p>Không có mô hình AI nào được tuyên bố đã huấn luyện. Gợi ý cục bộ có quy tắc minh bạch.</p><p>Flat-lay cho chế độ không hình người.</p></aside></div>';
+ const looks=listWardrobeLooks(),pair=compareIds.map(id=>looks.find(look=>look.id===id)).filter(Boolean);
+ const button=(look,action,label)=>'<button type="button" class="planner-btn" data-ws-'+action+'="'+esc(look.id)+'">'+label+'</button>';
+ const compare=pair.length===2?'<div class="ws-compare">'+pair.map(look=>'<article><h4>'+esc(look.name)+'</h4>'+lookPreview(look)+'</article>').join('')+'</div>':'';
+ const cards=looks.map(look=>'<article class="ws-look-card">'+lookPreview(look)+'<h4>'+esc(look.name)+'</h4><p>'+lookItems(look).length+' món · '+esc((look.tags||[]).join(', '))+'</p><div class="ws-card-actions">'
+ +button(look,'load','Mở / sửa')+button(look,'duplicate','Nhân bản')+button(look,'compare',compareIds.includes(look.id)?'Bỏ so sánh':'So sánh')
+ +button(look,'plan-look','Gắn vào kế hoạch')+button(look,'png-look','PNG')+button(look,'pdf-look','PDF')
+ +button(look,'share','Chia sẻ PNG')+button(look,'delete-look','Xóa')+'</div></article>').join('');
+ return '<div class="ws-layout"><section class="ws-main"><h3>Lookbook</h3>'+compare+'<div class="ws-look-grid">'+(cards||'<p class="planner-empty">Chưa có bộ đã lưu.</p>')+'</div></section><aside class="ws-side"><h3>Riêng tư</h3><p>Lookbook, ảnh và số đo ở trên thiết bị. Ảnh và số đo không gửi đến AI phối đồ.</p></aside></div>';
 }
-export function disposeWardrobeStudio(){sceneController?.abort();sceneController=null;if(cleanScene){try{cleanScene();}catch{}cleanScene=null;}clearPreviews();}
+export function disposeWardrobeStudio(){composeController?.abort();composeController=null;sceneController?.abort();sceneController=null;if(cleanScene){try{cleanScene();}catch{}cleanScene=null;}clearPreviews();}
 export function renderWardrobeStudio(which='catalog',context={}){
  section=which;bg=/^#[0-9a-f]{6}$/i.test(context.background||'')?context.background:bg;
- window.__photolensWardrobeWeather={temp:Number.isFinite(context.temperatureC)?context.temperatureC:null,rain:Number.isFinite(context.precipitationMm)?context.precipitationMm:null,wind:Number.isFinite(context.windKmh)?context.windKmh:null};window.__photolensWardrobeContext={genre:context.genre||'portrait',camera:context.camera||null};
+ studioContext={genre:context.genre||'portrait',weather:{temp:context.temperatureC,rain:context.precipitationMm,wind:context.windKmh},camera:context.camera,openStudio:context.openStudio,attachLook:context.attachLook};
  return '<div class="ws-app" data-ws-app data-ws-section="'+esc(section)+'"><div class="planner-status" data-ws-message role="status" aria-live="polite"></div><div data-ws-content></div></div>';
 }
 function renderHost(app){
@@ -130,64 +153,190 @@ function renderHost(app){
     .catch(()=>fallback('WebGL2 hoặc bộ dựng 3D không khả dụng. Đã chuyển sang Studio 2D.'));
  }
 }
-function historyPush(){history=history.slice(0,historyAt+1);history.push(selected.slice());if(history.length>30)history.shift();historyAt=history.length-1;}
-function addTemplate(template){const newId='closet-'+template.id;if(!repo.listItems().some(x=>x.id===newId))repo.saveItem({...template,id:newId,isTemplate:true});return newId;}
-async function aiCompose(app){
- try{
-  const enabled=Capacitor.isNativePlatform()?(await Preferences.get({key:'photolens_ai_enabled'})).value:localStorage.getItem('photolens_ai_enabled');if(enabled!=='true')throw new Error('AI đang tắt.');
-  let endpoint=String(import.meta.env.VITE_AI_ENDPOINT||'').trim();if(!endpoint)endpoint=Capacitor.isNativePlatform()?(await Preferences.get({key:'photolens_worker_url'})).value:localStorage.getItem('photolens_worker_url');endpoint=String(endpoint||'').replace(/\/+$/,'');if(!endpoint)throw new Error('Chưa cấu hình Worker.');
-  const weather=currentWeather(),candidates=filterGarments(available(),{...filters,weather:'current'},weather).slice(0,60).map(x=>({id:x.id,category:x.category,color:x.color||'#647d69',style:x.styleTags?.[0]||'casual',pattern:x.patternId||'solid',material:x.materialId||'unknown',season:x.season||'all'}));
-  if(!candidates.length)throw new Error('Không có món phù hợp trong bộ lọc.');
-  const body={genre:localStorage.getItem('photolens_outfit_genre')||'portrait',style:localStorage.getItem('photolens_outfit_style')||'Tự nhiên',backgroundColor:bg,temperatureC:Number.isFinite(weather.temp)?weather.temp:null,precipitationMm:Number.isFinite(weather.rain)?weather.rain:null,windKmh:Number.isFinite(weather.wind)?weather.wind:null,candidates};
-  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),25000);let res;try{res=await fetch(endpoint+'/outfit/compose',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:ctl.signal});}finally{clearTimeout(timer);}
-  const out=await res.json();const valid=new Set(candidates.map(x=>x.id));if(!res.ok||!Array.isArray(out.itemIds)||!out.itemIds.length||out.itemIds.length>8||new Set(out.itemIds).size!==out.itemIds.length||out.itemIds.some(x=>!valid.has(x)))throw new Error('Worker trả ID ngoài danh sách hoặc sai cấu trúc.');
-  selected=out.itemIds.map(x=>{const item=available().find(y=>y.id===x);return item?.isTemplate?addTemplate(item):x;});historyPush();message='AI chỉ chọn ID trong kho: '+out.reason;
- }catch(e){selected=composeRuleOutfit(filterGarments(available(),{...filters,weather:'current'},currentWeather()),{seed:seed++,weather:currentWeather(),includeOuter}).map(x=>x.isTemplate?addTemplate(x):x.id);historyPush();message='Đã dùng quy tắc cục bộ ('+(e.message||'AI chưa khả dụng')+'). Không gửi số đo hoặc ảnh.';}
- app.dataset.wsSection='studio2d';renderHost(app);
+function itemIdFor(item){
+ if(!item.isTemplate||item.id.startsWith('closet-'))return item.id;
+ const id='closet-'+item.id;
+ if(!items().some(row=>row.id===id))repo.saveItem({...item,id,isTemplate:true});
+ return id;
 }
-function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);}
-async function exportSvg(kind,lookItems=chosen()){
- const svg=buildSvgLook(lookItems,{background:bg,flatLay,pose,mannequin:effectiveMannequin()}),blob=new Blob([svg],{type:'image/svg+xml'});
- if(kind==='svg'){download(blob,'PhotoLens-look.svg');return;}
- const url=URL.createObjectURL(blob),image=new Image();await new Promise((ok,no)=>{image.onload=ok;image.onerror=no;image.src=url;});
- const canvas=document.createElement('canvas');canvas.width=820;canvas.height=900;canvas.getContext('2d').drawImage(image,0,0,820,900);URL.revokeObjectURL(url);
- if(kind==='png'){canvas.toBlob(x=>x&&download(x,'PhotoLens-look.png'),'image/png');return;}
- const {jsPDF}=await import('jspdf');const pdf=new jsPDF();pdf.addImage(canvas.toDataURL('image/png'),'PNG',20,20,170,185);pdf.save('PhotoLens-look.pdf');
+const applyItems=rows=>outfit.dispatch({type:'replace',itemIds:rows.map(itemIdFor)});
+function wear(item,toggle){
+ const id=itemIdFor(item);
+ if(chosen().some(row=>row.id===id)){
+  if(toggle){
+   if(isLocked(id))message='Mở khóa món này trước.';
+   else outfit.dispatch({type:'remove',id});
+  }
+  return;
+ }
+ const order=item.layerOrder??20;
+ const at=chosen().findIndex(row=>(row.catalogLayerOrder??0)>order);
+ outfit.dispatch({type:'add',id,at:at<0?undefined:at});
+}
+async function aiCompose(app,button){
+ if(composeController)return;
+ const ctl=new AbortController();
+ composeController=ctl;
+ button.disabled=true;
+ const note=app.querySelector('[data-ws-message]');
+ if(note)note.textContent='Đang tạo gợi ý…';
+ const revision=outfit.revision, filterKey=JSON.stringify(filters);
+ const pool=filterGarments(available(),{...filters,weather:filters.weather==='all'?'current':filters.weather},currentWeather());
+ const options=composerOptions();
+ const request=buildComposeRequest(pool,{genre:studioContext.genre,background:bg,weather:currentWeather()});
+ const byId=new Map(pool.map(item=>[item.id,item]));
+ const result=await resolveComposeChoice({
+  request,
+  localChoice:()=>ctl.signal.aborted?[]:composeRuleOutfit(pool,options).map(item=>item.id),
+  async fetchChoice(body){
+   const read=async key=>Capacitor.isNativePlatform()?(await Preferences.get({key})).value:localStorage.getItem(key);
+   if(await read('photolens_ai_enabled')!=='true')throw new Error('AI đang tắt.');
+   const endpoint=(String(import.meta.env.VITE_AI_ENDPOINT||'').trim()||String(await read('photolens_worker_url')||'')).replace(/\/+$/,'');
+   if(!endpoint)throw new Error('Chưa cấu hình Worker.');
+   const timer=setTimeout(()=>ctl.abort('timeout'),32000);
+   try{
+    const response=await fetch(endpoint+COMPOSE_PATH,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:ctl.signal});
+    if(!response.ok)throw new Error('Worker chưa trả được gợi ý hợp lệ.');
+    const payload=await response.json();
+    const {usage,...choice}=payload;
+    return choice;
+   }catch(error){
+    if(ctl.signal.reason==='timeout')throw new Error('Worker phản hồi quá lâu.');
+    throw error;
+   }finally{clearTimeout(timer);}
+  }
+ });
+ if(composeController===ctl)composeController=null;
+ if(ctl.signal.aborted&&ctl.signal.reason!=='timeout'||!app.isConnected)return;
+ button.disabled=false;
+ if(revision!==outfit.revision||filterKey!==JSON.stringify(filters))return;
+ const rows=result.itemIds.map(id=>byId.get(id)).filter(Boolean);
+ if(rows.length)applyItems(rows);
+ else if(ctl.signal.reason==='timeout')applyItems(composeRuleOutfit(pool,options));
+ message=result.source==='ai'?result.reason:pool.length?'Đã phối theo quy tắc cục bộ. '+result.reason:'Bộ lọc hiện không có món phù hợp.';
+ renderHost(app);
+}
+async function drawLookCanvas(rows,options){
+ const svg=buildSvgLook(rows,options);
+ const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+ try{
+  const image=new Image();
+  await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=reject;image.src=url;});
+  const canvas=document.createElement('canvas');canvas.width=820;canvas.height=900;
+  canvas.getContext('2d').drawImage(image,0,0);
+  return canvas;
+ }finally{URL.revokeObjectURL(url);}
+}
+async function lookBlob(kind,rows,options){
+ if(kind==='svg')return new Blob([buildSvgLook(rows,options)],{type:'image/svg+xml'});
+ const canvas=await drawLookCanvas(rows,options);
+ if(kind==='png')return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Không tạo được PNG.')),'image/png'));
+ const {jsPDF}=await import('jspdf');
+ const pdf=new jsPDF();
+ pdf.addImage(canvas.toDataURL('image/png'),'PNG',20,20,170,185);
+ return pdf.output('blob');
+}
+async function exportLook(kind,look=null,share=false){
+ const rows=look?lookItems(look):chosen();
+ if(!rows.length)throw new Error('Chưa có món để xuất.');
+ const options=look?drawingOptions(look):{...viewSettings(),mannequin:effectiveMannequin()};
+ const blob=await lookBlob(kind,rows,options),name='PhotoLens-look.'+kind;
+ if(share)return shareFile(blob,name,look?.name||'Lookbook PhotoLens');
+ downloadFile(blob,name);
+}
+function loadLook(look){
+ outfit.dispatch({type:'load',outfit:look});
+ editingLookId=look.id;collectionName=look.name;lookTags=(look.tags||[]).join(', ');
+ if(look.view){
+  const view=outfitViewSettings(look.view);
+  bg=view.background;tint=view.mannequinTone;pose=view.pose;flatLay=view.flatLay;
+  updateBackground(bg);
+ }
+}
+function updateBackground(color){
+ bg=color;
+ try{localStorage.setItem('photolens_bg_color',JSON.stringify(color));}catch{}
+ const picker=document.querySelector('#photoPlannerHost [data-bg]');
+ if(picker)picker.value=color;
+}
+export function openSavedWardrobeLook(id){
+ const look=listWardrobeLooks().find(row=>row.id===id);
+ if(!look)return false;
+ loadLook(look);
+ return true;
 }
 export function mountWardrobeStudio(host){
- const app=host?.matches('[data-ws-app]')?host:host?.querySelector('[data-ws-app]');if(!app)return;const redraw=()=>renderHost(app);
+ const app=host?.matches('[data-ws-app]')?host:host?.querySelector('[data-ws-app]');if(!app||app.dataset.wsMounted)return;app.dataset.wsMounted='true';const redraw=()=>renderHost(app);
  app.addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;const d=b.dataset;
   if(d.wsCutout!==undefined){const form=b.closest('form'),input=form?.querySelector('[data-ws-asset-input]'),file=input?.files?.[0],status=form?.querySelector('[data-ws-cutout-status]');if(!form||!file)return;const kind=classifyWardrobeAsset(file.name,file.type,file.size);if(kind!=='image'){if(status)status.textContent='Chỉ tách nền ảnh PNG, JPEG hoặc WebP hợp lệ.';return;}const header=new Uint8Array(await file.slice(0,12).arrayBuffer());if(!hasSupportedImageHeader(header)){if(status)status.textContent='Tệp không khớp định dạng ảnh khai báo.';return;}b.disabled=true;if(status)status.textContent='Đang tải runtime/model hoặc xử lý trên thiết bị…';try{const output=await buildCutoutFile(file,stage=>{if(status)status.textContent=stage==='runtime'?'Đang tải ONNX Runtime Web…':stage==='model'?'Đang tải model tách nền…':'Đang phân tích ảnh ngay trên thiết bị…';});cutoutResults.set(form,output);showUploadPreview(form,output);if(status)status.textContent='Đã tạo PNG nền trong suốt trên thiết bị. Xem trước rồi lưu món đồ.';}catch(err){if(status)status.textContent='Chưa tách được nền: '+String(err?.message||'lỗi không xác định')+'. Ảnh gốc vẫn còn trên thiết bị.';}finally{b.disabled=false;}return;}
-  if(d.wsWear){const x=available().find(y=>y.id===d.wsWear);if(x){const key=x.isTemplate?addTemplate(x):x.id;selected=selected.includes(key)?selected.filter(y=>y!==key):[...selected,key];historyPush();}redraw();return;}
-  if(d.wsRemove){if(locked.has(d.wsRemove)){message='Bỏ khóa món này trước.';}else{selected=selected.filter(x=>x!==d.wsRemove);historyPush();}redraw();return;}
-  if(d.wsLock){locked.has(d.wsLock)?locked.delete(d.wsLock):locked.add(d.wsLock);redraw();return;}
-  if(d.wsUndo||d.wsRedo){historyAt=Math.max(0,Math.min(history.length-1,historyAt+(d.wsUndo?-1:1)));selected=history[historyAt].slice();redraw();return;}
-  if(d.wsLayer){const x=items().find(y=>y.id===d.id);if(x){repo.saveItem({...x,layerOrder:Math.max(0,(x.layerOrder||20)+(d.wsLayer==='up'?10:-10))});}redraw();return;}
-  if(d.wsFav){const x=items().find(y=>y.id===d.wsFav);if(x)repo.saveItem({...x,favorite:!x.favorite});redraw();return;}
+  if(d.wsWear){const x=available().find(row=>row.id===d.wsWear);if(x)wear(x,true);redraw();return;}
+  if(d.wsRemove){if(isLocked(d.wsRemove))message='Mở khóa món này trước.';else outfit.dispatch({type:'remove',id:d.wsRemove});redraw();return;}
+  if(d.wsLock){outfit.dispatch({type:'lock',id:d.wsLock});redraw();return;}
+  if(d.wsUndo!==undefined||d.wsRedo!==undefined){outfit.dispatch({type:d.wsUndo!==undefined?'undo':'redo'});redraw();return;}
+  if(d.wsLayer){outfit.dispatch({type:'move',id:d.id,delta:d.wsLayer==='up'?1:-1});redraw();return;}
+  if(d.wsFav){const x=available().find(row=>row.id===d.wsFav);if(x){const id=itemIdFor(x),item=items().find(row=>row.id===id);if(item)repo.saveItem({...item,favorite:!item.favorite});}redraw();return;}
   if(d.wsEdit){editing=d.wsEdit;app.dataset.wsSection='catalog';redraw();return;}
-  if(d.wsDelete){if(locked.has(d.wsDelete)){message='Mở khóa trước khi xóa.';}else{repo.removeItem(d.wsDelete);selected=selected.filter(x=>x!==d.wsDelete);historyPush();message='Đã xóa món đồ.';}redraw();return;}
-  if(d.wsCancel){editing='';redraw();return;}
+  if(d.wsDelete){if(isLocked(d.wsDelete))message='Mở khóa món này trước.';else{repo.removeItem(d.wsDelete);outfit.dispatch({type:'remove',id:d.wsDelete});message='Đã xóa món đồ.';}redraw();return;}
+  if(d.wsCancel!==undefined){editing='';redraw();return;}
   if(d.wsFlat!==undefined){flatLay=!flatLay;redraw();return;}
   if(d.wsPose){pose=d.wsPose;redraw();return;}
   if(d.wsTurntable!==undefined){turntable=!turntable;redraw();app.querySelector('[data-ws-turntable]')?.focus();return;}
-  if(d.wsRandom||d.wsVariation||d.wsAnchor||d.wsCapsule){const pool=filterGarments(available(),{...filters,weather:'current'},currentWeather());let out;if(d.wsCapsule)out=buildCapsule(pool,8);else if(d.wsAnchor){const anchor=chosen().find(x=>['tops','bottoms','skirts','dresses','outerwear'].includes(x.category));if(!anchor){message='Hãy chọn một món chủ đạo trước.';redraw();return;}out=composeRuleOutfit(pool,{anchor,seed:seed++,weather:currentWeather(),includeOuter});}else if(d.wsVariation)out=composeRuleOutfit(pool,{mode:'variation',current:chosen(),seed:seed++});else out=composeRuleOutfit(pool,{seed:seed++,weather:currentWeather(),includeOuter});selected=out.map(x=>x.isTemplate?addTemplate(x):x.id);historyPush();message=d.wsCapsule?'Đã tạo capsule theo danh mục; hãy lưu look để giữ bộ trên thiết bị.':'Đã tạo bộ theo quy tắc cục bộ và dữ liệu thời tiết hiện có.';redraw();return;}
-  if(d.wsAi){await aiCompose(app);return;}
-  if(d.wsSaveLook){const name=app.querySelector('[data-ws-look-name]')?.value.trim(),tags=String(app.querySelector('[data-ws-look-tags]')?.value||'').split(',').map(x=>x.trim()).filter(Boolean),look=repo.saveLook({name,itemIds:selected,tags});message=look?'Đã lưu look cục bộ.':'Nhập tên và chọn món trước.';collectionName=name||'';redraw();return;}
-  if(d.wsLoad){const x=repo.listLooks().find(y=>y.id===d.wsLoad);if(x){selected=x.itemIds.slice();historyPush();app.dataset.wsSection='studio2d';}redraw();return;}
+  if(['wsRandom','wsVariation','wsAnchor','wsCapsule','wsCapsulePick'].some(key=>d[key]!==undefined)){
+   const pool=filterGarments(available(),{...filters,weather:filters.weather==='all'?'current':filters.weather},currentWeather());
+   const options=composerOptions();
+   let result;
+   if(d.wsCapsule!==undefined){
+    capsuleLooks=buildCapsuleLooks(pool,options);
+    result=capsuleLooks[0];
+   }else if(d.wsCapsulePick!==undefined)result=capsuleLooks[Number(d.wsCapsulePick)];
+   else if(d.wsAnchor!==undefined){
+    const anchor=chosen().find(item=>item.id===anchorId);
+    if(!anchor){message='Chọn một món chủ đạo trong danh sách.';redraw();return;}
+    result=composeRuleOutfit(pool,{...options,anchor});
+   }else result=composeRuleOutfit(pool,{...options,mode:d.wsVariation!==undefined?'variation':'random'});
+   if(result?.length)applyItems(result);
+   message=result?.length?(d.wsCapsule!==undefined?'Đã tạo '+capsuleLooks.length+' bộ từ nhóm món dùng chung.':'Đã phối theo quy tắc cục bộ.'):'Chưa có món phù hợp với bộ lọc.';
+   redraw();return;
+  }
+  if(d.wsAi!==undefined){await aiCompose(app,b);return;}
+  if(d.wsSaveLook!==undefined||d.wsNewLook!==undefined){
+   const name=app.querySelector('[data-ws-look-name]')?.value.trim();
+   const tags=String(app.querySelector('[data-ws-look-tags]')?.value||'').split(',').map(x=>x.trim()).filter(Boolean);
+   const saved=repo.saveLook({id:d.wsNewLook!==undefined?undefined:editingLookId,name,tags,...outfit.value,view:viewSettings()});
+   if(saved)editingLookId=saved.id;
+   collectionName=name||'';lookTags=tags.join(', ');
+   message=saved?'Đã lưu bộ phối trên thiết bị.':'Nhập tên và chọn món trước khi lưu.';
+   redraw();return;
+  }
+  if(d.wsLoad){if(openSavedWardrobeLook(d.wsLoad)){if(studioContext.openStudio)studioContext.openStudio('studio2d');else{app.dataset.wsSection='studio2d';redraw();}}return;}
+  if(d.wsPlanLook){const look=listWardrobeLooks().find(x=>x.id===d.wsPlanLook);if(look)studioContext.attachLook?.(look);return;}
   if(d.wsDuplicate){repo.duplicateLook(d.wsDuplicate);redraw();return;}
-  if(d.wsDeleteLook){repo.removeLook(d.wsDeleteLook);message='Đã xóa look.';redraw();return;}
-  if(d.wsRename){const x=repo.listLooks().find(y=>y.id===d.wsRename),name=globalThis.prompt?.('Đổi tên look',x?.name||'')||'';if(x&&name)repo.saveLook({...x,name});redraw();return;}
-  if(d.wsCompare){compareIds=compareIds.includes(d.wsCompare)?compareIds.filter(x=>x!==d.wsCompare):[...compareIds,d.wsCompare].slice(-2);message=compareIds.length===2?'Đang so sánh hai look.':'Chọn look tiếp theo.';redraw();return;}
-  if(d.wsShare){const x=repo.listLooks().find(y=>y.id===d.wsShare);if(x){const out=x.itemIds.map(id=>items().find(y=>y.id===id)).filter(Boolean);if(navigator.share)try{await navigator.share({title:x.name,text:'Lookbook PhotoLens'});}catch{}else await exportSvg('svg',out);}return;}
-  if(d.wsExport){try{await exportSvg(d.wsExport);}catch{message='Không xuất được tệp.';redraw();}return;}
+  if(d.wsDeleteLook){repo.removeLook(d.wsDeleteLook);if(editingLookId===d.wsDeleteLook)editingLookId='';message='Đã xóa bộ đã lưu.';redraw();return;}
+  if(d.wsCompare){compareIds=compareIds.includes(d.wsCompare)?compareIds.filter(x=>x!==d.wsCompare):[...compareIds,d.wsCompare].slice(-2);message=compareIds.length===2?'Đang so sánh hai bộ.':'Chọn hai bộ để so sánh.';redraw();return;}
+  if(d.wsShare||d.wsPngLook||d.wsPdfLook||d.wsExport){
+   b.disabled=true;
+   const look=listWardrobeLooks().find(x=>x.id===(d.wsShare||d.wsPngLook||d.wsPdfLook));
+   try{
+    const outcome=await exportLook(d.wsExport||(d.wsPdfLook?'pdf':'png'),look,Boolean(d.wsShare));
+    if(d.wsShare&&outcome==='downloaded')app.querySelector('[data-ws-message]').textContent='Đã tải PNG để bạn chia sẻ.';
+   }catch(error){app.querySelector('[data-ws-message]').textContent=error?.message||'Không xuất được tệp.';}
+   finally{b.disabled=false;}
+   return;
+  }
+
  });
  app.addEventListener('input',e=>{
+  if(e.target.matches('[data-ws-look-name]'))collectionName=e.target.value;
+  if(e.target.matches('[data-ws-look-tags]'))lookTags=e.target.value;
   if(e.target.matches('[data-ws-query]')){filters.query=e.target.value;clearTimeout(queryTimer);const node=e.target,at=node.selectionStart;queryTimer=setTimeout(()=>{redraw();const next=app.querySelector('[data-ws-query]');next?.focus();next?.setSelectionRange(at,at);},120);}
   if(e.target.matches('[data-ws-measure]')){const n=Number(e.target.value);if(n>0&&n<=300)measures[e.target.dataset.wsMeasure]=n;else delete measures[e.target.dataset.wsMeasure];}if(e.target.matches('[data-ws-body-range]')){const k=e.target.dataset.wsBodyRange;measures[k]=Number(e.target.value);const n=app.querySelector('[data-ws-measure="'+k+'"]');if(n)n.value=String(measures[k]);const o=app.querySelector('[data-ws-output="'+k+'"]');if(o)o.textContent=measures[k]+' cm';if(saveMeasures)try{localStorage.setItem('photolens_wardrobe_measurements_v1',JSON.stringify({...measures,heightCm:height}));}catch{}}
   if(e.target.matches('[data-ws-height]')){height=Number(e.target.value)||170;const o=e.target.closest('label')?.querySelector('output');if(o)o.textContent=height+' cm';}
  });
  app.addEventListener('change',async e=>{
+  if(e.target.matches('[data-ws-dress-code]')){dressCode=e.target.value;redraw();return;}
+  if(e.target.matches('[data-ws-anchor-id]')){anchorId=e.target.value;return;}
+  if(e.target.matches('[data-ws-include-outer]')){includeOuter=e.target.checked;return;}
   if(e.target.matches('[data-ws-asset-input]')){const form=e.target.closest('form'),file=e.target.files?.[0],button=form?.querySelector('[data-ws-cutout]'),status=form?.querySelector('[data-ws-cutout-status]');cutoutResults.delete(form);if(button)button.disabled=!file||classifyWardrobeAsset(file.name,file.type,file.size)!=='image';showUploadPreview(form,file&&classifyWardrobeAsset(file.name,file.type,file.size)&&['image','svg'].includes(classifyWardrobeAsset(file.name,file.type,file.size))?file:null);if(status)status.textContent=file?'Ảnh đang ở trên thiết bị. Tách nền là tùy chọn; model chỉ tạo mặt nạ vùng nổi bật để bạn xem lại.':'Ảnh giữ nguyên trong máy. Runtime/model chỉ tải sau khi bạn bấm tách nền; ảnh không được tải lên.';return;}
   if(e.target.matches('[data-ws-filter]')){filters[e.target.dataset.wsFilter]=e.target.value;redraw();return;}
   if(e.target.matches('[data-ws-measure]')){const k=e.target.dataset.wsMeasure,n=Number(e.target.value),limits={shoulders:[30,60],chest:[60,150],waist:[45,140],hips:[60,160],sleeve:[40,90],inseam:[55,110],neck:[25,55]}[k];if(Number.isFinite(n)&&n>=limits[0]&&n<=limits[1])measures[k]=n;else delete measures[k];if(saveMeasures)try{localStorage.setItem('photolens_wardrobe_measurements_v1',JSON.stringify({...measures,heightCm:height}));}catch{}redraw();return;}
@@ -199,20 +348,20 @@ export function mountWardrobeStudio(host){
   if(e.target.matches('[data-ws-focal]')){focalLength=Number(e.target.value)||50;redraw();return;}
   if(e.target.matches('[data-ws-distance]')){cameraDistance=Number(e.target.value)||450;redraw();return;}
   if(e.target.matches('[data-ws-camera-height]')){cameraHeight=Number(e.target.value)||135;redraw();return;}
-  if(e.target.matches('[data-ws-bg]')){bg=e.target.value;redraw();return;}
+  if(e.target.matches('[data-ws-bg]')){updateBackground(e.target.value);redraw();return;}
   if(e.target.matches('[data-ws-tone]')){tint=e.target.value;redraw();return;}
-  if(e.target.matches('[data-ws-color]')){const x=items().find(y=>y.id===e.target.dataset.wsColor);if(x)repo.saveItem({...x,color:e.target.value});redraw();return;}
-  if(e.target.matches('[data-ws-pattern]')){const x=items().find(y=>y.id===e.target.dataset.wsPattern);if(x)repo.saveItem({...x,patternId:e.target.value});redraw();return;}
+  if(e.target.matches('[data-ws-color]')){outfit.dispatch({type:'edit',id:e.target.dataset.wsColor,values:{color:e.target.value}});redraw();return;}
+  if(e.target.matches('[data-ws-pattern]')){outfit.dispatch({type:'edit',id:e.target.dataset.wsPattern,values:{patternId:e.target.value}});redraw();return;}
   if(e.target.matches('[data-ws-consent]')){saveMeasures=e.target.checked;if(saveMeasures){try{localStorage.setItem('photolens_wardrobe_measurements_consent','true');localStorage.setItem('photolens_wardrobe_measurements_v1',JSON.stringify({...measures,heightCm:height}));}catch{}}else{try{localStorage.removeItem('photolens_wardrobe_measurements_consent');localStorage.removeItem('photolens_wardrobe_measurements_v1');}catch{}}message=saveMeasures?'Đã lưu số đo trên thiết bị.':'Số đo chỉ tồn tại trong phiên này.';redraw();return;}
-  if(e.target.matches('[data-ws-temp]')){manual.temp=e.target.value===''?null:Number(e.target.value);redraw();return;}if(e.target.matches('[data-ws-wind]')){manual.wind=e.target.value===''?null:Number(e.target.value);redraw();return;}if(e.target.matches('[data-ws-include-outer]')){includeOuter=e.target.checked;return;}
-  if(e.target.matches('[data-ws-rain]')){manual.rain=e.target.checked?1:0;redraw();return;}if(e.target.matches('[data-ws-wind]')){manual.wind=e.target.value===''?null:Number(e.target.value);redraw();return;}if(e.target.matches('[data-ws-include-outer]')){includeOuter=e.target.checked;return;}
+
+
  });
  app.addEventListener('dragstart',e=>{const x=e.target.closest('[data-ws-draggable]');if(x&&e.dataTransfer)e.dataTransfer.setData('text/plain',x.dataset.wsDraggable);});
  app.addEventListener('dragover',e=>{if(e.target.closest('[data-ws-drop]'))e.preventDefault();});
- app.addEventListener('drop',e=>{const target=e.target.closest('[data-ws-drop]');if(!target)return;e.preventDefault();const x=available().find(y=>y.id===e.dataTransfer?.getData('text/plain'));if(x){const id=x.isTemplate?addTemplate(x):x.id;if(!selected.includes(id))selected.push(id);historyPush();app.dataset.wsSection='studio2d';redraw();}});
+ app.addEventListener('drop',e=>{if(!e.target.closest('[data-ws-drop]'))return;e.preventDefault();const item=available().find(x=>x.id===e.dataTransfer?.getData('text/plain'));if(item){wear(item,false);redraw();}});
  app.addEventListener('submit',async e=>{
   const form=e.target.closest('[data-ws-form]');if(!form)return;e.preventDefault();const fd=new FormData(form),v=Object.fromEntries(fd);
-  if(form.dataset.wsForm==='builder'){const x=templates.find(y=>y.id===v.templateId);if(!x)return;const saved=repo.saveItem({...x,id:undefined,isTemplate:false,name:v.name,color:v.color,patternId:v.patternId,parameters:{neck:v.neck,sleeve:v.sleeve,length:v.length,width:v.width}});if(saved){selected.push(saved.id);historyPush();message='Đã tạo biến thể đồ họa tham số.';}redraw();return;}
+  if(form.dataset.wsForm==='builder'){const x=templates.find(y=>y.id===v.templateId);if(!x)return;const saved=repo.saveItem({...x,id:undefined,isTemplate:false,name:v.name,color:v.color,patternId:v.patternId,parameters:{neck:v.neck,sleeve:v.sleeve,length:v.length,width:v.width}});if(saved){wear(saved,false);message='Đã tạo biến thể đồ họa tham số.';}redraw();return;}
   if(form.dataset.wsForm!=='item')return;
   const measuresCm={};for(const k of MEASURE_KEYS){const n=Number(fd.get('m_'+k));if(n>0&&n<=300)measuresCm[k]=n;}
   const existing=items().find(x=>x.id===v.id),input=form.querySelector('[name=asset]');
@@ -226,7 +375,7 @@ export function mountWardrobeStudio(host){
    assetId=await repo.saveAsset(file,{name:file.name});
   }catch(err){message=String(err?.message||'Không lưu được tệp cục bộ.');app.querySelector('[data-ws-message]').textContent=message;return;}
   const saved=repo.saveItem({id:v.id||undefined,name:v.name,category:v.category,color:v.color,colorFamily:family(v.color),patternId:v.patternId,materialId:v.materialId,styleTags:v.style?[v.style]:[],collections:String(v.collections||'').split(',').map(x=>x.trim()).filter(Boolean),measurementsCm,sizeTable,sizeTableVersion:sizeTable.length?'user-cm-v1':null,notes:v.notes,imageAssetId:assetKind==='image'||assetKind==='svg'?assetId:existing?.imageAssetId||null,vectorAssetId:assetKind==='glb'?assetId:existing?.vectorAssetId||null});
-  if(saved){selected.push(saved.id);historyPush();editing='';message='Đã lưu món đồ trên thiết bị.';}else message='Tên hoặc danh mục chưa hợp lệ.';redraw();
+  if(saved){wear(saved,false);editing='';message='Đã lưu món đồ trên thiết bị.';}else message='Tên hoặc danh mục chưa hợp lệ.';redraw();
  });
  repo.ready.then(()=>{try{if(localStorage.getItem('photolens_wardrobe_measurements_consent')==='true'){saveMeasures=true;const saved=JSON.parse(localStorage.getItem('photolens_wardrobe_measurements_v1')||'{}');height=normalizeMannequin(saved).heightCm;measures=Object.fromEntries(MEASURE_KEYS.filter(key=>Number.isFinite(saved[key])).map(key=>[key,saved[key]]));}}catch{}renderHost(app);});renderHost(app);
 }

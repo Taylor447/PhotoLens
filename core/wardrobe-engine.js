@@ -1,3 +1,4 @@
+import {normalizeOutfit,outfitViewSettings} from './wardrobe/outfit-state.js';
 export const DB_NAME='photolens-wardrobe', DB_VERSION=1;
 export const STATE_KEY='photolens_wardrobe_studio_v1', LEGACY_ITEMS='photolens_wardrobe_v1', LEGACY_LOOKS='photolens_outfits_v1';
 import {MEASURE_KEYS,normalizeMeasures,normalizeSizeTable,calculateFit,chooseSize} from './fit/measurements.js';
@@ -27,11 +28,11 @@ export function createWardrobeRepository(storage=globalThis.localStorage,indexed
  }
  const persist=()=>{state=cleanState(state);try{storage?.setItem(STATE_KEY,JSON.stringify(state));}catch{}if(db)try{db.transaction('state','readwrite').objectStore('state').put(state,'snapshot');persistence='IndexedDB';}catch{}return state;};
  const ready=(async()=>{try{db=await openDb(indexedDB);const saved=await request(db.transaction('state','readonly').objectStore('state').get('snapshot'));if(saved){const disk=cleanState(saved),map=new Map(disk.items.map(x=>[x.id,x]));for(const x of state.items)if(!map.has(x.id))map.set(x.id,x);state={schemaVersion:1,items:[...map.values()],looks:[...disk.looks,...state.looks.filter(x=>!disk.looks.some(y=>y.id===x.id))],assets:[...disk.assets,...state.assets]};}persist();persistence='IndexedDB';return persistence;}catch{persist();return persistence;}})();
- return {ready,getPersistence:()=>persistence,snapshot:()=>structuredClone(state),listItems:()=>state.items.map(x=>({...x})),listLooks:()=>state.looks.map(x=>({...x,itemIds:x.itemIds.slice(),tags:[...(x.tags||[])]})),
+ return {ready,getPersistence:()=>persistence,snapshot:()=>structuredClone(state),listItems:()=>state.items.map(x=>({...x})),listLooks:()=>structuredClone(state.looks),
  saveItem(v){const item=normalizeGarment(v);if(!item)return null;const i=state.items.findIndex(x=>x.id===item.id);if(i<0)state.items.unshift(item);else state.items[i]={...state.items[i],...item,createdAt:state.items[i].createdAt};persist();return item;},
  removeItem(itemId){state.items=state.items.filter(x=>x.id!==itemId);state.looks=state.looks.map(x=>({...x,itemIds:x.itemIds.filter(y=>y!==itemId)}));persist();return true;},
- saveLook(v){const name=text(v?.name,100);if(!name)return null;const itemIds=[...new Set((v.itemIds||[]).map(String))].filter(x=>state.items.some(y=>y.id===x));if(!itemIds.length)return null;const old=state.looks.find(x=>x.id===v.id),look={id:old?.id||text(v.id,120)||id(),name,itemIds,tags:Array.isArray(v.tags)?v.tags.map(x=>text(x,40)).filter(Boolean):old?.tags||[],createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};state.looks=old?state.looks.map(x=>x.id===old.id?look:x):[look,...state.looks];persist();return look;},
- duplicateLook(itemId){const old=state.looks.find(x=>x.id===itemId);return old?this.saveLook({name:old.name+' · bản sao',itemIds:old.itemIds,tags:old.tags}):null;},
+ saveLook(v){const name=text(v?.name,100);if(!name)return null;const itemIds=[...new Set((v.itemIds||[]).map(String))].filter(x=>state.items.some(y=>y.id===x));if(!itemIds.length)return null;const old=state.looks.find(x=>x.id===v.id),look={id:old?.id||text(v.id,120)||id(),name,...normalizeOutfit({itemIds,edits:v.edits??old?.edits,lockedIds:v.lockedIds??old?.lockedIds}),view:outfitViewSettings(v.view??old?.view),tags:Array.isArray(v.tags)?v.tags.map(x=>text(x,40)).filter(Boolean):old?.tags||[],createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};state.looks=old?state.looks.map(x=>x.id===old.id?look:x):[look,...state.looks];persist();return look;},
+ duplicateLook(itemId){const old=state.looks.find(x=>x.id===itemId);return old?this.saveLook({...old,id:undefined,name:old.name+' · bản sao'}):null;},
  removeLook(itemId){state.looks=state.looks.filter(x=>x.id!==itemId);persist();return true;},
  async saveAsset(blob,meta={}){if(!db)await ready;if(!db)throw new Error('IndexedDB không khả dụng; không thể lưu tệp cục bộ.');if(!blob||typeof blob.arrayBuffer!=='function')throw new TypeError('Tài sản phải là Blob hoặc File.');const asset={id:id(),blob,type:blob.type||'',name:text(meta.name||'Tệp cá nhân',100),createdAt:new Date().toISOString()};await request(db.transaction('assets','readwrite').objectStore('assets').put(asset));state.assets.push({id:asset.id,type:asset.type,name:asset.name});persist();return asset.id;},
  async getAsset(assetId){if(!db)await ready;return db?request(db.transaction('assets','readonly').objectStore('assets').get(assetId)):null;}
@@ -71,7 +72,7 @@ export function filterGarments(items=[],filters={},weather={}){
   if(filters.season&&filters.season!=='all'&&x.season!=='all'&&x.season!==filters.season)return false;
   if(filters.favorite==='favorites'&&!x.favorite)return false;
   if(filters.collection&&filters.collection!=='all'&&!(x.collections||[]).includes(filters.collection))return false;
-  const temp=Number(weather.temp);if(filters.weather==='current'&&Number.isFinite(temp)&&x.temperatureC?.min!=null&&temp<x.temperatureC.min)return false;if(filters.weather==='current'&&Number.isFinite(temp)&&x.temperatureC?.max!=null&&temp>x.temperatureC.max)return false;
+  const temp=weather.temp==null||weather.temp===''?NaN:Number(weather.temp);if(filters.weather==='current'&&Number.isFinite(temp)&&x.temperatureC?.min!=null&&temp<x.temperatureC.min)return false;if(filters.weather==='current'&&Number.isFinite(temp)&&x.temperatureC?.max!=null&&temp>x.temperatureC.max)return false;
   if(filters.weather==='rainy'&&(x.weather?.rain===false||(!x.weather?.rain&&x.weatherTags?.length&&!x.weatherTags.includes('rainy')&&!x.weatherTags.includes('all'))))return false;if(filters.weather==='windy'&&(x.weather?.wind===false||(!x.weather?.wind&&x.weatherTags?.length&&!x.weatherTags.includes('windy')&&!x.weatherTags.includes('all'))))return false;
   return !q||[x.name,x.category,x.materialId,x.patternId,...(x.styleTags||[]),...(x.weatherTags||[]),...(x.collections||[]),x.notes].join(' ').toLocaleLowerCase('vi').includes(q);
  });
@@ -79,13 +80,14 @@ export function filterGarments(items=[],filters={},weather={}){
 export function contrastRatio(fg,bg){const lum=c=>{if(!colorOk(c))return null;const a=[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);return .2126*a[0]+.7152*a[1]+.0722*a[2];},a=lum(fg),b=lum(bg);return a===null||b===null?null:Number(((Math.max(a,b)+.05)/(Math.min(a,b)+.05)).toFixed(2));}
 export function colorHarmony(items=[]){
  const hues=items.map(x=>{if(!colorOk(x.color))return null;const r=parseInt(x.color.slice(1,3),16)/255,g=parseInt(x.color.slice(3,5),16)/255,b=parseInt(x.color.slice(5,7),16)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;if(d<.08)return null;let h=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;return((h*60)+360)%360;}).filter(x=>x!==null);
+ if(hues.length===1&&items.filter(x=>colorOk(x.color)).length>1)return{scheme:'Trung tính + điểm nhấn',confidence:'medium'};
  if(hues.length<2)return{scheme:'Trung tính hoặc một màu',confidence:'low'};
  const diffs=[];for(let i=0;i<hues.length;i++)for(let j=i+1;j<hues.length;j++){const d=Math.abs(hues[i]-hues[j]);diffs.push(Math.min(d,360-d));}
  const sorted=diffs.sort((a,b)=>a-b),mean=diffs.reduce((a,b)=>a+b,0)/diffs.length;
  if(sorted.every(x=>x<18))return{scheme:'Đơn sắc',confidence:'medium'};
  if(sorted.every(x=>x<48))return{scheme:'Tương đồng',confidence:'medium'};
- if(sorted.some(x=>x>=150&&x<=210))return{scheme:'Bổ túc',confidence:'medium'};
- if(hues.length>=3&&sorted.some(x=>x>=100&&x<=140))return{scheme:'Bộ ba / đa sắc',confidence:'low'};
+ if(sorted.every(x=>x<=18||x>=155&&x<=180)&&sorted.some(x=>x>=155))return{scheme:'Bổ túc',confidence:'medium'};
+ if(hues.length>=3&&sorted.every(x=>x<=18||x>=100&&x<=140)&&sorted.filter(x=>x>=100).length>=3)return{scheme:'Bộ ba / đa sắc',confidence:'low'};
  return{scheme:mean>100?'Tương phản pha trộn':'Phối màu tự do',confidence:'low'};
 }
 export function scoreLook(items=[],context={}){
@@ -100,14 +102,14 @@ export function scoreLook(items=[],context={}){
  else reasons.push('Chưa có đủ nhãn fit để đánh giá tỉ lệ; có thể chỉnh thủ công.');
  reasons.push('Hòa sắc tham khảo: '+harmony.scheme+'; quy tắc màu trung tính, không phải đánh giá thẩm mỹ.');
  const ratio=items.map(x=>contrastRatio(x.color,context.background||'#56736f')).filter(Number.isFinite);
- if(ratio.some(x=>x>=3)){score+=8;reasons.push('Ít nhất một màu có tương phản nền từ 3:1 trở lên.');}
+ if(ratio.some(x=>x>=3)){score+=8;reasons.push('Tương phản cao nhất với nền '+Math.max(...ratio).toFixed(2)+':1 (+8 điểm).');}
  else reasons.push('Tương phản màu với nền dưới 3:1 hoặc chưa đủ dữ liệu; hãy xem ảnh thật.');
  const largePatterns=items.filter(x=>{const id=String(x.patternId||'').toLowerCase();return x.parameters?.patternScale==='large'||['wide-stripe','polka-large','floral-large','large-check'].includes(id)||id.includes('large');});
  const patternCount=items.filter(x=>x.patternId&&x.patternId!=='solid').length;
  if(largePatterns.length>=2){score-=9;warnings.push('Có từ hai họa tiết lớn được ghi nhận; cân nhắc giữ một họa tiết lớn.');}
  else if(patternCount>1){score-=4;warnings.push('Có nhiều họa tiết cùng lúc; xem trước để tránh cạnh tranh thị giác.');}
  else reasons.push('Số họa tiết được giữ gọn.');
- if(items.some(x=>x.shootingNotes?.moireRisk)){score-=5;warnings.push('Họa tiết nhỏ có thể tạo moiré.');}
+ if(items.some(x=>x.shootingNotes?.moireRisk||['thin-stripe','pinstripe','micro-dot','polka-small','floral-small'].includes(x.patternId))){score-=5;warnings.push('Họa tiết nhỏ có thể tạo moiré.');}
  if(items.some(x=>x.shootingNotes?.reflective===true))warnings.push('Có món phản quang theo ghi chú dữ liệu.');
  if(items.some(x=>x.shootingNotes?.wrinkle===true))warnings.push('Có món dễ nhăn theo ghi chú dữ liệu.');
  if(items.some(x=>x.shootingNotes?.highlight===true||x.shootingNotes?.highlight==='high'))warnings.push('Có thể cháy sáng theo ghi chú dữ liệu.');
@@ -119,6 +121,8 @@ export function scoreLook(items=[],context={}){
  const genre=String(context.genre||'').toLowerCase(),styles=items.flatMap(x=>x.styleTags||[]);
  if(genre==='cosplay'&&styles.length&&!styles.includes('cosplay'))warnings.push('Chưa có thẻ cosplay trên món đang chọn.');
  if(['portrait','night','moon'].includes(genre)&&items.some(x=>x.shootingNotes?.reflective===true))warnings.push('Phản quang có thể bắt sáng mạnh trong bối cảnh chân dung/đêm.');
+ if(['architecture','moon','night'].includes(genre)&&ratio.length&&ratio.every(x=>x<2))warnings.push('Màu đồ gần độ sáng của nền. Kiểm tra đường viền chủ thể trong ảnh thử.');
+ if(context.season&&context.season!=='all'&&items.some(x=>x.season&&x.season!=='all'&&x.season!==context.season))warnings.push('Có món được gắn nhãn mùa khác mùa đã chọn.');
  const temp=context.temperatureC===null||context.temperatureC===undefined||context.temperatureC===''?null:Number(context.temperatureC);
  if(Number.isFinite(temp)){
   if(temp<15&&!items.some(x=>x.layer==='outer'||x.temperatureC?.min!=null&&x.temperatureC.min<=temp)){score-=6;warnings.push('Trời lạnh nhưng chưa có lớp ngoài hoặc khoảng nhiệt độ phù hợp được xác nhận.');}
@@ -130,18 +134,62 @@ export function scoreLook(items=[],context={}){
  return{score:Math.max(0,Math.min(100,Math.round(score))),reasons,warnings:[...new Set(warnings)],harmony};
 }
 export function composeRuleOutfit(pool=[],options={}){
- let state=(Number(options.seed)||1)>>>0;const random=()=>((state=(state*1664525+1013904223)>>>0)/4294967296),pick=list=>list.length?list[Math.floor(random()*list.length)]:null,available=pool.filter(x=>x&&x.id);
+ let state=(Number(options.seed)||1)>>>0;
+ const random=()=>((state=(Math.imul(state,1664525)+1013904223)>>>0)/4294967296);
+ const available=pool.filter(x=>x?.id);
  if(options.mode==='capsule')return buildCapsule(available,options.limit||8);
- const anchor=options.anchor||null,current=options.current||[],byCategory=new Map();for(const x of available){if(!byCategory.has(x.category))byCategory.set(x.category,[]);byCategory.get(x.category).push(x);}
- if(options.mode==='variation'&&current.length){const out=current.slice(),i=Math.floor(random()*out.length),old=out[i],alt=pick((byCategory.get(old.category)||[]).filter(x=>x.id!==old.id));if(alt)out[i]=alt;return out.sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));}
- const choose=(cat)=>{const rows=byCategory.get(cat)||[];return anchor?.category===cat?anchor:pick(rows);},weather=options.weather||{},temp=weather.temp===null||weather.temp===undefined||weather.temp===''?null:Number(weather.temp),mustOuter=Boolean(options.includeOuter)||Number.isFinite(temp)&&temp<15;
- let out=[];const anchorCategory=anchor?.category;
- if(anchorCategory==='dresses')out=[anchor];else if(['tops','bottoms','skirts','outerwear'].includes(anchorCategory)){if(anchorCategory==='tops')out.push(anchor,choose(pick(['bottoms','skirts'])));else if(anchorCategory==='bottoms'||anchorCategory==='skirts')out.push(choose('tops'),anchor);else out.push(anchor,choose(pick(['tops','bottoms','skirts'])));}
- else{const dress=pick(byCategory.get('dresses')||[]);if(dress&&random()<.35)out=[dress];else out=[choose('tops'),choose(pick(['bottoms','skirts']))];}
- if(mustOuter&&!out.some(x=>x?.layer==='outer'))out.push(choose('outerwear'));
- if(!out.some(x=>x?.category==='shoes'))out.push(choose('shoes'));
- const accessory=pick((available.filter(x=>x.layer==='accessory'&&!['shoes'].includes(x.category))));if(accessory)out.push(accessory);
- return [...new Map(out.filter(Boolean).map(x=>[x.id,x])).values()].sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));
+ const current=options.current||[], anchor=options.anchor||null, weather=options.weather||{};
+ const pinned=new Set(options.lockedIds||[]), rank=new Map(available.map(x=>[x.id,random()]));
+ const context={temperatureC:weather.temp,precipitationMm:weather.rain,windKmh:weather.wind,...options.context};
+ const score=out=>{const result=scoreLook(out,context);return result.score-result.warnings.length*2;};
+ const pick=(rows,base=[])=>rows.slice().sort((a,b)=>score([...base,b])-score([...base,a])+(rank.get(b.id)??0)-(rank.get(a.id)??0))[0];
+ if(options.mode==='variation'&&current.length){
+  const options=current.map((item,index)=>({item,index,alternatives:available.filter(x=>x.category===item.category&&!current.some(existing=>existing.id===x.id))}))
+   .filter(row=>!pinned.has(row.item.id)&&row.alternatives.length);
+  if(!options.length)return current.slice();
+  const row=options[Math.floor(random()*options.length)],next=current.slice();
+  next[row.index]=pick(row.alternatives,current.filter((_,i)=>i!==row.index));
+  return next;
+ }
+ const out=[...new Map([...current.filter(x=>pinned.has(x.id)),...(anchor?[anchor]:[])].map(x=>[x.id,x])).values()];
+ const choose=categories=>pick(available.filter(x=>categories.includes(x.category)&&!out.some(y=>y.id===x.id)),out);
+ const add=categories=>{const item=choose(categories);if(item)out.push(item);};
+ if(!out.some(x=>['tops','bottoms','skirts','dresses'].includes(x.category))&&random()<.28)add(['dresses']);
+ if(!out.some(x=>x.category==='dresses')){
+  if(!out.some(x=>x.category==='tops'))add(['tops']);
+  if(!out.some(x=>['bottoms','skirts'].includes(x.category)))add(['bottoms','skirts']);
+ }
+ const temp=Number.isFinite(weather.temp)?weather.temp:null;
+ if((options.includeOuter||temp!==null&&temp<15||weather.rain>0||weather.wind>=30)&&!out.some(x=>x.layer==='outer')){
+  const outer=available.filter(x=>x.layer==='outer');
+  const supported=outer.filter(x=>(!(weather.rain>0)||x.weather?.rain===true)&&(!(weather.wind>=30)||x.weather?.wind===true));
+  const layer=pick(supported.length?supported:outer,out);if(layer)out.push(layer);
+ }
+ if(!out.some(x=>x.category==='shoes'))add(['shoes']);
+ if(!out.some(x=>x.layer==='accessory'&&x.category!=='shoes'))add(['bags','hats','eyewear','scarves','jewelry','hair','accessories']);
+ if(!out.length&&available.length)out.push(pick(available));
+ return out.sort((a,b)=>(a.catalogLayerOrder??a.layerOrder??0)-(b.catalogLayerOrder??b.layerOrder??0));
+}
+
+export function buildCapsuleLooks(items,options={}){
+ const selected=[], seen=new Set();
+ const pool=items.filter(x=>x?.id);
+ for(const [cats,count] of [[['tops'],2],[['bottoms','skirts'],2],[['dresses'],1],[['outerwear'],1],[['shoes'],1],[['bags','scarves','hats','jewelry','eyewear','accessories'],1]]){
+  selected.push(...pool.filter(x=>cats.includes(x.category)).slice(0,count));
+ }
+ const outfits=[];
+ for(const top of selected.filter(x=>x.category==='tops')){
+  for(const lower of selected.filter(x=>['bottoms','skirts'].includes(x.category))){
+   const out=composeRuleOutfit(selected,{...options,anchor:top,current:[lower],lockedIds:[lower.id]});
+   const key=out.map(x=>x.id).sort().join('|');
+   if(!seen.has(key)){outfits.push(out);seen.add(key);}
+  }
+ }
+ for(const dress of selected.filter(x=>x.category==='dresses')){
+  outfits.push(composeRuleOutfit(selected,{...options,anchor:dress}));
+ }
+ if(!outfits.length&&pool.length)outfits.push(composeRuleOutfit(selected.length?selected:pool,options));
+ return outfits;
 }
 export function buildCapsule(items=[],limit=8){
  const priority=['tops','bottoms','skirts','outerwear','shoes','dresses','bags','hats','scarves','accessories','eyewear','jewelry','hair'],picked=[],seen=new Set();

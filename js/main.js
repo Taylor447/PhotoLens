@@ -1139,7 +1139,7 @@ let plannerModulePromise;
 plannerLaunch.addEventListener('click', async () => {
   try {
     const planner = await (plannerModulePromise ||= import('../features/planner.js'));
-    planner.openPhotographyHub();
+    await planner.openPhotographyHub({palettes:[lastResult?.local?.A?.palette,lastResult?.local?.B?.palette]});
   } catch (error) {
     console.error('Không tải được công cụ chụp ảnh:', error);
     toast('Không mở được công cụ chụp ảnh. Hãy tải lại trang.');

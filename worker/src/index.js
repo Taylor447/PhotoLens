@@ -1,3 +1,4 @@
+import {validateComposeRequest,validateComposeChoice} from '../../core/wardrobe/compose-contract.js';
 const MAX_IMAGE_BASE64_BYTES = 1_500_000;
 const MAX_REQUEST_BYTES = 3_100_000;
 const MAX_IMAGES = 2;
@@ -415,7 +416,7 @@ export function validStructuredInput(path,b){
  if(path==='/spots/rank')return str(b.genre)&&Array.isArray(b.candidates)&&b.candidates.length>=1&&b.candidates.length<=35&&b.candidates.every(c=>c&&str(c.id)&&str(c.name)&&str(c.category)&&val(c.distanceKm)&&val(c.conditionScore)&&(c.knownNotes===null||typeof c.knownNotes==='string'));
  if(path==='/angles')return str(b.genre)&&str(b.subject)&&b.subject.length<=200&&typeof b.scene==='string'&&b.scene.length<=500&&Array.isArray(b.deviceFacts)&&b.deviceFacts.length<=40&&b.deviceFacts.every(f=>f&&str(f.label)&&(typeof f.value==='string'||typeof f.value==='number'||typeof f.value==='boolean'||f.value===null));
  if(path==='/outfit')return str(b.style)&&(b.backgroundColor===null||/^#[0-9a-f]{6}$/i.test(b.backgroundColor))&&['temperatureC','precipitationMm','windKmh'].every(k=>val(b[k]));
- if(path==='/outfit/compose'){const ids=new Set();return str(b.genre)&&Array.isArray(b.candidates)&&b.candidates.length>=1&&b.candidates.length<=60&&b.candidates.every(c=>{if(!c||!str(c.id)||ids.has(c.id)||!str(c.category)||!/^#[0-9a-f]{6}$/i.test(c.color)||!str(c.style)||!str(c.pattern)||!str(c.material)||!str(c.season))return false;ids.add(c.id);return true;})&&(b.backgroundColor===null||/^#[0-9a-f]{6}$/i.test(b.backgroundColor))&&['temperatureC','precipitationMm','windKmh'].every(k=>val(b[k]));}
+ if(path==='/outfit/compose')return validateComposeRequest(b);
  return false;
 }
 export function validStructuredOutput(path,d,b){
@@ -424,7 +425,7 @@ export function validStructuredOutput(path,d,b){
  if(path==='/spots/rank'){const ids=new Set(b.candidates.map(x=>x.id)),seen=new Set();return hasExactKeys(d,['ranked'])&&Array.isArray(d.ranked)&&d.ranked.length<=ids.size&&d.ranked.every(x=>hasExactKeys(x,['id','score','reason'])&&ids.has(x.id)&&!seen.has(x.id)&&(seen.add(x.id),Number.isInteger(x.score)&&x.score>=0&&x.score<=100&&str(x.reason)));}
  if(path==='/angles')return hasExactKeys(d,['angles'])&&Array.isArray(d.angles)&&d.angles.length===3&&d.angles.every(x=>hasExactKeys(x,['name','cameraHeight','distance','focalLength','composition','direction','avoid','settingsNote'])&&Object.values(x).every(str));
  if(path==='/outfit')return hasExactKeys(d,['sets'])&&Array.isArray(d.sets)&&d.sets.length>=2&&d.sets.length<=3&&d.sets.every(x=>hasExactKeys(x,['colors','clothing','accessories','reason','caution'])&&Array.isArray(x.colors)&&x.colors.length>=2&&x.colors.length<=5&&x.colors.every(str)&&['clothing','accessories','reason','caution'].every(k=>str(x[k])));
- if(path==='/outfit/compose'){const ids=new Set(b.candidates.map(x=>x.id)),seen=new Set();return hasExactKeys(d,['itemIds','reason'])&&Array.isArray(d.itemIds)&&d.itemIds.length>=1&&d.itemIds.length<=8&&d.itemIds.every(id=>typeof id==='string'&&ids.has(id)&&!seen.has(id)&&(seen.add(id),true))&&str(d.reason);}
+ if(path==='/outfit/compose')return validateComposeChoice(d,b.candidates);
  return false;
 }
 async function structuredWithGemini({path,body,env}){
