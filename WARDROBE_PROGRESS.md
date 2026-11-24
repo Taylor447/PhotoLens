@@ -86,3 +86,16 @@ Kiểm tra cục bộ gồm 47 unit test, Vite build và kiểm tra manifest/ass
 | UV, chất liệu và thiết bị | PARTIAL | Vật liệu PBR sinh theo mẫu tiếp tục dùng các map vải hiện có. Các mảnh may mô phỏng dùng tọa độ chiếu tham chiếu, các lai dùng tọa độ dọc theo vòng. Còn cần UV riêng cho các mảnh phức tạp và số đo FPS trên thiết bị thật. |
 
 Tệp triển khai gồm `garment-cuts.js`, `tailored-mesh.js`, `accessory-shells.js`, `surface-crossings.js`, `geometry.js`, `skirt-drape.js`, `export-glb.js` và `wardrobe3d.js`. Ảnh so sánh gồm áo thun, sơ mi, áo dài, áo bà ba, bộ blazer và áo trong, quần jogger và váy ở tư thế ngồi. PR #14 giữ trạng thái draft trong khi kiểm định.
+
+### GĐ4 – Giao cắt ở gấu và tay áo khoác
+
+Mốc đối chiếu là `baa95e8b8686710d5d7771330f33fc05928feee2`. Tái hiện được 8/24 ca giao cắt trên preset B. Hai lớp quanh gấu áo nới theo hướng khác nhau, còn ống tay áo khoác hoặc blazer cắt vào sườn váy hay quần. Ảnh Edge trước sửa tái hiện cảnh báo với áo thun + áo khoác ngắn, sơ mi + quần ống đứng + blazer và đầm cổ vuông + áo khoác ngắn.
+
+| Hạng mục | Trạng thái | Kết quả và giới hạn |
+|---|---|---|
+| Gấu áo và vùng eo | Đã sửa và bổ sung hồi quy | `tailored-mesh.js` dùng chung hướng nới ra từ tâm thân quanh eo/hông. Hướng nới chuyển dần theo vùng khớp để giữ dáng tay. |
+| Tay áo chạm quần hoặc váy | Đã sửa cho nhóm ca ban đầu | `geometry.js` thử nới cánh tay theo ba mức tăng tối đa 15,5°. Giữ nguyên số đo và tư thế gốc khi các lớp đã tách. Chỉ chọn biến thể giảm giao cắt và giữ các cặp đang tách tiếp tục tách. |
+| Kiểm thử | Đã mở rộng phạm vi | `tests/wardrobe-3d.test.js` kiểm tra 8 bộ qua 4 preset, 4 tư thế và 2 LOD. Dùng tam giác của mesh đã skinning để kiểm tra lớp, kiểm đỉnh xuyên thân và kiểm tra bề mặt thân ở các tư thế đã nới tay. Playwright chụp blazer, sơ mi và quần ở ba tư thế. CI và ảnh Playwright gắn với [PR #14](https://github.com/Taylor447/PhotoLens/pull/14/checks). |
+| Áo choàng và đầm nhiều lớp | PARTIAL | Khảo sát ngoài bộ hồi quy còn thấy áo choàng cosplay cắt qua áo giáp/áo thun, và blazer cắt vào đầm cosplay. Studio vẫn hiển thị tên các cặp giao nhau. Kiểm thử mới đo hình học tĩnh sau khi áp tư thế. Giao cắt lớp trong từng khung của mô phỏng vải chưa được kiểm định. |
+
+Ảnh Edge ở kích thước mobile cho ba bộ ban đầu đều có canvas và không phát cảnh báo giao cắt sau sửa, với mô phỏng vải tắt. Đợt xác minh cục bộ bị gián đoạn, kết quả chính thức lấy từ CI trên commit của PR. Phần chồng lớp GĐ4 vẫn PARTIAL. Tiếp theo ưu tiên biên dạng áo choàng và đầm xoè trong các ca ngoài bộ hồi quy, rồi kiểm tra mô phỏng vải khi mặc nhiều lớp.

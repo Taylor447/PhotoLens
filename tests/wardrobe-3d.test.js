@@ -232,6 +232,44 @@ test('the layer checker finds crossing faces with exterior vertices',()=>{
  assert.equal(findLayerCrossings(layers,transforms)[0]?.crossings,1);
 });
 
+test('eight layered outfits clear their seams across every mannequin preset, pose and LOD',t=>{
+ const outfits=[
+  ['tops-1','outerwear-1'],['tops-2','bottoms-1','outerwear-2'],
+  ['tops-4','outerwear-4'],['tops-1','skirts-2'],
+  ['tops-3','bottoms-4'],['bottoms-1','skirts-4'],
+  ['dresses-2','outerwear-1'],['tops-2','tops-1']
+ ].map(ids=>ids.map(id=>templates.find(item=>item.id==='tpl-'+id)));
+ let layeredCases=0,adjustedCases=0,maxTriangles=0,penetratingVertices=0,testedVertices=0;
+ for(const preset of MANNEQUIN_PRESETS)for(const pose of POSE_NAMES)for(const radial of [12,20]){
+  const options={pose,radial};
+  const armAngle=layout=>layout.bones.find(({name})=>name==='UpperArm_R').rz;
+  const reference=armAngle(buildStudioGeometry(preset,[],options).layout);
+  for(const items of outfits){
+   const {garments,layout,body,transforms,colliders,triangles}=buildStudioGeometry(preset,items,options);
+   const context=[preset.id,pose,radial,...items.map(({id})=>id)].join('/');
+   assert.deepEqual(findLayerCrossings(garments,transforms,{firstPerPair:false}),[],context);
+   const clip=measurePenetration(garments.flatMap(({parts})=>parts),transforms,colliders);
+   assert.ok(clip.ratio<=BODY_CLIP_LIMIT,context);
+   const adjustment=armAngle(layout)-reference;
+   assert.ok(adjustment>=0&&adjustment<=.271,context);
+   if(adjustment){
+    const [part]=body;
+    const points=part.points.map((_,i)=>new Vector3(...poseSurfacePoint(part,i,transforms)));
+    assert.equal(intersectionCount(part.indices,points),0,context);
+    adjustedCases++;
+   }
+   assert.ok(triangles+2<=MAX_SCENE_TRIANGLES,context);
+   maxTriangles=Math.max(maxTriangles,triangles+2);
+   penetratingVertices+=clip.penetratingVertices;
+   testedVertices+=clip.testedVertices;
+   layeredCases++;
+  }
+ }
+ assert.equal(layeredCases,256);
+ assert.ok(adjustedCases>0&&adjustedCases<layeredCases);
+ t.diagnostic(JSON.stringify({layeredCases,adjustedCases,maxTriangles,penetratingVertices,testedVertices}));
+});
+
 test('procedural GLB is a real skinned v2 asset in metres and preflight excludes external files and excessive triangles',async()=>{
  const b=makeProceduralGarmentGlb(templates[0]),info=inspectGarmentGlb(b);
  assert.equal(info.contract.unit,'m');

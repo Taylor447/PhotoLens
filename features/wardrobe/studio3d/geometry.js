@@ -20,6 +20,8 @@ export const BONE_NAMES = [
   'UpperArm_R', 'Forearm_R', 'Hand_R', 'Thigh_R', 'Shin_R', 'Foot_R'
 ];
 export const POSE_NAMES = ['standing', 'lean', 'step', 'sitting'];
+// Increase shoulder abduction in steps up to about 15.5 degrees.
+const SLEEVE_CLEARANCE_ANGLES = [.09,.18,.27];
 const TAU = Math.PI * 2;
 const add = (a,b) => a.map((v,i) => v+b[i]);
 const sub = (a,b) => a.map((v,i) => v-b[i]);
@@ -31,7 +33,7 @@ function radii(circumference, depthRatio) {
   return [radius, radius*depthRatio];
 }
 
-export function createRigLayout(value, pose = 'standing') {
+export function createRigLayout(value, pose = 'standing', armClearance = 0) {
   const {m,ankle,crotch,headHeight,neckTop,shoulder,pelvis,waist,chest,knee,wrist}=createMannequinLandmarks(value);
   const [hipRx, hipRz] = radii(m.hips,.73);
   const [waistRx, waistRz] = radii(m.waist,.7);
@@ -52,7 +54,7 @@ export function createRigLayout(value, pose = 'standing') {
     const armX=sign*m.shoulders/2, legX=sign*hipRx*.48;
     const upperLength=m.sleeve*.53, lowerLength=m.sleeve-upperLength;
     const handY=wrist;
-    bone('UpperArm_'+suffix,'Spine',[armX,shoulder,0],pose==='sitting'?-.33:pose==='step'?sign*.3:0,sign*.2);
+    bone('UpperArm_'+suffix,'Spine',[armX,shoulder,0],pose==='sitting'?-.33:pose==='step'?sign*.3:0,sign*(.2+armClearance));
     bone('Forearm_'+suffix,'UpperArm_'+suffix,[armX,shoulder-upperLength,0],pose==='sitting'?-1.27:-.14,sign*-.055);
     bone('Hand_'+suffix,'Forearm_'+suffix,[armX,handY,0]);
     bone('Thigh_'+suffix,'Pelvis',[legX,crotch+1,hipRz*.19],pose==='sitting'?-seatedHipAngle:pose==='step'?sign*-.36:0,sign*.045);
@@ -282,8 +284,8 @@ function fitSkinnedVertices(part,transforms,colliders){
 }
 
 let lastMannequin;
-function posedMannequin(value,pose,radial){
-  const layout=createRigLayout(value,pose),key=JSON.stringify([layout.m,pose,radial]);
+function posedMannequin(value,pose,radial,armClearance){
+  const layout=createRigLayout(value,pose,armClearance),key=JSON.stringify([layout.m,pose,radial,armClearance]);
   if(lastMannequin?.key===key)return lastMannequin;
   const body=[buildMannequinSurface(layout,radial)];
   const transforms=poseTransform(layout.bones),colliders=buildCollider(body,transforms);
@@ -316,8 +318,8 @@ function garmentPlan(items,mannequin,flatLay){
   return plan;
 }
 
-export function buildStudioGeometry(value, items=[], {pose='standing',radial=20,flatLay=false}={}){
-  const mannequin=posedMannequin(value,pose,radial);
+function buildPosedOutfit(value,items,{pose,radial,flatLay,armClearance=0}){
+  const mannequin=posedMannequin(value,pose,radial,armClearance);
   const {layout,body,transforms,colliders}=mannequin;
   const plan=garmentPlan(items,mannequin,flatLay);
   const garments=plan.map(({item,cut,lower,visible,ease})=>{
@@ -350,6 +352,31 @@ export function buildStudioGeometry(value, items=[], {pose='standing',radial=20,
   }
   const triangles=[...body,...garments.flatMap(x=>x.parts)].reduce((sum,x)=>sum+x.indices.length/3,0);
   return {layout,body,garments,transforms,colliders,triangles,radial};
+}
+
+export function buildStudioGeometry(value, items=[], {pose='standing',radial=20,flatLay=false}={}){
+  const options={pose,radial,flatLay};
+  let result=buildPosedOutfit(value,items,options);
+  if(flatLay)return result;
+  const cuts=result.garments.map(({item})=>garmentCut(item)).filter(Boolean);
+  if(cuts.length<2||!cuts.some(({sleeve})=>sleeve&&sleeve!=='sleeveless'))return result;
+
+  // Adjust the rig and both clothing layers together. Accept the first clear
+  // pose, or the best improvement that leaves every already-clear pair clear.
+  const collisions=model=>findLayerCrossings(model.garments,model.transforms,{firstPerPair:false});
+  const count=pairs=>pairs.reduce((total,pair)=>total+pair.crossings,0);
+  let remaining=collisions(result);
+  for(const armClearance of SLEEVE_CLEARANCE_ANGLES){
+    if(!remaining.length)break;
+    const candidate=buildPosedOutfit(value,items,{...options,armClearance});
+    const next=collisions(candidate);
+    const retainsClearPairs=next.every(({inner,outer})=>remaining.some(pair=>pair.inner===inner&&pair.outer===outer));
+    if(retainsClearPairs&&count(next)<count(remaining)){
+      remaining=next;
+      result=candidate;
+    }
+  }
+  return result;
 }
 
 export function buildBodyMorphs(value, radial=20){

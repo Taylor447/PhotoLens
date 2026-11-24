@@ -166,6 +166,27 @@ test('continuous mannequin renders each pose and rotates in the Studio 3D canvas
  expect(errors).toEqual([]);
 });
 
+test('a blazer, shirt and trousers render together without a layer intersection warning',async({page},testInfo)=>{
+ const errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await openStudio(page,'catalog');
+ for(const id of ['tpl-tops-2','tpl-bottoms-1','tpl-outerwear-2']){
+  await page.locator('[data-ws-wear="'+id+'"]').click();
+ }
+ await page.locator('[data-wardrobe-section="studio3d"]').click();
+ await page.locator('[data-ws-preset]').selectOption('reference-b');
+ const canvas=page.locator('.ws-three-host canvas');
+ await expect.poll(()=>canvas.evaluate(node=>Boolean(node.getContext('webgl2')))).toBeTruthy();
+ for(const pose of ['standing','step','sitting']){
+  await page.locator('[data-ws-pose="'+pose+'"]').click();
+  const screenshot=await stableScreenshot(canvas);
+  await expect(page.locator('[data-ws-message]')).not.toContainText('lớp giao nhau');
+  await testInfo.attach('blazer-trousers-'+pose+'.png',{body:screenshot,contentType:'image/png'});
+ }
+ expect(errors).toEqual([]);
+});
+
 test('offline AI compose falls back to the deterministic local rules engine',async({page})=>{
  await page.addInitScript(()=>{
   localStorage.setItem('photolens_ai_enabled','true');

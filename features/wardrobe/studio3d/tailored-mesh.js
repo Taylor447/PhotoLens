@@ -135,7 +135,14 @@ export function tailoredMesh(body,surface,cut,layout,{lower=false,values}={}){
     const sideDepth=clamp((chestRz*.91-Math.abs(z))/4,0,1);
     const pinch=lower||(!innerArm&&!sideTorso)?0:belowShoulder*aboveCuff*sideDepth;
     const vertical=lower?0:clamp((y-layout.chest)/8,0,1)*(1-.60*pinch);
-    return point.map((v,axis)=>v+normal[axis]*ease*(axis===0?1-.88*pinch:axis===1?vertical:1));
+    // Around the waist and hips, all layers expand from the same horizontal
+    // centre. This keeps a lapel or hem outside the layer it overlaps.
+    const torsoBlend=clamp((.30-sample.arm)/.22,0,1)
+      *clamp((y-layout.crotch)/8,0,1)
+      *clamp((layout.chest-y)/8,0,1);
+    const horizontal=norm([x,0,z]);
+    const direction=[normal[0]*(1-.88*pinch),normal[1]*vertical,normal[2]];
+    return point.map((v,axis)=>v+ease*lerp(direction[axis],horizontal[axis],torsoBlend));
   });
   return cutMesh(body,surface,values,positions);
 }
