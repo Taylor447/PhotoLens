@@ -142,3 +142,16 @@ Kiểm tra worker ở checkpoint liền trước đạt 8 tick cho ba bộ váy/
 - Sau sửa camera, Playwright kiểm tra mannequin/pose đạt 1/1; trước sửa này, 12/12 E2E đã đạt trên tree ngay trước camera. Cả lượt đều chạy trên Edge/SwiftShader; đây không phải thiết bị Android vật lý. Ảnh so sánh crop đầu trước/sau vẫn lưu trong thư mục `outputs` cục bộ.
 - Build sau sửa đã chuyển 319 module và asset preview validator đạt. Còn cảnh báo chunk lớn: `three` khoảng 753 kB, `heic2any` khoảng 1.353 kB.
 - Kiểm tra GitHub ngay sau khi đẩy checkpoint 98b171f vẫn chưa thấy Actions run hoặc commit status. Vì vậy trạng thái CI từ xa là CHƯA CHẠY; các số liệu trên là kết quả chạy cục bộ, không gắn nhãn thành CI GitHub.
+
+## Kiểm định model GLB người dùng gửi - 2026-11-25
+
+| Tệp | Kích thước | Hình học và rig | Kết luận với PhotoLens |
+|---|---:|---|---|
+| `Meshy_AI_Neutral_Elegance_20261125_texture.glb` | 10.332.424 byte | 123.618 tam giác, 1 mesh, 3 texture; không có skin, xương, animation hoặc morph target. Model là nhân vật đã mặc sẵn trang phục, ở tư thế tay dang. | Nằm trong giới hạn kích thước/tam giác nhưng không thể biến dạng theo số đo hoặc chuyển động cùng rig PhotoLens. Không phải asset quần áo riêng. |
+| `HOME_character_sitting.glb` | 13.253.180 byte | 123.618 tam giác, skin 33 xương Mixamo, 1 animation; không có morph target. Mesh đã gồm nhân vật và trang phục ở tư thế ngồi. | Vượt giới hạn nhập 12 MiB hiện tại; tên xương không theo PhotoLens và không có dữ liệu morph theo số đo. |
+| `HOME_character_sleep.glb` | 13.248.764 byte | 123.618 tam giác, skin 33 xương Mixamo, 1 animation; không có morph target. Nhân vật/trang phục ở tư thế nằm. | Vượt giới hạn nhập 12 MiB hiện tại; không phù hợp làm mannequin phối đồ. |
+| `HOME_character_walk.glb` | 13.285.156 byte | 123.618 tam giác, skin 33 xương Mixamo, 2 animation; không có morph target. Nhân vật/trang phục đã được ghép sẵn. | Vượt giới hạn nhập 12 MiB hiện tại; không phù hợp làm mannequin phối đồ. |
+
+- Cả bốn tệp được phân tích GLB và render thử trong Blender 5.3. Không tệp nào có metadata `asset.extras.photoLens`, giấy phép hoặc thông tin bản quyền. Bộ kiểm tra GLB trong ứng dụng yêu cầu hợp đồng PhotoLens v1; vì vậy các tệp chưa thể được xác nhận là asset fit/rig hợp lệ.
+- Không chép các GLB vào kho công khai hoặc thay mannequin mặc định: hiện chưa có dữ liệu giấy phép phân phối, còn hình học không hỗ trợ số đo và clipping theo tiêu chí PhotoLens. Không thay đổi mã nguồn, catalog hoặc PR trong lần kiểm định này; các ảnh render chỉ là bằng chứng xem xét cục bộ, chưa phải kiểm thử tích hợp trong trình duyệt.
+- Để dùng làm mannequin phối đồ, cần GLB trung tính, có giấy phép ghi rõ, xương theo `ASSET_SPEC.md` và morph targets gắn với các số đo cm. Model Meshy hiện tại chỉ có thể cân nhắc cho chế độ hình ảnh tĩnh nếu người dùng chấp nhận không có fit/pose theo số đo; các biến thể HOME phù hợp hơn với dự án game riêng.
