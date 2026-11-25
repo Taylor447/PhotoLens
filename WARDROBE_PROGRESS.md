@@ -119,6 +119,6 @@ Kiểm tra worker ở checkpoint liền trước đạt 8 tick cho ba bộ váy/
 
 - Đã xác minh PR #14 vẫn mở, draft, đúng nhánh `codex/wardrobe-gd0-contract-20261124`, head trước thay đổi là `1e00f62221a332d49c5adc08de6d493592557fb9`. Workflow `45416023222` hoàn tất build và core tests thành công; deploy bị skip như cấu hình PR. Workflow đó không chạy Playwright.
 - Mở rộng Garment Builder để xem trước SVG động theo màu, họa tiết, chất liệu, cổ, tay, độ dài, độ rộng, số nếp ly và viền; biến thể được lưu vào tủ đồ cục bộ. Cập nhật schema, unit test, Playwright test, CSS và tài liệu. Preview thumbnail tĩnh của 60 template không bị sửa.
-- Mã thay đổi đã được rà soát tĩnh trong phiên này. Unit test/build/Playwright cho commit mới chưa có kết quả cho tới khi GitHub Actions chạy; trạng thái GĐ6 vẫn PARTIAL. Không đánh dấu đạt trước CI.
+- Mã thay đổi đã được rà soát tĩnh trong phiên này; cú pháp JS được phân tích, JSON Schema parse hợp lệ và 60/60 SVG template cho đầu ra byte-identical so với trước thay đổi. Unit test/build/Playwright cho commit mới chưa có kết quả cho tới khi GitHub Actions chạy; trạng thái GĐ6 vẫn PARTIAL. Không đánh dấu đạt trước CI.
 - Ảnh 3D tư thế ngồi trước đó chưa được kiểm chứng lại trên trình duyệt của phiên này; kiểm thử hình học tự động không thay thế đánh giá trực quan. GĐ4 và nghiệm thu hình ảnh vẫn PARTIAL.
 - GĐ7 tiếp tục tạm dừng theo yêu cầu. Không có thao tác merge hoặc production deploy.
