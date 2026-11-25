@@ -122,3 +122,5 @@ Kiểm tra worker ở checkpoint liền trước đạt 8 tick cho ba bộ váy/
 - Mã thay đổi đã được rà soát tĩnh trong phiên này; cú pháp JS được phân tích, JSON Schema parse hợp lệ và 60/60 SVG template cho đầu ra byte-identical so với trước thay đổi. Unit test/build/Playwright cho commit mới chưa có kết quả cho tới khi GitHub Actions chạy; trạng thái GĐ6 vẫn PARTIAL. Không đánh dấu đạt trước CI.
 - Ảnh 3D tư thế ngồi trước đó chưa được kiểm chứng lại trên trình duyệt của phiên này; kiểm thử hình học tự động không thay thế đánh giá trực quan. GĐ4 và nghiệm thu hình ảnh vẫn PARTIAL.
 - GĐ7 tiếp tục tạm dừng theo yêu cầu. Không có thao tác merge hoặc production deploy.
+
+- Tại head hiện tại, truy vấn Actions không có run hoặc commit status cho thay đổi mới. Môi trường chạy lệnh cục bộ cũng không khả dụng; vì vậy chưa có kết quả build, unit test hay Playwright cho commit mới, dù cú pháp JS/JSON và tính bất biến 60 thumbnail đã được kiểm tra trong phiên.
