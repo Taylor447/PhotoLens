@@ -155,3 +155,13 @@ Kiểm tra worker ở checkpoint liền trước đạt 8 tick cho ba bộ váy/
 - Cả bốn tệp được phân tích GLB và render thử trong Blender 5.3. Không tệp nào có metadata `asset.extras.photoLens`, giấy phép hoặc thông tin bản quyền. Bộ kiểm tra GLB trong ứng dụng yêu cầu hợp đồng PhotoLens v1; vì vậy các tệp chưa thể được xác nhận là asset fit/rig hợp lệ.
 - Không chép các GLB vào kho công khai hoặc thay mannequin mặc định: hiện chưa có dữ liệu giấy phép phân phối, còn hình học không hỗ trợ số đo và clipping theo tiêu chí PhotoLens. Không thay đổi mã nguồn, catalog hoặc PR trong lần kiểm định này; các ảnh render chỉ là bằng chứng xem xét cục bộ, chưa phải kiểm thử tích hợp trong trình duyệt.
 - Để dùng làm mannequin phối đồ, cần GLB trung tính, có giấy phép ghi rõ, xương theo `ASSET_SPEC.md` và morph targets gắn với các số đo cm. Model Meshy hiện tại chỉ có thể cân nhắc cho chế độ hình ảnh tĩnh nếu người dùng chấp nhận không có fit/pose theo số đo; các biến thể HOME phù hợp hơn với dự án game riêng.
+
+
+## Tiếp tục mục chính sau đánh giá GLB - 2026-11-25
+
+- Theo yêu cầu mới, dừng xem xét các model đính kèm cho PhotoLens. Không thêm GLB vào catalog hoặc thay model mặc định.
+- PR #14 trên nhánh `codex/wardrobe-gd0-contract-20261124` hiện mở, draft, chưa merge, trạng thái mergeable là false. Head GitHub là `3078557e31d87481135161197229a6f2c0c78a5c`; không có workflow run hoặc commit status gắn với head này. Production không đổi.
+- Đã bắt đầu chạy `npm run test:unit` trên source hiện tại. Kiểm tra asset đầu lượt xác nhận 60 template, 180 manifest entry; 12 test đầu xuất hiện trạng thái đạt trong output. Lượt kiểm tra chưa có kết quả kết thúc: yêu cầu tiếp tục theo dõi bị auto-review từ chối vì tiến trình mở kết nối HTTPS telemetry tới host chưa xác minh, payload không rõ. Không đánh dấu toàn bộ unit suite là PASS và không thử vòng tránh.
+- Chưa chạy build hoặc Playwright sau head hiện tại. Đây là thay đổi tài liệu, không có mã tính năng mới trong checkpoint này.
+- Các mục chính vẫn cần bằng chứng hoàn tất: chất lượng hình ảnh 3D trên ứng dụng thật, golden-image regression, va chạm vải nhiều lớp ngoài bộ 416 trường hợp, GLB đúng hợp đồng PhotoLens, và FPS trên Android vật lý. Không gộp kết quả mô phỏng trình duyệt với số đo thiết bị thật.
+- Bước phát triển tiếp theo vẫn thuộc kiểm định GĐ4/GĐ8: hoàn tất xác minh trực quan và đo hiệu năng bằng môi trường có thể chạy kiểm thử mà không phát telemetry ngoài chưa được xác minh; PR vẫn giữ draft và chưa deploy.
