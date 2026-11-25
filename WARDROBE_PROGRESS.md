@@ -110,6 +110,6 @@ Mốc đối chiếu là `baa95e8b8686710d5d7771330f33fc05928feee2`. Tái hiện
 
 ### GĐ4 – Ca áo dài, quần chùng và áo khoác ở LOD thấp
 
-Đã thêm bộ điều chỉnh khoảng hở áo khoác theo từng nấc 1,5–6 cm. Bộ dựng thử các nấc sau khi các tư thế nới tay không xử lý được và chỉ giữ biến thể làm giảm giao cắt, đồng thời giữ nguyên các cặp đã tách. Bộ hồi quy tăng lên 13 outfit × 4 preset × 4 tư thế × 2 LOD, tức 416 tổ hợp. Playwright bổ sung ca áo dài, quần chùng, áo khoác ở tư thế ngồi trên viewport mobile và mức chi tiết thấp. CI cho phiên bản cập nhật đang chạy.
+Đã thêm bộ điều chỉnh khoảng hở áo khoác theo từng nấc 1,5–6 cm. Bộ dựng thử các nấc sau khi các tư thế nới tay không xử lý được và chỉ giữ biến thể làm giảm giao cắt, đồng thời giữ nguyên các cặp đã tách. Bộ hồi quy tăng lên 13 outfit × 4 preset × 4 tư thế × 2 LOD, tức 416 tổ hợp. Playwright bổ sung ca áo dài, quần chùng, áo khoác ở tư thế ngồi trên viewport mobile và mức chi tiết thấp. Commit `d424cd36798a1e0cc0c6c746d2167354401b8b54` đã lên PR #14. GitHub chưa tạo Actions run cho commit này; check suite Cloudflare Pages và Vercel còn ở trạng thái queued. Unit test và Playwright của commit mới chưa được xác nhận.
 
 Kiểm tra worker ở checkpoint liền trước đạt 8 tick cho ba bộ váy/áo choàng/đầm. Worker chặn đề xuất nếu mặt vải cắt qua lớp khác hoặc đỉnh xuyên thân. Còn cần xác minh lại CI sau khi thêm ca áo dài, cùng giới hạn kiểm tra vải tĩnh với GLB nhập và FPS trên thiết bị di động thật.
