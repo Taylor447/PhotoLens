@@ -16,3 +16,20 @@ Mốc bắt đầu: main `8a009014b383b8b5891af7a32453b5df2fe69a04`, PR #14 `8db
 
 GĐ7 chờ xác nhận. Production cần người dùng duyệt preview. Mốc sau ghi nối tiếp trong tài liệu này.
 
+
+
+## Đánh giá hiện tại trên PR #14 · 2026-11-25
+
+Phần bảng đầu tài liệu ghi nhận kiểm định ở mốc ban đầu. Bảng này cập nhật trạng thái theo source code-bearing commit `98b171f`; các commit tiếp theo trên PR chỉ cập nhật tài liệu. Head GitHub hiện là `246fc843eb4bbfdd6c0e33e24b15471bff091f9e`.
+
+| Mục | Trạng thái hiện tại | Bằng chứng và giới hạn |
+|---|---|---|
+| Kho và thumbnail | PASS trong bộ kiểm định đã chạy | 60 template/12 danh mục, 20 chất liệu, 40 họa tiết, 180 manifest entry và 60 đường dẫn thumbnail riêng. Trước đó Edge đo 60/60 ảnh và 0/60 tên bị ảnh che ở desktop/mobile. Chưa có sản phẩm thương mại hoặc số đo sản phẩm có nguồn. |
+| Ma-nơ-canh và morph | PASS về cấu trúc trong phạm vi kiểm tra; PARTIAL về chất lượng sản phẩm | Lưới thân đơn khối, kín và có 17 xương cùng 8 morph theo số đo. Bộ hình học trước đó kiểm tra 1.920 tổ hợp pose/preset/LOD với 0/1.247.864 đỉnh xuyên thân. Chưa có đánh giá trên thiết bị thật. |
+| Trang phục 3D và chồng lớp | PARTIAL | 60 mẫu procedural có mesh phân biệt; 416 tổ hợp nhiều lớp thuộc 13 outfit mẫu đạt phép thử giao cắt và giới hạn 150.000 tam giác. Đây chưa phải rập may, sản phẩm thương mại, hay bằng chứng mọi outfit tùy ý đều không giao nhau. GLB nhập phải theo hợp đồng PhotoLens; repo không đóng gói GLB quần áo. |
+| GĐ5 phối đồ và Lookbook | PASS trong phạm vi kiểm thử trước; cần chạy lại trên head hiện tại | 2D/3D dùng cùng outfit state; có undo/redo, khóa, chế độ phối, AI chỉ chọn ID trong tập ứng viên và fallback cục bộ. Lưu/xuất Lookbook và gắn vào kế hoạch chụp có trong code. Worker test dùng phản hồi giả lập, chưa xác minh dịch vụ AI trực tiếp. |
+| GĐ6 Garment Builder | Có triển khai; nghiệm thu hiện tại PARTIAL | Builder lưu biến thể với màu, chất liệu, họa tiết, cổ, tay, dài/rộng, nếp ly và viền; SVG xem trước mang tính minh họa, không phải rập may. Chưa có kết quả CI mới gắn với head PR hiện tại. |
+| GĐ8 kiểm thử và hiệu năng | PARTIAL | Lần kiểm thử cục bộ đầy đủ được ghi nhận trước đó: 55/55 unit, build 319 module, 12/12 Playwright trước thay đổi camera và 1/1 kiểm tra camera sau thay đổi. Lượt chạy mới chưa kết thúc vì auto-review chặn theo dõi tiến trình khi phát hiện HTTPS telemetry tới host chưa xác minh; không đánh dấu bộ test mới là PASS. Không có workflow run/status cho head `246fc8`. Chưa đo FPS Android vật lý, chưa có golden-image baseline. |
+| Trạng thái PR | OPEN / DRAFT / CHƯA MERGEABLE | PR #14 vẫn mở, giữ draft, không merge/deploy. Xung đột merge với main/PR #11 vẫn là việc tích hợp riêng cần xử lý trước nghiệm thu cuối. |
+
+Không có mã ứng dụng nào được sửa trong lượt cập nhật audit này. Các kết quả cục bộ cũ không được gán thành CI của head mới.
