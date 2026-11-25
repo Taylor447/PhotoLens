@@ -7,7 +7,7 @@ import {MANNEQUIN_PRESETS, createMannequinAnchors, normalizeGarment} from '../co
 import {calculateFit,chooseSize,parseSizeRows} from '../core/fit/measurements.js';
 import {
   BONE_NAMES, MORPH_NAMES, POSE_NAMES, BODY_CLIP_LIMIT, MAX_SCENE_TRIANGLES,
-  buildStudioGeometry, buildBodyMorphs, findLayerCrossings, measurePenetration, poseSurfacePoint
+  buildStudioGeometry, buildBodyMorphs, findLayerCrossings, measurePenetration, mannequinAimHeight, poseSurfacePoint
 } from '../features/wardrobe/studio3d/geometry.js';
 import {inspectGarmentGlb} from '../features/wardrobe/studio3d/glb.js';
 import {makeProceduralGarmentGlb,packGlb} from '../features/wardrobe/studio3d/export-glb.js';
@@ -50,6 +50,16 @@ test('all shared dimensions reach the rig and the accumulated morph vertices mat
  assert.ok(targets.every(target=>target.parts.some(part=>part.some(point=>point.some(coord=>Math.abs(coord)>1e-5)))));
  const anchor=createMannequinAnchors(input);
  assert.ok(Math.abs((anchor.ankles.y-anchor.crotch.y)/anchor.scalePxPerCm-input.inseam)<1e-7);
+});
+
+test('3D camera target centers the posed mannequin bounds for every preset and pose',()=>{
+ for(const preset of MANNEQUIN_PRESETS)for(const pose of POSE_NAMES){
+  const model=buildStudioGeometry(preset,[],{pose});
+  const ys=model.body[0].points.map((_,index)=>poseSurfacePoint(model.body[0],index,model.transforms)[1]);
+  const expected=(Math.min(...ys)+Math.max(...ys))/2;
+  assert.ok(Math.abs(mannequinAimHeight(model)-expected)<1e-9,`${preset.id}/${pose}`);
+  if(pose==='sitting')assert.ok(mannequinAimHeight(model)>preset.heightCm*.53,`${preset.id} seated aim`);
+ }
 });
 
 function assertClosedBody(part) {

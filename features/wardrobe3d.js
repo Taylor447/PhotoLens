@@ -1,4 +1,4 @@
-import {bodyRayExits, buildBodyMorphs, buildStudioGeometry, findLayerCrossings, poseSurfacePoint, BODY_CLIP_LIMIT, MAX_PROCEDURAL_ITEMS, MAX_SCENE_TRIANGLES} from './wardrobe/studio3d/geometry.js';
+import {bodyRayExits, buildBodyMorphs, buildStudioGeometry, findLayerCrossings, mannequinAimHeight, poseSurfacePoint, BODY_CLIP_LIMIT, MAX_PROCEDURAL_ITEMS, MAX_SCENE_TRIANGLES} from './wardrobe/studio3d/geometry.js';
 import {inspectGarmentGlb} from './wardrobe/studio3d/glb.js';
 import {createMaterialFactory} from './wardrobe/studio3d/materials.js';
 
@@ -311,7 +311,7 @@ export async function mountWardrobe3D(host,{
     let yaw=0,pitch=0,distance=clamp(Number(distanceCm)||450,140,1200), frame=0, previousTime=0, pinch=0;
     const reduceMotion=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const pointers=new Map();
-    const aim=flatLay?Math.max(35,154-(Math.ceil(model.garments.length/4)-1)*24):model.layout.m.heightCm*(pose==='sitting'?.39:.5);
+    const aim=flatLay?Math.max(35,154-(Math.ceil(model.garments.length/4)-1)*24):mannequinAimHeight(model);
     function draw(time){
       frame=0;
       if(signal.aborted||document.hidden)return;

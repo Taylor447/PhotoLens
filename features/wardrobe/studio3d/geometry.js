@@ -170,6 +170,16 @@ export function poseSurfacePoint(part, index, transforms){
   return result;
 }
 
+export function mannequinAimHeight(model){
+  let minY=Infinity,maxY=-Infinity;
+  for(const part of model.body)for(let index=0;index<part.points.length;index++){
+    const y=poseSurfacePoint(part,index,model.transforms)[1];
+    minY=Math.min(minY,y);
+    maxY=Math.max(maxY,y);
+  }
+  return Number.isFinite(minY+maxY)?(minY+maxY)/2:model.layout.m.heightCm/2;
+}
+
 export function buildCollider(body, transforms){
   return body.map(part=>{
     const points=part.points.map((_,i)=>poseSurfacePoint(part,i,transforms));
