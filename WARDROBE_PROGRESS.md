@@ -113,3 +113,12 @@ Mốc đối chiếu là `baa95e8b8686710d5d7771330f33fc05928feee2`. Tái hiện
 Đã thêm bộ điều chỉnh khoảng hở áo khoác theo từng nấc 1,5–6 cm. Bộ dựng thử các nấc sau khi các tư thế nới tay không xử lý được và chỉ giữ biến thể làm giảm giao cắt, đồng thời giữ nguyên các cặp đã tách. Bộ hồi quy tăng lên 13 outfit × 4 preset × 4 tư thế × 2 LOD, tức 416 tổ hợp. Playwright bổ sung ca áo dài, quần chùng, áo khoác ở tư thế ngồi trên viewport mobile và mức chi tiết thấp. Commit `d424cd36798a1e0cc0c6c746d2167354401b8b54` đã lên PR #14. GitHub chưa tạo Actions run cho commit này; check suite Cloudflare Pages và Vercel còn ở trạng thái queued. Unit test và Playwright của commit mới chưa được xác nhận.
 
 Kiểm tra worker ở checkpoint liền trước đạt 8 tick cho ba bộ váy/áo choàng/đầm. Worker chặn đề xuất nếu mặt vải cắt qua lớp khác hoặc đỉnh xuyên thân. Còn cần xác minh lại CI sau khi thêm ca áo dài, cùng giới hạn kiểm tra vải tĩnh với GLB nhập và FPS trên thiết bị di động thật.
+
+
+## Tiếp tục sau khi khôi phục phiên · 2026-11-25
+
+- Đã xác minh PR #14 vẫn mở, draft, đúng nhánh `codex/wardrobe-gd0-contract-20261124`, head trước thay đổi là `1e00f62221a332d49c5adc08de6d493592557fb9`. Workflow `45416023222` hoàn tất build và core tests thành công; deploy bị skip như cấu hình PR. Workflow đó không chạy Playwright.
+- Mở rộng Garment Builder để xem trước SVG động theo màu, họa tiết, chất liệu, cổ, tay, độ dài, độ rộng, số nếp ly và viền; biến thể được lưu vào tủ đồ cục bộ. Cập nhật schema, unit test, Playwright test, CSS và tài liệu. Preview thumbnail tĩnh của 60 template không bị sửa.
+- Mã thay đổi đã được rà soát tĩnh trong phiên này. Unit test/build/Playwright cho commit mới chưa có kết quả cho tới khi GitHub Actions chạy; trạng thái GĐ6 vẫn PARTIAL. Không đánh dấu đạt trước CI.
+- Ảnh 3D tư thế ngồi trước đó chưa được kiểm chứng lại trên trình duyệt của phiên này; kiểm thử hình học tự động không thay thế đánh giá trực quan. GĐ4 và nghiệm thu hình ảnh vẫn PARTIAL.
+- GĐ7 tiếp tục tạm dừng theo yêu cầu. Không có thao tác merge hoặc production deploy.

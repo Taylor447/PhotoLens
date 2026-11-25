@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createWardrobeRepository,LEGACY_ITEMS,LEGACY_LOOKS,filterGarments,normalizeGarment,calculateFit,chooseSize,contrastRatio,colorHarmony,scoreLook,composeRuleOutfit,buildCapsule,resolveStudioMode,reconcileLook,inspectTemplateBounds,buildSvgLook,safeSvgText,MANNEQUIN_DEFAULTS_CM,MANNEQUIN_PRESETS,normalizeMannequin,createMannequinAnchors,garmentSvgGeometry,inspectSvgGarmentClipping,classifyWardrobeAsset,hasSupportedImageHeader,validGlbHeader} from '../core/wardrobe-engine.js';
+import {createWardrobeRepository,LEGACY_ITEMS,LEGACY_LOOKS,filterGarments,normalizeGarment,calculateFit,chooseSize,contrastRatio,colorHarmony,scoreLook,composeRuleOutfit,buildCapsule,resolveStudioMode,reconcileLook,inspectTemplateBounds,buildSvgLook,safeSvgText,MANNEQUIN_DEFAULTS_CM,MANNEQUIN_PRESETS,normalizeMannequin,createMannequinAnchors,buildGarmentVariant,garmentSvgGeometry,inspectSvgGarmentClipping,classifyWardrobeAsset,hasSupportedImageHeader,validGlbHeader} from '../core/wardrobe-engine.js';
 import {readFileSync} from 'node:fs';
+import {garmentPortrait} from '../core/wardrobe/illustrations.js';
 function memoryStorage(){const map=new Map();return{getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,String(v)),removeItem:k=>map.delete(k)};}
 const template={id:'test-top',name:'Áo test',category:'tops',color:'#336699',styleTags:['casual'],materialId:'cotton',patternId:'solid',measurementsCm:{chest:100,waist:82},layerOrder:20};
 
@@ -95,6 +96,22 @@ test('closet copies preserve generated thumbnail mapping from their source templ
  const ref={id:'thumbnail:tpl-tops-1',path:'assets/wardrobe/previews/tpl-tops-1.svg',provenance:'generated-by-photolens'};
  assert.deepEqual(normalizeGarment({id:'closet-tpl-tops-1',name:'Áo mẫu',category:'tops',assets:{thumbnail:ref}}).assets,{thumbnail:ref});
  assert.equal(normalizeGarment({id:'bad',name:'Món lỗi',category:'tops',assets:{thumbnail:{...ref,path:'../private.svg'}}}).assets,undefined);
+});
+
+test('Garment Builder creates a local parametric variant with a live category SVG preview',()=>{
+ const base={id:'tpl-skirts-1',name:'Váy nền',category:'skirts',color:'#647d69',isTemplate:true,
+  assets:{thumbnail:{id:'thumbnail:tpl-skirts-1',path:'assets/wardrobe/previews/tpl-skirts-1.svg',provenance:'generated-by-photolens'}}};
+ const variant=buildGarmentVariant(base,{id:'builder-preview-test',name:'Váy xếp ly',color:'#8b5262',
+  materialId:'linen',patternId:'gingham',parameters:{pleats:3,trimColor:'#e0c080'}});
+ assert.equal(variant.isTemplate,false);
+ assert.equal(variant.measurementSource,null);
+ assert.equal(variant.measurementsCm,null);
+ assert.equal(variant.parameters.pleats,3);
+ const svg=garmentPortrait(variant);
+ assert.equal((svg.match(/data-region="pleat"/g)||[]).length,3);
+ assert.match(svg,/data-region="trim"/);
+ assert.match(svg,/data-garment-category="skirts"/);
+ assert.doesNotMatch(garmentPortrait(base),/data-region="trim"|data-region="pleat"/);
 });
 
 test('text and large-text color pairs meet or fail WCAG AA at the explicit thresholds',()=>{

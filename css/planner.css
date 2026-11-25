@@ -333,3 +333,7 @@
 .ws-layout-studio .ws-stage,.ws-layout-studio .ws-svg-host,.ws-layout-studio .ws-three-host {min-width:0}
 @media(min-width:1081px){.planner-dialog:has(.ws-layout-studio){width:min(1480px,97vw)}}
 @media(max-width:760px){.ws-item-card {grid-template-rows:108px minmax(2.65em,auto) minmax(2.5em,auto) 1fr}}
+
+.ws-builder-preview {width:min(100%,220px);aspect-ratio:1/1;background:var(--surface-soft,#eef2ef);border:1px solid var(--border,#d4dfd8);border-radius:14px;overflow:hidden;margin:0 auto 12px}
+.ws-builder-preview img {display:block;width:100%;height:100%;object-fit:contain}
+.ws-form input[type="range"] {min-height:44px;accent-color:var(--accent,#087f5b)}

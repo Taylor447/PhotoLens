@@ -109,6 +109,20 @@ export function garmentPortrait(item) {
  const wide = p.width === 'wide' ? 1.10 : p.width === 'slim' ? .91 : 1;
  const long = p.length === 'long' ? 1.08 : p.length === 'short' ? .87 : 1;
  const layer = (paint, alpha) => '<path d="'+outline+'" fill-rule="evenodd" fill="url(#'+key+'-'+paint+')" opacity="'+alpha+'"/>';
+ const parameterized = item.parameters?.builder === true;
+ const neckPaths = {crew:'M43 13 Q50 21 57 13',v:'M42 12 L50 24 58 12',square:'M42 12 V20 H58 V12',high:'M43 12 V19 Q50 23 57 19 V12'};
+ const neck = parameterized && ['tops','outerwear','dresses'].includes(item.category) ? '<path data-region="neck" d="'+(neckPaths[p.neck]||neckPaths.crew)+'" fill="none" stroke="#263b32" stroke-width="1.7"/>' : '';
+ const sleeveY = p.sleeve === 'long' ? 79 : p.sleeve === 'wide' ? 56 : 43;
+ const sleeve = parameterized && ['tops','outerwear'].includes(item.category)
+  ? p.sleeve === 'sleeveless'
+   ? '<path data-region="sleeveless" d="M18 27 29 31 34 44 29 49 23 40ZM82 27 71 31 66 44 71 49 77 40Z" fill="#edf1e9" stroke="#edf1e9" stroke-width="2"/>'
+   : '<path data-region="sleeve-hem" d="M16 '+sleeveY+' 29 '+(sleeveY+3)+' M71 '+(sleeveY+3)+' 84 '+sleeveY+'" fill="none" stroke="#263b32" stroke-width="1.4"/>'
+  : '';
+ const pleats = parameterized && ['skirts','dresses'].includes(item.category)
+  ? Array.from({length:p.pleats||0},(_,i)=>{const x=34+i*(32/Math.max(1,(p.pleats||0)-1));return '<path data-region="pleat" d="M'+x.toFixed(1)+' 49 L'+(x-5).toFixed(1)+' 96" fill="none" stroke="#263b32" opacity=".45" stroke-width=".8"/>';}).join('')
+  : '';
+ const trim = parameterized && /^#[0-9a-f]{6}$/i.test(p.trimColor||'') ? '<path data-region="trim" d="'+outline+'" fill="none" stroke="'+p.trimColor+'" stroke-width="1.8"/>' : '';
+ const variantDetails = neck+sleeve+pleats+trim;
  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-17 0 134 120" data-garment-id="${cut.id}" data-garment-category="${item.category}" role="img">
  <defs>
   <linearGradient id="${key}-light" x1="0" y1=".2" x2=".96" y2=".35"><stop stop-color="${color}"/><stop offset=".24" stop-color="white" stop-opacity="${shine}"/><stop offset=".47" stop-color="${color}"/><stop offset=".76" stop-color="#18272c" stop-opacity=".34"/><stop offset="1" stop-color="${color}"/></linearGradient>
@@ -122,6 +136,7 @@ export function garmentPortrait(item) {
   ${layer('light',1)}${weave ? layer('weave',opacity) : ''}${tile ? layer('print',.45) : ''}
   <path d="${seams}" fill="none" stroke="#263b32" opacity=".65" stroke-width="1.05"/>
   <path d="${seams}" transform="translate(.45 .65)" fill="none" stroke="#fff" opacity=".32" stroke-width=".55"/>
+  ${variantDetails}
  </g></svg>`.replace(/\n\s*/g,'');
 }
 

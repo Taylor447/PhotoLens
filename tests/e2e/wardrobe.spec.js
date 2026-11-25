@@ -243,6 +243,27 @@ test('seated áo dài, wide trousers and coat clear the overlap at the low-detai
  expect(errors).toEqual([]);
 });
 
+test('Garment Builder previews and saves a styled parameter variant',async({page})=>{
+ await openStudio(page,'catalog');
+ await page.getByText('Xưởng tạo biến thể tham số',{exact:true}).click();
+ const form=page.locator('[data-ws-form="builder"]');
+ await form.locator('[name="templateId"]').selectOption('tpl-skirts-1');
+ await form.locator('[name="name"]').fill('Váy xếp ly kiểm thử');
+ await form.locator('[name="patternId"]').selectOption({index:1});
+ await form.locator('[name="materialId"]').selectOption({index:1});
+ await form.locator('[name="color"]').evaluate(el=>{el.value='#8b5262';el.dispatchEvent(new Event('input',{bubbles:true}));});
+ await form.locator('[name="pleats"]').evaluate(el=>{el.value='3';el.dispatchEvent(new Event('input',{bubbles:true}));});
+ await form.locator('[name="trimColor"]').evaluate(el=>{el.value='#e0c080';el.dispatchEvent(new Event('input',{bubbles:true}));});
+ const src=await form.locator('[data-ws-builder-preview]').getAttribute('src');
+ const svg=decodeURIComponent(src.slice(src.indexOf(',')+1));
+ expect(svg).toContain('data-region="trim"');
+ expect((svg.match(/data-region="pleat"/g)||[])).toHaveLength(3);
+ await form.getByRole('button',{name:'Tạo biến thể'}).click();
+ const card=page.locator('.ws-item-card').filter({hasText:'Váy xếp ly kiểm thử'});
+ await expect(card).toBeVisible();
+ await expect(card.locator('.ws-thumb img')).toHaveAttribute('src',/^data:image\/svg\+xml/);
+});
+
 test('offline AI compose falls back to the deterministic local rules engine',async({page})=>{
  await page.addInitScript(()=>{
   localStorage.setItem('photolens_ai_enabled','true');
