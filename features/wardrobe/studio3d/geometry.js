@@ -22,6 +22,7 @@ export const BONE_NAMES = [
 export const POSE_NAMES = ['standing', 'lean', 'step', 'sitting'];
 // Increase shoulder abduction in steps up to about 15.5 degrees.
 const SLEEVE_CLEARANCE_ANGLES = [.09,.18,.27];
+const OUTERWEAR_EASE_CM = [1.5,3,4.5,6];
 const TAU = Math.PI * 2;
 const add = (a,b) => a.map((v,i) => v+b[i]);
 const sub = (a,b) => a.map((v,i) => v-b[i]);
@@ -315,7 +316,7 @@ function posedMannequin(value,pose,radial,armClearance){
   return lastMannequin;
 }
 
-function garmentPlan(items,mannequin,flatLay){
+function garmentPlan(items,mannequin,flatLay,outerwearEase=0){
   const {layout,body:[body]}=mannequin;
   const sorted=items.slice(0,MAX_PROCEDURAL_ITEMS).sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));
   const plan=sorted.map((item,i)=>{
@@ -332,7 +333,8 @@ function garmentPlan(items,mannequin,flatLay){
     const clearance=cut.width+(item.category==='outerwear'?1.2:0);
     const touches=previous=>coverage.some((value,k)=>value>=0&&previous.coverage[k]>=0);
     const overlapping=flatLay?[]:tailored.slice(0,i).filter(touches);
-    entry.ease=Math.max(clearance,...overlapping.map(previous=>previous.ease+(previous.lower?2.55:1.45)+.95));
+    entry.ease=Math.max(clearance,...overlapping.map(previous=>previous.ease+(previous.lower?2.55:1.45)+.95))
+      +(item.category==='outerwear'?outerwearEase:0);
     const covers=flatLay?[]:tailored.slice(i+1).filter(touches);
     // The outer piece renders the overlap. Leave a short seam allowance under its edge.
     entry.visible=coverage.map((value,k)=>Math.min(value,...covers.map(outer=>.15-outer.coverage[k])));
@@ -340,10 +342,10 @@ function garmentPlan(items,mannequin,flatLay){
   return plan;
 }
 
-function buildPosedOutfit(value,items,{pose,radial,flatLay,armClearance=0}){
+function buildPosedOutfit(value,items,{pose,radial,flatLay,armClearance=0,outerwearEase=0}){
   const mannequin=posedMannequin(value,pose,radial,armClearance);
   const {layout,body,transforms,colliders}=mannequin;
-  const plan=garmentPlan(items,mannequin,flatLay);
+  const plan=garmentPlan(items,mannequin,flatLay,outerwearEase);
   const garments=plan.map(({item,cut,lower,visible,ease})=>{
     const parts=[];
     if(visible){
@@ -414,7 +416,7 @@ export function buildStudioGeometry(value, items=[], {pose='standing',radial=20,
     return pairs;
   };
   const count=pairs=>pairs.reduce((total,pair)=>total+pair.crossings,0);
-  let remaining=collisions(result);
+  let remaining=collisions(result),selectedArmClearance=0;
   for(const armClearance of SLEEVE_CLEARANCE_ANGLES){
     if(!remaining.length)break;
     const candidate=buildPosedOutfit(value,items,{...options,armClearance});
@@ -423,6 +425,20 @@ export function buildStudioGeometry(value, items=[], {pose='standing',radial=20,
     if(retainsClearPairs&&count(next)<count(remaining)){
       remaining=next;
       result=candidate;
+      selectedArmClearance=armClearance;
+    }
+  }
+  if(remaining.length&&result.garments.some(({item})=>item.category==='outerwear')
+    &&result.garments.some(({item})=>item.category==='bottoms')){
+    for(const outerwearEase of OUTERWEAR_EASE_CM){
+      const candidate=buildPosedOutfit(value,items,{...options,armClearance:selectedArmClearance,outerwearEase});
+      const next=collisions(candidate);
+      const retainsClearPairs=next.every(({inner,outer})=>remaining.some(pair=>pair.inner===inner&&pair.outer===outer));
+      if(retainsClearPairs&&count(next)<count(remaining)){
+        remaining=next;
+        result=candidate;
+      }
+      if(!remaining.length)break;
     }
   }
   return result;

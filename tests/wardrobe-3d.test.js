@@ -241,7 +241,8 @@ test('layered outfits clear their seams across every mannequin preset, pose and 
   ['tops-3','bottoms-4'],['bottoms-1','skirts-4'],
   ['dresses-2','outerwear-1'],['tops-2','tops-1'],
   ['tops-5','outerwear-3'],['tops-1','skirts-3','outerwear-3'],
-  ['dresses-4','outerwear-2'],['dresses-5','outerwear-5']
+  ['dresses-4','outerwear-2'],['dresses-5','outerwear-5'],
+  ['tops-3','bottoms-4','outerwear-1']
  ].map(ids=>ids.map(id=>templates.find(item=>item.id==='tpl-'+id)));
  let layeredCases=0,capeCases=0,adjustedCases=0,maxTriangles=0,penetratingVertices=0,testedVertices=0;
  for(const preset of MANNEQUIN_PRESETS)for(const pose of POSE_NAMES)for(const radial of [12,20]){
@@ -275,7 +276,7 @@ test('layered outfits clear their seams across every mannequin preset, pose and 
    layeredCases++;
   }
  }
- assert.equal(layeredCases,384);
+ assert.equal(layeredCases,416);
  assert.equal(capeCases,64);
  assert.ok(adjustedCases>0&&adjustedCases<layeredCases);
  t.diagnostic(JSON.stringify({layeredCases,capeCases,adjustedCases,maxTriangles,penetratingVertices,testedVertices}));

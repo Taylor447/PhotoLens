@@ -220,6 +220,29 @@ test('layered cape and skirt stay visible while the cloth worker sends accepted 
  expect(errors).toEqual([]);
 });
 
+test('seated áo dài, wide trousers and coat clear the overlap at the low-detail setting',async({page},testInfo)=>{
+ const errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ await page.setViewportSize({width:412,height:915});
+ await page.addInitScript(()=>{
+  Object.defineProperty(navigator,'deviceMemory',{configurable:true,value:4});
+  Object.defineProperty(navigator,'hardwareConcurrency',{configurable:true,value:4});
+ });
+ await openStudio(page,'catalog');
+ for(const id of ['tpl-tops-3','tpl-bottoms-4','tpl-outerwear-1']){
+  await page.locator('[data-ws-wear="'+id+'"]').click();
+ }
+ await page.locator('[data-wardrobe-section="studio3d"]').click();
+ await page.locator('[data-ws-preset]').selectOption('reference-b');
+ await page.locator('[data-ws-pose="sitting"]').click();
+ const canvas=page.locator('.ws-three-host canvas');
+ await expect(canvas).toBeVisible({timeout:15_000});
+ const screenshot=await stableScreenshot(canvas);
+ await expect(page.locator('[data-ws-message]')).not.toContainText('lớp giao nhau');
+ await testInfo.attach('seated-ao-dai-trousers-coat-mobile.png',{body:screenshot,contentType:'image/png'});
+ expect(errors).toEqual([]);
+});
+
 test('offline AI compose falls back to the deterministic local rules engine',async({page})=>{
  await page.addInitScript(()=>{
   localStorage.setItem('photolens_ai_enabled','true');
