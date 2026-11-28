@@ -1,6 +1,8 @@
 import {bodyRayExits, buildBodyMorphs, buildStudioGeometry, findLayerCrossings, mannequinAimHeight, poseSurfacePoint, BODY_CLIP_LIMIT, MAX_PROCEDURAL_ITEMS, MAX_SCENE_TRIANGLES} from './wardrobe/studio3d/geometry.js';
 import {inspectGarmentGlb} from './wardrobe/studio3d/glb.js';
 import {createMaterialFactory} from './wardrobe/studio3d/materials.js';
+import {createRenderSampler} from './wardrobe/studio3d/performance.js';
+import {findFirstSurfaceConflict,prepareSurface} from './wardrobe/studio3d/surface-crossings.js';
 
 export const WARDROBE_LIGHTING={
   golden:{label:'Giờ vàng',sky:'#ffd397',fill:'#89766d',key:'#ffab65',power:2.8,ambient:1.25,position:[-380,245,300]},
@@ -125,18 +127,44 @@ function arrangeFlatLay(T,root,garments,materials){
   });
 }
 
-async function mountImportedLayers({T,renderer,rig,root,model,source,signal,onMessage,invalidate,addCleanup}){
+function proceduralLayerSurfaces(model){
+  return model.garments.map(({item,parts})=>({item,surfaces:parts.map(part=>prepareSurface(
+    part.points.map((_,index)=>poseSurfacePoint(part,index,model.transforms)),part.indices
+  ))}));
+}
+
+function collectImportedSurfaces(T,root){
+  const surfaces=[],point=new T.Vector3();
+  root.updateMatrixWorld(true);
+  root.traverse(mesh=>{
+    if(!mesh.isMesh||!mesh.geometry)return;
+    if(mesh.isSkinnedMesh)mesh.skeleton.update();
+    const position=mesh.geometry.getAttribute('position');
+    if(!position||position.count<3)return;
+    const index=mesh.geometry.getIndex();
+    const indices=index?Array.from(index.array):Array.from({length:position.count},(_,i)=>i);
+    if(indices.length<3)return;
+    const points=[];
+    for(let i=0;i<position.count;i++)points.push(mesh.getVertexPosition(i,point).applyMatrix4(mesh.matrixWorld).toArray());
+    surfaces.push(prepareSurface(points,indices));
+  });
+  return surfaces;
+}
+
+async function mountImportedLayers({T,renderer,rig,root,model,source,signal,onMessage,onAssetLoad=()=>{},invalidate,addCleanup}){
   const count=model.garments.filter(({item})=>item.vectorAssetId).length;
-  if(!count||!source)return;
+  if(!count){onAssetLoad('Không dùng GLB');return;}
+  if(!source){onAssetLoad('Không có nguồn GLB cục bộ');return;}
+  onAssetLoad('Đang nạp 0/'+count);
   const {createLocalGlbLoader}=await import('./wardrobe/studio3d/load-glb.js');
   if(signal.aborted)return;
   const parser=createLocalGlbLoader(renderer,signal);
   let remaining=MAX_SCENE_TRIANGLES-model.triangles-2;
-  const failures=[];
+  const failures=[],layerSurfaces=proceduralLayerSurfaces(model);let loaded=0,loadedBytes=0,elapsedMs=0;
   for(const {item,meshes} of model.garments){
     if(signal.aborted)break;
     if(!item.vectorAssetId)continue;
-    let assetScene;
+    let assetScene;const loadStarted=performance.now();
     try{
       const blob=await source(item.vectorAssetId);
       if(!blob)throw new Error('Chưa tìm thấy tệp cục bộ.');
@@ -177,13 +205,22 @@ async function mountImportedLayers({T,renderer,rig,root,model,source,signal,onMe
         }
       });
       if(!tested||inside/tested>BODY_CLIP_LIMIT)throw new Error('GLB xuyên thân quá 1% số đỉnh ở tư thế hiện tại.');
+      const candidateSurfaces=collectImportedSurfaces(T,assetScene);
+      const conflictingItem=findFirstSurfaceConflict(candidateSurfaces,layerSurfaces.filter(layer=>layer.item.id!==item.id));
+      if(conflictingItem)throw new Error('GLB giao cắt với lớp trang phục: '+conflictingItem.name+'.');
       remaining-=inspected.triangles;
       for(const mesh of meshes)mesh.visible=false;
       addCleanup(()=>{assetScene.removeFromParent();disposeNode(assetScene);});
+      const layerIndex=layerSurfaces.findIndex(layer=>layer.item.id===item.id);
+      if(layerIndex>=0)layerSurfaces[layerIndex]={item,surfaces:candidateSurfaces};
+      loaded++;loadedBytes+=bytes.byteLength;
     }catch(error){
       assetScene?.removeFromParent();
       if(assetScene)disposeNode(assetScene);
       failures.push(item.name+': '+(error?.message||'Không tải được GLB.'));
+    }finally{
+      elapsedMs+=performance.now()-loadStarted;
+      onAssetLoad(`${loaded}/${count} món · ${elapsedMs.toFixed(0)} ms · ${(loadedBytes/1048576).toFixed(1)} MB`);
     }
   }
   if(!signal.aborted){
@@ -247,6 +284,7 @@ export async function mountWardrobe3D(host,{
   onMessage=()=>{},onFallback=()=>{},externalSignal=null
 }={}){
   if(!host||!supportsWebGL())throw new Error('WebGL2 không khả dụng.');
+  const mountedAt=performance.now();
   const T=await import('three');
   if(externalSignal?.aborted||!host.isConnected)return ()=>{};
   const controller=new AbortController(),{signal}=controller, cleanups=[];
@@ -271,8 +309,11 @@ export async function mountWardrobe3D(host,{
     const canvas=renderer.domElement;
     canvas.tabIndex=0;canvas.setAttribute('role','img');
     canvas.setAttribute('aria-label','Ma-nơ-canh 3D. Phím mũi tên xoay, dấu cộng và dấu trừ chỉnh zoom.');
-    host.replaceChildren(canvas);
+    const diagnostics=createPerformancePanel(host);
+    if(flatLay)diagnostics.setAssetLoad('Không áp dụng trong flat-lay');
+    host.replaceChildren(canvas,diagnostics.element);
     cleanups.push(()=>{renderer.dispose();renderer.forceContextLoss();canvas.remove();});
+    cleanups.push(()=>{diagnostics.dispose();diagnostics.element.remove();});
     const materials=createMaterialFactory(T);
     cleanups.push(()=>{disposeNode(scene,true);materials.dispose();});
 
@@ -309,6 +350,20 @@ export async function mountWardrobe3D(host,{
     }
 
     let yaw=0,pitch=0,distance=clamp(Number(distanceCm)||450,140,1200), frame=0, previousTime=0, pinch=0;
+    const renderSampler=createRenderSampler({startedAt:mountedAt});
+    const diagnosticsTimer=setInterval(()=>{
+      if(signal.aborted||document.hidden)return;
+      const activity=renderSampler.snapshot(performance.now());
+      diagnostics.update({
+        activity,
+        calls:renderer.info.render.calls,
+        triangles:renderer.info.render.triangles,
+        geometries:renderer.info.memory.geometries,
+        textures:renderer.info.memory.textures,
+        heapBytes:performance.memory?.usedJSHeapSize??null
+      });
+    },1000);
+    cleanups.push(()=>clearInterval(diagnosticsTimer));
     const reduceMotion=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const pointers=new Map();
     const aim=flatLay?Math.max(35,154-(Math.ceil(model.garments.length/4)-1)*24):mannequinAimHeight(model);
@@ -321,6 +376,7 @@ export async function mountWardrobe3D(host,{
       camera.position.set(Math.sin(yaw)*distance,baseHeight+pitch,Math.cos(yaw)*distance);
       camera.lookAt(0,aim,0);
       renderer.render(scene,camera);
+      renderSampler.recordFrame(time);
       if(turntable&&!reduceMotion)invalidate();
     }
     function invalidate(){if(!frame&&!signal.aborted)frame=requestAnimationFrame(draw);}
@@ -375,11 +431,46 @@ export async function mountWardrobe3D(host,{
         onMessage('Một số lớp giao nhau ở tư thế này. '+details+(pairs.length>3?' và '+(pairs.length-3)+' cặp khác.':'.'));
       }
     }
-    if(rig)void mountImportedLayers({T,renderer,rig,root,model,source,signal,onMessage,invalidate,addCleanup:fn=>cleanups.push(fn)})
+    if(rig)void mountImportedLayers({T,renderer,rig,root,model,source,signal,onMessage,onAssetLoad:diagnostics.setAssetLoad,invalidate,addCleanup:fn=>cleanups.push(fn)})
       .catch(()=>{if(!signal.aborted)onMessage('Không tải được bộ đọc GLB. Studio hiển thị mẫu hình học thay thế.');});
     return dispose;
   }catch(error){
     dispose();
     throw error;
   }
+}
+
+function createPerformancePanel(host){
+  const details=document.createElement('details');
+  details.className='ws-three-diagnostics';
+  details.setAttribute('aria-label','Số liệu hiệu năng Studio 3D trên thiết bị này');
+  const summary=document.createElement('summary');summary.textContent='Hiệu năng trên thiết bị này';details.append(summary);
+  const status=document.createElement('p');status.className='ws-three-diagnostics-status';status.setAttribute('role','status');
+  const list=document.createElement('dl');
+  const values={};
+  const rows=[['fps','FPS'],['calls','Lệnh vẽ'],['triangles','Tam giác khung hình'],['geometries','Hình học đang dùng'],['textures','Texture đang dùng'],['firstFrame','Tới khung hình đầu'],['assetLoad','GLB nạp & kiểm tra'],['heap','Heap JS của trang']];
+  for(const [key,label] of rows){
+    const term=document.createElement('dt');term.textContent=label;
+    const value=document.createElement('dd');value.textContent='Đang đo';values[key]=value;
+    list.append(term,value);
+  }
+  const note=document.createElement('p');note.className='ws-three-diagnostics-note';
+  note.textContent='Bộ nhớ GPU không được trình duyệt cung cấp; heap JS là số liệu toàn trang. Dữ liệu chỉ đọc tại chỗ, không gửi đi.';
+  details.append(status,list,note);
+  const format=value=>Number.isFinite(value)?Math.round(value).toLocaleString('vi-VN'):'Chưa có dữ liệu';
+  return {
+    element:details,
+    update({activity,calls,triangles,geometries,textures,heapBytes}){
+      status.textContent=activity.active?'Đang kết xuất':'Đang nghỉ (Studio chỉ vẽ khi có thay đổi)';
+      values.fps.textContent=activity.active?(activity.fps===null?'Đang đo':activity.fps.toFixed(1)):'—';
+      values.calls.textContent=format(calls);
+      values.triangles.textContent=format(triangles)+' / 150.000';
+      values.geometries.textContent=format(geometries);
+      values.textures.textContent=format(textures);
+      values.firstFrame.textContent=activity.firstFrameMs===null?'Đang chờ':activity.firstFrameMs.toFixed(0)+' ms';
+      values.heap.textContent=Number.isFinite(heapBytes)?(heapBytes/1048576).toFixed(1)+' MB':'Chưa có dữ liệu';
+    },
+    setAssetLoad(value){values.assetLoad.textContent=value;},
+    dispose(){details.remove();}
+  };
 }

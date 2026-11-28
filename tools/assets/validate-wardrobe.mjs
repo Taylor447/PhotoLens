@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import Ajv2020 from 'ajv/dist/2020.js';
+import {fabricSurfaceProfile} from '../../features/wardrobe/studio3d/materials.js';
 
 const CATEGORIES=['tops','bottoms','skirts','dresses','outerwear','shoes','hats','bags','eyewear','scarves','jewelry','hair'];
 const STYLE_TAGS=['minimal','vintage','streetwear','office','active','traditional','cosplay','classic','cinematic','casual'];
@@ -56,6 +57,12 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
  validateProvenance(manifest.mannequin,'Mannequin');
  assert.equal(manifest.mannequin.format,'procedural3d','Mannequin asset must be procedural');
  validateGenerator(root,manifest.mannequin);
+ const proceduralTextures=manifest.proceduralTextures;
+ validateProvenance(proceduralTextures,'Procedural PBR textures');
+ assert.equal(proceduralTextures.id,'pbr:fabric-surfaces','Procedural PBR manifest ID is missing');
+ assert.equal(proceduralTextures.format,'procedural-texture','Procedural PBR format is invalid');
+ assert.equal(proceduralTextures.sizePx,1024,'Procedural PBR textures must be 1024 px');
+ validateGenerator(root,proceduralTextures);
  assert.equal(g.realGarmentCount,0,'Procedural templates must not be counted as physical products');
  assert.ok(Array.isArray(g.templates)&&g.templates.length>=60,'Need at least 60 generated templates');
  assert.equal(schema.properties.schemaVersion.const,g.schemaVersion);
@@ -69,6 +76,10 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
 
  const materialIds=new Set(m.materials.map(x=>x.id));
  const patternIds=new Set(p.patterns.map(x=>x.id));
+ const surfaceProfiles=m.materials.map(({id})=>fabricSurfaceProfile(id)?.id);
+ assert.ok(surfaceProfiles.every(Boolean),'Every material needs a procedural surface profile');
+ assert.equal(proceduralTextures.materialCount,materialIds.size,'PBR manifest material count differs from catalog');
+ assert.equal(proceduralTextures.profileCount,new Set(surfaceProfiles).size,'PBR manifest profile count differs from code');
  assert.equal(materialIds.size,m.materials.length,'Material ID collision');
  assert.equal(patternIds.size,p.patterns.length,'Pattern ID collision');
  assert.ok(materialIds.size>=20,'Need at least 20 material labels');
@@ -171,6 +182,7 @@ export function validateWardrobeData(root=path.resolve(path.dirname(fileURLToPat
   realGarmentCount:g.realGarmentCount,
   categoryCounts,
   materialCount:materialIds.size,
+  proceduralTextureProfileCount:new Set(surfaceProfiles).size,
   patternCount:patternIds.size,
   manifestEntries:manifest.assets.length,
   thumbnailCount:manifest.assets.filter(x=>x.format==='thumbnail-svg').length,

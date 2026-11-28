@@ -13,9 +13,34 @@ import {inspectGarmentGlb} from '../features/wardrobe/studio3d/glb.js';
 import {makeProceduralGarmentGlb,packGlb} from '../features/wardrobe/studio3d/export-glb.js';
 import {lensVerticalFov} from '../features/wardrobe3d.js';
 import {createClothCollisionGuard} from '../features/wardrobe/studio3d/cloth-collisions.js';
-import {countSurfaceCrossings,prepareSurface} from '../features/wardrobe/studio3d/surface-crossings.js';
+import {countSurfaceCrossings,findFirstSurfaceConflict,prepareSurface} from '../features/wardrobe/studio3d/surface-crossings.js';
+import {createRenderSampler} from '../features/wardrobe/studio3d/performance.js';
+import {fabricSurfaceProfile} from '../features/wardrobe/studio3d/materials.js';
 
 const {templates}=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url)));
+
+test('render sampler reports only sustained FPS and returns to idle after invalidation-driven rendering stops',()=>{
+ const sampler=createRenderSampler({startedAt:0,sampleWindowMs:1000,idleAfterMs:1000,minFrames:5});
+ for(const time of [0,200,400,600,800,1000])sampler.recordFrame(time);
+ assert.deepEqual(sampler.snapshot(1000),{active:true,fps:6,firstFrameMs:0});
+ assert.deepEqual(sampler.snapshot(2001),{active:false,fps:null,firstFrameMs:0});
+});
+
+test('render sampler withholds FPS until it has enough frames in a full sample window',()=>{
+ const sampler=createRenderSampler({startedAt:0,sampleWindowMs:1000,idleAfterMs:1000,minFrames:5});
+ sampler.recordFrame(0);sampler.recordFrame(1000);
+ assert.deepEqual(sampler.snapshot(1000),{active:true,fps:null,firstFrameMs:0});
+});
+
+test('all licensed fabric presets resolve to a deterministic non-identical PBR surface profile',()=>{
+ const {materials}=JSON.parse(readFileSync(new URL('../data/wardrobe/materials.json',import.meta.url)));
+ const profiles=materials.map(({id})=>fabricSurfaceProfile(id));
+ assert.equal(profiles.length,20);
+ assert.ok(profiles.every(Boolean));
+ assert.equal(new Set(profiles.map(profile=>profile.id)).size,11);
+ assert.notEqual(fabricSurfaceProfile('silk').normalScale,fabricSurfaceProfile('denim').normalScale);
+ assert.equal(fabricSurfaceProfile('unknown-fiber'),null);
+});
 
 test('canonical garment sizes survive normalization and compare only overlapping cm values',()=>{
  const garment=normalizeGarment({name:'User supplied',category:'tops',temperatureC:{min:null,max:null},sizeTable:[
@@ -242,6 +267,15 @@ test('the layer checker finds crossing faces with exterior vertices',()=>{
  ];
  const transforms=new Map([['Root',{toWorld:p=>p}]]);
  assert.equal(findLayerCrossings(layers,transforms)[0]?.crossings,1);
+});
+
+test('imported mesh collision guard identifies the conflicting garment and accepts separated surfaces',()=>{
+ const surface=(points)=>prepareSurface(points,[0,1,2]);
+ const candidate=[surface([[-1,0,-1],[1,0,-1],[0,0,1]])];
+ const crossing={item:{id:'outer',name:'Áo khoác'},surfaces:[surface([[0,-1,-.5],[0,1,-.5],[0,0,.5]])]};
+ const separated={item:{id:'pants',name:'Quần'},surfaces:[surface([[5,-1,-.5],[5,1,-.5],[5,0,.5]])]};
+ assert.equal(findFirstSurfaceConflict(candidate,[crossing])?.id,'outer');
+ assert.equal(findFirstSurfaceConflict(candidate,[separated]),null);
 });
 
 test('layered outfits clear their seams across every mannequin preset, pose and LOD',t=>{

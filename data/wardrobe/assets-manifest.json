@@ -1810,10 +1810,15 @@
     }
   ],
   "proceduralTextures": {
+    "id": "pbr:fabric-surfaces",
+    "format": "procedural-texture",
+    "generator": "features/wardrobe/studio3d/materials.js#createMaterialFactory",
     "source": "features/wardrobe/studio3d/materials.js",
     "license": "CC0",
     "author": "PhotoLens project",
     "sizePx": 1024,
-    "purpose": "Tileable procedural albedo, canvas normal and roughness maps."
+    "profileCount": 11,
+    "materialCount": 20,
+    "purpose": "Tileable albedo patterns and 1024 px normal and roughness maps generated from code-defined 128 px height fields."
   }
 }

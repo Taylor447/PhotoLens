@@ -60,3 +60,9 @@ export function countSurfaceCrossings(a,b,limit=Infinity){
   }
   return crossings;
 }
+
+export function findFirstSurfaceConflict(candidateSurfaces,layers){
+  for(const layer of layers)for(const candidate of candidateSurfaces)for(const surface of layer.surfaces)
+    if(countSurfaceCrossings(candidate,surface,1))return layer.item;
+  return null;
+}

@@ -231,9 +231,15 @@
 .ws-stage{min-width:0;min-height:340px;margin:12px 0 18px;border:1px solid var(--border,#d3dfe7);border-radius:18px;background:#edf3f0;overflow:hidden}
 .ws-svg-host{width:100%;height:min(68vh,680px);min-height:360px}
 .ws-svg-host svg{display:block;max-width:100%;margin:auto}
-.ws-three-host{width:100%;height:min(68vh,680px);min-height:380px;overflow:hidden;touch-action:none;background:#edf3f0}
+.ws-three-host{position:relative;width:100%;height:min(68vh,680px);min-height:380px;overflow:hidden;touch-action:none;background:#edf3f0}
 .ws-three-host canvas{display:block;width:100%;height:100%;outline:none;touch-action:none}
 .ws-three-host canvas:focus-visible{outline:3px solid #2863c5;outline-offset:-3px}
+.ws-three-diagnostics{position:absolute;z-index:2;left:12px;bottom:12px;width:min(340px,calc(100% - 24px));max-height:calc(100% - 24px);overflow:auto;border:1px solid var(--border,#cbd8d1);border-radius:14px;background:var(--surface,#fff);background:color-mix(in srgb,var(--surface,#fff) 94%,transparent);box-shadow:0 6px 22px #1d332626;color:var(--text,#1b2831);backdrop-filter:blur(8px);font-size:16px}
+.ws-three-diagnostics summary{display:flex;align-items:center;min-height:44px;padding:0 12px;cursor:pointer;font-weight:700}
+.ws-three-diagnostics-status,.ws-three-diagnostics-note{margin:4px 12px 10px;color:var(--muted,#566d7d)}
+.ws-three-diagnostics dl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;margin:8px 12px 10px}
+.ws-three-diagnostics dt{color:var(--muted,#566d7d)}.ws-three-diagnostics dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.ws-three-diagnostics-note{font-size:16px}
 .ws-measures{display:grid;grid-template-columns:1fr;gap:10px}.ws-measure-control{display:grid;gap:8px;padding:12px;border:1px solid var(--border,#d3dfe7);border-radius:14px;background:var(--surface,#fff);font-size:16px}.ws-measure-control label{font-size:16px}.ws-measure-control output{font-weight:700;color:var(--text,#18302a)}.ws-measure-control input[type=number]{min-height:44px}.ws-measure-range{display:grid;grid-template-columns:1fr;gap:4px}.ws-measure-control input[type=range]{width:100%;min-height:44px;accent-color:var(--color-accent,#0d7a5e);touch-action:pan-x}
 .ws-selected-row{display:grid;grid-template-columns:48px minmax(80px,1fr) auto auto;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border,#d3dfe7)}
 .ws-selected-row .ws-thumb{height:44px}
@@ -333,6 +339,12 @@
 .ws-layout-studio .ws-stage,.ws-layout-studio .ws-svg-host,.ws-layout-studio .ws-three-host {min-width:0}
 @media(min-width:1081px){.planner-dialog:has(.ws-layout-studio){width:min(1480px,97vw)}}
 @media(max-width:760px){.ws-item-card {grid-template-rows:108px minmax(2.65em,auto) minmax(2.5em,auto) 1fr}}
+
+/* Keep garment card actions inside narrow two-column mobile cards. */
+.ws-item-card {grid-template-rows:128px minmax(2.65em,auto) minmax(2.5em,auto) auto}
+.ws-item-card .ws-card-actions {width:100%;min-width:0;grid-template-columns:minmax(0,1fr) 44px;align-items:stretch}
+.ws-item-card .ws-card-actions button {box-sizing:border-box;display:flex;align-items:center;justify-content:center;width:100%;min-width:0;min-height:44px;padding:4px 6px;text-align:center;white-space:normal;overflow-wrap:anywhere;line-height:1.2}
+@media(max-width:760px){.ws-item-card {grid-template-rows:108px minmax(2.65em,auto) minmax(2.5em,auto) auto}.ws-item-card .ws-card-actions{gap:6px}}
 
 .ws-builder-preview {width:min(100%,220px);aspect-ratio:1/1;background:var(--surface-soft,#eef2ef);border:1px solid var(--border,#d4dfd8);border-radius:14px;overflow:hidden;margin:0 auto 12px}
 .ws-builder-preview img {display:block;width:100%;height:100%;object-fit:contain}

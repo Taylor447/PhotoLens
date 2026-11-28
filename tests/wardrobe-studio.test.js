@@ -35,6 +35,12 @@ test('2D generation, 3D fallback, shared ordering, fit and size limits are expli
  const bounds=inspectTemplateBounds({virtualShellClearanceCm:1.5},{heightCm:170,shoulderCm:40,chestCm:90,waistCm:70,hipCm:95});assert.equal(bounds.violates,false);assert.match(bounds.method,/proxy/);
  const safe=safeSvgText('<svg onload=alert(1)><script>alert(1)</script><style>@import url(https://evil.test/a.css)</style><image href="https://evil.test/a.png"/><path fill="url(https://evil.test/a.svg#p)"/></svg>');assert.match(safe,/<svg>/);assert.doesNotMatch(safe,/script|onload|evil\.test|@import|<style/i);assert.equal(safeSvgText('not svg'),null);
 });
+test('2D mannequin draws a neutral, curved body with separate limbs and feet',()=>{
+ const svg=buildSvgLook([],{mannequinTone:'#858d8a'}),parts=[...svg.matchAll(/data-mannequin-part="([^"]+)"/g)].map(match=>match[1]);
+ assert.deepEqual(parts,['left-leg','right-leg','left-foot','right-foot','torso','left-arm','right-arm','neck','head']);
+ assert.match(svg,/data-mannequin="neutral"/);assert.match(svg,/fill="#858d8a"/);
+ for(const part of ['left-leg','right-leg','torso','left-arm','right-arm'])assert.match(svg,new RegExp(`data-mannequin-part="${part}" d="M [^"]+ C `));
+});
 test('generated data has unique template IDs and no invented commercial products',()=>{
  const g=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url))),m=JSON.parse(readFileSync(new URL('../data/wardrobe/materials.json',import.meta.url))),p=JSON.parse(readFileSync(new URL('../data/wardrobe/patterns.json',import.meta.url)));
  assert.equal(g.schemaVersion,1);assert.equal(g.templates.length,60);assert.equal(g.realGarmentCount,0);assert.equal(new Set(g.templates.map(x=>x.id)).size,g.templates.length);assert.ok(m.materials.length>=20);assert.ok(p.patterns.length>=40);

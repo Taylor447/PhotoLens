@@ -1,7 +1,81 @@
 const ROUGHNESS = {
   silk:.29,satin:.31,leather:.48,'faux-leather':.52,velvet:.88,denim:.91,
-  linen:.94,cotton:.83,wool:.96,nylon:.58,polyester:.62,'technical-fabric':.65
+  linen:.94,cotton:.83,wool:.96,nylon:.58,polyester:.62,'technical-fabric':.65,
+  viscose:.56,twill:.87,jersey:.82,canvas:.92,chiffon:.38,fleece:.97,technical:.64,knit:.91,lace:.79,tulle:.76
 };
+const MATERIAL_SURFACE = Object.freeze({
+  cotton:'woven',linen:'linen',denim:'twill',wool:'boucle',silk:'silk',leather:'pebbled',
+  polyester:'smooth',nylon:'smooth',viscose:'silk',satin:'silk',twill:'twill',jersey:'knit',
+  canvas:'heavy-woven',chiffon:'silk',velvet:'pile',fleece:'pile',technical:'smooth',
+  knit:'knit',lace:'open-weave',tulle:'open-weave'
+});
+const SURFACE_PROFILES = Object.freeze({
+  woven:{id:'woven',normalScale:.22,roughnessVariation:14},
+  linen:{id:'linen',normalScale:.31,roughnessVariation:20},
+  twill:{id:'twill',normalScale:.27,roughnessVariation:15},
+  boucle:{id:'boucle',normalScale:.24,roughnessVariation:22},
+  silk:{id:'silk',normalScale:.055,roughnessVariation:5},
+  pebbled:{id:'pebbled',normalScale:.19,roughnessVariation:17},
+  smooth:{id:'smooth',normalScale:.075,roughnessVariation:6},
+  knit:{id:'knit',normalScale:.25,roughnessVariation:19},
+  'heavy-woven':{id:'heavy-woven',normalScale:.29,roughnessVariation:18},
+  pile:{id:'pile',normalScale:.18,roughnessVariation:24},
+  'open-weave':{id:'open-weave',normalScale:.2,roughnessVariation:16}
+});
+
+export function fabricSurfaceProfile(materialId){
+  const id=MATERIAL_SURFACE[materialId];
+  return id?SURFACE_PROFILES[id]:null;
+}
+
+const TAU=Math.PI*2;
+const HEIGHT_FIELDS=new Map();
+function surfaceHeight(profile,u,v){
+  const wave=(x,y,phase=0)=>Math.sin(TAU*(x*u+y*v)+phase);
+  switch(profile){
+    case 'woven':return wave(18,0)*wave(0,18)*.48+wave(36,36)*.12;
+    case 'linen':return wave(12,0)*wave(0,13)*.58+wave(25,17)*.16;
+    case 'twill':return wave(12,12)*.55+wave(24,-24)*.2+wave(0,18)*.12;
+    case 'boucle':return wave(7,0)*wave(0,8)*.44+wave(13,11)*.28+wave(19,-17)*.12;
+    case 'silk':return wave(0,22)*.34+wave(0,7)*.12+wave(2,0)*.025;
+    case 'pebbled':return wave(7,5)*wave(3,8)*.4+wave(14,-9)*.18;
+    case 'knit':return wave(8,0)*.32+wave(0,8)*.32+wave(8,8)*.16;
+    case 'heavy-woven':return wave(10,0)*wave(0,10)*.5+wave(20,20)*.22;
+    case 'pile':return wave(0,11)*.42+wave(11,11)*.26+wave(0,23)*.1;
+    case 'open-weave':return wave(10,0)*wave(0,10)*.35+wave(20,20)*.15;
+    default:return wave(17,0)*.08+wave(0,5)*.04;
+  }
+}
+
+function surfaceHeightField(profile){
+  if(HEIGHT_FIELDS.has(profile))return HEIGHT_FIELDS.get(profile);
+  const size=128,field=new Float32Array(size*size);
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++)field[y*size+x]=surfaceHeight(profile,x/size,y/size);
+  HEIGHT_FIELDS.set(profile,field);
+  return field;
+}
+
+function paintSurfaceMap(ctx,profile,kind){
+  const size=128,image=ctx.createImageData(size,size),strength=2.25;
+  const field=surfaceHeightField(profile),height=(x,y)=>field[((y%size+size)%size)*size+(x%size+size)%size];
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+    const i=(y*size+x)*4,h=height(x,y);
+    if(kind==='normal'){
+      let nx=-(height(x+1,y)-height(x-1,y))*strength;
+      let ny=(height(x,y+1)-height(x,y-1))*strength;
+      const length=Math.hypot(nx,ny,1);nx/=length;ny/=length;const nz=1/length;
+      image.data[i]=Math.round((nx*.5+.5)*255);
+      image.data[i+1]=Math.round((ny*.5+.5)*255);
+      image.data[i+2]=Math.round((nz*.5+.5)*255);
+    }else{
+      const variation=SURFACE_PROFILES[profile].roughnessVariation;
+      const value=Math.max(0,Math.min(255,Math.round(238+h*variation)));
+      image.data[i]=image.data[i+1]=image.data[i+2]=value;
+    }
+    image.data[i+3]=255;
+  }
+  ctx.putImageData(image,0,0);
+}
 
 function tile(size,draw){
   const canvas=document.createElement('canvas');
@@ -97,19 +171,12 @@ export function createMaterialFactory(T){
     const gloss=ROUGHNESS[materialId]??.84;
     const mat=new T.MeshStandardMaterial({color:tint,roughness:shell?gloss:1,metalness:0,side:shell?T.DoubleSide:T.FrontSide});
     if(shell&&materialId){
-      const stride=['wool','linen','denim'].includes(materialId)?8:4;
-      mat.normalMap=getMap('normal:'+stride,ctx=>{
-        ctx.fillStyle='#8080ff';ctx.fillRect(0,0,128,128);
-        for(let i=0;i<128;i+=stride){
-          ctx.fillStyle='#7483f8';ctx.fillRect(i,0,1,128);
-          ctx.fillStyle='#8b75f8';ctx.fillRect(0,i,128,1);
-        }
-      });
-      mat.normalScale.set(.14,.14);
-      mat.roughnessMap=getMap('roughness:'+stride,ctx=>{
-        ctx.fillStyle='#ededed';ctx.fillRect(0,0,128,128);
-        ctx.fillStyle='#d6d6d6';for(let i=0;i<128;i+=stride)ctx.fillRect(i,0,1,128);
-      });
+      const surface=fabricSurfaceProfile(materialId);
+      if(surface){
+        mat.normalMap=getMap('normal:'+surface.id,ctx=>paintSurfaceMap(ctx,surface.id,'normal'));
+        mat.normalScale.set(surface.normalScale,surface.normalScale);
+        mat.roughnessMap=getMap('roughness:'+surface.id,ctx=>paintSurfaceMap(ctx,surface.id,'roughness'));
+      }
     }
     if(shell&&patternId&&patternId!=='solid')mat.map=getMap('albedo:'+patternId,ctx=>paintPattern(ctx,patternId),{color:true});
     materials.add(mat);
