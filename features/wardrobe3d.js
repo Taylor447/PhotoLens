@@ -24,11 +24,8 @@ export function supportsWebGL(){
   }catch{return false;}
 }
 
-export function lensVerticalFov(focalLengthMm,aspect){
-  const focal=clamp(Number(focalLengthMm)||50,16,135);
-  const filmHeightMm=aspect>=1?36/aspect:36;
-  return 2*Math.atan(filmHeightMm/(2*focal))*180/Math.PI;
-}
+import {lensVerticalFov,framedCameraDistance} from './wardrobe/studio3d/camera-framing.js';
+export {lensVerticalFov,framedCameraDistance} from './wardrobe/studio3d/camera-framing.js';
 
 function disposeNode(root,sharedMaterials=false){
   const seen=new Set();
@@ -349,7 +346,7 @@ export async function mountWardrobe3D(host,{
       rig.pose();
     }
 
-    let yaw=0,pitch=0,distance=clamp(Number(distanceCm)||450,140,1200), frame=0, previousTime=0, pinch=0;
+    let yaw=0,pitch=0,distance=clamp(Number(distanceCm)||450,140,1200), frame=0, previousTime=0, pinch=0,autoFrame=true;
     const renderSampler=createRenderSampler({startedAt:mountedAt});
     const diagnosticsTimer=setInterval(()=>{
       if(signal.aborted||document.hidden)return;
@@ -367,6 +364,9 @@ export async function mountWardrobe3D(host,{
     const reduceMotion=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const pointers=new Map();
     const aim=flatLay?Math.max(35,154-(Math.ceil(model.garments.length/4)-1)*24):mannequinAimHeight(model);
+    const bounds=new T.Box3().setFromObject(root),size=bounds.getSize(new T.Vector3());
+    const fit=()=>framedCameraDistance({heightCm:Math.max(flatLay?120:model.layout.m.heightCm,size.y),widthCm:Math.max(flatLay?120:100,size.x),focalLengthMm,aspect:camera.aspect,cameraHeightCm,aimCm:aim});
+    const frameSubject=()=>{autoFrame=true;yaw=0;pitch=0;distance=Math.max(clamp(Number(distanceCm)||450,140,1200),fit());invalidate();};
     function draw(time){
       frame=0;
       if(signal.aborted||document.hidden)return;
@@ -384,6 +384,7 @@ export async function mountWardrobe3D(host,{
       const width=Math.max(1,host.clientWidth),height=Math.max(1,host.clientHeight);
       renderer.setSize(width,height,false);
       camera.aspect=width/height;camera.fov=lensVerticalFov(focalLengthMm,camera.aspect);camera.updateProjectionMatrix();
+      if(autoFrame)distance=Math.max(clamp(Number(distanceCm)||450,140,1200),fit());
       invalidate();
     }
     const observer=new ResizeObserver(resize);observer.observe(host);
@@ -400,20 +401,22 @@ export async function mountWardrobe3D(host,{
       if(pointers.size===1){yaw+=(event.clientX-point[0])*.009;pitch=clamp(pitch-(event.clientY-point[1])*.65,-110,95);}
       else if(pointers.size===2){
         const [a,b]=pointers.values(),gap=Math.hypot(a[0]-b[0],a[1]-b[1]);
-        if(pinch)distance=clamp(distance-(gap-pinch)*1.35,140,1200);
+        if(pinch){autoFrame=false;distance=clamp(distance-(gap-pinch)*1.35,140,1200);}
         pinch=gap;
       }
       invalidate();
     });
     for(const kind of ['pointerup','pointercancel','lostpointercapture'])listen(kind,event=>{pointers.delete(event.pointerId);pinch=0;});
-    listen('wheel',event=>{event.preventDefault();distance=clamp(distance+event.deltaY*.35,140,1200);invalidate();},{passive:false});
+    listen('wheel',event=>{event.preventDefault();autoFrame=false;distance=clamp(distance+event.deltaY*.35,140,1200);invalidate();},{passive:false});
+    host.addEventListener('wardrobe:frame',frameSubject,{signal});
     listen('keydown',event=>{
       if(event.key==='ArrowLeft')yaw-=.14;
       else if(event.key==='ArrowRight')yaw+=.14;
       else if(event.key==='ArrowUp')pitch=clamp(pitch+12,-110,95);
       else if(event.key==='ArrowDown')pitch=clamp(pitch-12,-110,95);
-      else if(['+','='].includes(event.key))distance=clamp(distance-20,140,1200);
-      else if(event.key==='-')distance=clamp(distance+20,140,1200);
+      else if(['+','='].includes(event.key)){autoFrame=false;distance=clamp(distance-20,140,1200);}
+      else if(event.key==='-'){autoFrame=false;distance=clamp(distance+20,140,1200);}
+      else if(event.key==='0'){frameSubject();}
       else return;
       event.preventDefault();invalidate();
     });

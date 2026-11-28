@@ -31,6 +31,28 @@ async function stableScreenshot(locator){
  return previous;
 }
 
+for(const [device,width,height] of [['desktop',1440,900],['mobile',412,915]]){
+ test('Studio layout keeps the canvas near the top on '+device,async({page},testInfo)=>{
+  await page.setViewportSize({width,height});
+  await openStudio(page,'studio2d');
+  const stage=page.locator('.ws-layout-studio .ws-stage');
+  const toolbar=page.locator('.ws-layout-studio .ws-stage-toolbar');
+  const closet=page.locator('.ws-layout-studio .ws-closet-panel');
+  const [stageBox,toolbarBox,closetBox]=await Promise.all([stage.boundingBox(),toolbar.boundingBox(),closet.boundingBox()]);
+  expect(stageBox).toBeTruthy();
+  expect(stageBox.y).toBeLessThan(height*.7);
+  expect(stageBox.y+stageBox.height).toBeLessThanOrEqual(toolbarBox.y+1);
+  if(device==='mobile'){
+   await expect(page.locator('.ws-mobile-closet')).not.toHaveAttribute('open');
+   await expect(closet.locator('[data-ws-query]')).toHaveAttribute('placeholder','Tìm món theo tên hoặc loại');
+   expect(stageBox.y).toBeLessThan(closetBox.y);
+  }
+  const label=page.locator('[data-ws-consent]').locator('xpath=..');
+  expect(await label.evaluate(node=>getComputedStyle(node).flexDirection)).toBe('row');
+  await testInfo.attach('studio-layout-'+device+'.png',{body:await page.locator('.planner-dialog').screenshot({animations:'disabled'}),contentType:'image/png'});
+ });
+}
+
 test('all catalog cards load their matching category thumbnail under the GitHub Pages base',async({page})=>{
  const responses=[];
  page.on('response',response=>{if(response.url().includes('/assets/wardrobe/previews/'))responses.push({url:response.url(),status:response.status()});});
