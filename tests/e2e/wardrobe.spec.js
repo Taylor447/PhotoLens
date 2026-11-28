@@ -1,11 +1,11 @@
 import {test,expect} from '@playwright/test';
 
-const categoryLabels={tops:'Áo',bottoms:'Quần',skirts:'Váy',dresses:'Váy / đầm',outerwear:'Áo khoác',shoes:'Giày dép',hats:'Mũ',bags:'Túi',eyewear:'Kính',scarves:'Khăn',jewelry:'Trang sức',hair:'Phụ kiện tóc'};
+const categoryLabels={tops:'Ao',bottoms:'Qu?n',skirts:'V�y',dresses:'V�y / d?m',outerwear:'Ao kho�c',shoes:'Gi�y d�p',hats:'Mu',bags:'T�i',eyewear:'K�nh',scarves:'Khan',jewelry:'Trang s?c',hair:'Ph? ki?n t�c'};
 
 async function openStudio(page,section='studio2d'){
  await page.goto('./');
- await expect(page.getByRole('heading',{name:'Chào mừng đến với PhotoLens'})).toBeVisible();
- await page.getByRole('button',{name:'Bắt đầu'}).click();
+ await expect(page.getByRole('heading',{name:'Ch�o m?ng d?n v?i PhotoLens'})).toBeVisible();
+ await page.getByRole('button',{name:'B?t d?u'}).click();
  await expect(page.locator('.modal-backdrop')).toHaveCount(0);
  await page.locator('#photoPlannerButton').click();
  await expect(page.getByRole('dialog')).toBeVisible();
@@ -31,6 +31,36 @@ async function stableScreenshot(locator){
  return previous;
 }
 
+for(const [device,width,height] of [['desktop',1440,900],['mobile',412,915]]){
+ test('Studio canvas, controls and closet fit the initial '+device+' viewport',async({page},testInfo)=>{
+  await page.setViewportSize({width,height});
+  await openStudio(page,'studio2d');
+  const stage=page.locator('.ws-layout-studio .ws-stage');
+  const toolbar=page.locator('.ws-layout-studio .ws-stage-toolbar');
+  const closet=page.locator('.ws-layout-studio .ws-closet-panel');
+  const footer=page.locator('.planner-dialog footer');
+  const [stageBox,toolbarBox,closetBox,footerBox]=await Promise.all([stage.boundingBox(),toolbar.boundingBox(),closet.boundingBox(),footer.boundingBox()]);
+  expect(stageBox).toBeTruthy();
+  expect(stageBox.y).toBeLessThan(height*.65);
+  expect(stageBox.y).toBeLessThan(footerBox.y-180);
+  expect(stageBox.y+stageBox.height).toBeLessThanOrEqual(toolbarBox.y+1);
+  if(device==='mobile'){
+   await expect(page.locator('.ws-mobile-closet')).not.toHaveAttribute('open');
+   expect(stageBox.y).toBeLessThan(closetBox.y);
+   await expect(closet.locator('[data-ws-query]')).toHaveAttribute('placeholder','T�m m�n theo t�n ho?c lo?i');
+   await closet.locator('summary').click();
+   await expect(page.locator('.ws-mobile-closet')).toHaveAttribute('open');
+  }else{
+   expect(closetBox.x+closetBox.width).toBeLessThanOrEqual(stageBox.x+1);
+   await expect(page.locator('.ws-mobile-closet')).toHaveAttribute('open');
+  }
+  const check=page.locator('[data-ws-consent]');
+  const label=check.locator('xpath=..');
+  expect(await label.evaluate(node=>getComputedStyle(node).flexDirection)).toBe('row');
+  await testInfo.attach('studio-layout-'+device+'.png',{body:await page.locator('.planner-dialog').screenshot({animations:'disabled'}),contentType:'image/png'});
+ });
+}
+
 test('all catalog cards load their matching category thumbnail under the GitHub Pages base',async({page})=>{
  const responses=[];
  page.on('response',response=>{if(response.url().includes('/assets/wardrobe/previews/'))responses.push({url:response.url(),status:response.status()});});
@@ -47,9 +77,9 @@ test('all catalog cards load their matching category thumbnail under the GitHub 
  for(const card of report){
   expect(card.src).toBe('/PhotoLens/assets/wardrobe/previews/'+card.id+'.svg');
   expect(card.width).toBeGreaterThan(0);
-  const category=Object.values(categoryLabels).find(label=>card.label.startsWith(label+' ·'));
+  const category=Object.values(categoryLabels).find(label=>card.label.startsWith(label+' �'));
   expect(category,card.id+' category label').toBeTruthy();
-  expect(card.alt).toContain('Xem trước '+category+':');
+  expect(card.alt).toContain('Xem tru?c '+category+':');
  }
  await expect.poll(()=>responses.length).toBe(60);
  expect(responses.every(response=>response.status===200)).toBeTruthy();
@@ -100,7 +130,7 @@ test('fixed outfit switches 2D and 3D, handles context loss, saves Lookbook and 
  await openStudio(page);
  const card=page.locator('[data-ws-draggable="tpl-tops-1"]');
  await card.scrollIntoViewIfNeeded();
- await card.getByRole('button',{name:'Mặc thử'}).click();
+ await card.getByRole('button',{name:'M?c th?'}).click();
  await expect(page.locator('.ws-stage svg [data-garment="closet-tpl-tops-1"]')).toBeVisible();
 
  const stage2d=page.locator('.ws-stage');
@@ -118,13 +148,13 @@ test('fixed outfit switches 2D and 3D, handles context loss, saves Lookbook and 
  await expect(page.locator('[data-wardrobe-section="studio2d"]')).toHaveAttribute('aria-selected','true');
  await expect(page.locator('.ws-stage svg [data-garment="closet-tpl-tops-1"]')).toBeVisible();
 
- await page.locator('[data-ws-look-name]').fill('E2E · Áo cơ bản');
+ await page.locator('[data-ws-look-name]').fill('E2E � Ao co b?n');
  await page.locator('[data-ws-look-tags]').fill('e2e, thumbnail');
  await page.locator('[data-ws-save-look]').click();
- await expect(page.locator('[data-ws-message]')).toContainText('Đã lưu bộ phối');
+ await expect(page.locator('[data-ws-message]')).toContainText('Da luu b? ph?i');
 
  await page.locator('[data-wardrobe-section="lookbook"]').click();
- const saved=page.locator('.ws-look-card').filter({hasText:'E2E · Áo cơ bản'});
+ const saved=page.locator('.ws-look-card').filter({hasText:'E2E � Ao co b?n'});
  await expect(saved).toBeVisible();
  const download=page.waitForEvent('download');
  await saved.getByRole('button',{name:'PNG',exact:true}).click();
@@ -181,7 +211,7 @@ test('a blazer, shirt and trousers render together without a layer intersection 
  for(const pose of ['standing','step','sitting']){
   await page.locator('[data-ws-pose="'+pose+'"]').click();
   const screenshot=await stableScreenshot(canvas);
-  await expect(page.locator('[data-ws-message]')).not.toContainText('lớp giao nhau');
+  await expect(page.locator('[data-ws-message]')).not.toContainText('l?p giao nhau');
   await testInfo.attach('blazer-trousers-'+pose+'.png',{body:screenshot,contentType:'image/png'});
  }
  expect(errors).toEqual([]);
@@ -215,12 +245,12 @@ test('layered cape and skirt stay visible while the cloth worker sends accepted 
  await expect(canvas).toBeVisible({timeout:15_000});
  await page.locator('[data-ws-cloth]').check();
  await expect.poll(()=>page.evaluate(()=>window.clothRevisions?.filter(value=>value>=2).length??0),{timeout:20_000}).toBe(2);
- await expect(page.locator('[data-ws-message]')).not.toContainText('lớp giao nhau');
+ await expect(page.locator('[data-ws-message]')).not.toContainText('l?p giao nhau');
  await testInfo.attach('cape-skirt-cloth.png',{body:await canvas.screenshot(),contentType:'image/png'});
  expect(errors).toEqual([]);
 });
 
-test('seated áo dài, wide trousers and coat clear the overlap at the low-detail setting',async({page},testInfo)=>{
+test('seated �o d�i, wide trousers and coat clear the overlap at the low-detail setting',async({page},testInfo)=>{
  const errors=[];
  page.on('pageerror',error=>errors.push(error.message));
  await page.setViewportSize({width:412,height:915});
@@ -238,17 +268,17 @@ test('seated áo dài, wide trousers and coat clear the overlap at the low-detai
  const canvas=page.locator('.ws-three-host canvas');
  await expect(canvas).toBeVisible({timeout:15_000});
  const screenshot=await stableScreenshot(canvas);
- await expect(page.locator('[data-ws-message]')).not.toContainText('lớp giao nhau');
+ await expect(page.locator('[data-ws-message]')).not.toContainText('l?p giao nhau');
  await testInfo.attach('seated-ao-dai-trousers-coat-mobile.png',{body:screenshot,contentType:'image/png'});
  expect(errors).toEqual([]);
 });
 
 test('Garment Builder previews and saves a styled parameter variant',async({page})=>{
  await openStudio(page,'catalog');
- await page.getByText('Xưởng tạo biến thể tham số',{exact:true}).click();
+ await page.getByText('Xu?ng t?o bi?n th? tham s?',{exact:true}).click();
  const form=page.locator('[data-ws-form="builder"]');
  await form.locator('[name="templateId"]').selectOption('tpl-skirts-1');
- await form.locator('[name="name"]').fill('Váy xếp ly kiểm thử');
+ await form.locator('[name="name"]').fill('V�y x?p ly ki?m th?');
  await form.locator('[name="patternId"]').selectOption({index:1});
  await form.locator('[name="materialId"]').selectOption({index:1});
  await form.locator('[name="color"]').evaluate(el=>{el.value='#8b5262';el.dispatchEvent(new Event('input',{bubbles:true}));});
@@ -258,8 +288,8 @@ test('Garment Builder previews and saves a styled parameter variant',async({page
  const svg=decodeURIComponent(src.slice(src.indexOf(',')+1));
  expect(svg).toContain('data-region="trim"');
  expect((svg.match(/data-region="pleat"/g)||[])).toHaveLength(3);
- await form.getByRole('button',{name:'Tạo biến thể'}).click();
- const card=page.locator('.ws-item-card').filter({hasText:'Váy xếp ly kiểm thử'});
+ await form.getByRole('button',{name:'T?o bi?n th?'}).click();
+ const card=page.locator('.ws-item-card').filter({hasText:'V�y x?p ly ki?m th?'});
  await expect(card).toBeVisible();
  await expect(card.locator('.ws-thumb img')).toHaveAttribute('src',/^data:image\/svg\+xml/);
 });
@@ -272,7 +302,7 @@ test('offline AI compose falls back to the deterministic local rules engine',asy
  await openStudio(page);
  await page.context().setOffline(true);
  await page.locator('[data-ws-ai]').click();
- await expect(page.locator('[data-ws-message]')).toContainText('Đã phối theo quy tắc cục bộ',{timeout:15_000});
+ await expect(page.locator('[data-ws-message]')).toContainText('Da ph?i theo quy t?c c?c b?',{timeout:15_000});
  expect(await page.locator('.ws-stage svg [data-garment]').count()).toBeGreaterThan(0);
 });
 
