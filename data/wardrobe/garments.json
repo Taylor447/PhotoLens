@@ -41,11 +41,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:tops-1",
+          "id": "svg:tpl-tops-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-tops-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-tops-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-tops-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-tops-2",
@@ -85,11 +95,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:tops-2",
+          "id": "svg:tpl-tops-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-tops-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-tops-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-tops-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-tops-3",
@@ -129,11 +149,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:tops-3",
+          "id": "svg:tpl-tops-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-tops-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-tops-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-tops-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-tops-4",
@@ -173,11 +203,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:tops-4",
+          "id": "svg:tpl-tops-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-tops-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-tops-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-tops-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-tops-5",
@@ -217,11 +257,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:tops-5",
+          "id": "svg:tpl-tops-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-tops-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-tops-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-tops-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-bottoms-1",
@@ -261,11 +311,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:bottoms-1",
+          "id": "svg:tpl-bottoms-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-bottoms-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bottoms-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bottoms-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-bottoms-2",
@@ -305,11 +365,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:bottoms-2",
+          "id": "svg:tpl-bottoms-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-bottoms-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bottoms-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bottoms-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-bottoms-3",
@@ -349,11 +419,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:bottoms-3",
+          "id": "svg:tpl-bottoms-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-bottoms-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bottoms-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bottoms-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-bottoms-4",
@@ -393,11 +473,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:bottoms-4",
+          "id": "svg:tpl-bottoms-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-bottoms-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bottoms-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bottoms-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-bottoms-5",
@@ -437,11 +527,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:bottoms-5",
+          "id": "svg:tpl-bottoms-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-bottoms-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bottoms-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bottoms-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-skirts-1",
@@ -481,11 +581,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:skirts-1",
+          "id": "svg:tpl-skirts-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-skirts-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-skirts-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-skirts-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-skirts-2",
@@ -525,11 +635,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:skirts-2",
+          "id": "svg:tpl-skirts-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-skirts-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-skirts-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-skirts-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-skirts-3",
@@ -569,11 +689,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:skirts-3",
+          "id": "svg:tpl-skirts-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-skirts-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-skirts-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-skirts-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-skirts-4",
@@ -613,11 +743,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:skirts-4",
+          "id": "svg:tpl-skirts-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-skirts-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-skirts-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-skirts-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-skirts-5",
@@ -657,11 +797,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:skirts-5",
+          "id": "svg:tpl-skirts-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-skirts-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-skirts-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-skirts-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-dresses-1",
@@ -701,11 +851,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:dresses-1",
+          "id": "svg:tpl-dresses-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-dresses-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-dresses-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-dresses-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-dresses-2",
@@ -745,11 +905,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:dresses-2",
+          "id": "svg:tpl-dresses-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-dresses-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-dresses-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-dresses-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-dresses-3",
@@ -789,11 +959,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:dresses-3",
+          "id": "svg:tpl-dresses-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-dresses-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-dresses-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-dresses-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-dresses-4",
@@ -833,11 +1013,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:dresses-4",
+          "id": "svg:tpl-dresses-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-dresses-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-dresses-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-dresses-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-dresses-5",
@@ -877,11 +1067,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:dresses-5",
+          "id": "svg:tpl-dresses-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-dresses-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-dresses-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-dresses-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-outerwear-1",
@@ -921,11 +1121,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:outerwear-1",
+          "id": "svg:tpl-outerwear-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-outerwear-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-outerwear-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-outerwear-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-outerwear-2",
@@ -965,11 +1175,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:outerwear-2",
+          "id": "svg:tpl-outerwear-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-outerwear-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-outerwear-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-outerwear-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-outerwear-3",
@@ -1009,11 +1229,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:outerwear-3",
+          "id": "svg:tpl-outerwear-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-outerwear-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-outerwear-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-outerwear-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-outerwear-4",
@@ -1053,11 +1283,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:outerwear-4",
+          "id": "svg:tpl-outerwear-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-outerwear-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-outerwear-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-outerwear-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-outerwear-5",
@@ -1097,11 +1337,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:outerwear-5",
+          "id": "svg:tpl-outerwear-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-outerwear-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-outerwear-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-outerwear-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-shoes-1",
@@ -1141,11 +1391,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:shoes-1",
+          "id": "svg:tpl-shoes-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-shoes-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-shoes-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-shoes-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-shoes-2",
@@ -1185,11 +1445,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:shoes-2",
+          "id": "svg:tpl-shoes-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-shoes-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-shoes-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-shoes-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-shoes-3",
@@ -1229,11 +1499,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:shoes-3",
+          "id": "svg:tpl-shoes-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-shoes-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-shoes-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-shoes-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-shoes-4",
@@ -1273,11 +1553,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:shoes-4",
+          "id": "svg:tpl-shoes-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-shoes-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-shoes-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-shoes-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-shoes-5",
@@ -1317,11 +1607,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:shoes-5",
+          "id": "svg:tpl-shoes-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-shoes-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-shoes-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-shoes-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-hats-1",
@@ -1361,11 +1661,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:hats-1",
+          "id": "svg:tpl-hats-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-hats-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hats-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hats-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-hats-2",
@@ -1405,11 +1715,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:hats-2",
+          "id": "svg:tpl-hats-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-hats-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hats-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hats-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-hats-3",
@@ -1449,11 +1769,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:hats-3",
+          "id": "svg:tpl-hats-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-hats-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hats-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hats-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-hats-4",
@@ -1493,11 +1823,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:hats-4",
+          "id": "svg:tpl-hats-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-hats-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hats-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hats-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-hats-5",
@@ -1537,11 +1877,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:hats-5",
+          "id": "svg:tpl-hats-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-hats-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hats-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hats-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-bags-1",
@@ -1581,11 +1931,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:bags-1",
+          "id": "svg:tpl-bags-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-bags-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bags-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bags-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-bags-2",
@@ -1625,11 +1985,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:bags-2",
+          "id": "svg:tpl-bags-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-bags-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bags-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bags-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-bags-3",
@@ -1669,11 +2039,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:bags-3",
+          "id": "svg:tpl-bags-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-bags-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bags-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bags-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-bags-4",
@@ -1713,11 +2093,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:bags-4",
+          "id": "svg:tpl-bags-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-bags-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bags-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bags-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-bags-5",
@@ -1757,11 +2147,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:bags-5",
+          "id": "svg:tpl-bags-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-bags-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-bags-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-bags-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-eyewear-1",
@@ -1801,11 +2201,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:eyewear-1",
+          "id": "svg:tpl-eyewear-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-eyewear-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-eyewear-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-eyewear-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-eyewear-2",
@@ -1845,11 +2255,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:eyewear-2",
+          "id": "svg:tpl-eyewear-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-eyewear-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-eyewear-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-eyewear-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-eyewear-3",
@@ -1889,11 +2309,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:eyewear-3",
+          "id": "svg:tpl-eyewear-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-eyewear-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-eyewear-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-eyewear-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-eyewear-4",
@@ -1933,11 +2363,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:eyewear-4",
+          "id": "svg:tpl-eyewear-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-eyewear-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-eyewear-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-eyewear-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-eyewear-5",
@@ -1977,11 +2417,21 @@
       "culturalNote": null,
       "assets": {
         "svg": {
-          "id": "svg:eyewear-5",
+          "id": "svg:tpl-eyewear-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-eyewear-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-eyewear-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-eyewear-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-scarves-1",
@@ -2021,11 +2471,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:scarves-1",
+          "id": "svg:tpl-scarves-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-scarves-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-scarves-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-scarves-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-scarves-2",
@@ -2065,11 +2525,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:scarves-2",
+          "id": "svg:tpl-scarves-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-scarves-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-scarves-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-scarves-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-scarves-3",
@@ -2109,11 +2579,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:scarves-3",
+          "id": "svg:tpl-scarves-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-scarves-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-scarves-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-scarves-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-scarves-4",
@@ -2153,11 +2633,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:scarves-4",
+          "id": "svg:tpl-scarves-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-scarves-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-scarves-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-scarves-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-scarves-5",
@@ -2197,11 +2687,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:scarves-5",
+          "id": "svg:tpl-scarves-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-scarves-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-scarves-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-scarves-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-jewelry-1",
@@ -2241,11 +2741,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:jewelry-1",
+          "id": "svg:tpl-jewelry-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-jewelry-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-jewelry-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-jewelry-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-jewelry-2",
@@ -2285,11 +2795,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:jewelry-2",
+          "id": "svg:tpl-jewelry-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-jewelry-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-jewelry-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-jewelry-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-jewelry-3",
@@ -2329,11 +2849,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:jewelry-3",
+          "id": "svg:tpl-jewelry-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-jewelry-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-jewelry-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-jewelry-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-jewelry-4",
@@ -2373,11 +2903,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:jewelry-4",
+          "id": "svg:tpl-jewelry-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-jewelry-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-jewelry-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-jewelry-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-jewelry-5",
@@ -2417,11 +2957,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:jewelry-5",
+          "id": "svg:tpl-jewelry-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-jewelry-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-jewelry-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-jewelry-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-hair-1",
@@ -2461,11 +3011,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:hair-1",
+          "id": "svg:tpl-hair-1",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-hair-1",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hair-1",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hair-1.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-hair-2",
@@ -2505,11 +3065,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:hair-2",
+          "id": "svg:tpl-hair-2",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-hair-2",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hair-2",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hair-2.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-hair-3",
@@ -2549,11 +3119,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:hair-3",
+          "id": "svg:tpl-hair-3",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-hair-3",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hair-3",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hair-3.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-hair-4",
@@ -2593,11 +3173,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:hair-4",
+          "id": "svg:tpl-hair-4",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-hair-4",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hair-4",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hair-4.svg"
+        }
+      },
+      "sizeTableVersion": null
     },
     {
       "id": "tpl-hair-5",
@@ -2637,11 +3227,21 @@
       "culturalNote": "Minh họa đồ họa, chưa được xác thực như trang phục truyền thống.",
       "assets": {
         "svg": {
-          "id": "svg:hair-5",
+          "id": "svg:tpl-hair-5",
           "provenance": "generated-by-photolens"
         },
-        "glb": null
-      }
+        "glb": null,
+        "procedural3d": {
+          "id": "three:tpl-hair-5",
+          "provenance": "generated-by-photolens"
+        },
+        "thumbnail": {
+          "id": "thumbnail:tpl-hair-5",
+          "provenance": "generated-by-photolens",
+          "path": "assets/wardrobe/previews/tpl-hair-5.svg"
+        }
+      },
+      "sizeTableVersion": null
     }
   ]
 }

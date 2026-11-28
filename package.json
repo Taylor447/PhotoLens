@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "dev": "node tools/assets/generate-previews.mjs --check && vite --host 0.0.0.0",
+    "build": "node tools/assets/generate-previews.mjs --check && vite build && node tools/assets/validate-preview-build.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "cap:android": "npm run build && node scripts/ensure-android.mjs && cap sync android && cap open android",
     "cap:sync": "npm run build && cap sync",
@@ -13,8 +13,9 @@
     "electron:build": "npm run build && electron-builder",
     "worker:dev": "npx wrangler dev --config worker/wrangler.toml",
     "worker:deploy": "npx wrangler deploy --config worker/wrangler.toml",
-    "test:unit": "node --test tests/core-planner.test.js tests/wardrobe-studio.test.js tests/worker-outfit.test.js && node tools/assets/validate-wardrobe.mjs",
-    "test": "npm run test:unit && npm run build"
+    "test:unit": "node tools/assets/generate-previews.mjs --check && node --test tests/core-planner.test.js tests/wardrobe-studio.test.js tests/wardrobe-thumbnails.test.js tests/worker-outfit.test.js tests/wardrobe-3d.test.js tests/wardrobe-compose.test.js && node tools/assets/validate-wardrobe.mjs",
+    "test": "npm run test:unit && npm run build",
+    "assets:previews": "node tools/assets/generate-previews.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
@@ -26,13 +27,15 @@
     "exifr": "^7.1.3",
     "heic2any": "^0.0.4",
     "html2canvas": "^1.4.1",
-    "jspdf": "^4.2.1"
+    "jspdf": "^4.2.1",
+    "three": "0.187.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^7.4.3",
     "electron": "^42.11.16",
     "electron-builder": "^26.0.12",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "ajv": "^8.20.0"
   },
   "main": "electron/main.js",
   "build": {

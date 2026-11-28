@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createWardrobeRepository,LEGACY_ITEMS,LEGACY_LOOKS,filterGarments,normalizeGarment,calculateFit,chooseSize,contrastRatio,colorHarmony,scoreLook,resolveStudioMode,reconcileLook,inspectTemplateBounds,buildSvgLook,safeSvgText} from '../core/wardrobe-engine.js';
+import {createWardrobeRepository,LEGACY_ITEMS,LEGACY_LOOKS,filterGarments,normalizeGarment,calculateFit,chooseSize,contrastRatio,colorHarmony,scoreLook,composeRuleOutfit,buildCapsule,resolveStudioMode,reconcileLook,inspectTemplateBounds,buildSvgLook,safeSvgText,MANNEQUIN_DEFAULTS_CM,MANNEQUIN_PRESETS,normalizeMannequin,createMannequinAnchors,buildGarmentVariant,garmentSvgGeometry,inspectSvgGarmentClipping,classifyWardrobeAsset,hasSupportedImageHeader,validGlbHeader} from '../core/wardrobe-engine.js';
 import {readFileSync} from 'node:fs';
+import {garmentPortrait} from '../core/wardrobe/illustrations.js';
 function memoryStorage(){const map=new Map();return{getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,String(v)),removeItem:k=>map.delete(k)};}
 const template={id:'test-top',name:'Áo test',category:'tops',color:'#336699',styleTags:['casual'],materialId:'cotton',patternId:'solid',measurementsCm:{chest:100,waist:82},layerOrder:20};
 
@@ -16,9 +17,9 @@ test('CRUD món đồ and legacy migration preserve saved items, looks, and comp
  repo.removeItem('test-top');assert.ok(!repo.listItems().some(x=>x.id==='test-top'));
 });
 test('search and category, style, material, color, season filters work',()=>{
- const items=[normalizeGarment(template),normalizeGarment({...template,id:'test-jacket',name:'Áo khoác len',category:'outerwear',styleTags:['classic'],materialId:'wool',season:'winter',color:'#663322'})];
+ const items=[normalizeGarment({...template,collections:['Capsule'],favorite:true}),normalizeGarment({...template,id:'test-jacket',name:'Áo khoác len',category:'outerwear',styleTags:['classic'],materialId:'wool',season:'winter',color:'#663322'})];
  assert.equal(filterGarments(items,{category:'tops'}).length,1);assert.equal(filterGarments(items,{style:'classic'}).length,1);assert.equal(filterGarments(items,{material:'wool'}).length,1);
- assert.equal(filterGarments(items,{color:'warm'}).length,1);assert.equal(filterGarments(items,{query:'khoác'}).length,1);assert.equal(filterGarments(items,{season:'winter'}).length,2);assert.deepEqual(filterGarments(items,{query:'không có tên'}),[]);
+ assert.equal(filterGarments(items,{color:'warm'}).length,1);assert.equal(filterGarments(items,{query:'khoác'}).length,1);assert.equal(filterGarments(items,{season:'winter'}).length,2);assert.equal(filterGarments(items,{collection:'Capsule'}).length,1);assert.equal(filterGarments(items,{favorite:'favorites'}).length,1);assert.deepEqual(filterGarments(items,{query:'không có tên'}),[]);
 });
 test('lookbook save, rename, duplicate and delete preserve item references',()=>{
  const repo=createWardrobeRepository(memoryStorage(),null);repo.saveItem(template);const look=repo.saveLook({name:'Phố chiều',itemIds:['test-top'],tags:['street']});
@@ -32,9 +33,96 @@ test('2D generation, 3D fallback, shared ordering, fit and size limits are expli
  const fit=calculateFit({chest:96,waist:80},item);assert.deepEqual(fit.details.map(x=>x.easeCm),[4,2]);assert.match(fit.message,/không bảo đảm/);
  assert.equal(chooseSize({chest:96},[]).size,null);assert.equal(contrastRatio('#000000','#ffffff'),21);assert.equal(colorHarmony([{color:'#ff0000'},{color:'#00ff00'},{color:'#0000ff'}]).scheme,'Bộ ba / đa sắc');assert.ok(scoreLook([item],{background:'#ffffff'}).score>=0);
  const bounds=inspectTemplateBounds({virtualShellClearanceCm:1.5},{heightCm:170,shoulderCm:40,chestCm:90,waistCm:70,hipCm:95});assert.equal(bounds.violates,false);assert.match(bounds.method,/proxy/);
- assert.match(safeSvgText('<svg><script>alert(1)</script><path/></svg>'),/<svg>/);assert.equal(safeSvgText('not svg'),null);
+ const safe=safeSvgText('<svg onload=alert(1)><script>alert(1)</script><style>@import url(https://evil.test/a.css)</style><image href="https://evil.test/a.png"/><path fill="url(https://evil.test/a.svg#p)"/></svg>');assert.match(safe,/<svg>/);assert.doesNotMatch(safe,/script|onload|evil\.test|@import|<style/i);assert.equal(safeSvgText('not svg'),null);
+});
+test('2D mannequin draws a neutral, curved body with separate limbs and feet',()=>{
+ const svg=buildSvgLook([],{mannequinTone:'#858d8a'}),parts=[...svg.matchAll(/data-mannequin-part="([^"]+)"/g)].map(match=>match[1]);
+ assert.deepEqual(parts,['left-leg','right-leg','left-foot','right-foot','torso','left-arm','right-arm','neck','head']);
+ assert.match(svg,/data-mannequin="neutral"/);assert.match(svg,/fill="#858d8a"/);
+ for(const part of ['left-leg','right-leg','torso','left-arm','right-arm'])assert.match(svg,new RegExp(`data-mannequin-part="${part}" d="M [^"]+ C `));
 });
 test('generated data has unique template IDs and no invented commercial products',()=>{
  const g=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url))),m=JSON.parse(readFileSync(new URL('../data/wardrobe/materials.json',import.meta.url))),p=JSON.parse(readFileSync(new URL('../data/wardrobe/patterns.json',import.meta.url)));
  assert.equal(g.schemaVersion,1);assert.equal(g.templates.length,60);assert.equal(g.realGarmentCount,0);assert.equal(new Set(g.templates.map(x=>x.id)).size,g.templates.length);assert.ok(m.materials.length>=20);assert.ok(p.patterns.length>=40);
+});
+
+test('outfit rules explain layering, pattern scale, proportion, dress code and manual weather',()=>{
+ const wideTop={...template,id:'wide-top',category:'tops',fit:'oversize',layer:'base',layerOrder:40,patternId:'wide-stripe',styleTags:['streetwear']};
+ const wideBottom={...template,id:'wide-bottom',category:'bottoms',fit:'oversize',layer:'base',layerOrder:50,patternId:'polka-large',styleTags:['streetwear']};
+ const outer={...template,id:'outer',category:'outerwear',fit:'regular',layer:'outer',layerOrder:10,patternId:'solid',styleTags:['streetwear']};
+ const result=scoreLook([wideTop,wideBottom,outer],{background:'#ffffff',temperatureC:10,precipitationMm:2,windKmh:40,dressCode:'formal',genre:'cosplay'});
+ assert.ok(result.score>=0&&result.score<=100);
+ assert.ok(result.warnings.some(x=>x.includes('hai họa tiết lớn')));
+ assert.ok(result.warnings.some(x=>x.includes('lớp ngoài nằm dưới')));
+ assert.ok(result.warnings.some(x=>x.includes('oversize')));
+ assert.ok(result.warnings.some(x=>x.includes('dress code')));
+ assert.ok(result.warnings.some(x=>x.includes('cosplay')));
+ assert.ok(result.warnings.some(x=>x.includes('mưa')));
+ assert.ok(result.warnings.some(x=>x.includes('Gió mạnh')));
+ const cold=scoreLook([wideTop],{temperatureC:10});assert.ok(cold.warnings.some(x=>x.includes('Trời lạnh')));
+});
+test('rule composer is seeded, uses an anchor, reacts to cold weather, and builds a compact capsule',()=>{
+ const g=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url))),pool=g.templates;
+ const one=composeRuleOutfit(pool,{seed:123,weather:{temp:5}}),two=composeRuleOutfit(pool,{seed:123,weather:{temp:5}});
+ assert.deepEqual(one.map(x=>x.id),two.map(x=>x.id));assert.ok(one.some(x=>x.layer==='outer'));assert.ok(one.some(x=>x.category==='shoes'));
+ const anchor=pool.find(x=>x.category==='tops'),anchored=composeRuleOutfit(pool,{anchor,seed:2});
+ assert.ok(anchored.some(x=>x.id===anchor.id));
+ const capsule=buildCapsule(pool,8);assert.ok(capsule.length<=8);assert.ok(capsule.some(x=>x.category==='tops'));assert.ok(capsule.some(x=>x.category==='bottoms'));assert.ok(capsule.some(x=>x.category==='shoes'));
+});
+
+test('shared mannequin dimensions clamp in cm and scale all 2D anchors within the stage',()=>{
+ const bounded=normalizeMannequin({heightCm:1,shoulders:500,chest:-1,waist:10000,hips:1,sleeve:0,inseam:999,neck:99});
+ assert.deepEqual(bounded,{heightCm:140,shoulders:60,chest:60,waist:140,hips:60,sleeve:40,inseam:110,neck:55});
+ for(const p of MANNEQUIN_PRESETS){const a=createMannequinAnchors(p);assert.equal(a.heightCm,p.heightCm);assert.ok(Math.abs(a.ankles.y-394.8)<1e-8);assert.equal(a.feet.y,402);assert.equal(a.scalePxPerCm,360/p.heightCm);assert.ok(a.shoulders.left<a.shoulders.right);assert.ok(a.hips.left<a.hips.right);}
+ assert.equal(normalizeMannequin({}).heightCm,MANNEQUIN_DEFAULTS_CM.heightCm);
+});
+test('all 60 procedural garment templates remain inside the 2D SVG viewBox for all four reference presets',()=>{
+ const g=JSON.parse(readFileSync(new URL('../data/wardrobe/garments.json',import.meta.url)));
+ let checked=0;
+ for(const preset of MANNEQUIN_PRESETS){const anchors=createMannequinAnchors(preset);for(const garment of g.templates){const geometry=garmentSvgGeometry(garment,anchors);assert.ok(geometry.paths.length,garment.id+' has no 2D path');const clipping=inspectSvgGarmentClipping(garment,anchors);assert.equal(clipping.passed,true,preset.id+' / '+garment.id+': '+JSON.stringify(clipping));assert.equal(clipping.clippingRatio,0);checked++;}}
+ assert.equal(checked,240);
+});
+
+test('local binary import validates declared type/signature and refuses phantom storage',async()=>{
+ assert.equal(classifyWardrobeAsset('shirt.png','image/png',100),'image');
+ assert.equal(classifyWardrobeAsset('shirt.jpg','image/png',100),null);
+ assert.equal(classifyWardrobeAsset('vector.glb','model/gltf-binary',100),'glb');
+ assert.equal(classifyWardrobeAsset('large.png','image/png',12*1024*1024+1),null);
+ assert.equal(hasSupportedImageHeader(Uint8Array.from([137,80,78,71,13,10,26,10])),true);
+ assert.equal(hasSupportedImageHeader(Uint8Array.from([255,216,255,0])),true);
+ assert.equal(hasSupportedImageHeader(Uint8Array.from([82,73,70,70,0,0,0,0,87,69,66,80])),true);
+ assert.equal(hasSupportedImageHeader(Uint8Array.from([0,0,0,0])),false);
+ const bytes=new Uint8Array(20),view=new DataView(bytes.buffer);view.setUint32(0,0x46546c67,true);view.setUint32(4,2,true);view.setUint32(8,20,true);
+ assert.equal(validGlbHeader(bytes,20),true);assert.equal(validGlbHeader(bytes,21),false);
+ const repo=createWardrobeRepository(memoryStorage(),null);
+ await assert.rejects(()=>repo.saveAsset(new Blob(['asset'],{type:'image/png'})),/IndexedDB/);
+});
+
+test('closet copies preserve generated thumbnail mapping from their source template',()=>{
+ const ref={id:'thumbnail:tpl-tops-1',path:'assets/wardrobe/previews/tpl-tops-1.svg',provenance:'generated-by-photolens'};
+ assert.deepEqual(normalizeGarment({id:'closet-tpl-tops-1',name:'Áo mẫu',category:'tops',assets:{thumbnail:ref}}).assets,{thumbnail:ref});
+ assert.equal(normalizeGarment({id:'bad',name:'Món lỗi',category:'tops',assets:{thumbnail:{...ref,path:'../private.svg'}}}).assets,undefined);
+});
+
+test('Garment Builder creates a local parametric variant with a live category SVG preview',()=>{
+ const base={id:'tpl-skirts-1',name:'Váy nền',category:'skirts',color:'#647d69',isTemplate:true,
+  assets:{thumbnail:{id:'thumbnail:tpl-skirts-1',path:'assets/wardrobe/previews/tpl-skirts-1.svg',provenance:'generated-by-photolens'}}};
+ const variant=buildGarmentVariant(base,{id:'builder-preview-test',name:'Váy xếp ly',color:'#8b5262',
+  materialId:'linen',patternId:'gingham',parameters:{pleats:3,trimColor:'#e0c080'}});
+ assert.equal(variant.isTemplate,false);
+ assert.equal(variant.measurementSource,null);
+ assert.equal(variant.measurementsCm,null);
+ assert.equal(variant.parameters.pleats,3);
+ const svg=garmentPortrait(variant);
+ assert.equal((svg.match(/data-region="pleat"/g)||[]).length,3);
+ assert.match(svg,/data-region="trim"/);
+ assert.match(svg,/data-garment-category="skirts"/);
+ assert.doesNotMatch(garmentPortrait(base),/data-region="trim"|data-region="pleat"/);
+});
+
+test('text and large-text color pairs meet or fail WCAG AA at the explicit thresholds',()=>{
+ assert.ok(contrastRatio('#000000','#ffffff')>=4.5);
+ assert.ok(contrastRatio('#767676','#ffffff')>=4.5);
+ assert.ok(contrastRatio('#949494','#ffffff')>=3);
+ assert.ok(contrastRatio('#777777','#ffffff')<4.5);
 });

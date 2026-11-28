@@ -1,0 +1,469 @@
+import {MANNEQUIN_DEFAULTS_CM, normalizeMannequin, createMannequinLandmarks} from '../../../core/wardrobe-engine.js';
+import {buildMannequinSurface} from './mannequin-surface.js';
+import {drapeTriangles, fitDrapeToPose, lowerBodyInPelvisSpace, skirtRadiusAtHeight} from './skirt-drape.js';
+import {catalogVariant, garmentCut} from './garment-cuts.js';
+import {cutCoverage, tailoredMesh, tailoringSurface} from './tailored-mesh.js';
+import {accessoryShells, part, ring} from './accessory-shells.js';
+import {countSurfaceCrossings, prepareSurface} from './surface-crossings.js';
+
+export const MAX_SCENE_TRIANGLES = 150_000;
+export const MAX_PROCEDURAL_ITEMS = 18;
+export const BODY_CLIP_LIMIT = 0.01;
+export const MORPH_NAMES = {
+  heightCm: 'Height', shoulders: 'ShoulderWidth', chest: 'ChestCircumference',
+  waist: 'WaistCircumference', hips: 'HipCircumference', sleeve: 'ArmLength',
+  inseam: 'InseamLength', neck: 'NeckCircumference'
+};
+export const BONE_NAMES = [
+  'Root', 'Pelvis', 'Spine', 'Neck', 'Head',
+  'UpperArm_L', 'Forearm_L', 'Hand_L', 'Thigh_L', 'Shin_L', 'Foot_L',
+  'UpperArm_R', 'Forearm_R', 'Hand_R', 'Thigh_R', 'Shin_R', 'Foot_R'
+];
+export const POSE_NAMES = ['standing', 'lean', 'step', 'sitting'];
+// Increase shoulder abduction in steps up to about 15.5 degrees.
+const SLEEVE_CLEARANCE_ANGLES = [.09,.18,.27];
+const OUTERWEAR_EASE_CM = [1.5,3,4.5,6];
+const TAU = Math.PI * 2;
+const add = (a,b) => a.map((v,i) => v+b[i]);
+const sub = (a,b) => a.map((v,i) => v-b[i]);
+const clamp = (n,min,max) => Math.max(min,Math.min(max,n));
+
+function radii(circumference, depthRatio) {
+  const h = ((1-depthRatio)/(1+depthRatio))**2;
+  const radius = circumference / (Math.PI*(1+depthRatio)*(1+3*h/(10+Math.sqrt(4-3*h))));
+  return [radius, radius*depthRatio];
+}
+
+export function createRigLayout(value, pose = 'standing', armClearance = 0) {
+  const {m,ankle,crotch,headHeight,neckTop,shoulder,pelvis,waist,chest,knee,wrist}=createMannequinLandmarks(value);
+  const [hipRx, hipRz] = radii(m.hips,.73);
+  const [waistRx, waistRz] = radii(m.waist,.7);
+  const [chestRx, chestRz] = radii(m.chest,.68);
+  const [neckRx, neckRz] = radii(m.neck,.9);
+  // Short torsos have less room for hip flexion when the front of the thighs rises.
+  const uprightClearance=clamp((shoulder-crotch)/(hipRz*1.55),0,1);
+  const seatedHipAngle=.72+.46*uprightClearance;
+  const bones = [];
+  const bone = (name,parent,position,rx=0,rz=0) => bones.push({name,parent,position,rx,rz});
+  bone('Root',null,[0,0,0]);
+  bone('Pelvis','Root',[0,pelvis,0],0,pose==='lean'?-.105:0);
+  bone('Spine','Pelvis',[0,waist,0],pose==='sitting'?-.07:0);
+  bone('Neck','Spine',[0,shoulder,0]);
+  bone('Head','Neck',[0,neckTop,0]);
+  const sideData=[];
+  for (const [sign, suffix] of [[-1,'L'],[1,'R']]){
+    const armX=sign*m.shoulders/2, legX=sign*hipRx*.48;
+    const upperLength=m.sleeve*.53, lowerLength=m.sleeve-upperLength;
+    const handY=wrist;
+    bone('UpperArm_'+suffix,'Spine',[armX,shoulder,0],pose==='sitting'?-.33:pose==='step'?sign*.3:0,sign*(.2+armClearance));
+    bone('Forearm_'+suffix,'UpperArm_'+suffix,[armX,shoulder-upperLength,0],pose==='sitting'?-1.27:-.14,sign*-.055);
+    bone('Hand_'+suffix,'Forearm_'+suffix,[armX,handY,0]);
+    bone('Thigh_'+suffix,'Pelvis',[legX,crotch+1,hipRz*.19],pose==='sitting'?-seatedHipAngle:pose==='step'?sign*-.36:0,sign*.045);
+    bone('Shin_'+suffix,'Thigh_'+suffix,[legX,knee,0],pose==='sitting'?seatedHipAngle-.02:pose==='step'?.25:0);
+    bone('Foot_'+suffix,'Shin_'+suffix,[legX,ankle,0],pose==='step'?sign*.14:0);
+    sideData.push({suffix,armX,legX,knee,upperLength,lowerLength,handY});
+  }
+  return {m,bones,sideData,ankle,crotch,headHeight,neckTop,shoulder,pelvis,waist,chest,hipRx,hipRz,waistRx,waistRz,chestRx,chestRz,neckRx,neckRz};
+}
+
+function referenceShell(item, layout, layerOffset, cut) {
+  const {m,ankle,pelvis,waist,hipRx,hipRz,waistRx,waistRz}=layout;
+  const variant = catalogVariant(item);
+  const p=item.parameters||{}, ease=(p.width==='wide'?4.6:p.width==='slim'?1.4:2.6)+layerOffset+variant*.3;
+  const long=p.length==='long'?1.18:p.length==='short'?.78:1;
+  const skirt=(panels=false)=>{
+    const length=panels?.84:cut.skirt, flare=panels?4:cut.flare;
+    const top=panels?pelvis+2:waist;
+    const hip=Math.min(pelvis+1,top-.4);
+    const hem=Math.max(ankle+4,pelvis-m.inseam*length*cut.length);
+    return {...part('Pelvis',[
+      ring(hem,hipRx+ease+flare,hipRz+ease+flare*.52),
+      ring((hem+hip)*.50,hipRx+ease+flare*.55,hipRz+ease+flare*.28),
+      ring(hip,hipRx+ease,hipRz+ease),
+      ring(top,(panels?hipRx:waistRx)+ease,(panels?hipRz:waistRz)+ease)
+    ],false,true),drape:true,pleats:cut.pleats,slits:panels?hip:undefined};
+  };
+  switch(item.category){
+    case 'tops':return cut.panels==='long'?[skirt(true)]:[];
+    case 'outerwear':return cut.panels==='cape'?torsoCape(layout,ease,variant,long):[];
+    case 'dresses':
+    case 'skirts':return [skirt()];
+    case 'bottoms':return [];
+    default:return accessoryShells(item.category,layout,variant,layerOffset);
+  }
+}
+function torsoCape({m,shoulder,pelvis,hipRz,hipRx,neckRx,neckRz,neckTop},ease,variant,long) {
+  const rows=[];
+  for(let i=0;i<=8;i++){
+    const t=i/8;
+    rows.push(ring(pelvis-(m.inseam*.35*long)+t*((shoulder+neckTop)/2-pelvis+m.inseam*.35*long),
+      (hipRx+14+variant)*(1-t)**.62+(neckRx+ease)*t+ease,
+      (hipRz+8)*(1-t)**.7+(neckRz+ease)*t+ease,0,-2.7));
+  }
+  return [{...part('Spine',rows,false,true),cape:true}];
+}
+
+export function tessellate(descriptor, radial = 20){
+  const {rings,cap,bone,cloth,drape,pleats,slits,shape=1}=descriptor, points=[],uv=[],indices=[];
+  const outline=value=>Math.sign(value)*Math.abs(value)**shape;
+  for(let r=0;r<rings.length;r++){
+    const {x,y,z,rx,rz}=rings[r];
+    for(let i=0;i<=radial;i++){
+      const angle=i/radial*TAU;
+      const fold=pleats?(1+Math.cos(angle*pleats))*Math.max(0,rings.at(-1).y-y)*.013:0;
+      points.push([x+outline(Math.cos(angle))*(rx+fold),y,z+outline(Math.sin(angle))*(rz+fold)]);
+      uv.push(i/radial,(y-rings[0].y)/Math.max(.01,rings.at(-1).y-rings[0].y));
+    }
+  }
+  const stride=radial+1;
+  for(let r=0;r<rings.length-1;r++){
+    for(let i=0;i<radial;i++){
+      if(rings[r+1].y<=slits&&Math.abs(Math.sin((i+.5)/radial*TAU))<.22)continue;
+      const a=r*stride+i,b=a+stride;
+      indices.push(a,b,a+1,a+1,b,b+1);
+    }
+  }
+  const caps=cap===true?[0,rings.length-1]:cap==='top'?[rings.length-1]:cap==='bottom'?[0]:[];
+  for(const r of caps){
+    const {x,y,z}=rings[r],center=points.length;
+    points.push([x,y,z]); uv.push(.5,r?1:0);
+    for(let i=0;i<radial;i++){const a=r*stride+i;indices.push(center,r?a+1:a,r?a:a+1);}
+  }
+  return {bone,points,uv,indices,cloth,drape,slits,radial,rows:rings.length,stride};
+}
+
+const rotateX=(p,a)=>[p[0],p[1]*Math.cos(a)-p[2]*Math.sin(a),p[1]*Math.sin(a)+p[2]*Math.cos(a)];
+const rotateZ=(p,a)=>[p[0]*Math.cos(a)-p[1]*Math.sin(a),p[0]*Math.sin(a)+p[1]*Math.cos(a),p[2]];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const AXES=[[1,0,0],[0,1,0],[0,0,1]];
+export function poseTransform(bones){
+  const result=new Map();
+  for(const bone of bones){
+    const parent=result.get(bone.parent);
+    const rotate=p=>rotateZ(rotateX(p,bone.rx),bone.rz);
+    const pivot=parent?parent.toWorld(bone.position):bone.position;
+    const axes=AXES.map(axis=>parent?parent.rotate(rotate(axis)):rotate(axis));
+    const rotateWorld=p=>[0,1,2].map(i=>p[0]*axes[0][i]+p[1]*axes[1][i]+p[2]*axes[2][i]);
+    result.set(bone.name,{
+      rotate:rotateWorld,axes,
+      toWorld:p=>add(pivot,rotateWorld(sub(p,bone.position))),
+      toRest:p=>add(bone.position,axes.map(axis=>dot(axis,sub(p,pivot))))
+    });
+  }
+  return result;
+}
+
+const RAY=[1,.01319,.02723];
+const CELL_CM=6;
+const rayCell=(point,axis)=>Math.floor((point[axis]-RAY[axis]*point[0])/CELL_CM);
+const cellKey=(y,z)=>y+':'+z;
+
+export function poseSurfacePoint(part, index, transforms){
+  const point=part.points[index];
+  if(!part.skin)return transforms.get(part.bone).toWorld(point);
+  const result=[0,0,0];
+  for(const [bone,weight] of part.skin[index]){
+    const posed=transforms.get(bone).toWorld(point);
+    for(let axis=0;axis<3;axis++)result[axis]+=posed[axis]*weight;
+  }
+  return result;
+}
+
+export function mannequinAimHeight(model){
+  let minY=Infinity,maxY=-Infinity;
+  for(const part of model.body)for(let index=0;index<part.points.length;index++){
+    const y=poseSurfacePoint(part,index,model.transforms)[1];
+    minY=Math.min(minY,y);
+    maxY=Math.max(maxY,y);
+  }
+  return Number.isFinite(minY+maxY)?(minY+maxY)/2:model.layout.m.heightCm/2;
+}
+
+export function buildCollider(body, transforms){
+  return body.map(part=>{
+    const points=part.points.map((_,i)=>poseSurfacePoint(part,i,transforms));
+    const min=[0,1,2].map(axis=>Math.min(...points.map(p=>p[axis])));
+    const max=[0,1,2].map(axis=>Math.max(...points.map(p=>p[axis])));
+    // Every point on a ray has the same projected Y/Z. Index the triangles in that plane.
+    const bins=new Map();
+    for(let i=0;i<part.indices.length;i+=3){
+      const [a,b,c]=part.indices.slice(i,i+3).map(index=>points[index]);
+      const e1=sub(b,a),e2=sub(c,a),h=cross(RAY,e2),det=dot(e1,h);
+      if(Math.abs(det)<=1e-8)continue;
+      const face={a,e1,e2,h,inv:1/det};
+      const ys=[rayCell(a,1),rayCell(b,1),rayCell(c,1)];
+      const zs=[rayCell(a,2),rayCell(b,2),rayCell(c,2)];
+      for(let y=Math.min(...ys);y<=Math.max(...ys);y++)for(let z=Math.min(...zs);z<=Math.max(...zs);z++){
+        const key=cellKey(y,z);
+        if(!bins.has(key))bins.set(key,[]);
+        bins.get(key).push(face);
+      }
+    }
+    return {min,max,bins};
+  });
+}
+
+export function bodyRayExits(point, colliders){
+  const containing=[];
+  for(const {min,max,bins} of colliders){
+    if(point.some((v,i)=>v<=min[i]+1e-5||v>=max[i]-1e-5))continue;
+    const faces=bins.get(cellKey(rayCell(point,1),rayCell(point,2)));
+    if(!faces)continue;
+    const hits=[];
+    for(const {a,e1,e2,h,inv} of faces){
+      const s=sub(point,a),u=inv*dot(s,h);
+      if(u<0||u>1)continue;
+      const q=cross(s,e1),v=inv*dot(RAY,q);
+      if(v<0||u+v>1)continue;
+      const distance=inv*dot(e2,q);
+      if(Math.abs(distance)<1e-5){hits.length=0;break;}
+      if(!hits.some(t=>Math.abs(t-distance)<1e-5))hits.push(distance);
+    }
+    const forward=hits.filter(t=>t>0), backward=hits.filter(t=>t<0);
+    if(forward.length%2===1&&backward.length%2===1)containing.push({positive:Math.min(...forward),negative:Math.max(...backward)});
+  }
+  return containing;
+}
+
+export function measurePenetration(parts, transforms, colliders){
+  let testedVertices=0,penetratingVertices=0;
+  for(const part of parts)for(let i=0;i<part.points.length;i++){
+    testedVertices++;
+    if(bodyRayExits(poseSurfacePoint(part,i,transforms),colliders).length)penetratingVertices++;
+  }
+  return {testedVertices,penetratingVertices,ratio:testedVertices?penetratingVertices/testedVertices:null};
+}
+
+export function findLayerCrossings(garments,transforms,{firstPerPair=true}={}){
+  if(garments.length<2)return [];
+  const limit=firstPerPair?1:Infinity;
+  const surfaces=garments.map(({parts})=>parts.map(part=>prepareSurface(
+    part.points.map((_,index)=>poseSurfacePoint(part,index,transforms)),part.indices
+  )));
+  const collisions=[];
+  for(const [outer,outerParts] of surfaces.entries())for(let inner=0;inner<outer;inner++){
+    let crossings=0;
+    for(const a of outerParts)for(const b of surfaces[inner]){
+      if(crossings<limit)crossings+=countSurfaceCrossings(a,b,limit-crossings);
+    }
+    if(crossings)collisions.push({inner:garments[inner].item,outer:garments[outer].item,crossings});
+  }
+  return collisions;
+}
+
+function moveOutside(point, colliders){
+  const exits=bodyRayExits(point,colliders);
+  if(!exits.length)return point;
+  const positive=Math.max(...exits.map(x=>x.positive)),negative=Math.min(...exits.map(x=>x.negative));
+  const sign=point[0]<-1 ? -1 : point[0]>1 ? 1 : positive<=-negative ? 1 : -1;
+  let current=point,hits=exits;
+  for(let i=0;i<16;i++){
+    const distance=sign>0?Math.max(...hits.map(x=>x.positive)):Math.min(...hits.map(x=>x.negative));
+    // A larger clearance can pass through a narrow opening into another limb.
+    const next=add(current,RAY.map(v=>v*(distance+sign*.55)));
+    const nextHits=bodyRayExits(next,colliders);
+    if(!nextHits.length)return next;
+    for(const clearance of [.12,.025]){
+      const candidate=add(current,RAY.map(v=>v*(distance+sign*clearance)));
+      if(!bodyRayExits(candidate,colliders).length)return candidate;
+    }
+    current=next;
+    hits=nextHits;
+  }
+  return current;
+}
+
+function deformSkinnedVertices(part,transforms,adjust){
+  const points=part.points.map((point,index)=>{
+    const posed=poseSurfacePoint(part,index,transforms);
+    const corrected=adjust(posed,part.skin[index]);
+    if(corrected===posed)return point;
+    const axes=AXES.map(()=>[0,0,0]);
+    for(const [bone,weight] of part.skin[index]){
+      const source=transforms.get(bone).axes;
+      for(let i=0;i<3;i++)for(let j=0;j<3;j++)axes[i][j]+=source[i][j]*weight;
+    }
+    // The blended rotation is generally not orthonormal. Invert it to preserve the original skin weights.
+    const cofactors=axes.map((_,i)=>cross(axes[(i+1)%3],axes[(i+2)%3]));
+    const det=dot(axes[0],cofactors[0]);
+    if(Math.abs(det)<1e-6)return point;
+    const delta=sub(corrected,posed);
+    return add(point,cofactors.map(axis=>dot(axis,delta)/det));
+  });
+  return {...part,points};
+}
+
+function fitCoatOverSkirts(part,skirts,transforms,colliders){
+  const pelvis=transforms.get('Pelvis');
+  return deformSkinnedVertices(part,transforms,(posed,skin)=>{
+    const arm=skin.reduce((sum,[joint,weight])=>sum+(/^(UpperArm|Forearm|Hand)_/.test(joint)?weight:0),0);
+    const trunk=clamp((.46-arm)/.32,0,1);
+    if(!trunk)return posed;
+    const [x,y,z]=pelvis.toRest(posed),radius=Math.hypot(x,z);
+    if(radius<1e-8)return posed;
+    const dx=x/radius,dz=z/radius;
+    let under=0;
+    for(const skirt of skirts){
+      const top=skirt.points.at(-1)[1],bottom=skirt.points[0][1];
+      if(y<bottom-3||y>top+4)continue;
+      under=Math.max(under,skirtRadiusAtHeight(skirt,clamp(y,bottom,top),dx,dz));
+    }
+    if(!under)return posed;
+    const target=radius+trunk*Math.max(0,under+1.4-radius);
+    if(target===radius)return posed;
+    return moveOutside(pelvis.toWorld([dx*target,y,dz*target]),colliders);
+  });
+}
+
+let lastMannequin;
+function posedMannequin(value,pose,radial,armClearance){
+  const layout=createRigLayout(value,pose,armClearance),key=JSON.stringify([layout.m,pose,radial,armClearance]);
+  if(lastMannequin?.key===key)return lastMannequin;
+  const body=[buildMannequinSurface(layout,radial)];
+  const transforms=poseTransform(layout.bones),colliders=buildCollider(body,transforms);
+  lastMannequin={key,layout,body,transforms,colliders,radial};
+  return lastMannequin;
+}
+
+function garmentPlan(items,mannequin,flatLay,outerwearEase=0){
+  const {layout,body:[body]}=mannequin;
+  const sorted=items.slice(0,MAX_PROCEDURAL_ITEMS).sort((a,b)=>(a.layerOrder||0)-(b.layerOrder||0));
+  const plan=sorted.map((item,i)=>{
+    const cut=garmentCut(item), lower=item.category==='bottoms';
+    const shells=referenceShell(item,layout,i*.48+(item.category==='outerwear'?1.6:0),cut);
+    if(!cut||item.category==='skirts'||cut.panels==='cape')return {item,shells};
+    mannequin.tailoring??=tailoringSurface(body);
+    const coverage=cutCoverage(mannequin.tailoring,cut,layout,lower);
+    return {item,cut,lower,shells,coverage};
+  });
+  const tailored=plan.filter(entry=>entry.coverage);
+  for(const [i,entry] of tailored.entries()){
+    const {cut,lower,item,coverage}=entry;
+    const clearance=cut.width+(item.category==='outerwear'?1.2:0);
+    const touches=previous=>coverage.some((value,k)=>value>=0&&previous.coverage[k]>=0);
+    const overlapping=flatLay?[]:tailored.slice(0,i).filter(touches);
+    entry.ease=Math.max(clearance,...overlapping.map(previous=>previous.ease+(previous.lower?2.55:1.45)+.95))
+      +(item.category==='outerwear'?outerwearEase:0);
+    const covers=flatLay?[]:tailored.slice(i+1).filter(touches);
+    // The outer piece renders the overlap. Leave a short seam allowance under its edge.
+    entry.visible=coverage.map((value,k)=>Math.min(value,...covers.map(outer=>.15-outer.coverage[k])));
+  }
+  return plan;
+}
+
+function buildPosedOutfit(value,items,{pose,radial,flatLay,armClearance=0,outerwearEase=0}){
+  const mannequin=posedMannequin(value,pose,radial,armClearance);
+  const {layout,body,transforms,colliders}=mannequin;
+  const plan=garmentPlan(items,mannequin,flatLay,outerwearEase);
+  const garments=plan.map(({item,cut,lower,visible,ease})=>{
+    const parts=[];
+    if(visible){
+      const fitted=tailoredMesh(body[0],mannequin.tailoring,{...cut,width:ease},layout,{lower,values:visible});
+      if(fitted.indices.length)parts.push(deformSkinnedVertices(fitted,transforms,point=>moveOutside(point,colliders)));
+    }
+    return {item,parts};
+  });
+  const pelvis=transforms.get('Pelvis');
+  const pantsInPelvis=flatLay?[]:garments.filter(({item})=>item.category==='bottoms')
+    .flatMap(({parts})=>parts.flatMap(part=>drapeTriangles(
+      part.points.map((_,i)=>pelvis.toRest(poseSurfacePoint(part,i,transforms))),part.indices
+    )));
+  for(const [i,{shells}] of plan.entries()){
+    if(!flatLay&&garments[i].item.category==='outerwear'&&garments[i].parts.length){
+      const skirts=garments.slice(0,i).flatMap(({parts})=>parts.filter(part=>part.drape&&!part.slits));
+      if(skirts.length)garments[i].parts=garments[i].parts.map(part=>fitCoatOverSkirts(part,skirts,transforms,colliders));
+    }
+    for(const desc of shells){
+      if(desc.cape&&!flatLay){
+        const spine=transforms.get(desc.bone);
+        const layers=[...body,...garments.slice(0,i).filter(({item})=>garmentCut(item)).flatMap(({parts})=>parts)];
+        const obstacles=layers.flatMap(part=>drapeTriangles(
+          part.points.map((_,index)=>spine.toRest(poseSurfacePoint(part,index,transforms))),part.indices
+        ));
+        garments[i].parts.push(fitDrapeToPose(desc,obstacles,radial,tessellate));
+        continue;
+      }
+      if(desc.drape&&!flatLay){
+        mannequin.lowerBody??=lowerBodyInPelvisSpace(body[0],i=>poseSurfacePoint(body[0],i,transforms),pelvis);
+        garments[i].parts.push(fitDrapeToPose(desc,[...mannequin.lowerBody,...pantsInPelvis],radial,tessellate));
+        continue;
+      }
+      const part=tessellate(desc,desc.pleats&&radial>=20?32:radial);
+      const {toWorld,toRest}=transforms.get(part.bone);
+      garments[i].parts.push({...part,points:part.points.map(point=>{
+        const posed=toWorld(point), corrected=moveOutside(posed,colliders);
+        return corrected===posed ? point : toRest(corrected);
+      })});
+    }
+  }
+  const triangles=[...body,...garments.flatMap(x=>x.parts)].reduce((sum,x)=>sum+x.indices.length/3,0);
+  return {layout,body,garments,transforms,colliders,triangles,radial};
+}
+
+export function buildStudioGeometry(value, items=[], {pose='standing',radial=20,flatLay=false}={}){
+  const options={pose,radial,flatLay};
+  let result=buildPosedOutfit(value,items,options);
+  if(flatLay)return result;
+  const cuts=result.garments.map(({item})=>garmentCut(item)).filter(Boolean);
+  const checkLayers=cuts.length>=2&&cuts.some(({sleeve})=>sleeve&&sleeve!=='sleeveless');
+  const hasSkirt=result.garments.some(({parts})=>parts.some(part=>part.drape));
+  if(!checkLayers&&!hasSkirt)return result;
+
+  // Adjust the rig and both clothing layers together. Accept the first clear
+  // pose, or the best improvement that leaves every already-clear pair clear.
+  const bodyLayer={};
+  const collisions=model=>{
+    const pairs=checkLayers?findLayerCrossings(model.garments,model.transforms,{firstPerPair:false}):[];
+    if(!hasSkirt)return pairs;
+    const posed=part=>prepareSurface(part.points.map((_,i)=>poseSurfacePoint(part,i,model.transforms)),part.indices);
+    const body=posed(model.body[0]);
+    for(const {item,parts} of model.garments){
+      const crossings=parts.filter(part=>part.drape)
+        .reduce((sum,part)=>sum+countSurfaceCrossings(posed(part),body),0);
+      if(crossings)pairs.push({inner:bodyLayer,outer:item,crossings});
+    }
+    return pairs;
+  };
+  const count=pairs=>pairs.reduce((total,pair)=>total+pair.crossings,0);
+  let remaining=collisions(result),selectedArmClearance=0;
+  for(const armClearance of SLEEVE_CLEARANCE_ANGLES){
+    if(!remaining.length)break;
+    const candidate=buildPosedOutfit(value,items,{...options,armClearance});
+    const next=collisions(candidate);
+    const retainsClearPairs=next.every(({inner,outer})=>remaining.some(pair=>pair.inner===inner&&pair.outer===outer));
+    if(retainsClearPairs&&count(next)<count(remaining)){
+      remaining=next;
+      result=candidate;
+      selectedArmClearance=armClearance;
+    }
+  }
+  if(remaining.length&&result.garments.some(({item})=>item.category==='outerwear')
+    &&result.garments.some(({item})=>item.category==='bottoms')){
+    for(const outerwearEase of OUTERWEAR_EASE_CM){
+      const candidate=buildPosedOutfit(value,items,{...options,armClearance:selectedArmClearance,outerwearEase});
+      const next=collisions(candidate);
+      const retainsClearPairs=next.every(({inner,outer})=>remaining.some(pair=>pair.inner===inner&&pair.outer===outer));
+      if(retainsClearPairs&&count(next)<count(remaining)){
+        remaining=next;
+        result=candidate;
+      }
+      if(!remaining.length)break;
+    }
+  }
+  return result;
+}
+
+export function buildBodyMorphs(value, radial=20){
+  const actual=normalizeMannequin(value), dimensions={...MANNEQUIN_DEFAULTS_CM};
+  const geometry=()=>[buildMannequinSurface(createRigLayout(dimensions),radial)];
+  const base=geometry(),targets=[];
+  let previous=base;
+  for(const [key,name] of Object.entries(MORPH_NAMES)){
+    dimensions[key]=actual[key];
+    const next=geometry();
+    targets.push({name,parts:next.map((part,i)=>part.points.map((p,j)=>sub(p,previous[i].points[j])))});
+    previous=next;
+  }
+  return {base,targets};
+}
