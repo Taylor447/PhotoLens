@@ -1,16 +1,3 @@
 const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
-
-export function lensVerticalFov(focalLengthMm,aspect){
-  const focal=clamp(Number(focalLengthMm)||50,16,135);
-  const filmHeightMm=aspect>=1?36/aspect:36;
-  return 2*Math.atan(filmHeightMm/(2*focal))*180/Math.PI;
-}
-
-export function framedCameraDistance({heightCm=170,widthCm=100,focalLengthMm=50,aspect=1,cameraHeightCm=135,aimCm=85}={}){
-  const safeAspect=Math.max(.2,Number(aspect)||1);
-  const halfVertical=Math.max(1,Number(heightCm)||170)*.58+Math.abs((Number(cameraHeightCm)||135)-(Number(aimCm)||85))*.16;
-  const halfHorizontal=Math.max(1,Number(widthCm)||100)*.58;
-  const vertical=Math.tan(lensVerticalFov(focalLengthMm,safeAspect)*Math.PI/360);
-  const horizontal=vertical*safeAspect;
-  return clamp(Math.ceil(Math.max(halfVertical/vertical,halfHorizontal/horizontal)+Math.max(20,halfHorizontal*.4)),140,1200);
-}
+export function lensVerticalFov(focalLengthMm,aspect){const focal=clamp(Number(focalLengthMm)||50,16,135);const filmHeightMm=aspect>=1?36/aspect:36;return 2*Math.atan(filmHeightMm/(2*focal))*180/Math.PI;}
+export function framedCameraDistance({heightCm=170,widthCm=100,focalLengthMm=50,aspect=1,cameraHeightCm=135,aimCm=85}={}){const safeAspect=Math.max(.2,Number(aspect)||1);const halfVertical=Math.max(1,Number(heightCm)||170)*.58+Math.abs((Number(cameraHeightCm)||135)-(Number(aimCm)||85))*.16;const halfHorizontal=Math.max(1,Number(widthCm)||100)*.58;const vertical=Math.tan(lensVerticalFov(focalLengthMm,safeAspect)*Math.PI/360);const horizontal=vertical*safeAspect;return clamp(Math.ceil(Math.max(halfVertical/vertical,halfHorizontal/horizontal)+Math.max(20,halfHorizontal*.4)),140,1200);}

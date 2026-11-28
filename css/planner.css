@@ -353,17 +353,9 @@
 /* S1: keep the working canvas near the top of the planner viewport. */
 .planner-outfit-context{margin:0 0 10px;border:1px solid var(--color-border);border-radius:12px;background:var(--color-surface)}
 .planner-outfit-context>summary{display:flex;align-items:center;min-height:44px;padding:9px 14px;cursor:pointer;font-size:16px;font-weight:700}
-.planner-outfit-context>.planner-card{margin:0 12px 12px}
-.planner-outfit-context>details{margin:0 12px 12px}
-.ws-layout-studio>.ws-main{display:flex;flex-direction:column}
-.ws-layout-studio>.ws-main>.ws-stage{order:-1;margin:0 0 12px}
-.ws-layout-studio>.ws-main>.ws-stage-toolbar{margin:0 0 12px}
-.ws-layout-studio .ws-properties .ws-inline-check,
-.ws-form-row label:has(>input[type=checkbox]){display:flex;flex-direction:row;align-items:center;gap:10px;min-height:44px}
-.ws-layout-studio .ws-properties .ws-inline-check input[type=checkbox],
-.ws-form-row label>input[type=checkbox]{flex:none;width:22px;height:22px;margin:0}
+.planner-outfit-context>.planner-card{margin:0 12px 12px}.planner-outfit-context>details{margin:0 12px 12px}
+.ws-layout-studio>.ws-main{display:flex;flex-direction:column}.ws-layout-studio>.ws-main>.ws-stage{order:-1;margin:0 0 12px}.ws-layout-studio>.ws-main>.ws-stage-toolbar{margin:0 0 12px}
+.ws-layout-studio .ws-properties .ws-inline-check,.ws-form-row label:has(>input[type=checkbox]){display:flex;flex-direction:row;align-items:center;gap:10px;min-height:44px}
+.ws-layout-studio .ws-properties .ws-inline-check input[type=checkbox],.ws-form-row label>input[type=checkbox]{flex:none;width:22px;height:22px;margin:0}
 .ws-layout-studio .ws-closet-content input[type=search]{min-width:0}
-@media(max-width:760px){
- .ws-layout-studio .ws-stage,.ws-layout-studio .ws-svg-host,.ws-layout-studio .ws-three-host{height:clamp(340px,48dvh,520px);min-height:340px;max-height:520px}
- .ws-layout-studio>.ws-closet-panel{max-height:min(54dvh,480px)}
-}
+@media(max-width:760px){.ws-layout-studio .ws-stage,.ws-layout-studio .ws-svg-host,.ws-layout-studio .ws-three-host{height:clamp(340px,48dvh,520px);min-height:340px;max-height:520px}.ws-layout-studio>.ws-closet-panel{max-height:min(54dvh,480px)}}
